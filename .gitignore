@@ -1,3 +1,6 @@
+# things
+src\main\resources\gtfs-import.properties
+
 # Gradle files
 .gradle/
 build/

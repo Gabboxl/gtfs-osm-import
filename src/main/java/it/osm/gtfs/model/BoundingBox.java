@@ -53,7 +53,8 @@ public class BoundingBox {
 	}
 	
 	public String getXAPIQuery(){
-		return "[bbox=" + minLon +"," + minLat + "," + maxLon +"," + maxLat + "]";
+		//return "[bbox=" + minLon +"," + minLat + "," + maxLon +"," + maxLat + "]";
+		return minLon +"," + minLat + "," + maxLon +"," + maxLat;
 	}
 
 	public String getXMLTag() {

@@ -19,23 +19,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 
 public class DownloadUtils {
 	private static final int TIMEOUT = 30*60000;
 
-	public static void downlod(String url, File dest) throws MalformedURLException, IOException{
+	public static void download(String url, File dest) throws MalformedURLException, IOException{
 		int retry = 0;
 		while (++retry <= 3){
 			System.out.println("Downloading " + url + " Retry count: " + retry);
 			try{
-				URLConnection conn = new URL(url).openConnection();
-				conn.setConnectTimeout(TIMEOUT);
-				conn.setReadTimeout(TIMEOUT);
+				//System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
+
+				HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
+				//conn.setConnectTimeout(TIMEOUT);
+				//conn.setReadTimeout(TIMEOUT);
+				conn.setRequestMethod("GET");
+				//conn.addRequestProperty("Host", "overpass-api.de");
+				//conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
+				//System.out.println(conn.getRequestProperties());
+
+
 				InputStream in = conn.getInputStream();
 				FileOutputStream fos = new FileOutputStream(dest);
 				BufferedOutputStream bout = new BufferedOutputStream(fos,1024);
@@ -47,8 +51,8 @@ public class DownloadUtils {
 				bout.close();
 				in.close();
 				return;
-			}catch(SocketTimeoutException e){
-			}catch (ConnectException e) {
+			}catch(SocketTimeoutException | ConnectException e){
+				System.err.println(e);
 			}
 		}
 		throw new SocketTimeoutException();
