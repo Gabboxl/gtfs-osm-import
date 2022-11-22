@@ -47,7 +47,7 @@ public class OSMBusImportGenerator implements IElementCreator{
 		document = impl.createDocument(null,null,null);
 
 		root = document.createElement("osm");
-		root.setAttribute("version", "0.5");
+		root.setAttribute("version", "0.6");
 		root.setAttribute("generator", "GTFSImport");
 		document.appendChild(root);
 		root.appendChild(bb.getXMLTag(this));
