@@ -49,7 +49,7 @@ public class GTFSGenerateRoutesBaseRelations {
 		List<Trip> trips = GTFSParser.readTrips(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_TRIPS_FILE_NAME,
 				routes, stopTimes);
 		BoundingBox bb = new BoundingBox(osmstops.values());
-		
+
 		//sorting set
 		Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
 		Set<String> keys = new TreeSet<String>(grouppedTrips.keySet());

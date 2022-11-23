@@ -50,7 +50,7 @@ public class StopsList {
 	}
 
 	public String getRelationAsStopList(Trip t, Route r){
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		for (Stop s:stops.values()){
 			buffer.append(s.getCode() + " " + s.getName()  + "\n");
 		}

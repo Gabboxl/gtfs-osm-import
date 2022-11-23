@@ -25,8 +25,8 @@ public class OSMRelationImportGenerator {
 
 	//FIXME: refactor
 	public static String getRelation(BoundingBox bb, StopsList stopTimes, Trip t, Route r){
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("<?xml version=\"1.0\"?><osm version='0.5' generator='JOSM'>");
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
 		buffer.append(bb.getXMLTag());
 		buffer.append("<relation id='-" + Math.round(Math.random()*100000) +  "'>\n");
 		for (Stop s:stopTimes.getStops().values()){

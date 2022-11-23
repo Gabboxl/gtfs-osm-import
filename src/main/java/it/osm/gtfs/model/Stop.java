@@ -141,7 +141,7 @@ public class Stop {
 				if (OSMDistanceUtils.distVincenty(getLat(), getLon(), os.getLat(), os.getLon()) < 5 && os.getGtfsId() == null && getGtfsId() == null){
 					//if less than 5m far away and both don't have gtfsid
 					return true;
-				}	
+				}
 			}
 		}else if (OSMDistanceUtils.distVincenty(getLat(), getLon(), os.getLat(), os.getLon()) < 50 && os.getGtfsId() != null && getGtfsId() != null && os.getGtfsId().equals(getGtfsId())){
 			//if have same gtfsid and are less than 50m far away and both don't have gtfsid
@@ -153,11 +153,11 @@ public class Stop {
 
 	public Element getNewXMLNode(IElementCreator document){
 		Element node = document.createElement("node");
-		Long id;
+		long id;
 		try{
-			id = Long.valueOf(getGtfsId());
+			id = Long.parseLong(getGtfsId());
 		}catch(Exception e){
-			id = (long) Math.abs(getGtfsId().hashCode());
+			id = Math.abs(getGtfsId().hashCode());
 		}
 
 		node.setAttribute("id", "-" + id);

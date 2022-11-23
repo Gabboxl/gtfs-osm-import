@@ -56,12 +56,12 @@ public class GTFSOSMImport {
 		GTFSCheckOsmRoutes.run(osmId);
 	}
 	
-	@Command(description="Generate/update osm data from xapi/api server")
+	@Command(description="Generate/update osm data from api server")
 	public void update() throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
 		GTFSUpdateDataFromOSM.run();
 	}
 	
-	@Command(description="Generate/update single relation from xapi/api server")
+	@Command(description="Generate/update single relation from api server")
 	public void updates(String relation) throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
 		GTFSUpdateDataFromOSM.run(relation);
 	}
@@ -133,20 +133,18 @@ public class GTFSOSMImport {
 
 	@Command(description="Display current configuration")
 	public String conf(){
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("Current Configuration:\n");
-		buffer.append("GTFS Path: " + GTFSImportSetting.getInstance().getGTFSPath() + "\n");
-		buffer.append("OSM Path: " + GTFSImportSetting.getInstance().getOSMPath() + "\n");
-		buffer.append("OUTPUT Path: " + GTFSImportSetting.getInstance().getOutputPath() + "\n");
-		buffer.append("Operator: " + GTFSImportSetting.getInstance().getOperator() + "\n");
-		buffer.append("RevisitedKey: " + GTFSImportSetting.getInstance().getRevisitedKey() + "\n");
-		buffer.append("Plugin Class: " + GTFSImportSetting.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
-		return buffer.toString();
+		return "Current Configuration:\n" +
+				"GTFS Path: " + GTFSImportSetting.getInstance().getGTFSPath() + "\n" +
+				"OSM Path: " + GTFSImportSetting.getInstance().getOSMPath() + "\n" +
+				"OUTPUT Path: " + GTFSImportSetting.getInstance().getOutputPath() + "\n" +
+				"Operator: " + GTFSImportSetting.getInstance().getOperator() + "\n" +
+				"RevisitedKey: " + GTFSImportSetting.getInstance().getRevisitedKey() + "\n" +
+				"Plugin Class: " + GTFSImportSetting.getInstance().getPlugin().getClass().getCanonicalName() + "\n";
 	}
 	
 	@Command(description="Display available commands")
 	public String help(){
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append("Available commands:\n");
 		for (Method method:this.getClass().getMethods()){
 			for(Annotation annotation : method.getDeclaredAnnotations()){
