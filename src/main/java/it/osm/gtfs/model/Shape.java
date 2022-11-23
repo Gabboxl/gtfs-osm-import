@@ -36,7 +36,7 @@ public class Shape {
 		return id;
 	}
 	
-	public String getGPX(String desc){
+	public String getGPXasWaypoints(String desc){
 		StringBuilder buffer = new StringBuilder();
 		buffer.append("<?xml version=\"1.0\"?><gpx version=\"1.0\" creator=\"GTFS-import\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">");
 		for (Long p:points.keySet()){
@@ -51,6 +51,25 @@ public class Shape {
 			buffer.append("]]></desc></wpt>");
 		}
 		buffer.append("</gpx>");
+		return buffer.toString();
+	}
+
+	public String getGPXasShape(String desc){
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("<?xml version=\"1.0\"?><gpx version=\"1.0\" creator=\"GTFS-import\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">");
+		buffer.append("<trk><trkseg> "); //per fare diventare i punti una traccia continua
+		for (Long p:points.keySet()){
+			buffer.append("<trkpt lat=\"");
+			buffer.append(points.get(p).getLat());
+			buffer.append("\" lon=\"");
+			buffer.append(points.get(p).getLon());
+			buffer.append("\"><name>");
+			buffer.append(desc);
+			buffer.append("</name><desc><![CDATA[");
+			buffer.append(desc);
+			buffer.append("]]></desc></trkpt>");
+		}
+		buffer.append("</trkseg></trk></gpx>");
 		return buffer.toString();
 	}
 

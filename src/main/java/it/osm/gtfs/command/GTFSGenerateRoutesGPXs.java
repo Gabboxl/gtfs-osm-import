@@ -65,7 +65,7 @@ public class GTFSGenerateRoutesGPXs {
 				Shape s = shapes.get(trip.getShapeID());
 
 				FileOutputStream f = new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
-				f.write(s.getGPX(r.getShortName()).getBytes());
+				f.write(s.getGPXasShape(r.getShortName()).getBytes());
 				f.close();
 			}
 		}
