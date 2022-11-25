@@ -36,8 +36,13 @@ public class GTTTurinPlugin implements GTFSPlugin {
 		busStopName = busStopName.replace('"', '\'')
 		    .replaceAll("Fermata [\\d]* - ", "").replaceAll("FERMATA [\\d]* - ", "")
 		    .replaceAll("Fermata ST[\\d]* - ", "").replaceAll("Fermata S00[\\d]* - ", "");
-		if (Character.isUpperCase(busStopName.charAt(1))){
-			return camelCase(busStopName).trim();
+
+		try {
+			if (Character.isUpperCase(busStopName.charAt(1))) {
+				return camelCase(busStopName).trim();
+			}
+		}catch (Exception e){
+			System.err.println(e);
 		}
 		return busStopName;
 	}
