@@ -101,7 +101,7 @@ public class GTFSGenerateBusStopsImport {
 					Double dist = OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.pairedWith.getLat(), osmStop.pairedWith.getLon());
 					if (dist > 5){
 						messages.put(dist, "Stop ref " + osmStop.getCode() +
-								" discance GTFS-OSM: " + OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.pairedWith.getLat(), osmStop.pairedWith.getLon()) + " m");
+								" distance GTFS-OSM: " + OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.pairedWith.getLat(), osmStop.pairedWith.getLon()) + " m");
 					}
 					if (!osmStop.pairedWith.getGtfsId().equals(osmStop.getGtfsId())){
 						osm_with_different_gtfs_id++;
