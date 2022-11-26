@@ -123,14 +123,14 @@ public class GTFSGenerateBusStopsImport {
 			if (osm_with_different_gtfs_id > 0){
 				bufferDifferentGTFS.end();
 				bufferDifferentGTFS.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS));
-				System.out.println("OSM stops with different gtfs_id: " + osm_with_different_gtfs_id + " (created josm osm change file to review data: " + GTFSImportSetting.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS + ")");
+				System.out.println("OSM stops with different gtfs_id (stops with new gtfs_id from GTFS): " + osm_with_different_gtfs_id + " (created josm osm change file to review data: " + GTFSImportSetting.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS + ")");
 			}
 			if (osm_with_gtfs_id_not_in_gtfs > 0){
 				bufferNotInGTFS.end();
 				bufferNotInGTFS.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS));
-				System.out.println("OSM stops with gtfs_id not found in GTFS: " + osm_with_gtfs_id_not_in_gtfs + " (created josm osm change file to review data: " + GTFSImportSetting.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS + ")");
+				System.out.println("OSM stops with gtfs_id not found in GTFS (OLD RIPPED STOPS): " + osm_with_gtfs_id_not_in_gtfs + " (created josm osm change file to review data: " + GTFSImportSetting.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS + ")");
 			}
-			System.out.println("Paired with gtfs_id: " + paired_with_gtfs_id);
+			System.out.println("Paired stops with gtfs_id (stops that are already OK): " + paired_with_gtfs_id);
 		}
 
 		//Paired without gtfs_id
@@ -157,9 +157,9 @@ public class GTFSGenerateBusStopsImport {
 			if (paired_without_gtfs_id > 0){
 				buffer.end();
 				buffer.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_PAIRED_WITHOUT_GTFS));
-				System.out.println("Paired without gtfs_id: " + paired_without_gtfs_id + " (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_PAIRED_WITHOUT_GTFS + ")");
+				System.out.println("Paired stops without gtfs_id: " + paired_without_gtfs_id + " (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_PAIRED_WITHOUT_GTFS + ")");
 			}else{
-				System.out.println("Paired without gtfs_id: " + paired_without_gtfs_id);
+				System.out.println("Paired stops without gtfs_id: " + paired_without_gtfs_id);
 			}
 		}
 
@@ -183,9 +183,9 @@ public class GTFSGenerateBusStopsImport {
 			buffer.end();
 			if (unpaired_in_gtfs > 0){
 				buffer.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
-				System.out.println("Unpaired in gtfs: " + unpaired_in_gtfs + " (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)");
+				System.out.println("Unpaired stops in gtfs (new stops from GTFS): " + unpaired_in_gtfs + " (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)");
 			}else{
-				System.out.println("Unpaired in gtfs: " + unpaired_in_gtfs);
+				System.out.println("Unpaired stops in gtfs (new stops from GTFS): " + unpaired_in_gtfs);
 			}
 		}
 	}
