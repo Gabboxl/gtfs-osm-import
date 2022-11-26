@@ -133,7 +133,7 @@ public class Stop {
 		if (os.getCode() != null && os.getCode().equals(getCode())){
 			if (OSMDistanceUtils.distVincenty(getLat(), getLon(), os.getLat(), os.getLon()) < 50 ||
 					(os.getGtfsId() != null && getGtfsId() != null && os.getGtfsId().equals(getGtfsId()))){
-				//if less than 50m far away or already linked with gtfsid
+				//if the stops are less than 50m far away or already linked with gtfsid
 				return true;
 			}else if (OSMDistanceUtils.distVincenty(getLat(), getLon(), os.getLat(), os.getLon()) < 10000){
 				System.err.println("Warning: Same ref with dist > 50 m (and less than 10km) [" + this + " -> " + os +  "]");
@@ -144,7 +144,7 @@ public class Stop {
 				}
 			}
 		}else if (OSMDistanceUtils.distVincenty(getLat(), getLon(), os.getLat(), os.getLon()) < 50 && os.getGtfsId() != null && getGtfsId() != null && os.getGtfsId().equals(getGtfsId())){
-			//if have same gtfsid and are less than 50m far away and both don't have gtfsid
+			//if the stops have same gtfsid and are less than 50m far away OR both don't have gtfsid
 			System.err.println("Warning: Different ref matched by gtfs_id [" + this + " -> " + os +  "]");
 			return true;
 		}
