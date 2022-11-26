@@ -41,13 +41,13 @@ public class GTFSCheckOsmRoutes {
 		}
 	}
 
-	private static void check(Relation r, Boolean debug) {
-		if (r.getStops().size() <= 1)
-			throw new IllegalArgumentException("Relation " + r.getId() + " has less than 2 stop.");
+	private static void check(Relation relation, Boolean debug) {
+		if (relation.getStops().size() <= 1)
+			throw new IllegalArgumentException("Relation " + relation.getId() + " has less than 2 stop.");
 
 		//FIXME: handling first segment without forward/backward as backward
 		OSMNode previous = null;
-		for (OSMRelationWayMember m:r.getWayMembers()){
+		for (OSMRelationWayMember m:relation.getWayMembers()){
 			if (previous != null){ 
 				if (m.backward == null){
 					if(previous.equals(m.way.nodes.get(m.way.nodes.size() - 1))){
@@ -55,10 +55,10 @@ public class GTFSCheckOsmRoutes {
 					}else if (previous.equals(m.way.nodes.get(0))){
 						previous = m.way.nodes.get(m.way.nodes.size() - 1);
 					}else{
-						throw new IllegalArgumentException("Relation " + r.getId() + " has a gap. (Current way: " + m.way.getId() + ") " + JOSMUtils.getJOSMRemoteControlRelationLink(r.getId()));
+						throw new IllegalArgumentException("Relation " + relation.getId() + " has a gap. (Current way: " + m.way.getId() + ") " + JOSMUtils.getJOSMRemoteControlRelationLink(relation.getId()));
 					}
 				}else if(!previous.equals(m.way.nodes.get((m.backward) ? m.way.nodes.size() - 1 : 0))){
-					throw new IllegalArgumentException("Relation " + r.getId() + " has a gap. (Current way: " + m.way.getId() + ") " + JOSMUtils.getJOSMRemoteControlRelationLink(r.getId()));
+					throw new IllegalArgumentException("Relation " + relation.getId() + " has a gap. (Current way: " + m.way.getId() + ") " + JOSMUtils.getJOSMRemoteControlRelationLink(relation.getId()));
 				}else{
 					previous = m.way.nodes.get((m.backward == null || !m.backward) ? m.way.nodes.size() - 1 : 0);
 				}
@@ -68,9 +68,8 @@ public class GTFSCheckOsmRoutes {
 		}
 
 		if (debug){
-			StopsList stopOSM = r;
-			for (long f = 1; f <= r.getStops().size() ; f++){
-				Stop osm = stopOSM.getStops().get(f);
+			for (long f = 1; f <= relation.getStops().size() ; f++){
+				Stop osm = relation.getStops().get(f);
 				System.out.println("Stop # " + f + "\t" + osm.getCode() + "\t" + osm.getOSMId() + "\t" + osm.getName());
 			}
 		}
