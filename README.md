@@ -11,7 +11,7 @@ Java tool to import/sync GTFS data into OSM
 
 Prima di tutto è necessario clonare i file sorgenti del progetto in locale:
 
-Se hai installato Git usa questo comando: `git clone https://gabboxl/gtfs-osm-import`, altrimenti [clicca qui per scaricare il sorgente](https://github.com/Gabboxl/gtfs-osm-import/archive/refs/heads/main.zip).
+Se hai installato Git usa questo comando: `git clone https://github.com/gabboxl/gtfs-osm-import`, altrimenti [clicca qui per scaricare il sorgente](https://github.com/Gabboxl/gtfs-osm-import/archive/refs/heads/main.zip).
 
 - Se hai scaricato i sorgenti come file .zip, estraili in una cartella a tuo piacimento.
 -----
@@ -55,7 +55,7 @@ java -jar shadow.jar
 (se il comando java non è trovato devi aggiungere i file binari Java alla variabile d'ambiente PATH del tuo sistema operativo... Usa Google :P)
 
 
-Questi sono i comandi disponibili nel tool attualmente:
+Questi sono i comandi disponibili nel tool al momento:
 ```
 Available commands:
 update  Generate/update osm data from api server
@@ -75,7 +75,7 @@ rels    Generate the base relations (including only stops) to be used only when 
 exit    Exit from GTFSImport
 ```
 
-Attualmente, per come il tool è stato originariamente sviluppato, bisogna eseguire alcuni step obbligatoriamente al primo avvio del tool:
+Attualmente, per come il tool è stato originariamente sviluppato, bisogna eseguire alcuni step obbligatori al primo avvio del tool *nel seguente ordine*:
 1) `update` per scaricare i dati da OSM
 2) `stops` per aggiornare i dati delle fermate con i dati GTFS
 3) Unisci tutti i file delle fermate nuove e modificate creati: (con Josm devi aprire i file `gtfs_import_osm_with_gtfsid_not_found.osm`, `gtfs_import_pared_with_different_gtfsid.osm`, `gtfs_import_unpared_in_gtfs.0.osm` e `stops.osm`)
