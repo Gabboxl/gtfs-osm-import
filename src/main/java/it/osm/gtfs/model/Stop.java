@@ -33,7 +33,7 @@ public class Stop {
 	private String name;
 	private Boolean isRailway;
 	private Boolean isStopPosition = false;
-	public Stop paredWith;
+	public Stop pairedWith;
 	public Node originalXMLNode;
 
 	public Stop(String gtfsId, String code, Double lat, Double lon, String name) {
@@ -178,8 +178,8 @@ public class Stop {
 
 
 	public static class GTFSStop extends Stop{
-		public Stop paredWithRailWay;
-		public List<Stop> paredWithStopPositions = new ArrayList<Stop>();
+		public Stop pairedWithRailWay;
+		public List<Stop> pairedWithStopPositions = new ArrayList<Stop>();
 
 		public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name) {
 			super(gtfsId, code, lat, lon, name);
