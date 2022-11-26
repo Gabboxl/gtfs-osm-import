@@ -80,7 +80,7 @@ Attualmente, per come il tool è stato originariamente sviluppato, bisogna esegu
 2) `stops` per aggiornare i dati delle fermate con i dati GTFS
 3) Unisci tutti i file delle fermate nuove e modificate creati: (con Josm devi aprire i file `gtfs_import_osm_with_gtfsid_not_found.osm`, `gtfs_import_pared_with_different_gtfsid.osm`, `gtfs_import_unpared_in_gtfs.0.osm` e `stops.osm`)
 4) Una volta aperti i file su Josm, selezionali tutti nella sezione Livelli a destra, poi fai *click destro* -> *unisci/merge* -> *imposta come livello di destinazione il file stops.osm*
-5) Conferma l'unificazione dei file/livelli, Salva il file stops.osm e chiudi Josm
+5) Conferma l'unificazione dei file/livelli, Salva il file stops.osm e chiudi Josm SENZA eseguire l'upload dei dati.
 6) Ora puoi eseguire tutti gli altri comandi disponibili nel tool
 
 
