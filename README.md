@@ -63,7 +63,7 @@ check   Check and validate OSM relations
 conf    Display current configuration
 help    Display available commands
 updates Generate/update single relation from api server
-bbox    Get the Bounding Box of the GTFS File and xapi links
+bbox    Get the Bounding Box of the GTFS File and api links
 geojson Generate a geojson file containg osm relations
 sqlite  Generate a sqlite db containg osm relations
 gpx     Generate .gpx file for all GTFS Trips

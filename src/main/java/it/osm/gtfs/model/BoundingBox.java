@@ -52,9 +52,9 @@ public class BoundingBox {
 				+ ", maxLat=" + maxLat + ", maxLon=" + maxLon + "]";
 	}
 	
-	public String getXAPIQuery(){
-		//return "[bbox=" + minLon +"," + minLat + "," + maxLon +"," + maxLat + "]";
-		return minLon +"," + minLat + "," + maxLon +"," + maxLat;
+	public String getAPIQuery(){
+		//return "[bbox=" + minLon +"," + minLat + "," + maxLon +"," + maxLat + "]"; //questo era per la vecchia XAPI
+		return minLon +"," + minLat + "," + maxLon +"," + maxLat; //questo è per la nuova api Overpass QL
 	}
 
 	public String getXMLTag() {

@@ -60,28 +60,28 @@ public class GTFSUpdateDataFromOSM {
 		List<GTFSStop> gtfs = GTFSParser.readBusStop(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_STOP_FILE_NAME);
 		BoundingBox bb = new BoundingBox(gtfs);
 
-		String urlbus = GTFSImportSetting.OSM_OVERPASS_XAPI_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getXAPIQuery();
+		String urlbus = GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
 		File filebus = new File(GTFSImportSetting.getInstance().getOSMCachePath() + "tmp_nbus.osm");
 		urlbus = urlbus.replace(" ", "%20"); //fixo la richiesta sostituendo gli spazi con la codifica uri visto che la richeista è buggata con httpurlconnection e non va
 		DownloadUtils.download(urlbus, filebus);
 
 		Thread.sleep(1000L);
 		
-		String urlstop = GTFSImportSetting.OSM_OVERPASS_XAPI_SERVER + "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getXAPIQuery();
+		String urlstop = GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
 		File filestop = new File(GTFSImportSetting.getInstance().getOSMCachePath() + "tmp_nstop.osm");
 		urlstop = urlstop.replace(" ", "%20");
 		DownloadUtils.download(urlstop, filestop);
 
 		Thread.sleep(1000L);
 		
-		String urltrm = GTFSImportSetting.OSM_OVERPASS_XAPI_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getXAPIQuery();
+		String urltrm = GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
 		File filetrm = new File(GTFSImportSetting.getInstance().getOSMCachePath() + "tmp_ntram.osm");
 		urltrm = urltrm.replace(" ", "%20");
 		DownloadUtils.download(urltrm, filetrm);
 
 		Thread.sleep(3000L);
 		
-		String urlmtr = GTFSImportSetting.OSM_OVERPASS_XAPI_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getXAPIQuery();
+		String urlmtr = GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
 		File filemtr = new File(GTFSImportSetting.getInstance().getOSMCachePath() + "tmp_nmetro.osm");
 		urlmtr = urlmtr.replace(" ", "%20");
 		DownloadUtils.download(urlmtr, filemtr);
@@ -97,7 +97,7 @@ public class GTFSUpdateDataFromOSM {
 	}
 
 	private static void updateBaseRels() throws MalformedURLException, IOException{
-		String urlrel = GTFSImportSetting.OSM_OVERPASS_XAPI_SERVER + "data=relation[network=" + GTFSImportSetting.getInstance().getNetwork() +  "];out meta;";
+		String urlrel = GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSetting.getInstance().getNetwork() +  "];out meta;";
 		File filerel = new File(GTFSImportSetting.getInstance().getOSMCachePath() + "tmp_rels.osm");
 		DownloadUtils.download(urlrel, filerel);
 	}

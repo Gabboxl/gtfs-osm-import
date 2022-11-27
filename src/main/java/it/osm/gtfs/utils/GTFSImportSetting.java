@@ -29,8 +29,8 @@ public class GTFSImportSetting {
 
 	/* instanze disponibili di Overpass: https://wiki.openstreetmap.org/wiki/Overpass_API
 	meglio usare l'instanza di Overpass russa perchè non ha forme di rate limiting */
-	public static final String OSM_OVERPASS_XAPI_SERVER = "https://maps.mail.ru/osm/tools/overpass/api/interpreter?";
-	//public static final String OSM_OVERPASS_XAPI_SERVER = "http://overpass.osm.rambler.ru/cgi/xapi?";
+	public static final String OSM_OVERPASS_API_SERVER = "https://maps.mail.ru/osm/tools/overpass/api/interpreter?";
+	//public static final String OSM_OVERPASS_XAPI_SERVER = "http://overpass.osm.rambler.ru/cgi/xapi?"; //vecchia xapi
 	
 	public static final String OSM_API_SERVER =  "https://www.openstreetmap.org/api/0.6/";
 	public static final String OSM_RELATIONS_FILE_NAME = "relations.osm";

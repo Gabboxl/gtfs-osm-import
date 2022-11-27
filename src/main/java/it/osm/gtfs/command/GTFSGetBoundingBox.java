@@ -30,11 +30,11 @@ public class GTFSGetBoundingBox {
 
 		System.out.println("GTFS " + bb);
 		//Bus
-		System.out.println("XAPI links buses: http://open.mapquestapi.com/xapi/api/0.6/node" + bb.getXAPIQuery() + "[highway=bus_stop]");
+		System.out.println("API link buses: " + GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery());
 		//Tram
-		System.out.println("XAPI links trams: http://open.mapquestapi.com/xapi/api/0.6/node" + bb.getXAPIQuery() + "[railway=tram_stop]");
+		System.out.println("API links trams: " + GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
 		//Metro
-		System.out.println("XAPI links trams: http://open.mapquestapi.com/xapi/api/0.6/node" + bb.getXAPIQuery() + "[railway=station]");
+		System.out.println("API links trams: " + GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
 	}
 
 }
