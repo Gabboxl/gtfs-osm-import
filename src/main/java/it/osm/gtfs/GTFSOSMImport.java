@@ -15,38 +15,27 @@
 
 package it.osm.gtfs;
 
+import asg.cliche.CLIException;
+import asg.cliche.Command;
+import asg.cliche.Shell;
+import asg.cliche.ShellFactory;
+import it.osm.gtfs.command.*;
 import it.osm.gtfs.command.gui.GTFSRouteDiffGui;
-import it.osm.gtfs.command.GTFSCheckOsmRoutes;
-import it.osm.gtfs.command.GTFSGenerateBusStopsImport;
-import it.osm.gtfs.command.GTFSGenerateGeoJSON;
-import it.osm.gtfs.command.GTFSGenerateRoutesBaseRelations;
-import it.osm.gtfs.command.GTFSGenerateRoutesDiff;
-import it.osm.gtfs.command.GTFSGenerateRoutesGPXs;
-import it.osm.gtfs.command.GTFSGenerateSQLLiteDB;
-import it.osm.gtfs.command.GTFSGetBoundingBox;
-import it.osm.gtfs.command.GTFSUpdateDataFromOSM;
 import it.osm.gtfs.utils.GTFSImportSetting;
+import org.json.JSONException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.json.JSONException;
-import org.xml.sax.SAXException;
-
-import asg.cliche.CLIException;
-import asg.cliche.Command;
-import asg.cliche.Shell;
-import asg.cliche.ShellFactory;
-
 public class GTFSOSMImport {
 	
-	@Command(description="Get the Bounding Box of the GTFS File and xapi links")
+	@Command(description="Get the Bounding Box of the GTFS File and api links")
 	public void bbox() throws IOException, ParserConfigurationException, SAXException, TransformerException {
 		GTFSGetBoundingBox.run();
 	}
@@ -129,6 +118,12 @@ public class GTFSOSMImport {
 	@Command(description="Generate a geojson file containg osm relations")
 	public void geojson() throws ParserConfigurationException, SAXException, IOException, JSONException{
 		GTFSGenerateGeoJSON.run();
+	}
+
+
+	@Command(description="Match gpx files to OSM data to generate precise relations")
+	public void match() throws ParserConfigurationException, SAXException, IOException, JSONException{
+		GTFSMatchGPX.run();
 	}
 
 	@Command(description="Display current configuration")
