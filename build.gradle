@@ -18,7 +18,7 @@ dependencies {
     implementation 'org.fusesource.jansi:jansi:2.4.0'
 
 
-    implementation files('libs/original-graphhopper-core-7.0-SNAPSHOT.jar')
+    implementation files('libs/graphhopper-core-7.0-SNAPSHOT-modded.jar')
 
     implementation ('com.graphhopper:graphhopper-map-matching:7.0-pre1') {
         //exclude group: 'com.graphhopper', module: 'graphhopper-core'

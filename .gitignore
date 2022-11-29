@@ -2,6 +2,9 @@
 src\main\resources\gtfs-import.properties
 graph-cache/
 
+#include some custom files
+!graphhopper-core-7.0-SNAPSHOT-modded.jar
+
 # Gradle files
 .gradle/
 build/
