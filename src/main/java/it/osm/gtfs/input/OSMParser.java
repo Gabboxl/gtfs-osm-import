@@ -294,18 +294,19 @@ public class OSMParser {
 			}else if(currentRelation != null && localName.equals("member")){
 				String type = attributes.getValue("type");
 				String role = attributes.getValue("role");
+				String ref = attributes.getValue("ref");
 
 				if (type.equals("node")){
-					if (role.equals("stop")){
-						Stop stop = stopsWithOSMIndex.get( attributes.getValue("ref"));
+					if (role.equals("stop") || role.equals("platform")){
+						Stop stop = stopsWithOSMIndex.get( ref);
 						if (stop == null){
-							System.err.println("Warning: Node " +  attributes.getValue("ref") + " not found.");
-							missingNodes.add(attributes.getValue("ref"));
+							System.err.println("Warning: Node " +  ref + " not found.");
+							missingNodes.add(ref);
 							failed = true;
 						}
 						currentRelation.pushPoint(seq++, stop, "");
 					}else{
-						System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of type node. Its role is: \"" + role +"\"");
+						System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of type node. Its role is: \"" + role +"\", ref/node ID=" + ref);
 					}
 				}else if (type.equals("way")){
 					if (role.equals("forward")){
