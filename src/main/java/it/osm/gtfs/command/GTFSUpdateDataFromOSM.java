@@ -140,7 +140,7 @@ public class GTFSUpdateDataFromOSM {
 			try{
 				if (filesorted.exists()){
 					List<Relation> relationInFile = OSMParser.readOSMRelations(filesorted, osmstopsOsmID);
-					if (relationInFile.size() > 0 && relationInFile.get(0).getVersion() == idWithVersion.get(relationId))
+					if (relationInFile.size() > 0 && relationInFile.get(0).getVersion().equals(idWithVersion.get(relationId))) //si usa equals per le instanze Integer diverse come in questo caso per questo motivo: https://stackoverflow.com/a/4428779/9008381
 						uptodate = true;
 				}
 			}catch (Exception e) {
