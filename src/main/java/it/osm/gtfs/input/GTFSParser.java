@@ -36,6 +36,9 @@ import java.util.TreeMap;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.fusesource.jansi.Ansi;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
 	public static List<Stop.GTFSStop> readBusStop(String fName) throws IOException{
@@ -270,7 +273,7 @@ public class GTFSParser {
 		while ((thisLine = br.readLine()) != null) { 
 			count ++;
 			if (count % 100000 == 0)
-				System.err.println("Stop Times Readed so far: " + count);
+				System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Stop Times Readed so far: ").reset().a(count));
 
 			if (isFirstLine) {
 				isFirstLine = false;

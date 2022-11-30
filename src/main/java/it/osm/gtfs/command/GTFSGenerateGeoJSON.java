@@ -31,15 +31,15 @@ public class GTFSGenerateGeoJSON {
 
 	public static void run() throws ParserConfigurationException, SAXException,
 	IOException, JSONException {
-		System.err.println("Parsing OSM Stops");
+		System.out.println("Parsing OSM Stops...");
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
 				.getInstance().getOSMPath()
 				+ GTFSImportSetting.OSM_STOP_FILE_NAME);
 
-		System.err.println("Indexing OSM Stops");
+		System.out.println("Indexing OSM Stops...");
 		Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 		
-		System.err.println("Parsing OSM Relation");
+		System.out.println("Parsing OSM Relations...");
 		List<Relation> osmRels = OSMParser.readOSMRelations(new File(
 				GTFSImportSetting.getInstance().getOSMPath()
 				+ GTFSImportSetting.OSM_RELATIONS_FILE_NAME),
@@ -48,13 +48,13 @@ public class GTFSGenerateGeoJSON {
 
 		GTFSGenerateGeoJSON generator = null;
 		try {
-			System.err.println("Creating GeoJSON");
+			System.out.println("Creating GeoJSON...");
 			generator = new GTFSGenerateGeoJSON();
-			System.err.println("Adding Stops to GeoJSON");
+			System.out.println("Adding Stops to GeoJSON...");
 			generator.insertStops(osmStops);
 			//System.err.println("Adding Relations to GeoJSON");
 			//generator.insertRelations(osmRels);
-			System.err.println("Done.");
+			System.out.println("Done.");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();

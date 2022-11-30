@@ -16,19 +16,22 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSCheckOsmRoutes {
 	public static void run(String osmId) throws ParserConfigurationException, SAXException, IOException {
-		System.err.println("Warning: this command is still in alpha stage and check only some aspects of the relations.");
-		System.err.println("Step 1/4 Reading OSM Stops");
+		System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
+		System.out.println("Step 1/4 Reading OSM Stops");
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME);
-		System.err.println("Step 2/4 Indexing OSM Stops");
+		System.out.println("Step 2/4 Indexing OSM Stops");
 		Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
-		System.err.println("Step 3/4 Reading OSM Relations");
+		System.out.println("Step 3/4 Reading OSM Relations");
 		List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_RELATIONS_FILE_NAME), osmstopsOsmID);
 
-		System.err.println("Step 4/4 Checking relations");
+		System.out.println("Step 4/4 Checking relations");
 		for (Relation r:osmRels){
 			try{
 				if (osmId == null || osmId.length() == 0)

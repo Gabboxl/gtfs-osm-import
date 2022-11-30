@@ -23,15 +23,15 @@ public class GTFSGenerateSQLLiteDB {
 
 	public static void run() throws ParserConfigurationException, SAXException,
 	IOException {
-		System.err.println("Parsing OSM Stops");
+		System.out.println("Parsing OSM stops...");
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
 				.getInstance().getOSMPath()
 				+ GTFSImportSetting.OSM_STOP_FILE_NAME);
 
-		System.err.println("Indexing OSM Stops");
+		System.out.println("Indexing OSM stops...");
 		Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 		
-		System.err.println("Parsing OSM Relation");
+		System.out.println("Parsing OSM relations...");
 		List<Relation> osmRels = OSMParser.readOSMRelations(new File(
 				GTFSImportSetting.getInstance().getOSMPath()
 				+ GTFSImportSetting.OSM_RELATIONS_FILE_NAME),
@@ -40,14 +40,14 @@ public class GTFSGenerateSQLLiteDB {
 
 		GTFSGenerateSQLLiteDB generator = null;
 		try {
-			System.err.println("Creating SQLite DB");
+			System.out.println("Creating SQLite DB...");
 			generator = new GTFSGenerateSQLLiteDB("gtt.db");
 			generator.createDB();
-			System.err.println("Adding Stops to SQLite DB");
+			System.out.println("Adding stops to SQLite DB...");
 			generator.insertStops(osmStops);
-			System.err.println("Adding Relations to SQLite DB");
+			System.out.println("Adding relations to SQLite DB...");
 			generator.insertRelations(osmRels);
-			System.err.println("Done.");
+			System.out.println("Done.");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();

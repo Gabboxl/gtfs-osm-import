@@ -96,14 +96,14 @@ public class GTFSGenerateRoutesDiff {
 							osmRelationFoundInGTFS.add(found);
 						}else{
 							tripsNotFoundInOSM.add(trip);
-							System.err.println("Warning tripid: " + trip.getTripID() + " (" + trip.getName() + ") not found in OSM, detail below." );
-							System.err.println("Detail: shapeid" + trip.getShapeID() + " shortname: " + route.getShortName() + " longname:" + route.getLongName());
+							System.err.println("Warning: tripid: " + trip.getTripID() + " (" + trip.getName() + ") not found in OSM, details below." );
+							System.err.println("Details: shapeid: " + trip.getShapeID() + " shortname: " + route.getShortName() + " longname:" + route.getLongName());
 						}
 					}else{
-						System.err.println("Warning tripid: " + trip.getTripID() + " skipped (invalidated route by plugin)." );
+						System.err.println("Warning: tripid: " + trip.getTripID() + " skipped (invalidated route by plugin)." );
 					}
 				}else{
-					System.err.println("Warning tripid: " + trip.getTripID() + " skipped (invalidated trip by plugin)." );
+					System.err.println("Warning: tripid: " + trip.getTripID() + " skipped (invalidated trip by plugin)." );
 				}
 			}
 		}
