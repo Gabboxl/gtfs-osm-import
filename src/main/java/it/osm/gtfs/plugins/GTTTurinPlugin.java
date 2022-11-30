@@ -54,7 +54,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
 	
 	private static String camelCase(String string) {
 		String[] words = string.split("\\s");
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		for (String s : words) {
 			buffer.append(capitalize(s) + " ");
 		}
