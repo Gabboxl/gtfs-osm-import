@@ -17,11 +17,11 @@ package it.osm.gtfs.model;
 
 
 public class Trip implements Comparable<Trip> {
-	private Route route;
-	private String shapeID;
-	private String tripID;
-	private String name;
-	private StopsList stopList;
+	private final Route route;
+	private final String shapeID;
+	private final String tripID;
+	private final String name;
+	private final StopsList stopList;
 
 	public Trip(String tripID, Route route, String shapeID, String name, StopsList stopList) {
 		super();

@@ -104,11 +104,13 @@ public class Relation extends StopsList{
 
 	public static class OSMRelationWayMember{
 		public OSMWay way;
+
+		//TODO: l'attributo backward e' da rimuovere in vista del nuovo schema PTv2
 		public Boolean backward;
 	}
 
 	public static class OSMWay {
-		private long id;
+		private final long id;
 		public List<OSMNode> nodes = new ArrayList<Relation.OSMNode>();
 		public boolean oneway = false;
 
@@ -122,8 +124,8 @@ public class Relation extends StopsList{
 	}
 
 	public static class OSMNode {
-		private Double lat;
-		private Double lon;
+		private final Double lat;
+		private final Double lon;
 
 		public OSMNode(Double lat, Double lon) {
 			super();

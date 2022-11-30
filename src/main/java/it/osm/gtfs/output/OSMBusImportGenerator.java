@@ -36,8 +36,8 @@ import org.w3c.dom.Element;
 
 public class OSMBusImportGenerator implements IElementCreator{
 	private boolean completed = false;
-	private Document document;
-	private Element root;
+	private final Document document;
+	private final Element root;
 
 	public OSMBusImportGenerator(BoundingBox bb) throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

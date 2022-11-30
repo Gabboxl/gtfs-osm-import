@@ -19,8 +19,8 @@ import java.util.TreeMap;
 
 public class Shape {
 
-	private String id;
-	private Map<Long, ShapePoint> points;
+	private final String id;
+	private final Map<Long, ShapePoint> points;
 	
 	public Shape(String id) {
 		super();
@@ -74,9 +74,9 @@ public class Shape {
 	}
 
 	public class ShapePoint {
-		private Long seq;
-		private Double lat;
-		private Double lon;
+		private final Long seq;
+		private final Double lat;
+		private final Double lon;
 		
 		public ShapePoint(Long seq, Double lat, Double lon) {
 			super();

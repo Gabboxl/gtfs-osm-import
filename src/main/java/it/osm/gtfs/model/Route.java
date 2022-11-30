@@ -18,11 +18,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Route implements Comparable<Route> {
-	private String id;
-	private String shortName;
-	private String longName;
-	private String agencyId;
-	private Set<String> shapesIDs;
+	private final String id;
+	private final String shortName;
+	private final String longName;
+	private final String agencyId;
+	private final Set<String> shapesIDs;
 	
 	public Route(String id, String shortName, String longName, String agencyId) {
 		super();

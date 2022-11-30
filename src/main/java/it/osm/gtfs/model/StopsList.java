@@ -19,7 +19,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class StopsList {
-	private String id;
+	private final String id;
 	private Map<Long, Stop> stops;
 	private Map<Long, String> stopsTime;
 	private Boolean valid = true;
