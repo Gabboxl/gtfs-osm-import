@@ -301,7 +301,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
 
 		@Override
 		public int compareTo(WeightedRelation other) {
-			if (other.weight == weight){
+			if (other.weight.equals(weight)){
 				return getId().compareTo(other.getId());
 			}else if(other.weight > weight){
 				return 1;
