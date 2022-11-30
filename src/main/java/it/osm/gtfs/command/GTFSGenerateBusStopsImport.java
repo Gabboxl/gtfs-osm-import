@@ -186,7 +186,7 @@ public class GTFSGenerateBusStopsImport {
 			buffer.end();
 			if (unpaired_in_gtfs > 0){
 				buffer.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
-				System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)"));
+				System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)").reset());
 			}else{
 				System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs));
 			}
