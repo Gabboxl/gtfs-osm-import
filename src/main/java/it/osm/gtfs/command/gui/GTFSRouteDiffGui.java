@@ -136,7 +136,9 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
 				line = br.readLine();
 			}
 			br.close();
-		}catch (Exception e) {}
+		}catch (Exception e) {
+			System.err.println(e);
+		}
 		
 		for (Trip t:uniqueTrips){
 			if (tripIdMarkers.contains(t.getTripID())){
