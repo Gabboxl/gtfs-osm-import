@@ -305,7 +305,7 @@ public class OSMParser {
 						}
 						currentRelation.pushPoint(seq++, stop, "");
 					}else{
-						System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of type node.");
+						System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of type node. Its role is: \"" + role +"\"");
 					}
 				}else if (type.equals("way")){
 					if (role.equals("forward")){
@@ -325,7 +325,7 @@ public class OSMParser {
 						currentRelation.getWayMembers().add(member);
 					}
 				}else{
-					System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type .");
+					System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type: \"" + type +"\"");
 				}
 			}else if (currentRelation != null && localName.equals("tag")){
 				String key = attributes.getValue("k");
