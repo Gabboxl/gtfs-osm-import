@@ -86,80 +86,80 @@ public class OSMParser {
 		Document doc = db.parse(file);
 		doc.getDocumentElement().normalize();
 
-		NodeList nodeLst = doc.getElementsByTagName("node");
+		NodeList nodeList = doc.getElementsByTagName("node");
 
-		for (int s = 0; s < nodeLst.getLength(); s++) {
-			Node fstNode = nodeLst.item(s);
-			Stop st = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null);
-			st.originalXMLNode = fstNode;
+		for (int s = 0; s < nodeList.getLength(); s++) {
+			Node fstNode = nodeList.item(s);
+			Stop stop = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null);
+			stop.originalXMLNode = fstNode;
 			NodeList att = fstNode.getChildNodes();
 			for (int t = 0; t < att.getLength(); t++) {
 				Node attNode = att.item(t);
 				if (attNode.getAttributes() != null){
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("ref"))
-						st.setCode(attNode.getAttributes().getNamedItem("v").getNodeValue());
+						stop.setCode(attNode.getAttributes().getNamedItem("v").getNodeValue());
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("name"))
-						st.setName(attNode.getAttributes().getNamedItem("v").getNodeValue());
+						stop.setName(attNode.getAttributes().getNamedItem("v").getNodeValue());
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("gtfs_id"))
-						st.setGtfsId(attNode.getAttributes().getNamedItem("v").getNodeValue());
+						stop.setGtfsId(attNode.getAttributes().getNamedItem("v").getNodeValue());
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("highway") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("bus_stop"))
-						st.setIsRailway(false);
+						stop.setIsRailway(false);
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("railway") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("tram_stop"))
-						st.setIsRailway(true);
+						stop.setIsRailway(true);
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("railway") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("station"))
-						st.setIsRailway(true);
+						stop.setIsRailway(true);
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("public_transport") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("stop_position") &&
-							st.isRailway() == null)
-						st.setIsStopPosition(true);
+							stop.isRailway() == null)
+						stop.setIsStopPosition(true);
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("train") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("yes"))
-						st.setIsRailway(true);
+						stop.setIsRailway(true);
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("tram") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("yes"))
-						st.setIsRailway(true);
+						stop.setIsRailway(true);
 					if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("bus") &&
 							attNode.getAttributes().getNamedItem("v").getNodeValue().equals("yes"))
-						st.setIsRailway(false);
+						stop.setIsRailway(false);
 				}
 			}
 
 			
-			if (st.isRailway() == null)
-				if (st.isStopPosition())
+			if (stop.isRailway() == null)
+				if (stop.isStopPosition())
 					continue; //ignore unsupported stop positions (like ferries)
 				else
-					throw new IllegalArgumentException("Unknow node type for node: " + st.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
+					throw new IllegalArgumentException("Unknow node type for node: " + stop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
 			//Check duplicate ref in osm
-			if (st.getCode() != null){
-				if (st.isStopPosition() == null || st.isStopPosition() == false){
-					if (st.isRailway()){
-						if (refRails.containsKey(st.getCode())){
-							for (Stop existingStop:refRails.get(st.getCode())){
-								if (OSMDistanceUtils.distVincenty(st.getLat(), st.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
-									System.err.println("Warning: The ref " + st.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-											" (nodes ids:" + st.getOSMId() + "," + existingStop.getOSMId() + ")");
+			if (stop.getCode() != null){
+				if (stop.isStopPosition() == null || stop.isStopPosition() == false){
+					if (stop.isRailway()){
+						if (refRails.containsKey(stop.getCode())){
+							for (Stop existingStop:refRails.get(stop.getCode())){
+								if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
+									System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
+											" (nodes ids:" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
 							}
 						}
 
-						refRails.put(st.getCode(), st);
+						refRails.put(stop.getCode(), stop);
 					}else{
-						if (refBuses.containsKey(st.getCode())){
-							for (Stop existingStop:refBuses.get(st.getCode())){
-								if (OSMDistanceUtils.distVincenty(st.getLat(), st.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
-									System.err.println("Warning: The ref " + st.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-											" (nodes ids:" + st.getOSMId() + "," + existingStop.getOSMId() + ")");
+						if (refBuses.containsKey(stop.getCode())){
+							for (Stop existingStop:refBuses.get(stop.getCode())){
+								if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
+									System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
+											" (nodes ids:" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
 							}
 						}
-						refBuses.put(st.getCode(), st);
+						refBuses.put(stop.getCode(), stop);
 					}
 				}
 			}
-			result.add(st);
+			result.add(stop);
 		}
 
 		return result;
