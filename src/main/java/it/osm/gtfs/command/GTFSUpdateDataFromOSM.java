@@ -40,10 +40,14 @@ import org.xml.sax.SAXException;
 
 public class GTFSUpdateDataFromOSM {
 	public static void run() throws IOException, InterruptedException, ParserConfigurationException, SAXException {
-		new File(GTFSImportSetting.getInstance().getOSMCachePath()).mkdirs();
-		updateBusStops();
-		updateBaseRels();
-		updateFullRels();
+
+		if(new File(GTFSImportSetting.getInstance().getOSMCachePath()).mkdirs()) {
+			updateBusStops();
+			updateBaseRels();
+			updateFullRels();
+		}else{
+			System.err.println("Error during the creation of the cache directory for gtfs-osm-import.");
+		}
 	}
 
 	public static void run(String relation) throws ParserConfigurationException, SAXException, IOException, InterruptedException {
