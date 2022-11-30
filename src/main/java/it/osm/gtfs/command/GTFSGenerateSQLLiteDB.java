@@ -93,7 +93,7 @@ public class GTFSGenerateSQLLiteDB {
 		PreparedStatement stm = connection
 		.prepareStatement("insert into stop values(?, ?, ?, ?, ?, ?, ?)");
 		for (Stop s : stops) {
-			stm.setLong(1, Long.valueOf(s.getOSMId()));
+			stm.setLong(1, Long.parseLong(s.getOSMId()));
 			stm.setString(2, s.getCode());
 			stm.setString(3, s.getName());
 			stm.setDouble(4, s.getLat());
@@ -107,7 +107,7 @@ public class GTFSGenerateSQLLiteDB {
 	private void insertRelations(List<Relation> rels) throws SQLException {
 		PreparedStatement stm = connection.prepareStatement("insert into relation values(?, ?, ?, ?, ?, ?)");
 		for (Relation r : rels) {
-			stm.setLong(1, Long.valueOf(r.getId()));
+			stm.setLong(1, Long.parseLong(r.getId()));
 			stm.setString(2, r.getRef());
 			stm.setString(3, r.getName());
 			stm.setString(4, r.getFrom());
@@ -118,8 +118,8 @@ public class GTFSGenerateSQLLiteDB {
 		stm = connection.prepareStatement("insert into relation_stops values(?, ?, ?)");
 		for (Relation r : rels) {
 			for (Long k:r.getStops().keySet()){
-				stm.setLong(1, Long.valueOf(r.getId()));
-				stm.setLong(2, Long.valueOf(r.getStops().get(k).getOSMId()));
+				stm.setLong(1, Long.parseLong(r.getId()));
+				stm.setLong(2, Long.parseLong(r.getStops().get(k).getOSMId()));
 				stm.setLong(3, k);
 				stm.executeUpdate();
 			}
