@@ -21,10 +21,12 @@ import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.model.StopsList;
 import it.osm.gtfs.model.Trip;
 
+import java.util.List;
+
 public class OSMRelationImportGenerator {
 
 	//FIXME: refactor
-	public static String getRelation(BoundingBox bb, StopsList stopTimes, Trip t, Route r){
+	public static String getRelation(BoundingBox bb, StopsList stopTimes, List<Integer> osmWaysIds, Trip t, Route r){
 		StringBuilder buffer = new StringBuilder();
 		buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
 		buffer.append(bb.getXMLTag());
@@ -32,6 +34,14 @@ public class OSMRelationImportGenerator {
 		for (Stop s:stopTimes.getStops().values()){
 			buffer.append("<member type='node' ref='" + s.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
 		}
+
+
+		if(osmWaysIds != null) {
+			for (Integer osmWayId : osmWaysIds) {
+				buffer.append("<member type='way' ref='" + osmWayId + "' role='' />\n");
+			}
+		}
+
 		buffer.append("<tag k='direction' v='" + GTFSImportSetting.getInstance().getPlugin().fixTripName(t.getName()) + "' />\n");
 		buffer.append("<tag k='name' v='" + r.getShortName() + ": " + r.getLongName().replaceAll("'", "\'") + "' />\n");
 		buffer.append("<tag k='network' v='" + GTFSImportSetting.getInstance().getNetwork() + "' />\n");

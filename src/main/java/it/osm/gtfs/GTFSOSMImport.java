@@ -75,6 +75,12 @@ public class GTFSOSMImport {
 		GTFSGenerateRoutesBaseRelations.run();
 	}
 
+	@Command(description="Generate full releations including ways and stops")
+	public void fullrels() throws IOException, ParserConfigurationException, SAXException {
+		GTFSGenerateRoutesFullRelations.run();
+	}
+
+
 	@Command(description="Analyze the diff between osm relations and gtfs trips")
 	public void reldiff() throws IOException, ParserConfigurationException, SAXException {
 		GTFSGenerateRoutesDiff.run();
@@ -120,10 +126,14 @@ public class GTFSOSMImport {
 		GTFSGenerateGeoJSON.run();
 	}
 
+	@Command(description="Merge all the new stops into the stops.osm file")
+	public void mergestops() throws ParserConfigurationException, SAXException, IOException, JSONException{
+		GTFSMergeNewStops.run();
+	}
 
 	@Command(description="Match gpx files to OSM data to generate precise relations")
 	public void match() throws ParserConfigurationException, SAXException, IOException, JSONException{
-		GTFSMatchGPX.run();
+		GTFSMatchGPX.run(null);
 	}
 
 	@Command(description="Display current configuration")
