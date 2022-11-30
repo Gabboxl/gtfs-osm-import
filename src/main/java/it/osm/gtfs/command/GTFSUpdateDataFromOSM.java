@@ -144,6 +144,7 @@ public class GTFSUpdateDataFromOSM {
 						uptodate = true;
 				}
 			}catch (Exception e) {
+				System.err.println(e);
 			}
 			
 			if (!uptodate){
