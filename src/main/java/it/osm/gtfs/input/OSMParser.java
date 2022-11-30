@@ -195,7 +195,7 @@ public class OSMParser {
 
 
 		if (relationParser.missingNodes.size() > 0 || relationParser.failedRelationIds.size() > 0){
-			System.err.println("Failed to parse some relations. Relations id: " + StringUtils.join(relationParser.failedRelationIds, ", "));
+			System.err.println("Failed to parse some relations. Relations IDs: " + StringUtils.join(relationParser.failedRelationIds, ", "));
 			System.err.println("Failed to parse some relations. Missing nodes: " + StringUtils.join(relationParser.missingNodes, ", "));
 		}
 
@@ -356,7 +356,7 @@ public class OSMParser {
 					result.add(currentRelation);
 				}else{
 					failedRelationIds.add(currentRelation.getId());
-					System.err.println("Warning: failed to parse relation " + currentRelation.getId() + " " + currentRelation.getName());
+					System.err.println("Warning: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]");
 				}
 				currentRelation = null;
 			}
