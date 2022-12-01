@@ -15,78 +15,26 @@
 
 package it.osm.gtfs;
 
-import asg.cliche.CLIException;
-import asg.cliche.Command;
-import asg.cliche.Shell;
-import asg.cliche.ShellFactory;
 import it.osm.gtfs.command.*;
 import it.osm.gtfs.command.gui.GTFSRouteDiffGui;
 import it.osm.gtfs.utils.GTFSImportSetting;
 import org.json.JSONException;
 import org.xml.sax.SAXException;
+import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
+@CommandLine.Command(name = "GTFSOSMImport", subcommands = {
+		GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
+GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesBaseRelations.class, GTFSGenerateRoutesFullRelations.class,
+GTFSMatchGPX.class, GTFSCheckOsmRoutes.class,
+		GTFSGenerateRoutesDiff.class
+})
 public class GTFSOSMImport {
-	
-	@Command(description="Get the Bounding Box of the GTFS File and api links")
-	public void bbox() throws IOException, ParserConfigurationException, SAXException, TransformerException {
-		GTFSGetBoundingBox.run();
-	}
-
-	@Command(description="Check and validate OSM relations")
-	public void check(String osmId) throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
-		GTFSCheckOsmRoutes.run(osmId);
-	}
-	
-	@Command(description="Generate/update osm data from api server")
-	public void update() throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
-		GTFSUpdateDataFromOSM.run();
-	}
-	
-	@Command(description="Generate/update single relation from api server")
-	public void updates(String relation) throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
-		GTFSUpdateDataFromOSM.run(relation);
-	}
-	
-	@Command(description="Generate files to import bus stops into osm merging with existing stops")
-	public void stops() throws IOException, ParserConfigurationException, SAXException, TransformerException {
-		GTFSGenerateBusStopsImport.run(false);
-	}
-	
-	@Command(description="Generate files to import bus stops into osm merging with existing stops (export to small file)")
-	public void stops(Boolean smallFile) throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
-		GTFSGenerateBusStopsImport.run(smallFile);
-	}
-
-	@Command(description="Generate .gpx file for all GTFS Trips")
-	public void gpx() throws IOException, ParserConfigurationException, SAXException {
-		GTFSGenerateRoutesGPXs.run();
-	}
-
-	@Command(description="Generate the base relations (including only stops) to be used only when importing without any existing relation in osm")
-	public void rels() throws IOException, ParserConfigurationException, SAXException {
-		GTFSGenerateRoutesBaseRelations.run();
-	}
-
-	@Command(description="Generate full releations including ways and stops")
-	public void fullrels() throws IOException, ParserConfigurationException, SAXException {
-		GTFSGenerateRoutesFullRelations.run();
-	}
-
-
-	@Command(description="Analyze the diff between osm relations and gtfs trips")
-	public void reldiff() throws IOException, ParserConfigurationException, SAXException {
-		GTFSGenerateRoutesDiff.run();
-	}
-	
-	@Command(description="Analyze the diff between osm relations and gtfs trips")
+	@CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips")
 	public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
 		final Object lock = new Object();
 		final GTFSRouteDiffGui app = new GTFSRouteDiffGui();
@@ -116,28 +64,9 @@ public class GTFSOSMImport {
         System.out.println("Done");
 	}
 
-	@Command(description="Generate a sqlite db containg osm relations")
-	public void sqlite() throws ParserConfigurationException, SAXException, IOException{
-		GTFSGenerateSQLLiteDB.run();
-	}	
-	
-	@Command(description="Generate a geojson file containg osm relations")
-	public void geojson() throws ParserConfigurationException, SAXException, IOException, JSONException{
-		GTFSGenerateGeoJSON.run();
-	}
 
-	@Command(description="Merge all the new stops into the stops.osm file")
-	public void mergestops() throws ParserConfigurationException, SAXException, IOException, JSONException{
-		GTFSMergeNewStops.run();
-	}
-
-	@Command(description="Match gpx files to OSM data to generate precise relations")
-	public void match() throws ParserConfigurationException, SAXException, IOException, JSONException{
-		GTFSMatchGPX.run(null);
-	}
-
-	@Command(description="Display current configuration")
-	public String conf(){
+	@CommandLine.Command(description = "Display current configuration")
+	String conf(){
 		return "Current Configuration:\n" +
 				"GTFS Path: " + GTFSImportSetting.getInstance().getGTFSPath() + "\n" +
 				"OSM Path: " + GTFSImportSetting.getInstance().getOSMPath() + "\n" +
@@ -146,32 +75,13 @@ public class GTFSOSMImport {
 				"RevisitedKey: " + GTFSImportSetting.getInstance().getRevisitedKey() + "\n" +
 				"Plugin Class: " + GTFSImportSetting.getInstance().getPlugin().getClass().getCanonicalName() + "\n";
 	}
-	
-	@Command(description="Display available commands")
-	public String help(){
-		StringBuilder buffer = new StringBuilder();
-		buffer.append("Available commands:\n");
-		for (Method method:this.getClass().getMethods()){
-			for(Annotation annotation : method.getDeclaredAnnotations()){
-				if(annotation instanceof Command){
-					Command myAnnotation = (Command) annotation;
-					buffer.append(method.getName() + "\t" + myAnnotation.description() + "\n");
-				}
-			}
-		}
-		buffer.append("exit\tExit from GTFSImport\n");
-		return buffer.toString();
-	}
 
-	public static void main(String[] args) throws IOException, CLIException {
+	public static void main(String[] args) {
 		initChecks();
-		System.out.println("GTFS Import\n");
-		Shell shell = ShellFactory.createConsoleShell("GTFSImport", "", new GTFSOSMImport());
-		shell.processLine("conf");
-		shell.processLine("help");
-		shell.commandLoop();
-		// ensure we close app at this point even with awt resourced leaked
-		System.exit(0);
+		System.out.println("Welcome to GTFS-OSM-Import!\n");
+
+		int exitCode = new CommandLine(new GTFSOSMImport()).execute(args);
+		System.exit(exitCode);
 	}
 	
 	private static void initChecks(){

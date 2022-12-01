@@ -32,32 +32,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.xml.sax.SAXException;
+import picocli.CommandLine;
 
-public class GTFSUpdateDataFromOSM {
-	public static void run() throws IOException, InterruptedException, ParserConfigurationException, SAXException {
+@CommandLine.Command(name = "update", description = "Generate/update osm data from api server")
+public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
-		if(new File(GTFSImportSetting.getInstance().getOSMCachePath()).mkdirs()) {
-			updateBusStops();
-			updateBaseRels();
-			updateFullRels();
-		}else{
-			System.err.println("Error during the creation of the cache directory for gtfs-osm-import.");
+	@CommandLine.Option(names = {"-r", "--relation"}, description = "Optional relation ID to generate/update single relation from api server")
+	String relation;
+
+	@Override
+	public Void call() throws IOException, InterruptedException, ParserConfigurationException, SAXException {
+
+		if (relation == null || relation.isBlank()) {
+
+			if (new File(GTFSImportSetting.getInstance().getOSMCachePath()).mkdirs()) {
+				updateBusStops();
+				updateBaseRels();
+				updateFullRels();
+			} else {
+				System.err.println("Error during the creation of the cache directory for gtfs-osm-import.");
+			}
+		}else {
+			StringTokenizer st = new StringTokenizer(relation, " ,\n\t");
+			Map<String, Integer> idWithVersion = new HashMap<String, Integer>();
+			while (st.hasMoreTokens()){
+				idWithVersion.put(st.nextToken(), Integer.MAX_VALUE);
+			}
+
+			updateFullRels(idWithVersion);
 		}
-	}
-
-	public static void run(String relation) throws ParserConfigurationException, SAXException, IOException, InterruptedException {
-		StringTokenizer st = new StringTokenizer(relation, " ,\n\t");
-		Map<String, Integer> idWithVersion = new HashMap<String, Integer>();
-		while (st.hasMoreTokens()){
-			idWithVersion.put(st.nextToken(), Integer.MAX_VALUE);
-		}
-		
-		updateFullRels(idWithVersion);
+		return null;
 	}
 
 	private static void updateBusStops() throws IOException, InterruptedException{

@@ -29,19 +29,27 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
+import java.util.concurrent.Callable;
 
 import org.fusesource.jansi.Ansi;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import picocli.CommandLine;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 
-public class GTFSGenerateBusStopsImport {
-	public static void run(boolean smallFileExport) throws IOException, ParserConfigurationException, SAXException, TransformerException {
+@CommandLine.Command(name = "stops", description = "Generate files to import bus stops into osm merging with existing stops")
+public class GTFSGenerateBusStopsImport implements Callable<Void> {
+
+	@CommandLine.Option(names = {"-s", "--small"}, description = "Export to small file")
+	boolean smallFileExport;
+
+	@Override
+	public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
 		List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_STOP_FILE_NAME);
 		BoundingBox bb = new BoundingBox(gtfsStops);
 
@@ -191,5 +199,6 @@ public class GTFSGenerateBusStopsImport {
 				System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs));
 			}
 		}
+		return null;
 	}
 }

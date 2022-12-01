@@ -33,15 +33,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
+
+import com.google.common.collect.Multimap;
+import org.xml.sax.SAXException;
+import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
+@CommandLine.Command(name = "gpx", description = "Generate .gpx file for all GTFS Trips")
+public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
-import com.google.common.collect.Multimap;
-
-public class GTFSGenerateRoutesGPXs {
-	public static void run() throws IOException, ParserConfigurationException, SAXException {
+	@Override
+	public Void call() throws IOException, ParserConfigurationException, SAXException {
 		Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME));
 		Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
 		Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_SHAPES_FILE_NAME);
@@ -69,5 +73,6 @@ public class GTFSGenerateRoutesGPXs {
 				f.close();
 			}
 		}
+		return null;
 	}
 }

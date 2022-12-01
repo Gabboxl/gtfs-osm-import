@@ -21,16 +21,21 @@ import it.osm.gtfs.model.*;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
 import it.osm.gtfs.utils.GTFSImportSetting;
 import org.xml.sax.SAXException;
+import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 
-public class GTFSGenerateRoutesFullRelations {
-	public static void run() throws IOException, ParserConfigurationException, SAXException {
+@CommandLine.Command(name = "fullrels", description = "Generate full releations including ways and stops")
+public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
+
+	@Override
+	public Void call() throws IOException, ParserConfigurationException, SAXException {
 		Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME));
 		Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
 		Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_SHAPES_FILE_NAME);
@@ -60,7 +65,7 @@ public class GTFSGenerateRoutesFullRelations {
 				String xmlGPXShape = shape.getGPXasShape(route.getShortName());
 
 
-				List<Integer> osmWayIds = GTFSMatchGPX.run(xmlGPXShape);
+				List<Integer> osmWayIds = new GTFSMatchGPX().runMatch(xmlGPXShape);
 				
 				FileOutputStream f = new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
 				f.write(OSMRelationImportGenerator.getRelation(bb, stops, osmWayIds, trip, route).getBytes());
@@ -70,5 +75,6 @@ public class GTFSGenerateRoutesFullRelations {
 				f.close();
 			}
 		}
+		return null;
 	}
 }

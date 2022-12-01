@@ -33,15 +33,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.Multimap;
+import picocli.CommandLine;
 
-public class GTFSGenerateRoutesDiff {
-	public static void run() throws ParserConfigurationException, SAXException, IOException{
+@CommandLine.Command(name = "reldiff", description = "Analyze the diff between osm relations and gtfs trips")
+public class GTFSGenerateRoutesDiff implements Callable<Void> {
+
+	@Override
+	public Void call() throws ParserConfigurationException, IOException, SAXException {
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME);
 		Map<String, Stop> osmstopsGTFSId = OSMParser.applyGTFSIndex(osmStops);
 		Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
@@ -147,6 +152,7 @@ public class GTFSGenerateRoutesDiff {
 		System.out.println("Relation in OSM not matched in GTFS: " + osmRelationNotFoundInGTFS.size());
 		System.out.println("Trips in GTFS not matched in OSM: " + tripsNotFoundInOSM.size());
 		System.out.println("---");
+		return null;
 	}
 
 	private static class Affinity{

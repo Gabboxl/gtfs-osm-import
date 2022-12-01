@@ -30,11 +30,9 @@ import com.graphhopper.util.*;
 import it.osm.gtfs.utils.GTFSImportSetting;
 import it.osm.gtfs.utils.GpxConversions;
 import org.fusesource.jansi.Ansi;
-import org.xml.sax.SAXException;
+import picocli.CommandLine;
 
 import javax.annotation.Nullable;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,23 +42,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class GTFSMatchGPX {
-	 static String instructions_locale = "";
-	static String profile_graphhopper = "car";
+@CommandLine.Command(name = "match", description = "Match gpx files to OSM data to generate precise relations")
+public class GTFSMatchGPX implements Callable<Void> {
+	String instructions_locale = "";
+	String profile_graphhopper = "car";
 
-	static StopWatch importSW;
-	static StopWatch matchSW;
-	static XmlMapper xmlMapper;
-	static MapMatching mapMatching;
-	static GraphHopper hopper;
-	static Translation tr;
-	static boolean withRoute;
-	static ArrayList<Integer> matchWayIDs = null;
+	StopWatch importSW;
+	StopWatch matchSW;
+	XmlMapper xmlMapper;
+	MapMatching mapMatching;
+	GraphHopper hopper;
+	Translation tr;
+	boolean withRoute;
+	ArrayList<Integer> matchWayIDs = null;
 
-	public static ArrayList<Integer> run(@Nullable String xmlGPXString) throws IOException, ParserConfigurationException, SAXException {
+	//@CommandLine.Option(names = {"-f", "--file"}, description = "export to file")
+	//Boolean exportToFile;
+
+	public Void call() throws IOException {
+
+		runMatch(null);
+		return null;
+	}
+
+	public ArrayList<Integer> runMatch(@Nullable String xmlGPXString) throws IOException{
 
 		ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
 		//objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
@@ -117,7 +126,7 @@ public class GTFSMatchGPX {
 
 
 
-	static private @Nullable ArrayList<Integer> matchGPX(String xmlData, String outputFile){ //metodo con tipi generici
+	private @Nullable ArrayList<Integer> matchGPX(String xmlData, @Nullable String outputFile){ //metodo con tipi generici
 		try {
 			importSW.start();
 			Gpx gpx = xmlMapper.readValue(xmlData, Gpx.class);
@@ -174,16 +183,12 @@ public class GTFSMatchGPX {
 			}
 
 
-
-			if (outputFile != null) {
-				try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-					long time = gpx.trk.get(0).getStartTime()
-							.map(Date::getTime)
-							.orElse(System.currentTimeMillis());
-					writer.append(GpxConversions.createGPX(responsePath.getInstructions(), gpx.trk.get(0).name != null ? gpx.trk.get(0).name : "", time, hopper.hasElevation(), withRoute, true, false, Constants.VERSION, tr));
-				}
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+				long time = gpx.trk.get(0).getStartTime()
+						.map(Date::getTime)
+						.orElse(System.currentTimeMillis());
+				writer.append(GpxConversions.createGPX(responsePath.getInstructions(), gpx.trk.get(0).name != null ? gpx.trk.get(0).name : "", time, hopper.hasElevation(), withRoute, true, false, Constants.VERSION, tr));
 			}
-
 
 
 		} catch(Exception ex){

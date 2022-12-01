@@ -5,7 +5,6 @@ import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Relation.OSMNode;
 import it.osm.gtfs.model.Relation.OSMRelationWayMember;
 import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.StopsList;
 import it.osm.gtfs.utils.GTFSImportSetting;
 import it.osm.gtfs.utils.JOSMUtils;
 
@@ -13,16 +12,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.concurrent.Callable;
 
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
+import picocli.CommandLine;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class GTFSCheckOsmRoutes {
-	public static void run(String osmId) throws ParserConfigurationException, SAXException, IOException {
+@CommandLine.Command(name = "check", description = "Check and validate OSM relations")
+public class GTFSCheckOsmRoutes implements Callable<Void> {
+
+	@CommandLine.Option(names = "--osmid", interactive = true)
+	String osmId;
+
+	@Override
+	public Void call() throws ParserConfigurationException, IOException, SAXException {
 		System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
 		System.out.println("Step 1/4 Reading OSM Stops");
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME);
@@ -42,6 +49,7 @@ public class GTFSCheckOsmRoutes {
 				System.out.println(e.getMessage());
 			}
 		}
+		return null;
 	}
 
 	private static void check(Relation relation, Boolean debug) {

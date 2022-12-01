@@ -29,7 +29,9 @@ dependencies {
     implementation 'org.slf4j:slf4j-simple:2.0.5' //anche questa come quello sopra
 
 
-    implementation 'com.googlecode.clichemaven:cliche:110413'
+    implementation 'info.picocli:picocli:4.7.0'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.0'
+
     implementation 'org.mapfish.geo:mapfish-geo-lib:1.2.0'
 
     implementation 'org.openstreetmap.osmosis:osmosis-xml:0.48.3'
@@ -39,6 +41,11 @@ dependencies {
     implementation 'commons-lang:commons-lang:2.6' //esiste la release 3 comunque
 
     shadow 'junit:junit:3.8.2'
+}
+
+//needed for Picocli
+compileJava {
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
 
 

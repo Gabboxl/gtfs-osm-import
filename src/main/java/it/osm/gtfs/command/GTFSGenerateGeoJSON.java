@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -26,11 +27,13 @@ import org.xml.sax.SAXException;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import picocli.CommandLine;
 
-public class GTFSGenerateGeoJSON {
+@CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
+public class GTFSGenerateGeoJSON implements Callable<Void> {
 
-	public static void run() throws ParserConfigurationException, SAXException,
-	IOException, JSONException {
+	@Override
+	public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
 		System.out.println("Parsing OSM Stops...");
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
 				.getInstance().getOSMPath()
@@ -62,6 +65,7 @@ public class GTFSGenerateGeoJSON {
 			if (generator != null)
 				generator.close("data.json");
 		}
+		return null;
 	}
 
 	private StringBuffer buffer;

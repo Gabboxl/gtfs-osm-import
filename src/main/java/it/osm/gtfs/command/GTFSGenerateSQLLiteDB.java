@@ -14,15 +14,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+
+import org.xml.sax.SAXException;
+import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
+@CommandLine.Command(name = "sqlite", description = "Generate a sqlite db containg osm relations")
+public class GTFSGenerateSQLLiteDB implements Callable<Void> {
 
-public class GTFSGenerateSQLLiteDB {
-
-	public static void run() throws ParserConfigurationException, SAXException,
-	IOException {
+	@Override
+	public Void call() throws ParserConfigurationException, IOException, SAXException {
 		System.out.println("Parsing OSM stops...");
 		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
 				.getInstance().getOSMPath()
@@ -55,6 +58,7 @@ public class GTFSGenerateSQLLiteDB {
 			if (generator != null)
 				generator.close();
 		}
+		return null;
 	}
 
 	private Connection connection = null;

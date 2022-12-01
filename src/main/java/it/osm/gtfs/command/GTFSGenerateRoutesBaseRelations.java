@@ -34,15 +34,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.Multimap;
+import picocli.CommandLine;
 
-public class GTFSGenerateRoutesBaseRelations {
-	public static void run() throws IOException, ParserConfigurationException, SAXException {
+@CommandLine.Command(name = "rels", description = "Generate the base relations (including only stops) to be used only when importing without any existing relation in osm")
+public class GTFSGenerateRoutesBaseRelations implements Callable<Void> {
+
+	@Override
+	public Void call() throws IOException, ParserConfigurationException, SAXException {
 		Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME));
 		Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
 		Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_STOP_TIME_FILE_NAME, osmstops);
@@ -75,5 +80,6 @@ public class GTFSGenerateRoutesBaseRelations {
 				f.close();
 			}
 		}
+		return null;
 	}
 }

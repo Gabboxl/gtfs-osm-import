@@ -18,13 +18,17 @@ import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.model.BoundingBox;
 import it.osm.gtfs.model.Stop.GTFSStop;
 import it.osm.gtfs.utils.GTFSImportSetting;
+import picocli.CommandLine;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class GTFSGetBoundingBox {
+@CommandLine.Command(name = "bbox", description = "Get the Bounding Box of the GTFS File and api links")
+public class GTFSGetBoundingBox implements Callable<Void> {
 
-	public static void run() throws IOException {
+	@Override
+	public Void call() throws IOException {
 		List<GTFSStop> gtfs = GTFSParser.readBusStop(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_STOP_FILE_NAME);
 		BoundingBox bb = new BoundingBox(gtfs);
 
@@ -35,6 +39,7 @@ public class GTFSGetBoundingBox {
 		System.out.println("API links trams: " + GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
 		//Metro
 		System.out.println("API links trams: " + GTFSImportSetting.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
+		return null;
 	}
 
 }
