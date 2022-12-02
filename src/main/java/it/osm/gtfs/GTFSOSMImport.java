@@ -66,14 +66,14 @@ public class GTFSOSMImport {
 
 
 	@CommandLine.Command(description = "Display current configuration")
-	String conf(){
-		return "Current Configuration:\n" +
+	void conf(){
+		System.out.println("Current Configuration:\n" +
 				"GTFS Path: " + GTFSImportSetting.getInstance().getGTFSPath() + "\n" +
 				"OSM Path: " + GTFSImportSetting.getInstance().getOSMPath() + "\n" +
 				"OUTPUT Path: " + GTFSImportSetting.getInstance().getOutputPath() + "\n" +
 				"Operator: " + GTFSImportSetting.getInstance().getOperator() + "\n" +
 				"RevisitedKey: " + GTFSImportSetting.getInstance().getRevisitedKey() + "\n" +
-				"Plugin Class: " + GTFSImportSetting.getInstance().getPlugin().getClass().getCanonicalName() + "\n";
+				"Plugin Class: " + GTFSImportSetting.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
 	}
 
 	public static void main(String[] args) {
