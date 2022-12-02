@@ -51,7 +51,9 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
 		if (relation == null || relation.isBlank()) {
 
-			if (new File(GTFSImportSetting.getInstance().getOSMCachePath()).mkdirs()) {
+			File cachedirectory = new File(GTFSImportSetting.getInstance().getOSMCachePath());
+
+			if (cachedirectory.mkdirs() || cachedirectory.isDirectory()) { //controllo che sia stata creata la directori o se esiste gia'
 				updateBusStops();
 				updateBaseRels();
 				updateFullRels();
