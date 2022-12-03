@@ -55,7 +55,7 @@ public class OSMParser {
         final Map<String, Stop> result = new TreeMap<String, Stop>();
 
         for (Stop stop : stops){
-            if (stop.getGtfsId() != null && stop.getGtfsId() != ""){
+            if (stop.getGtfsId() != null && !stop.getGtfsId().equals("")){
                 result.put(stop.getGtfsId(), stop);
             }
         }
