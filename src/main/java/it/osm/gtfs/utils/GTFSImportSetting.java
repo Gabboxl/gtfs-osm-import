@@ -128,7 +128,7 @@ public class GTFSImportSetting {
 					        }
 					    }
 						if (validPlugin)
-							plugin = (GTFSPlugin) pluginClass.newInstance();
+							plugin = (GTFSPlugin) pluginClass.getDeclaredConstructor().newInstance();
 						else
 							throw new IllegalArgumentException("The specified plugin is not found or not valid");
 					}catch (Exception e) {
