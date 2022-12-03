@@ -5,7 +5,7 @@ import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Relation.OSMNode;
 import it.osm.gtfs.model.Relation.OSMRelationWayMember;
 import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.JOSMUtils;
 
 import java.io.File;
@@ -32,11 +32,11 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
         System.out.println("Step 1/4 Reading OSM Stops");
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
         System.out.println("Step 2/4 Indexing OSM Stops");
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_RELATIONS_FILE_NAME), osmstopsOsmID);
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_RELATIONS_FILE_NAME), osmstopsOsmID);
 
         System.out.println("Step 4/4 Checking relations");
         for (Relation r:osmRels){

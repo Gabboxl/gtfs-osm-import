@@ -17,7 +17,7 @@ package it.osm.gtfs.input;
 import it.osm.gtfs.model.Route;
 import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.model.Trip;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.model.Shape;
 import it.osm.gtfs.model.StopsList;
 
@@ -103,7 +103,7 @@ public class GTFSParser {
                         System.err.println("skipped station (group of multiple stops): " + elements[stopIdKey]);
                     }else{
                         Stop.GTFSStop gs = new Stop.GTFSStop(elements[stopIdKey],elements[stopCodeKey],Double.valueOf(elements[stopLatKey]),Double.valueOf(elements[stopLonKey]), elements[stopNameKey]);
-                        if (GTFSImportSetting.getInstance().getPlugin().isValidStop(gs)){
+                        if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gs)){
                             result.add(gs);
                         }
                     }

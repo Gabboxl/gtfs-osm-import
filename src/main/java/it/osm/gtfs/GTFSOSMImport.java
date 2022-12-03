@@ -17,7 +17,7 @@ package it.osm.gtfs;
 
 import it.osm.gtfs.command.*;
 import it.osm.gtfs.command.gui.GTFSRouteDiffGui;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
 import org.jline.console.impl.SystemRegistryImpl;
@@ -84,12 +84,12 @@ public class GTFSOSMImport {
     @CommandLine.Command(description = "Display current configuration")
     void conf(){
         System.out.println("Current Configuration:\n" +
-                "GTFS Path: " + GTFSImportSetting.getInstance().getGTFSPath() + "\n" +
-                "OSM Path: " + GTFSImportSetting.getInstance().getOSMPath() + "\n" +
-                "OUTPUT Path: " + GTFSImportSetting.getInstance().getOutputPath() + "\n" +
-                "Operator: " + GTFSImportSetting.getInstance().getOperator() + "\n" +
-                "RevisitedKey: " + GTFSImportSetting.getInstance().getRevisitedKey() + "\n" +
-                "Plugin Class: " + GTFSImportSetting.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
+                "GTFS Path: " + GTFSImportSettings.getInstance().getGTFSPath() + "\n" +
+                "OSM Path: " + GTFSImportSettings.getInstance().getOSMPath() + "\n" +
+                "OUTPUT Path: " + GTFSImportSettings.getInstance().getOutputPath() + "\n" +
+                "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
+                "RevisitedKey: " + GTFSImportSettings.getInstance().getRevisitedKey() + "\n" +
+                "Plugin Class: " + GTFSImportSettings.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
     }
 
 

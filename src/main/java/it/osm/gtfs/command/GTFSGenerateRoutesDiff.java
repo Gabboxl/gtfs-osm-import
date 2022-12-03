@@ -16,7 +16,7 @@ package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Route;
 import it.osm.gtfs.model.Stop;
@@ -47,14 +47,14 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
 
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
         Map<String, Stop> osmstopsGTFSId = OSMParser.applyGTFSIndex(osmStops);
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_RELATIONS_FILE_NAME), osmstopsOsmID);
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_RELATIONS_FILE_NAME), osmstopsOsmID);
 
-        Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
-        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_STOP_TIME_FILE_NAME, osmstopsGTFSId);
-        List<Trip> trips = GTFSParser.readTrips(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_TRIPS_FILE_NAME,
+        Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
+        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstopsGTFSId);
+        List<Trip> trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, stopTimes);
 
         //looking from mapping gtfs trip into existing osm relations
@@ -73,11 +73,11 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
             for (Trip trip : uniqueTrips){
                 Route route = routes.get(trip.getRoute().getId());
                 StopsList s = stopTimes.get(trip.getTripID());
-                if (GTFSImportSetting.getInstance().getPlugin().isValidTrip(allTrips, uniqueTrips, trip, s)){
-                    if (GTFSImportSetting.getInstance().getPlugin().isValidRoute(route)){
+                if (GTFSImportSettings.getInstance().getPlugin().isValidTrip(allTrips, uniqueTrips, trip, s)){
+                    if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(route)){
                         Relation found = null;
                         for (Relation relation: osmRels){
-                            if (relation.equalsStops(s) || GTFSImportSetting.getInstance().getPlugin().isRelationSameAs(relation, s)){
+                            if (relation.equalsStops(s) || GTFSImportSettings.getInstance().getPlugin().isRelationSameAs(relation, s)){
                                 if (found != null){
                                     osmRelationNotFoundInGTFS.remove(found);
                                     osmRelationFoundInGTFS.add(found);

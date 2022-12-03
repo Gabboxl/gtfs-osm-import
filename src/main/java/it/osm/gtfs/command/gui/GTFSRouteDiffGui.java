@@ -7,7 +7,7 @@ import it.osm.gtfs.model.Route;
 import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.model.StopsList;
 import it.osm.gtfs.model.Trip;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -107,20 +107,20 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         Map<String, StopsList> stopTimes;
         List<Trip> trips;
 
-        osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME);
+        osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
         osmstopsGTFSId = OSMParser.applyGTFSIndex(osmStops);
         osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
-        osmRels = convertoToWigthed(OSMParser.readOSMRelations(new File(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_RELATIONS_FILE_NAME), osmstopsOsmID));
+        osmRels = convertoToWigthed(OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_RELATIONS_FILE_NAME), osmstopsOsmID));
 
-        routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
-        stopTimes = GTFSParser.readStopTimes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_STOP_TIME_FILE_NAME, osmstopsGTFSId);
-        trips = GTFSParser.readTrips(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_TRIPS_FILE_NAME,
+        routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
+        stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstopsGTFSId);
+        trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, stopTimes);
         Set<Trip> uniqueTripSet = new TreeSet<Trip>(trips);
         uniqueTrips = new ArrayList<Trip>();
         for (Trip trip:uniqueTripSet){
-            if (GTFSImportSetting.getInstance().getPlugin().isValidRoute(routes.get(trip.getRoute().getId())) &&
-                    GTFSImportSetting.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, stopTimes.get(trip.getTripID()))){
+            if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(routes.get(trip.getRoute().getId())) &&
+                    GTFSImportSettings.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, stopTimes.get(trip.getTripID()))){
                 uniqueTrips.add(trip);
             }
         }

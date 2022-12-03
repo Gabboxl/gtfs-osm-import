@@ -3,7 +3,7 @@ package it.osm.gtfs.command;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,17 +35,17 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings
                 .getInstance().getOSMPath()
-                + GTFSImportSetting.OSM_STOP_FILE_NAME);
+                + GTFSImportSettings.OSM_STOP_FILE_NAME);
 
         System.out.println("Indexing OSM Stops...");
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         System.out.println("Parsing OSM Relations...");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(
-                        GTFSImportSetting.getInstance().getOSMPath()
-                                + GTFSImportSetting.OSM_RELATIONS_FILE_NAME),
+                        GTFSImportSettings.getInstance().getOSMPath()
+                                + GTFSImportSettings.OSM_RELATIONS_FILE_NAME),
                 osmstopsOsmID);
 
 

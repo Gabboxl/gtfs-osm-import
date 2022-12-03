@@ -20,7 +20,7 @@ import it.osm.gtfs.model.BoundingBox;
 import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.model.Stop.GTFSStop;
 import it.osm.gtfs.output.OSMBusImportGenerator;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.utils.OSMXMLUtils;
 
@@ -50,10 +50,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
-        List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_STOP_FILE_NAME);
+        List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStops);
 
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() + GTFSImportSetting.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
 
         for (GTFSStop gtfsStop : gtfsStops){
             for (Stop osmStop : osmStops){
@@ -133,13 +133,13 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
             if (osm_with_different_gtfs_id > 0){
                 bufferDifferentGTFS.end();
-                bufferDifferentGTFS.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("OSM stops with different gtfs_id (stops with new gtfs_id from GTFS): ").reset().a(osm_with_different_gtfs_id).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSetting.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS + ")"));
+                bufferDifferentGTFS.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("OSM stops with different gtfs_id (stops with new gtfs_id from GTFS): ").reset().a(osm_with_different_gtfs_id).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_PAIRED_WITH_DIFFERENT_GTFS + ")"));
             }
             if (osm_with_gtfs_id_not_in_gtfs > 0){
                 bufferNotInGTFS.end();
-                bufferNotInGTFS.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("OSM stops with gtfs_id not found in GTFS (OLD RIPPED STOPS): ").reset().a(osm_with_gtfs_id_not_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSetting.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS + ")"));
+                bufferNotInGTFS.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("OSM stops with gtfs_id not found in GTFS (OLD RIPPED STOPS): ").reset().a(osm_with_gtfs_id_not_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS + ")"));
             }
             System.out.println(ansi().fg(Ansi.Color.GREEN).a("Paired stops with gtfs_id (stops that are already OK): ").reset().a(paired_with_gtfs_id));
         }
@@ -153,12 +153,12 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 if (osmStop.pairedWith != null && osmStop.getGtfsId() == null){
                     Element n = (Element) osmStop.originalXMLNode;
                     OSMXMLUtils.addTag(n, "gtfs_id", osmStop.pairedWith.getGtfsId());
-                    OSMXMLUtils.addTagIfNotExisting(n, "operator", GTFSImportSetting.getInstance().getOperator());
-                    OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSetting.getInstance().getRevisitedKey(), "no");
+                    OSMXMLUtils.addTagIfNotExisting(n, "operator", GTFSImportSettings.getInstance().getOperator());
+                    OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSettings.getInstance().getRevisitedKey(), "no");
                     OSMXMLUtils.addTagIfNotExisting(n, "shelter", "unknown");
                     OSMXMLUtils.addTagIfNotExisting(n, "bench", "unknown");
                     OSMXMLUtils.addTagIfNotExisting(n, "tactile_paving", "unknown");
-                    OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSetting.getInstance().getPlugin().fixBusStopName(osmStop.pairedWith.getName()));
+                    OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.pairedWith.getName()));
 
                     buffer.appendNode(n);
 
@@ -167,8 +167,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             }
             if (paired_without_gtfs_id > 0){
                 buffer.end();
-                buffer.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_PAIRED_WITHOUT_GTFS));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Paired stops without gtfs_id: ").reset().a(paired_without_gtfs_id).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_PAIRED_WITHOUT_GTFS + ")"));
+                buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_PAIRED_WITHOUT_GTFS));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Paired stops without gtfs_id: ").reset().a(paired_without_gtfs_id).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_PAIRED_WITHOUT_GTFS + ")"));
             }else{
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Paired stops without gtfs_id: ").reset().a(paired_without_gtfs_id));
             }
@@ -186,15 +186,15 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
                     if (smallFileExport && unpaired_in_gtfs % 10 == 0){
                         buffer.end();
-                        buffer.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
+                        buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
                         buffer = new OSMBusImportGenerator(bb);
                     }
                 }
             }
             buffer.end();
             if (unpaired_in_gtfs > 0){
-                buffer.saveTo(new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSetting.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)").reset());
+                buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)").reset());
             }else{
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs));
             }

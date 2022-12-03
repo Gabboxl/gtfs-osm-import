@@ -20,7 +20,7 @@ import it.osm.gtfs.plugins.GTFSPlugin;
 import java.io.File;
 import java.util.Properties;
 
-public class GTFSImportSetting {
+public class GTFSImportSettings {
     public static final String GTFS_STOP_FILE_NAME = "stops.txt";
     public static final String GTFS_STOP_TIME_FILE_NAME = "stop_times.txt";
     public static final String GTFS_ROUTES_FILE_NAME = "routes.txt";
@@ -42,7 +42,7 @@ public class GTFSImportSetting {
 
     private final Properties properties;
 
-    private GTFSImportSetting() {
+    private GTFSImportSettings() {
         properties = new Properties();
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream("gtfs-import.properties"));
@@ -51,12 +51,12 @@ public class GTFSImportSetting {
         }
     }
 
-    private static class SettingHolder {
-        private final static GTFSImportSetting INSTANCE = new GTFSImportSetting();
+    private static class SettingsHolder {
+        private final static GTFSImportSettings INSTANCE = new GTFSImportSettings();
     }
 
-    public static GTFSImportSetting getInstance() {
-        return SettingHolder.INSTANCE;
+    public static GTFSImportSettings getInstance() {
+        return SettingsHolder.INSTANCE;
     }
 
     private String gtfsPath = null;
