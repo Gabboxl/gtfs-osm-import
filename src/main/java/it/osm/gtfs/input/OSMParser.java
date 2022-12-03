@@ -54,9 +54,9 @@ public class OSMParser {
     public static Map<String, Stop> applyGTFSIndex(List<Stop> stops) throws ParserConfigurationException, SAXException, IOException{
         final Map<String, Stop> result = new TreeMap<String, Stop>();
 
-        for (Stop s:stops){
-            if (s.getGtfsId() != null && s.getGtfsId() != ""){
-                result.put(s.getGtfsId(), s);
+        for (Stop stop : stops){
+            if (stop.getGtfsId() != null && stop.getGtfsId() != ""){
+                result.put(stop.getGtfsId(), stop);
             }
         }
 
@@ -66,9 +66,9 @@ public class OSMParser {
     public static Map<String, Stop> applyOSMIndex(List<Stop> stops) throws ParserConfigurationException, SAXException, IOException{
         final Map<String, Stop> result = new TreeMap<String, Stop>();
 
-        for (Stop s:stops){
-            if (s.getOSMId() != null){
-                result.put(s.getOSMId(), s);
+        for (Stop stop : stops){
+            if (stop.getOSMId() != null){
+                result.put(stop.getOSMId(), stop);
             }
         }
 
