@@ -125,6 +125,7 @@ public class GTFSImportSetting {
                         for (Class<?> c : pluginClass.getInterfaces()) {
                             if (c.equals(GTFSPlugin.class)) {
                                 validPlugin = true;
+                                break; //termino il for loop perchè il plugin è stato trovato e non ha senso continuare con il cliclo anche se corto
                             }
                         }
                         if (validPlugin)
