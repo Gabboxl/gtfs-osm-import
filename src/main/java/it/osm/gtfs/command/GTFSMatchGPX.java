@@ -27,7 +27,7 @@ import com.graphhopper.matching.MatchResult;
 import com.graphhopper.matching.Observation;
 import com.graphhopper.routing.ev.OSMWayID;
 import com.graphhopper.util.*;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.GpxConversions;
 import org.fusesource.jansi.Ansi;
 import picocli.CommandLine;
@@ -97,7 +97,7 @@ public class GTFSMatchGPX implements Callable<Void> {
 
 
         if(xmlGPXString.isBlank()) {
-            File directoryPath = new File(GTFSImportSetting.getInstance().getOutputPath() + "/gpx");
+            File directoryPath = new File(GTFSImportSettings.getInstance().getOutputPath() + "/gpx");
             //List of all files and directories
             File[] gpx_files_list = directoryPath.listFiles();
 

@@ -17,7 +17,7 @@ package it.osm.gtfs.command;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.model.BoundingBox;
 import it.osm.gtfs.model.Route;
 import it.osm.gtfs.model.Stop;
@@ -48,10 +48,10 @@ public class GTFSGenerateRoutesBaseRelations implements Callable<Void> {
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
-        Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME));
-        Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
-        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_STOP_TIME_FILE_NAME, osmstops);
-        List<Trip> trips = GTFSParser.readTrips(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_TRIPS_FILE_NAME,
+        Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME));
+        Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
+        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstops);
+        List<Trip> trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, stopTimes);
         BoundingBox bb = new BoundingBox(osmstops.values());
 
@@ -59,7 +59,7 @@ public class GTFSGenerateRoutesBaseRelations implements Callable<Void> {
         Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
         Set<String> keys = new TreeSet<String>(grouppedTrips.keySet());
 
-        new File(GTFSImportSetting.getInstance().getOutputPath() + "relations").mkdirs();
+        new File(GTFSImportSettings.getInstance().getOutputPath() + "relations").mkdirs();
 
         int id = 10000;
         for (String k:keys){
@@ -72,10 +72,10 @@ public class GTFSGenerateRoutesBaseRelations implements Callable<Void> {
                 Route r = routes.get(trip.getRoute().getId());
                 StopsList s = stopTimes.get(trip.getTripID());
 
-                FileOutputStream f = new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + "relations/r" + id + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
+                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "relations/r" + id + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
                 f.write(OSMRelationImportGenerator.getRelation(bb, s, null, trip, r).getBytes());
                 f.close();
-                f = new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + "relations/r" + id++ + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".txt");
+                f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "relations/r" + id++ + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".txt");
                 f.write(s.getRelationAsStopList(trip, r).getBytes());
                 f.close();
             }

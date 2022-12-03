@@ -15,7 +15,7 @@
 package it.osm.gtfs.model;
 
 import it.osm.gtfs.output.IElementCreator;
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.utils.OSMXMLUtils;
 
@@ -82,7 +82,7 @@ public class Stop {
 	}
 
 	public void setCode(String code) {
-		this.code = GTFSImportSetting.getInstance().getPlugin().fixBusStopRef(code);
+		this.code = GTFSImportSettings.getInstance().getPlugin().fixBusStopRef(code);
 	}
 
 	public void setLat(Double lat) {
@@ -170,7 +170,7 @@ public class Stop {
 		node.appendChild(OSMXMLUtils.createTagElement(document, "shelter", "unknown"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "bench", "unknown"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "tactile_paving", "unknown"));
-		node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSetting.getInstance().getPlugin().fixBusStopName(getName())));
+		node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(getName())));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
 		return node;

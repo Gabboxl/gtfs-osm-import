@@ -14,7 +14,7 @@
  **/
 package it.osm.gtfs.output;
 
-import it.osm.gtfs.utils.GTFSImportSetting;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.model.BoundingBox;
 import it.osm.gtfs.model.Route;
 import it.osm.gtfs.model.Stop;
@@ -42,10 +42,10 @@ public class OSMRelationImportGenerator {
             }
         }
 
-        buffer.append("<tag k='direction' v='" + GTFSImportSetting.getInstance().getPlugin().fixTripName(t.getName()) + "' />\n");
+        buffer.append("<tag k='direction' v='" + GTFSImportSettings.getInstance().getPlugin().fixTripName(t.getName()) + "' />\n");
         buffer.append("<tag k='name' v='" + r.getShortName() + ": " + r.getLongName().replaceAll("'", "\'") + "' />\n");
-        buffer.append("<tag k='network' v='" + GTFSImportSetting.getInstance().getNetwork() + "' />\n");
-        buffer.append("<tag k='operator' v='" + GTFSImportSetting.getInstance().getOperator() + "' />\n");
+        buffer.append("<tag k='network' v='" + GTFSImportSettings.getInstance().getNetwork() + "' />\n");
+        buffer.append("<tag k='operator' v='" + GTFSImportSettings.getInstance().getOperator() + "' />\n");
         buffer.append("<tag k='ref' v='" + r.getShortName() + "' />\n");
         buffer.append("<tag k='route' v='bus' />\n");
         buffer.append("<tag k='type' v='route' />\n");
