@@ -63,7 +63,7 @@ public class GTFSImportSetting {
 	public String getGTFSPath() {
 		if (gtfsPath == null){
 			synchronized (this) {
-				gtfsPath = properties.getProperty("gtfs-path");
+				gtfsPath = properties.getProperty("gtfs_path");
 				if (gtfsPath == null)
 					throw new IllegalArgumentException("Please set a valid gtfs-path.");
 				if (!gtfsPath.endsWith(File.separator))
@@ -79,7 +79,7 @@ public class GTFSImportSetting {
 	public String getOSMPath() {
 		if (osmPath == null){
 			synchronized (this) {
-				osmPath = properties.getProperty("osm-path");
+				osmPath = properties.getProperty("osm_path");
 				if (osmPath == null)
 					throw new IllegalArgumentException("Please set a valid osm-path.");
 				if (!osmPath.endsWith(File.separator))
@@ -99,7 +99,7 @@ public class GTFSImportSetting {
 	public String getOutputPath() {
 		if (outputPath == null){
 			synchronized (this) {
-				outputPath = properties.getProperty("output-path");
+				outputPath = properties.getProperty("output_path");
 				if (outputPath == null)
 					throw new IllegalArgumentException("Please set a valid output-path.");
 				if (!outputPath.endsWith(File.separator))
