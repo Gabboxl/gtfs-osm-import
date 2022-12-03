@@ -1,15 +1,15 @@
 /**
-   Licensed under the GNU General Public License version 3
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+ Licensed under the GNU General Public License version 3
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-       http://www.gnu.org/licenses/gpl-3.0.html
+ http://www.gnu.org/licenses/gpl-3.0.html
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
 
  **/
 package it.osm.gtfs.command;
@@ -44,35 +44,35 @@ import javax.xml.parsers.ParserConfigurationException;
 @CommandLine.Command(name = "gpx", description = "Generate .gpx file for all GTFS Trips")
 public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
-	@Override
-	public Void call() throws IOException, ParserConfigurationException, SAXException {
-		Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME));
-		Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
-		Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_SHAPES_FILE_NAME);
-		Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_STOP_TIME_FILE_NAME, osmstops);
-		List<Trip> trips = GTFSParser.readTrips(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_TRIPS_FILE_NAME,
-				routes, new HashMap<String, StopsList>());
-		
-		//sorting set
-		Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
-		Set<String> keys = new TreeSet<String>(grouppedTrips.keySet());
+    @Override
+    public Void call() throws IOException, ParserConfigurationException, SAXException {
+        Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSetting.getInstance().getOSMPath() +  GTFSImportSetting.OSM_STOP_FILE_NAME));
+        Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_ROUTES_FILE_NAME);
+        Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_SHAPES_FILE_NAME);
+        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSetting.getInstance().getGTFSPath() +  GTFSImportSetting.GTFS_STOP_TIME_FILE_NAME, osmstops);
+        List<Trip> trips = GTFSParser.readTrips(GTFSImportSetting.getInstance().getGTFSPath() + GTFSImportSetting.GTFS_TRIPS_FILE_NAME,
+                routes, new HashMap<String, StopsList>());
 
-		new File(GTFSImportSetting.getInstance().getOutputPath() + "gpx").mkdirs();
-		
-		int id = 10000;
-		for (String k:keys){
-			Collection<Trip> allTrips = grouppedTrips.get(k);
-			Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
+        //sorting set
+        Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
+        Set<String> keys = new TreeSet<String>(grouppedTrips.keySet());
 
-			for (Trip trip:uniqueTrips){
-				Route r = routes.get(trip.getRoute().getId());
-				Shape s = shapes.get(trip.getShapeID());
+        new File(GTFSImportSetting.getInstance().getOutputPath() + "gpx").mkdirs();
 
-				FileOutputStream f = new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
-				f.write(s.getGPXasShape(r.getShortName()).getBytes());
-				f.close();
-			}
-		}
-		return null;
-	}
+        int id = 10000;
+        for (String k:keys){
+            Collection<Trip> allTrips = grouppedTrips.get(k);
+            Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
+
+            for (Trip trip:uniqueTrips){
+                Route r = routes.get(trip.getRoute().getId());
+                Shape s = shapes.get(trip.getShapeID());
+
+                FileOutputStream f = new FileOutputStream(GTFSImportSetting.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
+                f.write(s.getGPXasShape(r.getShortName()).getBytes());
+                f.close();
+            }
+        }
+        return null;
+    }
 }

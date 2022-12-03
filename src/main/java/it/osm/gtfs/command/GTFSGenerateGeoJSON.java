@@ -32,88 +32,88 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
 public class GTFSGenerateGeoJSON implements Callable<Void> {
 
-	@Override
-	public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
-		System.out.println("Parsing OSM Stops...");
-		List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
-				.getInstance().getOSMPath()
-				+ GTFSImportSetting.OSM_STOP_FILE_NAME);
+    @Override
+    public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
+        System.out.println("Parsing OSM Stops...");
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSetting
+                .getInstance().getOSMPath()
+                + GTFSImportSetting.OSM_STOP_FILE_NAME);
 
-		System.out.println("Indexing OSM Stops...");
-		Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
-		
-		System.out.println("Parsing OSM Relations...");
-		List<Relation> osmRels = OSMParser.readOSMRelations(new File(
-				GTFSImportSetting.getInstance().getOSMPath()
-				+ GTFSImportSetting.OSM_RELATIONS_FILE_NAME),
-				osmstopsOsmID);
+        System.out.println("Indexing OSM Stops...");
+        Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+
+        System.out.println("Parsing OSM Relations...");
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(
+                        GTFSImportSetting.getInstance().getOSMPath()
+                                + GTFSImportSetting.OSM_RELATIONS_FILE_NAME),
+                osmstopsOsmID);
 
 
-		GTFSGenerateGeoJSON generator = null;
-		try {
-			System.out.println("Creating GeoJSON...");
-			generator = new GTFSGenerateGeoJSON();
-			System.out.println("Adding Stops to GeoJSON...");
-			generator.insertStops(osmStops);
-			//System.err.println("Adding Relations to GeoJSON");
-			//generator.insertRelations(osmRels);
-			System.out.println("Done.");
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		} finally {
-			if (generator != null)
-				generator.close("data.json");
-		}
-		return null;
-	}
+        GTFSGenerateGeoJSON generator = null;
+        try {
+            System.out.println("Creating GeoJSON...");
+            generator = new GTFSGenerateGeoJSON();
+            System.out.println("Adding Stops to GeoJSON...");
+            generator.insertStops(osmStops);
+            //System.err.println("Adding Relations to GeoJSON");
+            //generator.insertRelations(osmRels);
+            System.out.println("Done.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (generator != null)
+                generator.close("data.json");
+        }
+        return null;
+    }
 
-	private StringBuffer buffer;
-	private Collection<MfFeature> stops;
-	private final GeometryFactory factory;
-	
-	private GTFSGenerateGeoJSON(){
-		buffer = new StringBuffer();
-		factory = new GeometryFactory();
-	}
-	
-	private void close(String string) throws JSONException {
-		MfFeatureCollection fc = new MfFeatureCollection(stops);
-		JSONStringer stringer = new JSONStringer();
-		MfGeoJSONWriter builder = new MfGeoJSONWriter(stringer);
-		builder.encodeFeatureCollection(fc);
+    private StringBuffer buffer;
+    private Collection<MfFeature> stops;
+    private final GeometryFactory factory;
+
+    private GTFSGenerateGeoJSON(){
+        buffer = new StringBuffer();
+        factory = new GeometryFactory();
+    }
+
+    private void close(String string) throws JSONException {
+        MfFeatureCollection fc = new MfFeatureCollection(stops);
+        JSONStringer stringer = new JSONStringer();
+        MfGeoJSONWriter builder = new MfGeoJSONWriter(stringer);
+        builder.encodeFeatureCollection(fc);
         String geojsonResulted = stringer.toString();
         System.out.println(geojsonResulted);
-	}
+    }
 
-	private void insertStops(List<Stop> osmstops) throws SQLException {
-		stops = new LinkedList<MfFeature>();
-		
-		for (Stop s : osmstops) {
-			stops.add(new JSONStop(s));
-		}
-	}
+    private void insertStops(List<Stop> osmstops) throws SQLException {
+        stops = new LinkedList<MfFeature>();
+
+        for (Stop s : osmstops) {
+            stops.add(new JSONStop(s));
+        }
+    }
 /*
 	private void insertRelations(List<Relation> rels) throws SQLException {
 	}*/
-	
-	public static class JSONStop extends MfFeature{
-		private Stop stop;
-		
-		 private JSONStop(Stop stop) {
-			super();
-			this.stop = stop;
-		}
-		public String getFeatureId() {
-             return "bus_stop";
-         }
-         public MfGeometry getMfGeometry() {
-             return new MfGeometry(new GeometryFactory().createPoint(new Coordinate(stop.getLon(), stop.getLat())));
-         }
-         public void toJSON(JSONWriter builder) throws JSONException {
-             builder.key("name").value(stop.getName());
-             builder.key("ref").value(stop.getCode());
-         }
-	}
+
+    public static class JSONStop extends MfFeature{
+        private Stop stop;
+
+        private JSONStop(Stop stop) {
+            super();
+            this.stop = stop;
+        }
+        public String getFeatureId() {
+            return "bus_stop";
+        }
+        public MfGeometry getMfGeometry() {
+            return new MfGeometry(new GeometryFactory().createPoint(new Coordinate(stop.getLon(), stop.getLat())));
+        }
+        public void toJSON(JSONWriter builder) throws JSONException {
+            builder.key("name").value(stop.getName());
+            builder.key("ref").value(stop.getCode());
+        }
+    }
 
 }
