@@ -51,7 +51,7 @@ import com.google.common.collect.Multimap;
 
 public class OSMParser {
 
-    public static Map<String, Stop> applyGTFSIndex(List<Stop> stops) throws ParserConfigurationException, SAXException, IOException{
+    public static Map<String, Stop> applyGTFSIndex(List<Stop> stops) {
         final Map<String, Stop> result = new TreeMap<String, Stop>();
 
         for (Stop stop : stops){
@@ -63,7 +63,7 @@ public class OSMParser {
         return result;
     }
 
-    public static Map<String, Stop> applyOSMIndex(List<Stop> stops) throws ParserConfigurationException, SAXException, IOException{
+    public static Map<String, Stop> applyOSMIndex(List<Stop> stops) {
         final Map<String, Stop> result = new TreeMap<String, Stop>();
 
         for (Stop stop : stops){
@@ -165,7 +165,7 @@ public class OSMParser {
         return result;
     }
 
-    public static List<Relation> readOSMRelations(File file, Map<String, Stop> stopsWithOSMIndex) throws ParserConfigurationException, SAXException, IOException{
+    public static List<Relation> readOSMRelations(File file, Map<String, Stop> stopsWithOSMIndex) throws SAXException, IOException{
         NodeParser nodeParser;
         {
             XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -229,7 +229,7 @@ public class OSMParser {
 
         @Override
         public void startElement(String uri, String localName, String qName,
-                                 Attributes attributes) throws SAXException {
+                                 Attributes attributes) {
 
             if (localName.equals("way")){
                 currentWay = new OSMWay(Long.parseLong(attributes.getValue("id")));
@@ -284,7 +284,7 @@ public class OSMParser {
 
         @Override
         public void startElement(String uri, String localName, String qName,
-                                 Attributes attributes) throws SAXException {
+                                 Attributes attributes) {
 
             if (localName.equals("relation")){
                 currentRelation = new Relation(attributes.getValue("id"));
@@ -349,8 +349,7 @@ public class OSMParser {
         }
 
         @Override
-        public void endElement(String uri, String localName, String qName)
-                throws SAXException {
+        public void endElement(String uri, String localName, String qName) {
             if (localName.equals("relation")){
                 if (!failed){
                     result.add(currentRelation);
