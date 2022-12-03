@@ -165,16 +165,16 @@ public class GTFSImportSettings {
         return network;
     }
 
-    private String revisitedKey = null;
-    public String getRevisitedKey() {
-        if (revisitedKey == null){
+    private String revisedKey = null;
+    public String getRevisedKey() {
+        if (revisedKey == null){
             synchronized (this) {
-                revisitedKey = properties.getProperty("revisedkey");
-                if (revisitedKey == null)
+                revisedKey = properties.getProperty("revisedkey");
+                if (revisedKey == null)
                     throw new IllegalArgumentException("Please set a valid operator.");
             }
         }
-        return revisitedKey;
+        return revisedKey;
     }
 
 

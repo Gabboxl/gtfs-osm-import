@@ -165,8 +165,8 @@ public class Stop {
 		node.setAttribute("lat", getLat().toString());
 		node.setAttribute("lon", getLon().toString());
 		node.appendChild(OSMXMLUtils.createTagElement(document, "highway", "bus_stop"));
-		node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSetting.getInstance().getOperator()));
-		node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSetting.getInstance().getRevisitedKey(), "no"));
+		node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));
+		node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSettings.getInstance().getRevisedKey(), "no"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "shelter", "unknown"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "bench", "unknown"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "tactile_paving", "unknown"));
