@@ -166,8 +166,7 @@ public class GpxConversions {
         if (!Double.isNaN(azimuth))
             output.append("<gh:azimuth>").append(Helper.round2(azimuth)).append("</gh:azimuth>");
 
-        if (instruction instanceof RoundaboutInstruction) {
-            RoundaboutInstruction ri = (RoundaboutInstruction) instruction;
+        if (instruction instanceof RoundaboutInstruction ri) {
 
             output.append("<gh:exit_number>").append(ri.getExitNumber()).append("</gh:exit_number>");
         }
