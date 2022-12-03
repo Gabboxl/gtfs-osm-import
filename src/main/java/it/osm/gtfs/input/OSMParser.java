@@ -136,7 +136,7 @@ public class OSMParser {
 
             //Check duplicate ref in osm
             if (stop.getCode() != null){
-                if (stop.isStopPosition() == null || stop.isStopPosition() == false){
+                if (stop.isStopPosition() == null || !stop.isStopPosition()){
                     if (stop.isRailway()){
                         if (refRails.containsKey(stop.getCode())){
                             for (Stop existingStop:refRails.get(stop.getCode())){
