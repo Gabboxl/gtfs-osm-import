@@ -132,7 +132,7 @@ public class OSMParser {
                 if (stop.isStopPosition())
                     continue; //ignore unsupported stop positions (like ferries)
                 else
-                    throw new IllegalArgumentException("Unknow node type for node: " + stop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
+                    throw new IllegalArgumentException("Unknown node type for node: " + stop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
             //Check duplicate ref in osm
             if (stop.getCode() != null){

@@ -38,7 +38,7 @@ public class GTFSImportSettings {
     public static final String OUTPUT_PAIRED_WITHOUT_GTFS = "gtfs_import_paired_without_gtfsid.osm";
     public static final String OUTPUT_PAIRED_WITH_DIFFERENT_GTFS = "gtfs_import_paired_with_different_gtfsid.osm";
     public static final String OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS = "gtfs_import_osm_with_gtfsid_not_found.osm";
-    public static final String OUTPUT_UNPAIRED_IN_GTFS = "gtfs_import_unpaired_in_gtfs";
+    public static final String OUTPUT_UNPAIRED_FROM_GTFS = "gtfs_import_unpaired_from_gtfs";
 
     private final Properties properties;
 

@@ -176,27 +176,27 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         //new in gtfs
         {
-            int unpaired_in_gtfs = 0;
+            int unpaired_from_gtfs = 0;
             int current_part = 0;
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
             for (GTFSStop gtfsStop:gtfsStops){
                 if (gtfsStop.pairedWith == null && gtfsStop.pairedWithRailWay == null && gtfsStop.pairedWithStopPositions.size() == 0){
-                    unpaired_in_gtfs++;
+                    unpaired_from_gtfs++;
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
-                    if (smallFileExport && unpaired_in_gtfs % 10 == 0){
+                    if (smallFileExport && unpaired_from_gtfs % 10 == 0){
                         buffer.end();
-                        buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
+                        buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_UNPAIRED_FROM_GTFS + "."+ (current_part++) + ".osm"));
                         buffer = new OSMBusImportGenerator(bb);
                     }
                 }
             }
             buffer.end();
-            if (unpaired_in_gtfs > 0){
-                buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_UNPAIRED_IN_GTFS + "."+ (current_part++) + ".osm"));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_UNPAIRED_IN_GTFS + "[.part].osm)").reset());
+            if (unpaired_from_gtfs > 0){
+                buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_UNPAIRED_FROM_GTFS + "."+ (current_part++) + ".osm"));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops from GTFS (new stops from GTFS): ").reset().a(unpaired_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_UNPAIRED_FROM_GTFS + "[.part].osm)").reset());
             }else{
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops in gtfs (new stops from GTFS): ").reset().a(unpaired_in_gtfs));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Unpaired stops from GTFS (new stops from GTFS): ").reset().a(unpaired_from_gtfs));
             }
         }
         return null;
