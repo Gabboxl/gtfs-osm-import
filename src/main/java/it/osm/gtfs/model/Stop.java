@@ -169,9 +169,6 @@ public class Stop {
 		node.appendChild(OSMXMLUtils.createTagElement(document, "public_transport", "platform"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));
 		node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSettings.getInstance().getRevisedKey(), "no"));
-		//node.appendChild(OSMXMLUtils.createTagElement(document, "shelter", "unknown"));
-		//node.appendChild(OSMXMLUtils.createTagElement(document, "bench", "unknown"));
-		//node.appendChild(OSMXMLUtils.createTagElement(document, "tactile_paving", "unknown"));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(getName())));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
 		node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
