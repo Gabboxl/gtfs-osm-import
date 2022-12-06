@@ -122,11 +122,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         Element n = (Element) osmStop.originalXMLNode;
                         OSMXMLUtils.addTagOrReplace(n, "gtfs_id", osmStop.stopMatchedWith.getGtfsId());
                         bufferDifferentGTFS.appendNode(n);
-                        System.out.println("OSM Stop id " + osmStop.getOSMId() +  " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
+                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + "(ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
                     }
                 }else if (osmStop.getGtfsId() != null){
                     osm_with_gtfs_id_not_in_gtfs++;
-                    System.out.println("OSM Stop id " + osmStop.getOSMId() +  " has gtfs_id: " + osmStop.getGtfsId() + " but is no longer in GTFS.");
+                    System.out.println("OSM Stop node id " + osmStop.getOSMId() + "(ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop ref is no longer present in GTFS (probably the stop got removed/is no longer in function).");
                     Element n = (Element) osmStop.originalXMLNode;
                     bufferNotInGTFS.appendNode(n);
                 }
