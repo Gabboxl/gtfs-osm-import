@@ -129,7 +129,7 @@ public class Stop {
 		return true;
 	}
 
-	public boolean seams(Stop osmStop) {
+	public boolean matches(Stop osmStop) {
 		double distanceBetween = OSMDistanceUtils.distVincenty(getLat(), getLon(), osmStop.getLat(), osmStop.getLon());
 		String debugData = "GTFS Stop data: [" + this + "] -> OSM Stop data: [" + osmStop +  "], exact distance between: " + distanceBetween + " m";
 

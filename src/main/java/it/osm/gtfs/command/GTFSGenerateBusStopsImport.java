@@ -57,7 +57,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         for (GTFSStop gtfsStop : gtfsStops){
             for (Stop osmStop : osmStops){
-                if (gtfsStop.seams(osmStop)){
+                if (gtfsStop.matches(osmStop)){
                     if (osmStop.isStopPosition()){
                         if (osmStop.pairedWith != null){
                             System.err.println("Mupliple paring found.");
