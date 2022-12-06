@@ -60,24 +60,26 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 if (gtfsStop.matches(osmStop)){
                     if (osmStop.isStopPosition()){
                         if (osmStop.pairedWith != null){
-                            System.err.println("Mupliple paring found.");
+                            System.err.println("Mupliple pairing found.");
                             System.err.println(" OSM: " + osmStop);
                             System.err.println("GTFS: " + gtfsStop);
                             System.err.println(" OSM: " + gtfsStop.pairedWithRailWay);
                             System.err.println("GTFS: " + osmStop.pairedWith);
-                            throw new IllegalArgumentException("Multiple paring found, this is currently unsupported.");
+                            throw new IllegalArgumentException("Multiple pairing found, this is currently unsupported.");
                         }
+
                         gtfsStop.pairedWithStopPositions.add(osmStop);
                         osmStop.pairedWith = gtfsStop;
                     }else if (osmStop.isRailway()){
                         if (gtfsStop.pairedWithRailWay != null || osmStop.pairedWith != null){
-                            System.err.println("Mupliple paring found.");
+                            System.err.println("Mupliple pairing found.");
                             System.err.println(" OSM: " + osmStop);
                             System.err.println("GTFS: " + gtfsStop);
                             System.err.println(" OSM: " + gtfsStop.pairedWithRailWay);
                             System.err.println("GTFS: " + osmStop.pairedWith);
-                            throw new IllegalArgumentException("Multiple paring found, this is currently unsupported.");
+                            throw new IllegalArgumentException("Multiple pairing found, this is currently unsupported.");
                         }
+
                         gtfsStop.pairedWithRailWay = osmStop;
                         osmStop.pairedWith = gtfsStop;
                     }else{
@@ -89,10 +91,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                             System.err.println("GTFS: " + osmStop.pairedWith);
                             throw new IllegalArgumentException("Multiple paring found, this is currently unsupported.");
                         }
+
                         gtfsStop.pairedWith = osmStop;
                         osmStop.pairedWith = gtfsStop;
-
                     }
+
                 }
             }
         }
