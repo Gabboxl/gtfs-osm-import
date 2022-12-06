@@ -33,7 +33,7 @@ public class Stop {
 	private String name;
 	private Boolean isRailway;
 	private Boolean isStopPosition = false;
-	public Stop pairedWith;
+	public Stop stopMatchedWith;
 	public Node originalXMLNode;
 
 	public Stop(String gtfsId, String code, Double lat, Double lon, String name) {
