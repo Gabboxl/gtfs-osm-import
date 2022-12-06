@@ -131,23 +131,20 @@ public class Stop {
 
 	public boolean seams(Stop osmStop) {
 		double distanceBetween = OSMDistanceUtils.distVincenty(getLat(), getLon(), osmStop.getLat(), osmStop.getLon());
+		String debugData = "GTFS Stop data: [" + this + "] -> OSM Stop data: [" + osmStop +  "], exact distance between: " + distanceBetween + " m";
 
 		if (osmStop.getCode() != null && osmStop.getCode().equals(getCode())){
 
-			if (distanceBetween < 70 || (osmStop.getGtfsId() != null && getGtfsId() != null && osmStop.getGtfsId().equals(getGtfsId()))){
+		if (distanceBetween < 70 || (osmStop.getGtfsId() != null && getGtfsId() != null && osmStop.getGtfsId().equals(getGtfsId()))){
 				//if the stops are less than 70m far away or are already linked with gtfsid
 				return true;
 			}else if (distanceBetween < 10000){
-				System.err.println("Warning: Same ref tag with dist > 70 m (and less than 10km) / GTFS Stop data: [" + this + "] -> OSM Stop data: [" + osmStop +  "], exact distance between: " + distanceBetween + " meters");
-			}else{
-				if (distanceBetween < 5 && osmStop.getGtfsId() == null && getGtfsId() == null){
-					//if less than 5m far away and both don't have gtfsid
-					return true;
-				}
+				System.err.println("Warning: Same ref tag with dist > 70 m (and less than 10km) / " + debugData);
 			}
+
 		}else if (distanceBetween < 70 && osmStop.getGtfsId() != null && getGtfsId() != null && osmStop.getGtfsId().equals(getGtfsId())){
-			//if the stops have same gtfsid and are less than 70m far away OR both don't have gtfsid
-			System.err.println("Warning: Different ref tag matched by gtfs_id [" + this + " -> " + osmStop +  "]");
+			//if the stops have different ref tag code, same gtfs_id and are less than 70m far away
+			System.err.println("Warning: Different ref tag matched but equal gtfs_id matched / " + debugData);
 			return true;
 		}
 
