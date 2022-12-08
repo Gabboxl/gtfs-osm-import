@@ -207,7 +207,7 @@ public class OSMParser {
 
         @Override
         public void startElement(String uri, String localName, String qName,
-                                 Attributes attributes) throws SAXException {
+                                 Attributes attributes) {
             if (localName.equals("node")){
                 result.put(Long.parseLong(attributes.getValue("id")),
                         new OSMNode(Double.parseDouble(attributes.getValue("lat")),
@@ -255,8 +255,7 @@ public class OSMParser {
         }
 
         @Override
-        public void endElement(String uri, String localName, String qName)
-                throws SAXException {
+        public void endElement(String uri, String localName, String qName) {
             if (localName.equals("way")){
                 result.put(currentWay.getId(), currentWay);
                 currentWay = null;
