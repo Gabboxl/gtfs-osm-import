@@ -27,22 +27,22 @@ public interface GTFSPlugin {
     /**
      * Apply changes to the bus stop name before generating OSM Import file
      */
-    public String fixBusStopName(String stopName);
-    public String fixBusStopRef(String stopRef);
+    String fixBusStopName(String stopName);
+    String fixBusStopRef(String stopRef);
 
-    public String fixTripName(String name);
+    String fixTripName(String name);
 
     /**
      * Allow to exclude some stops from importing
      */
-    public Boolean isValidStop(Stop s);
+    Boolean isValidStop(Stop s);
 
-    public boolean isValidRoute(Route route);
+    boolean isValidRoute(Route route);
 
     /**
      * allow plugins to define custom rules to decide if a route is the same
      */
-    public boolean isRelationSameAs(Relation relation, StopsList s);
+    boolean isRelationSameAs(Relation relation, StopsList s);
 
-    public boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, StopsList s);
+    boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, StopsList s);
 }
