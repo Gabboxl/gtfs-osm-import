@@ -98,7 +98,7 @@ public class OSMParser {
                 if (attNode.getAttributes() != null){
                     String key = attNode.getAttributes().getNamedItem("k").getNodeValue();
                     String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
-                    
+
                     if (key.equals("ref"))
                         stop.setCode(value);
                     if (key.equals("name"))
@@ -198,7 +198,7 @@ public class OSMParser {
     }
 
     private static class NodeParser extends DefaultHandler{
-        private Map<Long, OSMNode> result = new HashMap<Long, OSMNode>();
+        private final Map<Long, OSMNode> result = new HashMap<Long, OSMNode>();
 
         @Override
         public void startElement(String uri, String localName, String qName,
