@@ -96,33 +96,28 @@ public class OSMParser {
             for (int t = 0; t < att.getLength(); t++) {
                 Node attNode = att.item(t);
                 if (attNode.getAttributes() != null){
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("ref"))
-                        stop.setCode(attNode.getAttributes().getNamedItem("v").getNodeValue());
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("name"))
-                        stop.setName(attNode.getAttributes().getNamedItem("v").getNodeValue());
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("gtfs_id"))
-                        stop.setGtfsId(attNode.getAttributes().getNamedItem("v").getNodeValue());
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("highway") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("bus_stop"))
+                    String key = attNode.getAttributes().getNamedItem("k").getNodeValue();
+                    String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
+                    
+                    if (key.equals("ref"))
+                        stop.setCode(value);
+                    if (key.equals("name"))
+                        stop.setName(value);
+                    if (key.equals("gtfs_id"))
+                        stop.setGtfsId(value);
+                    if (key.equals("highway") && value.equals("bus_stop"))
                         stop.setIsRailway(false);
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("railway") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("tram_stop"))
+                    if (key.equals("railway") && value.equals("tram_stop"))
                         stop.setIsRailway(true);
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("railway") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("station"))
+                    if (key.equals("railway") && value.equals("station"))
                         stop.setIsRailway(true);
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("public_transport") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("stop_position") &&
-                            stop.isRailway() == null)
+                    if (key.equals("public_transport") && value.equals("stop_position") && stop.isRailway() == null)
                         stop.setIsStopPosition(true);
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("train") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("yes"))
+                    if (key.equals("train") && value.equals("yes"))
                         stop.setIsRailway(true);
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("tram") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("yes"))
+                    if (key.equals("tram") && value.equals("yes"))
                         stop.setIsRailway(true);
-                    if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals("bus") &&
-                            attNode.getAttributes().getNamedItem("v").getNodeValue().equals("yes"))
+                    if (key.equals("bus") && value.equals("yes"))
                         stop.setIsRailway(false);
                 }
             }
