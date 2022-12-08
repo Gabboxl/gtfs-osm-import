@@ -231,18 +231,19 @@ public class OSMParser {
             }else if(currentWay != null && localName.equals("nd")){
                 currentWay.nodes.add(nodes.get(Long.parseLong(attributes.getValue("ref"))));
             }else if(currentWay != null && localName.equals("tag")){
-                if (attributes.getValue("k").equals("oneway")){
-                    if (attributes.getValue("v").equals("yes") ||
-                            attributes.getValue("v").equals("true")){
+                String key = attributes.getValue("k");
+                String value = attributes.getValue("v");
+
+                if (key.equals("oneway")){
+                    if (value.equals("yes") || value.equals("true")){
                         currentWay.oneway = true;
-                    }else if (attributes.getValue("v").equals("no") ||
-                            attributes.getValue("v").equals("false")){
+                    }else if (value.equals("no") || value.equals("false")){
                         currentWay.oneway = false;
                     }else{
-                        System.err.println("Unhandled oneway attribute: " + attributes.getValue("v") + " way id: " + currentWay.getId());
+                        System.err.println("Unhandled oneway attribute: " + value + " way id: " + currentWay.getId());
                     }
-                }else if (attributes.getValue("k").equals("junction")){
-                    if (attributes.getValue("v").equals("roundabout")){
+                }else if (key.equals("junction")){
+                    if (value.equals("roundabout")){
                         currentWay.oneway = true;
                     }
                 }
