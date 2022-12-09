@@ -59,7 +59,7 @@ public class Route implements Comparable<Route> {
 
     @Override
     public boolean equals(Object other) {
-        if (other != null && other instanceof Route){
+        if (other instanceof Route){
             return ((Route)other).id.equals(id);
         }
         return false;
