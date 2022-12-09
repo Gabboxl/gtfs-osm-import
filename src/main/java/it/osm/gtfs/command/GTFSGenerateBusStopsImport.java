@@ -108,7 +108,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             //TODO: probably the matched_stops counter can be moved and incremented in the first matching phase up there
             int matched_stops = 0;
             int not_matched_osm_stops = 0;
-            int osm_with_different_gtfs_id = 0;
+            int osm_with_different_gtfs_id = 0; //this can be removed as it serves no purpose actually
             OSMBusImportGenerator bufferNotMatchedStops = new OSMBusImportGenerator(bb);
             OSMBusImportGenerator bufferMatchedStops = new OSMBusImportGenerator(bb);
 
@@ -165,17 +165,19 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             for(String msg:messages.values())
                 System.out.println(msg);
 
-            if (osm_with_different_gtfs_id > 0){
+            if (matched_stops > 0){
                 bufferMatchedStops.end();
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched stops with updated data applied (new gtfs ids, names etc.): ").reset().a(osm_with_different_gtfs_id).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")"));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")"));
+            }else{
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("No OSM stop got matched with GTFS data!").reset());
             }
+
             if (not_matched_osm_stops > 0){
                 bufferNotMatchedStops.end();
                 bufferNotMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS));
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stops NOT MATCHED that need to be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")"));
             }
-            System.out.println(ansi().fg(Ansi.Color.GREEN).a("Total matched OSM stops with GTFS data: ").reset().a(matched_stops));
         }
 
         //new stops from gtfs data
