@@ -160,7 +160,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
                         uptodate = true;
                 }
             }catch (Exception e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
 
             if (!uptodate){
