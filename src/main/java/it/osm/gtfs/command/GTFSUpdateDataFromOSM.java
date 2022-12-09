@@ -112,7 +112,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(input, fileout));
     }
 
-    private static void updateBaseRels() throws MalformedURLException, IOException{
+    private static void updateBaseRels() throws IOException{
         String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];out meta;";
         File filerel = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_rels.osm");
         DownloadUtils.download(urlrel, filerel);
