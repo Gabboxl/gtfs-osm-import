@@ -35,9 +35,8 @@ public class GTFSImportSettings {
     public static final String OSM_API_SERVER =  "https://www.openstreetmap.org/api/0.6/";
     public static final String OSM_RELATIONS_FILE_NAME = "relations.osm";
     public static final String OSM_STOP_FILE_NAME = "stops.osm";
-    public static final String OUTPUT_MATCHED_WITHOUT_GTFS = "gtfs_import_matched_without_gtfsid.osm";
-    public static final String OUTPUT_MATCHED_WITH_DIFFERENT_GTFS = "gtfs_import_matched_with_different_gtfsid.osm";
-    public static final String OUTPUT_OSM_WITH_GTFSID_NOT_IN_GTFS = "gtfs_import_osm_with_gtfsid_not_found.osm";
+    public static final String OUTPUT_MATCHED_WITH_UPDATED_METADATA = "gtfs_import_matched_with_updated_metadata.osm";
+    public static final String OUTPUT_NOT_MATCHED_STOPS = "gtfs_import_not_matched_stops.osm";
     public static final String OUTPUT_NEW_STOPS_FROM_GTFS = "gtfs_import_new_stops_from_gtfs";
 
     private final Properties properties;
