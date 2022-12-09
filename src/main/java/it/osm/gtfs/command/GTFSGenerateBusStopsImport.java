@@ -156,6 +156,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 if (osmStop.stopMatchedWith != null && osmStop.getGtfsId() == null){
                     Element n = (Element) osmStop.originalXMLNode;
                     OSMXMLUtils.addTag(n, "gtfs_id", osmStop.stopMatchedWith.getGtfsId());
+                    OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
                     OSMXMLUtils.addTagIfNotExisting(n, "operator", GTFSImportSettings.getInstance().getOperator());
                     OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 
@@ -167,8 +168,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         OSMXMLUtils.addTagIfNotExisting(n, "highway", "bus_stop");
                         OSMXMLUtils.addTagIfNotExisting(n, "public_transport", "platform");
                     }
-
-                    OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
 
                     buffer.appendNode(n);
 
