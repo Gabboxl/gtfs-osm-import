@@ -1,4 +1,4 @@
-/**
+﻿/**
  Licensed under the GNU General Public License version 3
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -60,36 +60,36 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 if (gtfsStop.matches(osmStop)){
                     if (osmStop.isStopPosition()){
                         if (osmStop.stopMatchedWith != null){
-                            System.err.println("Mupliple pairing found.");
+                            System.err.println("Mupliple match found.");
                             System.err.println(" OSM: " + osmStop);
                             System.err.println("GTFS: " + gtfsStop);
-                            System.err.println(" OSM: " + gtfsStop.pairedWithRailWay);
+                            System.err.println(" OSM: " + gtfsStop.railWayMatchedWith);
                             System.err.println("GTFS: " + osmStop.stopMatchedWith);
-                            throw new IllegalArgumentException("Multiple pairing found, this is currently unsupported.");
+                            throw new IllegalArgumentException("Multiple match found, this is currently unsupported.");
                         }
 
-                        gtfsStop.pairedWithStopPositions.add(osmStop);
+                        gtfsStop.stopPositionsMatchedWith.add(osmStop);
                         osmStop.stopMatchedWith = gtfsStop;
                     }else if (osmStop.isRailway()){
-                        if (gtfsStop.pairedWithRailWay != null || osmStop.stopMatchedWith != null){
-                            System.err.println("Mupliple pairing found.");
+                        if (gtfsStop.railWayMatchedWith != null || osmStop.stopMatchedWith != null){
+                            System.err.println("Mupliple match found.");
                             System.err.println(" OSM: " + osmStop);
                             System.err.println("GTFS: " + gtfsStop);
-                            System.err.println(" OSM: " + gtfsStop.pairedWithRailWay);
+                            System.err.println(" OSM: " + gtfsStop.railWayMatchedWith);
                             System.err.println("GTFS: " + osmStop.stopMatchedWith);
-                            throw new IllegalArgumentException("Multiple pairing found, this is currently unsupported.");
+                            throw new IllegalArgumentException("Multiple match found, this is currently unsupported.");
                         }
 
-                        gtfsStop.pairedWithRailWay = osmStop;
+                        gtfsStop.railWayMatchedWith = osmStop;
                         osmStop.stopMatchedWith = gtfsStop;
                     }else{
                         if (gtfsStop.stopMatchedWith != null || osmStop.stopMatchedWith != null){
-                            System.err.println("Mupliple paring found.");
+                            System.err.println("Mupliple match found.");
                             System.err.println(" OSM: " + osmStop);
                             System.err.println("GTFS: " + gtfsStop);
                             System.err.println(" OSM: " + gtfsStop.stopMatchedWith);
                             System.err.println("GTFS: " + osmStop.stopMatchedWith);
-                            throw new IllegalArgumentException("Multiple paring found, this is currently unsupported.");
+                            throw new IllegalArgumentException("Multiple match found, this is currently unsupported.");
                         }
 
                         gtfsStop.stopMatchedWith = osmStop;
@@ -122,11 +122,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         Element n = (Element) osmStop.originalXMLNode;
                         OSMXMLUtils.addTagOrReplace(n, "gtfs_id", osmStop.stopMatchedWith.getGtfsId());
                         bufferDifferentGTFS.appendNode(n);
-                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + "(ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
+                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
                     }
                 }else if (osmStop.getGtfsId() != null){
                     osm_with_gtfs_id_not_in_gtfs++;
-                    System.out.println("OSM Stop node id " + osmStop.getOSMId() + "(ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop ref is no longer present in GTFS (probably the stop got removed/is no longer in function).");
+                    System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop ref is no longer present in GTFS (probably the stop got removed/is no longer in function).");
                     Element n = (Element) osmStop.originalXMLNode;
                     bufferNotInGTFS.appendNode(n);
                 }
@@ -186,7 +186,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
             for (GTFSStop gtfsStop:gtfsStops){
-                if (gtfsStop.stopMatchedWith == null && gtfsStop.pairedWithRailWay == null && gtfsStop.pairedWithStopPositions.size() == 0){
+                if (gtfsStop.stopMatchedWith == null && gtfsStop.railWayMatchedWith == null && gtfsStop.stopPositionsMatchedWith.size() == 0){
                     unpaired_from_gtfs++;
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
                     if (smallFileExport && unpaired_from_gtfs % 10 == 0){

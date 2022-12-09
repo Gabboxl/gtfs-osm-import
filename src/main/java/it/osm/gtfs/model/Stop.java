@@ -177,8 +177,8 @@ public class Stop {
 
 
 	public static class GTFSStop extends Stop{
-		public Stop pairedWithRailWay;
-		public List<Stop> pairedWithStopPositions = new ArrayList<Stop>();
+		public Stop railWayMatchedWith;
+		public List<Stop> stopPositionsMatchedWith = new ArrayList<Stop>();
 
 		public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name) {
 			super(gtfsId, code, lat, lon, name);
