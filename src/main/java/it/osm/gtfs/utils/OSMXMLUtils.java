@@ -50,7 +50,7 @@ public class OSMXMLUtils {
         for (int t = 0; t < childs.getLength(); t++) {
             Node attNode = childs.item(t);
             if (attNode.getAttributes() != null){
-                if (attNode.getAttributes().getNamedItem("k").getNodeValue().equals(key)){
+                if (attNode.getAttributes().getNamedItem("k").getNodeValue().equalsIgnoreCase(key)){ //check if the key equals without case check
                     return (Element) attNode;
                 }
             }
