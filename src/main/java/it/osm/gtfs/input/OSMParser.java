@@ -95,6 +95,7 @@ public class OSMParser {
             NodeList att = fstNode.getChildNodes();
             for (int t = 0; t < att.getLength(); t++) {
                 Node attNode = att.item(t);
+
                 if (attNode.getAttributes() != null){
                     String key = attNode.getAttributes().getNamedItem("k").getNodeValue();
                     String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
@@ -137,7 +138,7 @@ public class OSMParser {
                             for (Stop existingStop:refRails.get(stop.getCode())){
                                 if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
                                     System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-                                            " (nodes ids:" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
+                                            " (node IDs :" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
                             }
                         }
 
@@ -147,7 +148,7 @@ public class OSMParser {
                             for (Stop existingStop:refBuses.get(stop.getCode())){
                                 if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
                                     System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-                                            " (nodes ids:" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
+                                            " (node IDs :" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
                             }
                         }
                         refBuses.put(stop.getCode(), stop);
