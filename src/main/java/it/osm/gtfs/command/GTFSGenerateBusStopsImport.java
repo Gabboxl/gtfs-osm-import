@@ -158,11 +158,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     OSMXMLUtils.addTag(n, "gtfs_id", osmStop.stopMatchedWith.getGtfsId());
                     OSMXMLUtils.addTagIfNotExisting(n, "operator", GTFSImportSettings.getInstance().getOperator());
                     OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
-
-                    //unknown state no more needed
-                    //OSMXMLUtils.addTagIfNotExisting(n, "shelter", "unknown");
-                    //OSMXMLUtils.addTagIfNotExisting(n, "bench", "unknown");
-                    //OSMXMLUtils.addTagIfNotExisting(n, "tactile_paving", "unknown");
                     OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
 
                     buffer.appendNode(n);
