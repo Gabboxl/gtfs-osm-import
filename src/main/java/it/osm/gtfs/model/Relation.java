@@ -72,11 +72,11 @@ public class Relation extends StopsList{
         this.wayMembers = wayMembers;
     }
 
-    public static enum RelationType{
+    public enum RelationType{
         SUBWAY(0), TRAM(1), BUS(2), TRAIN(3), LIGHT_RAIL(4);
 
         private int dbId;
-        private RelationType(int dbId){
+        RelationType(int dbId){
             this.dbId = dbId;
         }
 
