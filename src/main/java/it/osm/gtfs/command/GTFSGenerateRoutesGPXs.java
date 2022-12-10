@@ -44,6 +44,9 @@ import javax.xml.parsers.ParserConfigurationException;
 @CommandLine.Command(name = "gpx", description = "Generate .gpx file for all GTFS Trips")
 public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
+    @CommandLine.Option(names = {"-w", "--waypoints"}, description = "Export GPX as waypoints instead of as a shape/track")
+    boolean asWaypoints;
+
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
         Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME));
@@ -65,11 +68,17 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
             Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
 
             for (Trip trip:uniqueTrips){
-                Route r = routes.get(trip.getRoute().getId());
-                Shape s = shapes.get(trip.getShapeID());
+                Route route = routes.get(trip.getRoute().getId());
+                Shape shape = shapes.get(trip.getShapeID());
 
-                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + r.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
-                f.write(s.getGPXasShape(r.getShortName()).getBytes());
+                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
+
+                if(asWaypoints){
+                    f.write(shape.getGPXasWaypoints(route.getShortName()).getBytes());
+                }else{
+                    f.write(shape.getGPXasShape(route.getShortName()).getBytes());
+                }
+
                 f.close();
             }
         }

@@ -46,7 +46,7 @@ import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-@CommandLine.Command(name = "match", description = "Match gpx files to OSM data to generate precise relations")
+@CommandLine.Command(name = "match", description = "Match gpx files to OSM data to generate precise relations (this command will be removed soon)")
 public class GTFSMatchGPX implements Callable<Void> {
     String instructions_locale = "";
     String profile_graphhopper = "car";
