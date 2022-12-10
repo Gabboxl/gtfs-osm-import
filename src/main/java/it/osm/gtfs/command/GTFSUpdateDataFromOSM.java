@@ -108,7 +108,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         input.add(filetrm);
         input.add(filemtr);
 
-        File fileout = new File(GTFSImportSettings.getInstance().getOsmDataPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
+        File fileout = new File(GTFSImportSettings.OSM_STOP_FILE_PATH);
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(input, fileout));
     }
 
@@ -119,7 +119,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
     }
 
     private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, InterruptedException{
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmDataPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
@@ -133,7 +133,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
     }
 
     private static void updateFullRels(Map<String, Integer> idWithVersion) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmDataPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         List<File> sorted = new ArrayList<File>();
@@ -175,8 +175,8 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         }
         OsmosisUtils.checkProcessOutput(previousTask);
 
-        File filestops = new File(GTFSImportSettings.getInstance().getOsmDataPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
-        File fileout = new File(GTFSImportSettings.getInstance().getOsmDataPath() + GTFSImportSettings.OSM_RELATIONS_FILE_NAME);
+        File filestops = new File(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        File fileout = new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH);
         sorted.add(filestops);
 
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sorted, fileout));
