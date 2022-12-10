@@ -41,11 +41,11 @@ import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-//TODO: to remove this command and integrate into the fullrels command as option like --gpx
-@CommandLine.Command(name = "gpx", description = "Generate .gpx file for all GTFS Trips")
+
+@CommandLine.Command(name = "gpx", description = "Generate .gpx files for all GTFS trips (mostly for debug purposes)")
 public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-w", "--waypoints"}, description = "Export GPX as waypoints instead of as a shape/track")
+    @CommandLine.Option(names = {"-w", "--waypoints"}, description = "Export GPXs as waypoints instead of shape/track")
     boolean asWaypoints;
 
     @Override
