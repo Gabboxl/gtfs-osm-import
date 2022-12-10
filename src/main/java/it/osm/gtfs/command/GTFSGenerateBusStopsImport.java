@@ -45,9 +45,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "stops", description = "Generate files to import bus stops into osm merging with existing stops")
 public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-s", "--small"}, description = "Export to small file")
-    boolean smallFileExport;
-
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
         List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
@@ -193,11 +190,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 if (gtfsStop.stopMatchedWith == null && gtfsStop.railwayMatchedWith == null && gtfsStop.stopPositionsMatchedWith.size() == 0){
                     new_stops_from_gtfs++;
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
-                    if (smallFileExport && new_stops_from_gtfs % 10 == 0){
-                        buffer.end();
-                        buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm"));
-                        buffer = new OSMBusImportGenerator(bb);
-                    }
+
+
                 }
             }
             buffer.end();
