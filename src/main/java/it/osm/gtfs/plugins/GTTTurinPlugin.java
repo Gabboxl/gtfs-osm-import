@@ -42,7 +42,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
                 return camelCase(busStopName).trim();
             }
         }catch (Exception e){
-            System.err.println(e);
+            System.err.println("stopname: " + busStopName + " " + e); //sarebbe meglio e.printStacktrace(); al posto di un println
         }
         return busStopName;
     }
