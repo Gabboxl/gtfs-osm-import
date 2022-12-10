@@ -189,9 +189,9 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             for (GTFSStop gtfsStop:gtfsStops){
                 if (gtfsStop.stopMatchedWith == null && gtfsStop.railwayMatchedWith == null && gtfsStop.stopPositionsMatchedWith.size() == 0){
                     new_stops_from_gtfs++;
+
+                    //we create the new node with new tags here
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
-
-
                 }
             }
             buffer.end();

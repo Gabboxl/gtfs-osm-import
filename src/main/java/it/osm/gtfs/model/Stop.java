@@ -160,7 +160,7 @@ public class Stop {
         return false;
     }
 
-    public Element getNewXMLNode(IElementCreator document){
+    public Element getNewXMLNode(IElementCreator document){ //TODO: I think we need to support different combinations of tags for tram stops/metro stops/bus stops
         Element node = document.createElement("node");
         long id;
         try{
@@ -181,6 +181,7 @@ public class Stop {
         node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(getName())));
         node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
+        node.appendChild(OSMXMLUtils.createTagElement(document, "wheelchair", getWheelchairAccessibility().getOsmValue()));
         return node;
     }
 
