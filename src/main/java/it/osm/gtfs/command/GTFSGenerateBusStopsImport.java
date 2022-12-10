@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.command;
 
+import it.osm.gtfs.enums.GTFSWheelchairAccess;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.BoundingBox;
@@ -139,7 +140,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 
                     //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
-                    OSMXMLUtils.addTagIfNotExisting(n, "wheelchair", osmStop.getWheelchairAccessibility().getOsmValue());
+                    GTFSWheelchairAccess wheelchairAccess = osmStop.getWheelchairAccessibility();
+                    if(wheelchairAccess != null && wheelchairAccess != GTFSWheelchairAccess.UNKNOWN) {
+                        OSMXMLUtils.addTagIfNotExisting(n, "wheelchair", wheelchairAccess.getOsmValue());
+                    }
 
                     if(osmStop.isRailway()) {
                         //OSMXMLUtils.addTagIfNotExisting(n, "tram", "yes");
