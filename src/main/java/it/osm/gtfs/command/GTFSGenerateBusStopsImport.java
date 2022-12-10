@@ -183,7 +183,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         //new stops from gtfs data
         {
             int new_stops_from_gtfs = 0;
-            int current_part = 0;
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
             for (GTFSStop gtfsStop:gtfsStops){
@@ -192,15 +191,15 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
                     if (smallFileExport && new_stops_from_gtfs % 10 == 0){
                         buffer.end();
-                        buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + "."+ (current_part++) + ".osm"));
+                        buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm"));
                         buffer = new OSMBusImportGenerator(bb);
                     }
                 }
             }
             buffer.end();
             if (new_stops_from_gtfs > 0){
-                buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + "."+ (current_part++) + ".osm"));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + "[.part].osm)").reset());
+                buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm"));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm)").reset());
             }else{
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs));
             }
