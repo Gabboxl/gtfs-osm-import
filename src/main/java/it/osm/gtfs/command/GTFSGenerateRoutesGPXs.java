@@ -41,6 +41,7 @@ import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+//TODO: to remove this command and integrate into the fullrels command as option like --gpx
 @CommandLine.Command(name = "gpx", description = "Generate .gpx file for all GTFS Trips")
 public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 

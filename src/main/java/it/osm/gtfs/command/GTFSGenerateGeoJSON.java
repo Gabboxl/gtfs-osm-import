@@ -29,6 +29,8 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import picocli.CommandLine;
 
+
+//TODO: is this class still useful in some way?
 @CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
 public class GTFSGenerateGeoJSON implements Callable<Void> {
 

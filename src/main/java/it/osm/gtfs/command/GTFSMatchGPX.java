@@ -73,12 +73,9 @@ public class GTFSMatchGPX implements Callable<Void> {
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSMatchGPX.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
 
-
         hopper = new GraphHopper().init(graphHopperConfiguration);
         hopper.importOrLoad();
-
         //hopper.setEncodedValuesString("osm_way_id"); x tag personalizzati senza specificarli in graphopper.yml
-
 
         PMap hints = new PMap();
         hints.putObject("profile", profile_graphhopper);

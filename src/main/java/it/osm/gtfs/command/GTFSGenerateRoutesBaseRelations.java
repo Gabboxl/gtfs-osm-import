@@ -43,6 +43,7 @@ import org.xml.sax.SAXException;
 import com.google.common.collect.Multimap;
 import picocli.CommandLine;
 
+//TODO: to remove this command and integrate into the fullrels command like --stops for only stops relation generation
 @CommandLine.Command(name = "stoprels", description = "Generate STOP-ONLY relations")
 public class GTFSGenerateRoutesBaseRelations implements Callable<Void> {
 
