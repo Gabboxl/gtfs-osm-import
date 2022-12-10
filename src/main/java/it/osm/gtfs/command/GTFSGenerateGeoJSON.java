@@ -36,7 +36,7 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
         List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings
-                .getInstance().getOSMPath()
+                .getInstance().getOutputPath()
                 + GTFSImportSettings.OSM_STOP_FILE_NAME);
 
         System.out.println("Indexing OSM Stops...");
@@ -44,7 +44,7 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
 
         System.out.println("Parsing OSM Relations...");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(
-                        GTFSImportSettings.getInstance().getOSMPath()
+                        GTFSImportSettings.getInstance().getOutputPath()
                                 + GTFSImportSettings.OSM_RELATIONS_FILE_NAME),
                 osmstopsOsmID);
 

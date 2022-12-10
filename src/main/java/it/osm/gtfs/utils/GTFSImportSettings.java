@@ -74,26 +74,6 @@ public class GTFSImportSettings {
         return gtfsPath;
     }
 
-    private String osmPath = null;
-    public String getOSMPath() {
-        if (osmPath == null){
-            synchronized (this) {
-                osmPath = properties.getProperty("osm_path");
-                if (osmPath == null)
-                    throw new IllegalArgumentException("Please set a valid osm-path.");
-                if (!osmPath.endsWith(File.separator))
-                    osmPath = osmPath + File.separator;
-                if (!new File(osmPath).isDirectory())
-                    throw new IllegalArgumentException("Please set a valid osm-path.");
-            }
-        }
-        return osmPath;
-    }
-
-    public String getOSMCachePath() {
-        return getOSMPath() + File.separator + "cache" + File.separator;
-    }
-
     private String outputPath = null;
     public String getOutputPath() {
         if (outputPath == null){
@@ -108,6 +88,14 @@ public class GTFSImportSettings {
             }
         }
         return outputPath;
+    }
+
+    public String getCachePath() {
+        return getOutputPath() + File.separator + "cache" + File.separator;
+    }
+
+    public String getOsmDataPath() {
+        return getOutputPath() + File.separator + "osmdata" + File.separator;
     }
 
     private GTFSPlugin plugin = null;

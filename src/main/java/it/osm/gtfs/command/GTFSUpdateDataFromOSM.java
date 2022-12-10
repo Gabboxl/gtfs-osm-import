@@ -26,7 +26,6 @@ import it.osm.gtfs.model.Stop.GTFSStop;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,9 +50,10 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
         if (relation == null || relation.isBlank()) {
 
-            File cachedirectory = new File(GTFSImportSettings.getInstance().getOSMCachePath());
+            File cachedirectory = new File(GTFSImportSettings.getInstance().getCachePath());
+            File osmdatadirectory = new File(GTFSImportSettings.getInstance().getOsmDataPath());
 
-            if (cachedirectory.mkdirs() || cachedirectory.isDirectory()) { //controllo che sia stata creata la directori o se esiste gia'
+            if ((cachedirectory.mkdirs() || cachedirectory.isDirectory()) && (osmdatadirectory.mkdirs() || osmdatadirectory.isDirectory())) { //controllo che sia stata creata la directori o se esiste gia'
                 updateBusStops();
                 updateBaseRels();
                 updateFullRels();
@@ -77,28 +77,28 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         BoundingBox bb = new BoundingBox(gtfs);
 
         String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
-        File filebus = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_nbus.osm");
+        File filebus = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nbus.osm");
         urlbus = urlbus.replace(" ", "%20"); //fixo la richiesta sostituendo gli spazi con la codifica uri visto che la richeista è buggata con httpurlconnection e non va
         DownloadUtils.download(urlbus, filebus);
 
         Thread.sleep(1000L);
 
         String urlstop = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
-        File filestop = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_nstop.osm");
+        File filestop = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nstop.osm");
         urlstop = urlstop.replace(" ", "%20");
         DownloadUtils.download(urlstop, filestop);
 
         Thread.sleep(1000L);
 
         String urltrm = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
-        File filetrm = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_ntram.osm");
+        File filetrm = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_ntram.osm");
         urltrm = urltrm.replace(" ", "%20");
         DownloadUtils.download(urltrm, filetrm);
 
         Thread.sleep(3000L);
 
         String urlmtr = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
-        File filemtr = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_nmetro.osm");
+        File filemtr = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nmetro.osm");
         urlmtr = urlmtr.replace(" ", "%20");
         DownloadUtils.download(urlmtr, filemtr);
 
@@ -108,21 +108,21 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         input.add(filetrm);
         input.add(filemtr);
 
-        File fileout = new File(GTFSImportSettings.getInstance().getOSMPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
+        File fileout = new File(GTFSImportSettings.getInstance().getOsmDataPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(input, fileout));
     }
 
     private static void updateBaseRels() throws IOException{
         String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];out meta;";
-        File filerel = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_rels.osm");
+        File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_rels.osm");
         DownloadUtils.download(urlrel, filerel);
     }
 
     private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, InterruptedException{
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmDataPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOSMCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
 
         Map<String, Integer> idWithVersion = new HashMap<String, Integer>();
         for (Relation r:osmRels){
@@ -133,15 +133,15 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
     }
 
     private static void updateFullRels(Map<String, Integer> idWithVersion) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOSMPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
+        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmDataPath() +  GTFSImportSettings.OSM_STOP_FILE_NAME);
         Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         List<File> sorted = new ArrayList<File>();
 
         // Default to all available rel, then override forced updates
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOSMCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
         for (Relation r:osmRels){
-            File filesorted = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_s" + r.getId() + ".osm");
+            File filesorted = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_s" + r.getId() + ".osm");
             if (filesorted.exists())
                 sorted.add(filesorted);
         }
@@ -149,7 +149,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         Pipeline previousTask = null;
         for (String relationId:idWithVersion.keySet()){
             System.out.println("Processing relation " + relationId);
-            File filesorted = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_s" + relationId + ".osm");
+            File filesorted = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_s" + relationId + ".osm");
             sorted.add(filesorted);
 
             boolean uptodate = false;
@@ -164,7 +164,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
             }
 
             if (!uptodate){
-                File filerelation = new File(GTFSImportSettings.getInstance().getOSMCachePath() + "tmp_r" + relationId + ".osm");
+                File filerelation = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_r" + relationId + ".osm");
                 String url = GTFSImportSettings.OSM_API_SERVER + "relation/" + relationId + "/full";
                 DownloadUtils.download(url, filerelation);
 
@@ -175,8 +175,8 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         }
         OsmosisUtils.checkProcessOutput(previousTask);
 
-        File filestops = new File(GTFSImportSettings.getInstance().getOSMPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
-        File fileout = new File(GTFSImportSettings.getInstance().getOSMPath() + GTFSImportSettings.OSM_RELATIONS_FILE_NAME);
+        File filestops = new File(GTFSImportSettings.getInstance().getOsmDataPath() + GTFSImportSettings.OSM_STOP_FILE_NAME);
+        File fileout = new File(GTFSImportSettings.getInstance().getOsmDataPath() + GTFSImportSettings.OSM_RELATIONS_FILE_NAME);
         sorted.add(filestops);
 
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sorted, fileout));

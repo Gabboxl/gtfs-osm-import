@@ -28,7 +28,7 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM stops...");
         List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings
-                .getInstance().getOSMPath()
+                .getInstance().getOutputPath()
                 + GTFSImportSettings.OSM_STOP_FILE_NAME);
 
         System.out.println("Indexing OSM stops...");
@@ -36,7 +36,7 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
 
         System.out.println("Parsing OSM relations...");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(
-                        GTFSImportSettings.getInstance().getOSMPath()
+                        GTFSImportSettings.getInstance().getOutputPath()
                                 + GTFSImportSettings.OSM_RELATIONS_FILE_NAME),
                 osmstopsOsmID);
 

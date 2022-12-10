@@ -85,7 +85,6 @@ public class GTFSOSMImport {
     void conf(){
         System.out.println("Current Configuration:\n" +
                 "GTFS path: " + GTFSImportSettings.getInstance().getGTFSPath() + "\n" +
-                "OSM path: " + GTFSImportSettings.getInstance().getOSMPath() + "\n" +
                 "Output path: " + GTFSImportSettings.getInstance().getOutputPath() + "\n" +
                 "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
                 "Revised key: " + GTFSImportSettings.getInstance().getRevisedKey() + "\n" +
