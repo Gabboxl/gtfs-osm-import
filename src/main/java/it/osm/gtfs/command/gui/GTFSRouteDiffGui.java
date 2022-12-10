@@ -48,10 +48,10 @@ import org.xml.sax.SAXException;
 public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, KeyListener {
     private static final long serialVersionUID = 1L;
 
-    private JList gtfsList;
-    private JList gtfsStopList;
-    private JList osmStopList;
-    private JList osmList;
+    private JList<String> gtfsList;
+    private JList<String> gtfsStopList;
+    private JList<String> osmStopList;
+    private JList<String> osmList;
 
     List<Trip> uniqueTrips;
     Set<Trip> uniqueTripsMarkerOk = new HashSet<Trip>();
@@ -80,13 +80,13 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         {
             gtfsStopList = createEmptyJList();
             gtfsStopList.setCellRenderer(new GTFSStopsCellRendered());
-            updateGTFSStopBind();
+            updateStopBinding(currentGTFSStops, gtfsStopList);
             add(new JScrollPane(gtfsStopList));
         }
         {
             osmStopList = createEmptyJList();
             osmStopList.setCellRenderer(new OSMStopsCellRendered());
-            updateOSMStopBind();
+            updateStopBinding(currentOSMStops, osmStopList);
             add(new JScrollPane(osmStopList));
         }
         {
@@ -137,7 +137,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             }
             br.close();
         }catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
 
         for (Trip t:uniqueTrips){
@@ -153,8 +153,8 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         }
     }
 
-    private JList createEmptyJList(){
-        JList j = new JList();
+    private JList<String> createEmptyJList(){
+        JList<String> j = new JList<String>();
         j.setLayoutOrientation(JList.VERTICAL);
         j.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         j.setSize(200, 500);
@@ -167,7 +167,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             Trip selectedTrip = uniqueTrips.get(gtfsList.getSelectedIndex());
             currentGTFSStops.clear();
             currentGTFSStops.addAll(selectedTrip.getStopTime().getStops().values());
-            updateGTFSStopBind();
+            updateStopBinding(currentGTFSStops, gtfsStopList);
             updateAffinity(selectedTrip);
         }else if (event.getSource().equals(osmList)){
             currentOSMStops.clear();
@@ -175,7 +175,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
                 WeightedRelation selectedRel = osmRels.get(osmList.getSelectedIndex());
                 currentOSMStops.addAll(selectedRel.getStops().values());
             }
-            updateOSMStopBind();
+            updateStopBinding(currentOSMStops, osmStopList);
         }
     }
 
@@ -229,17 +229,10 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         gtfsListBind.bind();
     }
 
-    private void updateGTFSStopBind(){
-        updateStopMarkers();
-        JListBinding<Stop, List<Stop>, JList> gtfsStopListBind = SwingBindings.createJListBinding(UpdateStrategy.READ, currentGTFSStops, gtfsStopList);
-        ELProperty<Stop, String> fullNameP = ELProperty.create("${code} ${name}");
-        gtfsStopListBind.setDetailBinding(fullNameP);
-        gtfsStopListBind.bind();
-    }
 
-    private void updateOSMStopBind() {
+    private void updateStopBinding(List<Stop> currentStops, JList stopList) {
         updateStopMarkers();
-        JListBinding<Stop, List<Stop>, JList> osmStopListBind = SwingBindings.createJListBinding(UpdateStrategy.READ, currentOSMStops, osmStopList);
+        JListBinding<Stop, List<Stop>, JList> osmStopListBind = SwingBindings.createJListBinding(UpdateStrategy.READ, currentStops, stopList);
         ELProperty<Stop, String> fullNameP = ELProperty.create("${code} ${name}");
         osmStopListBind.setDetailBinding(fullNameP);
         osmStopListBind.bind();

@@ -320,7 +320,7 @@ public class GTFSParser {
                         s.invalidate();
                         if (!missingStops.contains(gtfsID)){
                             missingStops.add(gtfsID);
-                            System.err.println("Warning: No stop found with gtfs_id = " + gtfsID + ". This Trip " + elements[trip_id] + " and maybe others won't be generated !!");
+                            System.err.println("Warning: No stop found with gtfs_id = " + gtfsID + ". This Trip " + elements[trip_id] + " and maybe others won't be generated!");
                         }
                     }
                 }

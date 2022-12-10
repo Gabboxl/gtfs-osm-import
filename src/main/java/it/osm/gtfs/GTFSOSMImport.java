@@ -42,7 +42,6 @@ import java.util.function.Supplier;
 
 
 
-
 @CommandLine.Command(name = "GTFSOSMImport", /* capire a cosa serve bene sta variabile */mixinStandardHelpOptions = true, subcommands = {
         GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
         GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesBaseRelations.class, GTFSGenerateRoutesFullRelations.class,
@@ -50,6 +49,7 @@ import java.util.function.Supplier;
         GTFSGenerateRoutesDiff.class
 })
 public class GTFSOSMImport {
+
     @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
     public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
         final Object lock = new Object();
