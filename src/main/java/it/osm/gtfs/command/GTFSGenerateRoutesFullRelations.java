@@ -20,6 +20,7 @@ import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.*;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
@@ -29,6 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Callable;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 
 @CommandLine.Command(name = "fullrels", description = "Generate full releations including ways and stops (very long!)")
@@ -59,6 +62,8 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
 
             for (Trip trip:uniqueTrips){
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating full way-matched relations...").reset());
+
                 int count = Collections.frequency(allTrips, trip);
 
                 Route route = routes.get(trip.getRoute().getId());
@@ -72,6 +77,8 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = new GTFSMatchGPX().runMatch(xmlGPXShape);
+                }else {
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relations...").reset());
                 }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
@@ -81,6 +88,8 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                 f.write(stops.getRelationAsStopList(trip, route).getBytes());
                 f.close();
             }
+
+            System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
         }
         return null;
     }
