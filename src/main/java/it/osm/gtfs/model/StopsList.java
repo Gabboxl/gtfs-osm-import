@@ -80,7 +80,7 @@ public class StopsList {
         for (Long key: o.stops.keySet()){
             Stop a = stops.get(key);
             Stop b = o.stops.get(key);
-            if (a == null || b == null || !a.equals(b))
+            if (a == null || !a.equals(b))
                 return false;
         }
         return true;

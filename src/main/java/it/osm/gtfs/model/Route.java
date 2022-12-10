@@ -69,5 +69,4 @@ public class Route implements Comparable<Route> {
         return id.compareTo(route.id);
     }
 
-
 }
