@@ -50,7 +50,7 @@ import java.util.function.Supplier;
         GTFSGenerateRoutesDiff.class
 })
 public class GTFSOSMImport {
-    @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips")
+    @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
     public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
         final Object lock = new Object();
         final GTFSRouteDiffGui app = new GTFSRouteDiffGui();

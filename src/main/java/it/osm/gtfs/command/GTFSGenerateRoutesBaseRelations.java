@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 import com.google.common.collect.Multimap;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "rels", description = "Generate the base relations (including only stops) to be used only when importing without any existing relation in osm")
+@CommandLine.Command(name = "rels", description = "Generate STOP-ONLY relations")
 public class GTFSGenerateRoutesBaseRelations implements Callable<Void> {
 
     @Override
