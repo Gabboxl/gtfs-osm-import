@@ -50,7 +50,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class GTFSMatchGPX implements Callable<Void> {
     String instructions_locale = "";
     String profile_graphhopper = "car";
-
     StopWatch importSW;
     StopWatch matchSW;
     XmlMapper xmlMapper;
@@ -69,10 +68,9 @@ public class GTFSMatchGPX implements Callable<Void> {
         return null;
     }
 
-    public ArrayList<Integer> runMatch(@Nullable String xmlGPXString) throws IOException{
+    public ArrayList<Integer> runMatch(@Nullable String xmlGPXString) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
-        //objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSMatchGPX.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
 
 
@@ -96,7 +94,7 @@ public class GTFSMatchGPX implements Callable<Void> {
         xmlMapper = new XmlMapper();
 
 
-        if(xmlGPXString.isBlank()) {
+        if(xmlGPXString == null || xmlGPXString.isBlank()) {
             File directoryPath = new File(GTFSImportSettings.getInstance().getOutputPath() + "/gpx");
             //List of all files and directories
             File[] gpx_files_list = directoryPath.listFiles();
@@ -112,22 +110,17 @@ public class GTFSMatchGPX implements Callable<Void> {
                 matchGPX(Files.readString(gpxFile.toPath()), outFile);
 
                 System.out.println("\tExport results to:" + outFile);
-
-
             }
         } else {
             matchWayIDs = matchGPX(xmlGPXString, null);
         }
-
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("GPS import took: ").reset().a(importSW.getSeconds() + " s").fg(Ansi.Color.GREEN).a(", match took: ").reset().a(matchSW.getSeconds() + " s"));
 
         return matchWayIDs;
     }
 
-
-
-    private @Nullable ArrayList<Integer> matchGPX(String xmlData, @Nullable String outputFile){ //metodo con tipi generici
+    private @Nullable ArrayList<Integer> matchGPX(String xmlData, @Nullable String outputFile){
         try {
             importSW.start();
             Gpx gpx = xmlMapper.readValue(xmlData, Gpx.class);
