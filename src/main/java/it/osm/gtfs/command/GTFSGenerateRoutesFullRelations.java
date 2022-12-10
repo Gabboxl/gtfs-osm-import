@@ -31,8 +31,11 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 
-@CommandLine.Command(name = "fullrels", description = "Generate full releations including ways and stops")
+@CommandLine.Command(name = "fullrels", description = "Generate full releations including ways and stops (very long!)")
 public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
+
+    @CommandLine.Option(names = {"-s", "--stops"}, description = "Generate stops-only relations (skips ways matching)")
+    Boolean includeStopsOnly;
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
@@ -60,12 +63,16 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
                 Route route = routes.get(trip.getRoute().getId());
                 StopsList stops = stopTimes.get(trip.getTripID());
-                Shape shape = shapes.get(trip.getShapeID());
+                List<Integer> osmWayIds = null;
 
-                String xmlGPXShape = shape.getGPXasShape(route.getShortName());
+                if(includeStopsOnly == null || !includeStopsOnly) {
+                    Shape shape = shapes.get(trip.getShapeID());
 
+                    String xmlGPXShape = shape.getGPXasShape(route.getShortName());
 
-                List<Integer> osmWayIds = new GTFSMatchGPX().runMatch(xmlGPXShape);
+                    //TODO: need to check if the way matches are ordered well
+                    osmWayIds = new GTFSMatchGPX().runMatch(xmlGPXShape);
+                }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
                 f.write(OSMRelationImportGenerator.getRelation(bb, stops, osmWayIds, trip, route).getBytes());

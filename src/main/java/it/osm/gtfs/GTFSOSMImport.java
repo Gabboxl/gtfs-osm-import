@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 
 @CommandLine.Command(name = "GTFSOSMImport", /* capire a cosa serve bene sta variabile */mixinStandardHelpOptions = true, subcommands = {
         GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
-        GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesBaseRelations.class, GTFSGenerateRoutesFullRelations.class,
+        GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesFullRelations.class,
         GTFSMatchGPX.class, GTFSCheckOsmRoutes.class,
         GTFSGenerateRoutesDiff.class
 })
@@ -100,7 +100,7 @@ public class GTFSOSMImport {
             footer = {"", "Press Ctrl-D to exit."},
             subcommands = {
                     GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
-                    GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesBaseRelations.class, GTFSGenerateRoutesFullRelations.class,
+                    GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesFullRelations.class,
                     GTFSMatchGPX.class, GTFSCheckOsmRoutes.class,
                     GTFSGenerateRoutesDiff.class, PicocliCommands.ClearScreen.class, CommandLine.HelpCommand.class})
     static class CliCommands implements Runnable {
