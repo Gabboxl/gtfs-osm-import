@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.model;
 
+import it.osm.gtfs.enums.GTFSWheelchairAccess;
 import it.osm.gtfs.output.IElementCreator;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMDistanceUtils;
@@ -31,18 +32,20 @@ public class Stop {
     private Double lat;
     private Double lon;
     private String name;
+    private GTFSWheelchairAccess wheelchairAccessibility;
     private Boolean isRailway;
     private Boolean isStopPosition = false;
     public Stop stopMatchedWith;
     public Node originalXMLNode;
 
-    public Stop(String gtfsId, String code, Double lat, Double lon, String name) {
+    public Stop(String gtfsId, String code, Double lat, Double lon, String name, GTFSWheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;
         this.code = code;
         this.lat = lat;
         this.lon = lon;
         this.name = name;
+        this.wheelchairAccessibility = wheelchairAccessibility;
     }
 
     public String getGtfsId() {
@@ -60,6 +63,9 @@ public class Stop {
     public String getName() {
         return name;
     }
+    public GTFSWheelchairAccess getWheelchairAccessibility(){
+        return wheelchairAccessibility;
+    }
     public Boolean isRailway(){
         return isRailway;
     }
@@ -69,7 +75,6 @@ public class Stop {
     public String getOSMId(){
         return (originalXMLNode == null) ? null : originalXMLNode.getAttributes().getNamedItem("id").getNodeValue();
     }
-
 
     public void setIsRailway(Boolean isRailway){
         this.isRailway = isRailway;
@@ -97,10 +102,14 @@ public class Stop {
         this.name = name;
     }
 
+    public void setWheelchairAccessibility(GTFSWheelchairAccess wheelchairAccessibility){
+        this.wheelchairAccessibility = wheelchairAccessibility;
+    }
+
     @Override
     public String toString() {
         return "Stop [gtfsId=" + gtfsId + ", code=" + code + ", lat=" + lat
-                + ", lon=" + lon + ", name=" + name +
+                + ", lon=" + lon + ", name=" + name + ", accessibility=" + wheelchairAccessibility +
                 ((originalXMLNode != null) ? ", osmid=" + getOSMId() : "" )
                 + "]";
     }
@@ -180,8 +189,8 @@ public class Stop {
         public Stop railwayMatchedWith;
         public List<Stop> stopPositionsMatchedWith = new ArrayList<Stop>();
 
-        public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name) {
-            super(gtfsId, code, lat, lon, name);
+        public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, GTFSWheelchairAccess wheelchairAccessibility) {
+            super(gtfsId, code, lat, lon, name, wheelchairAccessibility);
         }
 
     }

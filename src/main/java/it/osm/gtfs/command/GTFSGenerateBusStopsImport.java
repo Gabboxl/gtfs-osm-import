@@ -116,7 +116,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             Map<Double, String> messages = new TreeMap<Double, String>();
             for (Stop osmStop : osmStops){
                 if (osmStop.stopMatchedWith != null){
-
+                    Element n = (Element) osmStop.originalXMLNode;
 
                     //non so perche' sia importate la distanza tra le due fermate qua
                     double dist = OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.stopMatchedWith.getLat(), osmStop.stopMatchedWith.getLon());
@@ -125,7 +125,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                                 " distance GTFS-OSM: " + OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.stopMatchedWith.getLat(), osmStop.stopMatchedWith.getLon()) + " m");
                     }
 
-                    Element n = (Element) osmStop.originalXMLNode;
 
 
                     if (!osmStop.stopMatchedWith.getGtfsId().equals(osmStop.getGtfsId())){
@@ -136,11 +135,14 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
                     }
 
+                    //TODO: check if the name changed & other tags
                     OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
                     OSMXMLUtils.addTagIfNotExisting(n, "operator", GTFSImportSettings.getInstance().getOperator());
 
-
                     OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+
+                    //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
+                    OSMXMLUtils.addTagIfNotExisting(n, "wheelchair", osmStop.getWheelchairAccessibility().getOsmValue());
 
                     if(osmStop.isRailway()) {
                         //OSMXMLUtils.addTagIfNotExisting(n, "tram", "yes");
@@ -151,13 +153,15 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         OSMXMLUtils.addTagIfNotExisting(n, "public_transport", "platform");
                     }
 
-
+                    //add the node to the buffer of matched stops
                     bufferMatchedStops.appendNode(n);
                     matched_stops++;
                 }else{
                     not_matched_osm_stops++;
                     System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop didn't get matched to a GTFS stop as they are too distant or ref code is no more available.");
                     Element n = (Element) osmStop.originalXMLNode;
+
+                    //add the node to the buffer of not matched stops
                     bufferNotMatchedStops.appendNode(n);
                 }
             }

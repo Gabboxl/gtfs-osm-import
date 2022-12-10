@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.input;
 
+import it.osm.gtfs.enums.GTFSWheelchairAccess;
 import it.osm.gtfs.model.Route;
 import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.model.Trip;
@@ -46,7 +47,7 @@ public class GTFSParser {
 
         String thisLine;
         String [] elements;
-        int stopIdKey=-1, stopNameKey=-1, stopCodeKey=-1, stopLatKey=-1, stopLonKey=-1, locationTypeKey=-1, parentStationKey=-1;
+        int stopIdKey=-1, stopNameKey=-1, stopCodeKey=-1, stopLatKey=-1, stopLonKey=-1, locationTypeKey=-1, parentStationKey=-1, wheelchairBoardingKey = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
@@ -64,6 +65,7 @@ public class GTFSParser {
                     else if(keys[i].equals("stop_code")) stopCodeKey = i;
                     else if(keys[i].equals("location_type")) locationTypeKey = i;
                     else if(keys[i].equals("parent_station")) parentStationKey = i;
+                    else if(keys[i].equals("wheelchair_boarding")) wheelchairBoardingKey = i;
 
                         // gtfs stop_url is mapped to source_ref tag in OSM
                     else if(keys[i].equals("stop_url")){
@@ -100,15 +102,20 @@ public class GTFSParser {
                 if (stopCode.length() > 0){
                     if (locationTypeKey >= 0 && parentStationKey >= 0 && "1".equals(elements[locationTypeKey])){
                         //this is a station (group of multiple stops)
-                        System.err.println("skipped station (group of multiple stops): " + elements[stopIdKey]);
+                        System.err.println("GTFSParser: skipped station (group of multiple stops): " + elements[stopIdKey]);
                     }else{
-                        Stop.GTFSStop gs = new Stop.GTFSStop(elements[stopIdKey],elements[stopCodeKey],Double.valueOf(elements[stopLatKey]),Double.valueOf(elements[stopLonKey]), elements[stopNameKey]);
+                        Stop.GTFSStop gs = new Stop.GTFSStop(elements[stopIdKey],
+                                elements[stopCodeKey],
+                                Double.valueOf(elements[stopLatKey]),
+                                Double.valueOf(elements[stopLonKey]),
+                                elements[stopNameKey],
+                                GTFSWheelchairAccess.valueOf(elements[wheelchairBoardingKey]));
                         if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gs)){
                             result.add(gs);
                         }
                     }
                 }else{
-                    System.err.println("Failed to parse stops.txt line: " + thisLine);
+                    System.err.println("GTFSParser: Failed to parse stops.txt line: " + thisLine);
                 }
             }
         }

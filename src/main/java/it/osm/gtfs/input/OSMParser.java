@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.input;
 
+import it.osm.gtfs.enums.GTFSWheelchairAccess;
 import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Relation.OSMNode;
@@ -90,7 +91,7 @@ public class OSMParser {
 
         for (int s = 0; s < nodeList.getLength(); s++) {
             Node fstNode = nodeList.item(s);
-            Stop stop = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null);
+            Stop stop = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null);
             stop.originalXMLNode = fstNode;
             NodeList att = fstNode.getChildNodes();
             for (int t = 0; t < att.getLength(); t++) {
@@ -120,6 +121,10 @@ public class OSMParser {
                         stop.setIsRailway(true);
                     if (key.equals("bus") && value.equals("yes"))
                         stop.setIsRailway(false);
+                    if (key.equals("wheelchair") && value.equals("no"))
+                        stop.setWheelchairAccessibility(GTFSWheelchairAccess.NO);
+                    if (key.equals("wheelchair") && value.equals("limited"))
+                        stop.setWheelchairAccessibility(GTFSWheelchairAccess.LIMITED);
                 }
             }
 
