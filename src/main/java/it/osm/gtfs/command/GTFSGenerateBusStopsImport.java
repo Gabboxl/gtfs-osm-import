@@ -114,7 +114,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
             //TODO: non ho capito esattamente perche' si utilizza questo per salvare i messaggi per poi stamparli solamente una volta in un ciclo for
             Map<Double, String> messages = new TreeMap<Double, String>();
-            for (Stop osmStop:osmStops){
+            for (Stop osmStop : osmStops){
                 if (osmStop.stopMatchedWith != null){
 
 
