@@ -310,22 +310,9 @@ public class OSMParser {
                         System.err.println("Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref);
                     }
                 }else if (type.equals("way")){
-                    if (role.equals("forward")){
                         OSMRelationWayMember member = new OSMRelationWayMember();
                         member.way = ways.get(Long.parseLong(attributes.getValue("ref")));
-                        member.backward = false;
                         currentRelation.getWayMembers().add(member);
-                    }else if (role.equals("backward")){
-                        OSMRelationWayMember member = new OSMRelationWayMember();
-                        member.way = ways.get(Long.parseLong(attributes.getValue("ref")));
-                        member.backward = true;
-                        currentRelation.getWayMembers().add(member);
-                    }else{
-                        OSMRelationWayMember member = new OSMRelationWayMember();
-                        member.way = ways.get(Long.parseLong(attributes.getValue("ref")));
-                        member.backward = null;
-                        currentRelation.getWayMembers().add(member);
-                    }
                 }else{
                     System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type: \"" + type +"\"");
                 }

@@ -56,7 +56,7 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
         if (relation.getStops().size() <= 1)
             throw new IllegalArgumentException("Relation " + relation.getId() + " has less than 2 stop.");
 
-        //FIXME: handling first segment without forward/backward as backward
+        /*
         OSMNode previous = null;
         for (OSMRelationWayMember m:relation.getWayMembers()){
             if (previous != null){
@@ -77,6 +77,7 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
                 previous = m.way.nodes.get((m.backward == null || !m.backward) ? m.way.nodes.size() - 1 : 0);
             }
         }
+        */
 
         if (debug){
             for (long f = 1; f <= relation.getStops().size() ; f++){

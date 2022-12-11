@@ -104,9 +104,6 @@ public class Relation extends StopsList{
 
     public static class OSMRelationWayMember{
         public OSMWay way;
-
-        //TODO: l'attributo backward e' da rimuovere in vista del nuovo schema PTv2
-        public Boolean backward;
     }
 
     public static class OSMWay {
