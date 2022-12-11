@@ -132,17 +132,16 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                         System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
                     }
+                    
+                    OSMXMLUtils.addTagOrReplace(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
+                    OSMXMLUtils.addTagOrReplace(n, "operator", GTFSImportSettings.getInstance().getOperator());
 
-                    //TODO: check if the name changed & other tags
-                    OSMXMLUtils.addTagIfNotExisting(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
-                    OSMXMLUtils.addTagIfNotExisting(n, "operator", GTFSImportSettings.getInstance().getOperator());
-
-                    OSMXMLUtils.addTagIfNotExisting(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+                    OSMXMLUtils.addTagOrReplace(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 
                     //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
                     GTFSWheelchairAccess wheelchairAccess = osmStop.getWheelchairAccessibility();
                     if(wheelchairAccess != null && wheelchairAccess != GTFSWheelchairAccess.UNKNOWN) {
-                        OSMXMLUtils.addTagIfNotExisting(n, "wheelchair", wheelchairAccess.getOsmValue());
+                        OSMXMLUtils.addTagOrReplace(n, "wheelchair", wheelchairAccess.getOsmValue());
                     }
 
                     if(osmStop.isRailway()) {
