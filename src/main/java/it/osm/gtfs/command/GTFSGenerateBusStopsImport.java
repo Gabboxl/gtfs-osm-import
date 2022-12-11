@@ -99,7 +99,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             }
         }
 
-        //Stops matched with gtfs_id (also checking stops no longer in GTFS)
+        //Stops matched with gtfs_id (also checking stops that didn't get matched)
         {
             //FIXME: check if other tags of the node are in line with GTFS data
 
@@ -110,10 +110,9 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator bufferNotMatchedStops = new OSMBusImportGenerator(bb);
             OSMBusImportGenerator bufferMatchedStops = new OSMBusImportGenerator(bb);
 
-            for (Stop osmStop : osmStops){
+            for (Stop osmStop : osmStops) {
                 if (osmStop.stopMatchedWith != null){
                     Element n = (Element) osmStop.originalXMLNode;
-
 
                     if (!osmStop.stopMatchedWith.getGtfsId().equals(osmStop.getGtfsId())){
                         osm_with_different_gtfs_id++;
