@@ -101,7 +101,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         //Stops matched with gtfs_id (also checking stops no longer in GTFS)
         {
-            //FIXME: check if all tags of the node are in line with GTFS data (name, accessibility ecc)
+            //FIXME: check if other tags of the node are in line with GTFS data
 
             //TODO: probably the matched_stops counter can be moved and incremented in the first matching phase up there
             int matched_stops = 0;
@@ -110,19 +110,9 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator bufferNotMatchedStops = new OSMBusImportGenerator(bb);
             OSMBusImportGenerator bufferMatchedStops = new OSMBusImportGenerator(bb);
 
-            //TODO: non ho capito esattamente perche' si utilizza questo per salvare i messaggi per poi stamparli solamente una volta in un ciclo for
-            Map<Double, String> messages = new TreeMap<Double, String>();
             for (Stop osmStop : osmStops){
                 if (osmStop.stopMatchedWith != null){
                     Element n = (Element) osmStop.originalXMLNode;
-
-                    //non so perche' sia importate la distanza tra le due fermate qua
-                    double dist = OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.stopMatchedWith.getLat(), osmStop.stopMatchedWith.getLon());
-                    if (dist > 5){
-                        messages.put(dist, "Stop ref " + osmStop.getCode() +
-                                " distance GTFS-OSM: " + OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), osmStop.stopMatchedWith.getLat(), osmStop.stopMatchedWith.getLon()) + " m");
-                    }
-
 
 
                     if (!osmStop.stopMatchedWith.getGtfsId().equals(osmStop.getGtfsId())){
@@ -132,7 +122,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                         System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
                     }
-                    
+
                     OSMXMLUtils.addTagOrReplace(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
                     OSMXMLUtils.addTagOrReplace(n, "operator", GTFSImportSettings.getInstance().getOperator());
 
@@ -165,9 +155,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     bufferNotMatchedStops.appendNode(n);
                 }
             }
-
-            for(String msg:messages.values())
-                System.out.println(msg);
 
             if (matched_stops > 0){
                 bufferMatchedStops.end();
