@@ -36,10 +36,13 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 import com.google.common.collect.Multimap;
+import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 
 @CommandLine.Command(name = "gpx", description = "Generate .gpx files for all GTFS trips (mostly for debug purposes)")
@@ -83,6 +86,8 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
                 f.close();
             }
         }
+
+        System.out.println(ansi().fg(Ansi.Color.GREEN).a("Done ").reset());
         return null;
     }
 }
