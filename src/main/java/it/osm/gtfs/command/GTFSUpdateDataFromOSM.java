@@ -39,7 +39,7 @@ import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "update", description = "Generate/update osm data from api server")
+@CommandLine.Command(name = "update", description = "Generate/update data from OpenStreetMap")
 public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
     @CommandLine.Option(names = {"-r", "--relation"}, description = "Optional relation ID to generate/update single relation from api server")

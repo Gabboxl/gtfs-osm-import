@@ -299,7 +299,7 @@ public class OSMParser {
 
                 if (type.equals("node")){
                     if (role.equals("stop") || role.equals("platform")){
-                        Stop stop = stopsWithOSMIndex.get( ref);
+                        Stop stop = stopsWithOSMIndex.get(ref);
                         if (stop == null){
                             System.err.println("Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"?");
                             missingNodes.add(ref);
@@ -307,7 +307,7 @@ public class OSMParser {
                         }
                         currentRelation.pushPoint(seq++, stop, "");
                     }else{
-                        System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of type node. Its role is: \"" + role +"\", node ref/ID=" + ref);
+                        System.err.println("Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref);
                     }
                 }else if (type.equals("way")){
                     if (role.equals("forward")){
