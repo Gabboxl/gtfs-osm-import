@@ -90,6 +90,11 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             }
 
             System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
+
+            if(includeStopsOnly == null || !includeStopsOnly) {
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nBe aware that the IDs of OSM's ways can change anytime!").reset());
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nThis means you can encounter problems when uploading the relations to OSM in a different time window.").reset());
+            }
         }
         return null;
     }
