@@ -71,16 +71,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         throw new IllegalArgumentException("Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
                     }
 
-                    if (osmStop.isBusStopPosition()){
-                        gtfsStop.stopPositionsMatchedWith.add(osmStop);
-                        osmStop.stopMatchedWith = gtfsStop;
-                    }else if (osmStop.isTramStop()){
-                        osmStop.stopMatchedWith = gtfsStop;
-                    }else{
-                        gtfsStop.stopMatchedWith = osmStop;
-                        osmStop.stopMatchedWith = gtfsStop;
-                    }
+                    gtfsStop.stopsMatchedWith.add(osmStop);
+                    osmStop.stopsMatchedWith.add(gtfsStop);
 
+                    gtfsStop.stopMatchedWith = osmStop;
+                    osmStop.stopMatchedWith = gtfsStop;
                 }
             }
         }
@@ -176,7 +171,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
             for (GTFSStop gtfsStop:gtfsStops){
-                if (gtfsStop.stopMatchedWith == null && gtfsStop.tramStopMatchedWith == null && gtfsStop.stopPositionsMatchedWith.size() == 0){
+                if (gtfsStop.stopMatchedWith == null && gtfsStop.stopsMatchedWith.size() == 0){
                     new_stops_from_gtfs++;
 
                     //we create the new node with new tags here
