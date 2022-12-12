@@ -34,8 +34,8 @@ public class Stop {
     private String name;
     private String operator;
     private GTFSWheelchairAccess wheelchairAccessibility;
-    private Boolean isRailway;
-    private Boolean isStopPosition = false;
+    private Boolean isTramStop;
+    private Boolean isBusStopPosition = false;
     public Stop stopMatchedWith;
     public Node originalXMLNode;
 
@@ -71,21 +71,21 @@ public class Stop {
     public GTFSWheelchairAccess getWheelchairAccessibility(){
         return wheelchairAccessibility;
     }
-    public Boolean isRailway(){
-        return isRailway;
+    public Boolean isTramStop(){
+        return isTramStop;
     }
-    public Boolean isStopPosition(){
-        return isStopPosition;
+    public Boolean isBusStopPosition(){
+        return isBusStopPosition;
     }
     public String getOSMId(){
         return (originalXMLNode == null) ? null : originalXMLNode.getAttributes().getNamedItem("id").getNodeValue();
     }
 
-    public void setIsRailway(Boolean isRailway){
-        this.isRailway = isRailway;
+    public void setIsTramStop(Boolean isTramStop){
+        this.isTramStop = isTramStop;
     }
-    public void setIsStopPosition(Boolean isStopPosition){
-        this.isStopPosition = isStopPosition;
+    public void setIsBusStopPosition(Boolean isBusStopPosition){
+        this.isBusStopPosition = isBusStopPosition;
     }
     public void setGtfsId(String gtfsId) {
         this.gtfsId = gtfsId;

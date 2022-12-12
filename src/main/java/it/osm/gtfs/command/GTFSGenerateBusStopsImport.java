@@ -22,15 +22,11 @@ import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.model.Stop.GTFSStop;
 import it.osm.gtfs.output.OSMBusImportGenerator;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.utils.OSMXMLUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
 import org.fusesource.jansi.Ansi;
@@ -50,6 +46,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsWithDifferentOperatorTagValue;
 
+    //TODO: create a gui to review stop by stop before & after with two maps side by side the changes of every stop after having matched them etc -  very simple
+    //@CommandLine.Option(names = {"-r", "--review"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
+    //Boolean needGuiReview;
+
+
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
         List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
@@ -61,7 +62,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         for (GTFSStop gtfsStop : gtfsStops){
             for (Stop osmStop : osmStops){
                 if (gtfsStop.matches(osmStop)){
-                    if (osmStop.isStopPosition()){
+                    if (osmStop.isBusStopPosition()){
                         if (osmStop.stopMatchedWith != null){
                             System.err.println("Mupliple match found.");
                             System.err.println(" OSM: " + osmStop);
@@ -73,7 +74,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                         gtfsStop.stopPositionsMatchedWith.add(osmStop);
                         osmStop.stopMatchedWith = gtfsStop;
-                    }else if (osmStop.isRailway()){
+                    }else if (osmStop.isTramStop()){
                         if (gtfsStop.railwayMatchedWith != null || osmStop.stopMatchedWith != null){
                             System.err.println("Mupliple match found.");
                             System.err.println(" OSM: " + osmStop);
@@ -137,7 +138,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         OSMXMLUtils.addTagOrReplace(n, "wheelchair", wheelchairAccess.getOsmValue());
                     }
 
-                    if(osmStop.isRailway()) {
+                    if(osmStop.isTramStop()) {
                         //OSMXMLUtils.addTagIfNotExisting(n, "tram", "yes");
                         OSMXMLUtils.addTagIfNotExisting(n, "public_transport", "stop_position");
                     } else {

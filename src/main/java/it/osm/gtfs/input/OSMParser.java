@@ -110,19 +110,19 @@ public class OSMParser {
                     if (key.equals("gtfs_id"))
                         stop.setGtfsId(value);
                     if (key.equals("highway") && value.equals("bus_stop"))
-                        stop.setIsRailway(false);
+                        stop.setIsTramStop(false);
                     if (key.equals("railway") && value.equals("tram_stop"))
-                        stop.setIsRailway(true);
+                        stop.setIsTramStop(true);
                     if (key.equals("railway") && value.equals("station"))
-                        stop.setIsRailway(true);
-                    if (key.equals("public_transport") && value.equals("stop_position") && stop.isRailway() == null)
-                        stop.setIsStopPosition(true);
+                        stop.setIsTramStop(true);
+                    if (key.equals("public_transport") && value.equals("stop_position") && stop.isTramStop() == null)
+                        stop.setIsBusStopPosition(true);
                     if (key.equals("train") && value.equals("yes"))
-                        stop.setIsRailway(true);
+                        stop.setIsTramStop(true);
                     if (key.equals("tram") && value.equals("yes"))
-                        stop.setIsRailway(true);
+                        stop.setIsTramStop(true);
                     if (key.equals("bus") && value.equals("yes"))
-                        stop.setIsRailway(false);
+                        stop.setIsTramStop(false);
                     if (key.equals("wheelchair") && value.equals("no"))
                         stop.setWheelchairAccessibility(GTFSWheelchairAccess.NO);
                     if (key.equals("wheelchair") && value.equals("limited"))
@@ -131,16 +131,16 @@ public class OSMParser {
             }
 
 
-            if (stop.isRailway() == null)
-                if (stop.isStopPosition())
+            if (stop.isTramStop() == null)
+                if (stop.isBusStopPosition())
                     continue; //ignore unsupported stop positions (like ferries)
                 else
                     throw new IllegalArgumentException("Unknown node type for node: " + stop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
             //Check duplicate ref in osm
             if (stop.getCode() != null){
-                if (stop.isStopPosition() == null || !stop.isStopPosition()){
-                    if (stop.isRailway()){
+                if (stop.isBusStopPosition() == null || !stop.isBusStopPosition()){
+                    if (stop.isTramStop()){
                         if (refRails.containsKey(stop.getCode())){
                             for (Stop existingStop:refRails.get(stop.getCode())){
                                 if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
