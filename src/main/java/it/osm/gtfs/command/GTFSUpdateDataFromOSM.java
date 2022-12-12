@@ -35,9 +35,12 @@ import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.fusesource.jansi.Ansi;
 import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 @CommandLine.Command(name = "update", description = "Generate/update data from OpenStreetMap")
 public class GTFSUpdateDataFromOSM implements Callable<Void> {
@@ -57,6 +60,8 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
                 updateBusStops();
                 updateBaseRels();
                 updateFullRels();
+
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. You can now generate the bus stops import."));
             } else {
                 System.err.println("Error during the creation of the cache directory for gtfs-osm-import.");
             }
