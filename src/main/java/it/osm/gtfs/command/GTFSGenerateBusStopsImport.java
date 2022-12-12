@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
@@ -45,6 +46,9 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 @CommandLine.Command(name = "stops", description = "Generate files to import bus stops into osm merging with existing stops")
 public class GTFSGenerateBusStopsImport implements Callable<Void> {
+
+    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
+    Boolean checkStopsWithDifferentOperatorTagValue;
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
@@ -146,12 +150,26 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     bufferMatchedStops.appendNode(n);
                     matched_stops++;
                 }else{
-                    not_matched_osm_stops++;
+
                     System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop didn't get matched to a GTFS stop as they are too distant or ref code is no more available.");
                     Element n = (Element) osmStop.originalXMLNode;
 
-                    //add the node to the buffer of not matched stops
-                    bufferNotMatchedStops.appendNode(n);
+                    System.out.println(osmStop.getOperator());
+
+                    if(checkStopsWithDifferentOperatorTagValue == null || !checkStopsWithDifferentOperatorTagValue) {
+
+
+                        if(osmStop.getOperator() != null && osmStop.getOperator().equals(GTFSImportSettings.getInstance().getOperator())){
+                            //add the node to the buffer of not matched stops
+                            bufferNotMatchedStops.appendNode(n);
+                            not_matched_osm_stops++;
+                        }
+
+                    } else {
+                        not_matched_osm_stops++;
+                        //add the node to the buffer of not matched stops
+                        bufferNotMatchedStops.appendNode(n);
+                    }
                 }
             }
 
@@ -166,7 +184,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             if (not_matched_osm_stops > 0){
                 bufferNotMatchedStops.end();
                 bufferNotMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("NOT MATCHED OSM stops that need to be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")"));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("NOT MATCHED OSM stops that should be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")"));
             }
         }
 
@@ -191,6 +209,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs));
             }
         }
+
+
         return null;
     }
 }
