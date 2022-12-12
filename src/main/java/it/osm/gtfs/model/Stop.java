@@ -32,19 +32,21 @@ public class Stop {
     private Double lat;
     private Double lon;
     private String name;
+    private String operator;
     private GTFSWheelchairAccess wheelchairAccessibility;
     private Boolean isRailway;
     private Boolean isStopPosition = false;
     public Stop stopMatchedWith;
     public Node originalXMLNode;
 
-    public Stop(String gtfsId, String code, Double lat, Double lon, String name, GTFSWheelchairAccess wheelchairAccessibility) {
+    public Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;
         this.code = code;
         this.lat = lat;
         this.lon = lon;
         this.name = name;
+        this.operator = operator;
         this.wheelchairAccessibility = wheelchairAccessibility;
     }
 
@@ -62,6 +64,9 @@ public class Stop {
     }
     public String getName() {
         return name;
+    }
+    public String getOperator() {
+        return operator;
     }
     public GTFSWheelchairAccess getWheelchairAccessibility(){
         return wheelchairAccessibility;
@@ -100,6 +105,10 @@ public class Stop {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public void setWheelchairAccessibility(GTFSWheelchairAccess wheelchairAccessibility){
@@ -190,8 +199,8 @@ public class Stop {
         public Stop railwayMatchedWith;
         public List<Stop> stopPositionsMatchedWith = new ArrayList<Stop>();
 
-        public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, GTFSWheelchairAccess wheelchairAccessibility) {
-            super(gtfsId, code, lat, lon, name, wheelchairAccessibility);
+        public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
+            super(gtfsId, code, lat, lon, name, operator, wheelchairAccessibility);
         }
 
     }

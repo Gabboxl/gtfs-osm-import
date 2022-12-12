@@ -91,7 +91,7 @@ public class OSMParser {
 
         for (int s = 0; s < nodeList.getLength(); s++) {
             Node fstNode = nodeList.item(s);
-            Stop stop = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null);
+            Stop stop = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
             stop.originalXMLNode = fstNode;
             NodeList att = fstNode.getChildNodes();
             for (int t = 0; t < att.getLength(); t++) {
@@ -105,6 +105,8 @@ public class OSMParser {
                         stop.setCode(value);
                     if (key.equals("name"))
                         stop.setName(value);
+                    if (key.equals("operator"))
+                        stop.setOperator(value);
                     if (key.equals("gtfs_id"))
                         stop.setGtfsId(value);
                     if (key.equals("highway") && value.equals("bus_stop"))
