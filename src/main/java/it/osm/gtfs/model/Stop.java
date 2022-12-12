@@ -196,7 +196,6 @@ public class Stop {
 
 
     public static class GTFSStop extends Stop{
-        public Stop railwayMatchedWith;
         public List<Stop> stopPositionsMatchedWith = new ArrayList<Stop>();
 
         public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {

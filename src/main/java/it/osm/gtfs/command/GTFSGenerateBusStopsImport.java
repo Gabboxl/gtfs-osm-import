@@ -52,7 +52,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
 
     @Override
-    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
+    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException, IllegalArgumentException {
         List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStops);
 
@@ -62,40 +62,21 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         for (GTFSStop gtfsStop : gtfsStops){
             for (Stop osmStop : osmStops){
                 if (gtfsStop.matches(osmStop)){
-                    if (osmStop.isBusStopPosition()){
-                        if (osmStop.stopMatchedWith != null){
-                            System.err.println("Mupliple match found.");
-                            System.err.println(" OSM: " + osmStop);
-                            System.err.println("GTFS: " + gtfsStop);
-                            System.err.println(" OSM: " + gtfsStop.railwayMatchedWith);
-                            System.err.println("GTFS: " + osmStop.stopMatchedWith);
-                            throw new IllegalArgumentException("Multiple match found, this is currently unsupported.");
-                        }
+                    if (osmStop.stopMatchedWith != null || gtfsStop.stopMatchedWith != null){
+                        System.err.println("Mupliple match found between this GTFS stop and other OSM stops:");
+                        System.err.println("GTFS stop: " + gtfsStop);
+                        System.err.println("Current-matching OSM stop: " + osmStop);
 
+                        System.err.println("Already-matched GTFS stop: " + osmStop.stopMatchedWith);
+                        throw new IllegalArgumentException("Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
+                    }
+
+                    if (osmStop.isBusStopPosition()){
                         gtfsStop.stopPositionsMatchedWith.add(osmStop);
                         osmStop.stopMatchedWith = gtfsStop;
                     }else if (osmStop.isTramStop()){
-                        if (gtfsStop.railwayMatchedWith != null || osmStop.stopMatchedWith != null){
-                            System.err.println("Mupliple match found.");
-                            System.err.println(" OSM: " + osmStop);
-                            System.err.println("GTFS: " + gtfsStop);
-                            System.err.println(" OSM: " + gtfsStop.railwayMatchedWith);
-                            System.err.println("GTFS: " + osmStop.stopMatchedWith);
-                            throw new IllegalArgumentException("Multiple match found, this is currently unsupported.");
-                        }
-
-                        gtfsStop.railwayMatchedWith = osmStop;
                         osmStop.stopMatchedWith = gtfsStop;
                     }else{
-                        if (gtfsStop.stopMatchedWith != null || osmStop.stopMatchedWith != null){
-                            System.err.println("Mupliple match found.");
-                            System.err.println(" OSM: " + osmStop);
-                            System.err.println("GTFS: " + gtfsStop);
-                            System.err.println(" OSM: " + gtfsStop.stopMatchedWith);
-                            System.err.println("GTFS: " + osmStop.stopMatchedWith);
-                            throw new IllegalArgumentException("Multiple match found, this is currently unsupported.");
-                        }
-
                         gtfsStop.stopMatchedWith = osmStop;
                         osmStop.stopMatchedWith = gtfsStop;
                     }
@@ -195,7 +176,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
             for (GTFSStop gtfsStop:gtfsStops){
-                if (gtfsStop.stopMatchedWith == null && gtfsStop.railwayMatchedWith == null && gtfsStop.stopPositionsMatchedWith.size() == 0){
+                if (gtfsStop.stopMatchedWith == null && gtfsStop.tramStopMatchedWith == null && gtfsStop.stopPositionsMatchedWith.size() == 0){
                     new_stops_from_gtfs++;
 
                     //we create the new node with new tags here
