@@ -26,6 +26,7 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+//TODO: to refactor the Stop class and decouple OSM-stops-only variables and methods in another class. and also do something with the GTFSStop class...
 public class Stop {
     private String gtfsId;
     private String code;
@@ -37,6 +38,7 @@ public class Stop {
     private Boolean isTramStop;
     private Boolean isBusStopPosition = false;
     public Stop stopMatchedWith;
+    public List<Stop> stopsMatchedWith = new ArrayList<Stop>();
     public Node originalXMLNode;
 
     public Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
@@ -115,6 +117,7 @@ public class Stop {
         this.wheelchairAccessibility = wheelchairAccessibility;
     }
 
+
     @Override
     public String toString() {
         return "Stop [gtfsId=" + gtfsId + ", code=" + code + ", lat=" + lat
@@ -131,6 +134,7 @@ public class Stop {
         return result;
     }
 
+    //TODO: this method is never used, should we keep it? maybe yes because this function can be helpful
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -195,8 +199,8 @@ public class Stop {
     }
 
 
+    //TODO: lol what is the purpose of this class now
     public static class GTFSStop extends Stop{
-        public List<Stop> stopPositionsMatchedWith = new ArrayList<Stop>();
 
         public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
             super(gtfsId, code, lat, lon, name, operator, wheelchairAccessibility);
