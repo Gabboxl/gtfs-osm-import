@@ -158,9 +158,9 @@ public class Stop {
         if (stop.getCode() != null && stop.getCode().equals(getCode())){
 
             if (distanceBetween < 70 || (stop.getGtfsId() != null && getGtfsId() != null && stop.getGtfsId().equals(getGtfsId()))){
-                //if the stops are less than 70m far away or are already linked with gtfsid
+                //if the stops are less than 70m far away or are already linked with gtfsid TODO: or the revised key is already set to yes? maybe?
                 return true;
-            }else if (distanceBetween < 10000){
+            }else if (distanceBetween < 5000){
                 System.err.println("Warning: Same ref tag with dist > 70 m (and less than 10km) / " + debugData);
             }
 
