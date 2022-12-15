@@ -268,12 +268,12 @@ public class OSMParser {
     }
 
     private static class RelationParser extends DefaultHandler{
-        private Map<String, OSMStop> stopsWithOSMIndex;
-        private Map<Long, OSMWay> ways;
+        private final Map<String, OSMStop> stopsWithOSMIndex;
+        private final Map<Long, OSMWay> ways;
 
-        private List<Relation> result = new ArrayList<Relation>();
-        private List<String> failedRelationIds = new ArrayList<String>();
-        private List<String> missingNodes = new ArrayList<String>();
+        private final List<Relation> result = new ArrayList<Relation>();
+        private final List<String> failedRelationIds = new ArrayList<String>();
+        private final List<String> missingNodes = new ArrayList<String>();
 
         private Relation currentRelation;
         private long seq = 1;
