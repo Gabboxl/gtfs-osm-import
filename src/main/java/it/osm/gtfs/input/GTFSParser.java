@@ -279,7 +279,7 @@ public class GTFSParser {
         while ((thisLine = br.readLine()) != null) {
             count ++;
             if (count % 100000 == 0)
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Stop Times Readed so far: ").reset().a(count));
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Stop times read so far: ").reset().a(count));
 
             if (isFirstLine) {
                 isFirstLine = false;
