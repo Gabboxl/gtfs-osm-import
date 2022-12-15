@@ -1,6 +1,6 @@
 package it.osm.gtfs.enums;
 
-public enum GTFSWheelchairAccess {
+public enum WheelchairAccess {
     UNKNOWN(0, "unknown"),
     LIMITED(1, "limited"),
     NO(2, "no");
@@ -8,7 +8,7 @@ public enum GTFSWheelchairAccess {
     private final int gtfsValue;
     private final String osmValue;
 
-    GTFSWheelchairAccess(int gtfsValue, String osmValue) {
+    WheelchairAccess(int gtfsValue, String osmValue) {
         this.gtfsValue = gtfsValue;
         this.osmValue = osmValue;
     }

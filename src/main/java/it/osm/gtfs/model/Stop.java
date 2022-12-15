@@ -14,17 +14,12 @@
  **/
 package it.osm.gtfs.model;
 
-import it.osm.gtfs.enums.GTFSWheelchairAccess;
-import it.osm.gtfs.output.IElementCreator;
+import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMDistanceUtils;
-import it.osm.gtfs.utils.OSMXMLUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 //TODO: to refactor the Stop class and decouple OSM-stops-only variables and methods in another class. and also do something with the GTFSStop class...
 public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
@@ -34,14 +29,14 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private Double lon;
     private String name;
     private String operator;
-    private GTFSWheelchairAccess wheelchairAccessibility;
-    private Boolean isTramStop;
+    private WheelchairAccess wheelchairAccessibility;
+    private Boolean isTramStop; //TODO: should we move this variable to the OSMStop class?
     private Boolean isBusStopPosition = false;
     public Stop stopMatchedWith;
     public List<Stop> stopsMatchedWith = new ArrayList<Stop>();
 
 
-    protected Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
+    protected Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;
         this.code = code;
@@ -70,7 +65,7 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public String getOperator() {
         return operator;
     }
-    public GTFSWheelchairAccess getWheelchairAccessibility(){
+    public WheelchairAccess getWheelchairAccessibility(){
         return wheelchairAccessibility;
     }
     public Boolean isTramStop(){
@@ -111,7 +106,7 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
         this.operator = operator;
     }
 
-    public void setWheelchairAccessibility(GTFSWheelchairAccess wheelchairAccessibility){
+    public void setWheelchairAccessibility(WheelchairAccess wheelchairAccessibility){
         this.wheelchairAccessibility = wheelchairAccessibility;
     }
 

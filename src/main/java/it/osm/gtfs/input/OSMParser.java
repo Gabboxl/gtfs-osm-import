@@ -14,8 +14,7 @@
  **/
 package it.osm.gtfs.input;
 
-import it.osm.gtfs.enums.GTFSWheelchairAccess;
-import it.osm.gtfs.model.GTFSStop;
+import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.model.Relation;
@@ -23,7 +22,6 @@ import it.osm.gtfs.model.Relation.OSMNode;
 import it.osm.gtfs.model.Relation.OSMRelationWayMember;
 import it.osm.gtfs.model.Relation.OSMWay;
 import it.osm.gtfs.model.Relation.RelationType;
-import it.osm.gtfs.model.Stop;
 
 import java.io.File;
 import java.io.FileReader;
@@ -126,9 +124,9 @@ public class OSMParser {
                     if (key.equals("bus") && value.equals("yes"))
                         stop.setIsTramStop(false);
                     if (key.equals("wheelchair") && value.equals("no"))
-                        stop.setWheelchairAccessibility(GTFSWheelchairAccess.NO);
+                        stop.setWheelchairAccessibility(WheelchairAccess.NO);
                     if (key.equals("wheelchair") && value.equals("limited"))
-                        stop.setWheelchairAccessibility(GTFSWheelchairAccess.LIMITED);
+                        stop.setWheelchairAccessibility(WheelchairAccess.LIMITED);
                 }
             }
 
