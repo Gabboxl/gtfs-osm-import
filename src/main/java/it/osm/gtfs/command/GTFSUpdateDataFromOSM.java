@@ -58,7 +58,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
                 updateBaseRels();
                 updateFullRels();
 
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. You can now generate the bus stops import."));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. You can now generate the bus stops import.").reset());
             } else {
                 System.err.println("Error during the creation of the cache directory for gtfs-osm-import.");
             }
