@@ -1,6 +1,6 @@
 package it.osm.gtfs.enums;
 
-public enum WheelchairAccess {
+public enum WheelchairAccess { //according to GTFS reference guide
     UNKNOWN(0, "unknown"),
     LIMITED(1, "limited"),
     NO(2, "no");

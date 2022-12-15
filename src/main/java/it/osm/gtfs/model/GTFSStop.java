@@ -6,7 +6,7 @@ import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMXMLUtils;
 import org.w3c.dom.Element;
 
-public class GTFSStop extends Stop{
+public class GTFSStop extends Stop {
 
 
     public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {

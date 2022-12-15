@@ -21,7 +21,6 @@ import it.osm.gtfs.utils.OSMDistanceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: to refactor the Stop class and decouple OSM-stops-only variables and methods in another class. and also do something with the GTFSStop class...
 public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private String gtfsId;
     private String code;
@@ -31,7 +30,7 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private String operator;
     private WheelchairAccess wheelchairAccessibility;
     private Boolean isTramStop; //TODO: should we move this variable to the OSMStop class?
-    private Boolean isBusStopPosition = false;
+    private Boolean isBusStopPosition = false; //TODO: should we move this variable to the OSMStop class too?
     public Stop stopMatchedWith;
     public List<Stop> stopsMatchedWith = new ArrayList<Stop>();
 
