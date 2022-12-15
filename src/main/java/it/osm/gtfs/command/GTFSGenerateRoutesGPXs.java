@@ -16,11 +16,7 @@ package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.model.Route;
-import it.osm.gtfs.model.Shape;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.StopsList;
-import it.osm.gtfs.model.Trip;
+import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.io.File;
@@ -53,7 +49,7 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
-        Map<String, Stop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH));
+        Map<String, OSMStop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH));
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
         Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstops);

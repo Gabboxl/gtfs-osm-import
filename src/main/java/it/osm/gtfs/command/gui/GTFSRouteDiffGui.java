@@ -2,11 +2,7 @@ package it.osm.gtfs.command.gui;
 
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Route;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.StopsList;
-import it.osm.gtfs.model.Trip;
+import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.awt.Color;
@@ -100,9 +96,9 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
 
 
     private void readData() throws ParserConfigurationException, SAXException, IOException{
-        List<Stop> osmStops;
-        Map<String, Stop> osmstopsGTFSId;
-        Map<String, Stop> osmstopsOsmID;
+        List<OSMStop> osmStops;
+        Map<String, OSMStop> osmstopsGTFSId; //change weird map variable name
+        Map<String, OSMStop> osmstopsOsmID; //change weird map variable name
         Map<String, Route> routes;
         Map<String, StopsList> stopTimes;
         List<Trip> trips;
@@ -239,8 +235,8 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
     }
 
     private void updateStopMarkers() {
-        currentGTFSStopsMarker = new HashSet<Stop>();
-        currentOSMStopsMarker = new HashSet<Stop>();
+        currentGTFSStopsMarker = new HashSet<>();
+        currentOSMStopsMarker = new HashSet<>();
         if (currentGTFSStops.size() == 0 || currentOSMStops.size() == 0){
             return;
         }else{
@@ -291,7 +287,6 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             setVersion(r.getVersion());
             setWayMembers(r.getWayMembers());
             setStops(r.getStops());
-            setStopsTime(r.getStopsTime());
         }
 
         @Override

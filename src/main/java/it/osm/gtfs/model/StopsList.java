@@ -18,25 +18,25 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+//probably this is only a list of gtfsstops? ?
 public class StopsList {
     private final String id;
-    private Map<Long, Stop> stops;
+    private Map<Long, OSMStop> stops;
     private Map<Long, String> stopsTime;
     private Boolean valid = true;
 
     public StopsList(String id) {
         super();
         this.id = id;
-        stops = new TreeMap<Long, Stop>();
+        stops = new TreeMap<Long, OSMStop>();
         stopsTime = new TreeMap<Long, String>();
     }
-
 
     public Boolean isValid() {
         return valid;
     }
 
-    public void invalidate(){
+    public void invalidate() {
         valid = false;
     }
 
@@ -44,7 +44,7 @@ public class StopsList {
         return id;
     }
 
-    public void pushPoint(Long seq, Stop stop, String arrival_time){
+    public void pushPoint(Long seq, OSMStop stop, String arrival_time){
         stops.put(seq, stop);
         stopsTime.put(seq, arrival_time);
     }
@@ -58,11 +58,11 @@ public class StopsList {
     }
 
 
-    public Map<Long, Stop> getStops() {
+    public Map<Long, OSMStop> getStops() {
         return stops;
     }
 
-    public void setStops(Map<Long, Stop> s){
+    public void setStops(Map<Long, OSMStop> s){
         stops = s;
     }
 
@@ -86,24 +86,7 @@ public class StopsList {
         return true;
     }
 
-    public int getStopsAffinity(StopsList o) {
-        boolean exactMatch = true;
-        int affinity = 0;
-        for (Stop s:stops.values())
-            if (o.stops.containsValue(s)){
-                affinity+= stops.size() - Math.abs((getKeysByValue(stops, s) - getKeysByValue(o.stops, s)));
-            }else{
-                affinity -= stops.size();
-                exactMatch = false;
-            }
-        int diff = Math.abs(o.stops.size() - stops.size());
 
-        if (exactMatch && diff == 0)
-            return Integer.MAX_VALUE;
-
-        affinity -= diff;
-        return affinity;
-    }
 
     private static <T, E> T getKeysByValue(Map<T, E> map, E value) {
         for (Entry<T, E> entry : map.entrySet()) {

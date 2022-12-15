@@ -14,13 +14,10 @@
  **/
 package it.osm.gtfs.output;
 
+import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.model.BoundingBox;
-import it.osm.gtfs.model.Route;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.StopsList;
-import it.osm.gtfs.model.Trip;
 
+import java.util.Collection;
 import java.util.List;
 
 public class OSMRelationImportGenerator {
@@ -31,7 +28,9 @@ public class OSMRelationImportGenerator {
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
         buffer.append(bb.getXMLTag());
         buffer.append("<relation id='-" + Math.round(Math.random()*100000) +  "'>\n");
-        for (Stop s:stopTimes.getStops().values()){
+
+        for (OSMStop s : stopTimes.getStops().values()){
+            //OSMStop s1 = (OSMStop) s;
             buffer.append("<member type='node' ref='" + s.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
         }
 

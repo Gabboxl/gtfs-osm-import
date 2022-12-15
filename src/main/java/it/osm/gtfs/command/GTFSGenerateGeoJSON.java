@@ -1,6 +1,7 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.OSMParser;
+import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -37,10 +38,10 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
         System.out.println("Indexing OSM Stops...");
-        Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         System.out.println("Parsing OSM Relations...");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH),
@@ -84,10 +85,10 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
         System.out.println(geojsonResulted);
     }
 
-    private void insertStops(List<Stop> osmstops) throws SQLException {
+    private void insertStops(List<OSMStop> osmstops) throws SQLException {
         stops = new LinkedList<MfFeature>();
 
-        for (Stop s : osmstops) {
+        for (OSMStop s : osmstops) {
             stops.add(new JSONStop(s));
         }
     }

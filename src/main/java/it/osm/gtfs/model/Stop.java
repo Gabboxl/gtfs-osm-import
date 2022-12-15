@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 //TODO: to refactor the Stop class and decouple OSM-stops-only variables and methods in another class. and also do something with the GTFSStop class...
-public class Stop {
+public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private String gtfsId;
     private String code;
     private Double lat;
@@ -39,9 +39,9 @@ public class Stop {
     private Boolean isBusStopPosition = false;
     public Stop stopMatchedWith;
     public List<Stop> stopsMatchedWith = new ArrayList<Stop>();
-    public Node originalXMLNode;
 
-    public Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
+
+    protected Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;
         this.code = code;
@@ -79,9 +79,7 @@ public class Stop {
     public Boolean isBusStopPosition(){
         return isBusStopPosition;
     }
-    public String getOSMId(){
-        return (originalXMLNode == null) ? null : originalXMLNode.getAttributes().getNamedItem("id").getNodeValue();
-    }
+
 
     public void setIsTramStop(Boolean isTramStop){
         this.isTramStop = isTramStop;
@@ -118,13 +116,6 @@ public class Stop {
     }
 
 
-    @Override
-    public String toString() {
-        return "Stop [gtfsId=" + gtfsId + ", code=" + code + ", lat=" + lat
-                + ", lon=" + lon + ", name=" + name + ", accessibility=" + wheelchairAccessibility +
-                ((originalXMLNode != null) ? ", osmid=" + getOSMId() : "" )
-                + "]";
-    }
 
     @Override
     public int hashCode() {
@@ -173,38 +164,4 @@ public class Stop {
         return false;
     }
 
-    public Element getNewXMLNode(IElementCreator document){ //TODO: I think we need to support different combinations of tags for tram stops/metro stops/bus stops
-        Element node = document.createElement("node");
-        long id;
-        try{
-            id = Long.parseLong(getGtfsId());
-        }catch(Exception e){
-            id = Math.abs(getGtfsId().hashCode());
-        }
-
-        node.setAttribute("id", "-" + id);
-        node.setAttribute("visible", "true");
-        node.setAttribute("lat", getLat().toString());
-        node.setAttribute("lon", getLon().toString());
-        node.appendChild(OSMXMLUtils.createTagElement(document, "bus", "yes"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "highway", "bus_stop"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "public_transport", "platform"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));
-        node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSettings.getInstance().getRevisedKey(), "no"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(getName())));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "wheelchair", getWheelchairAccessibility().getOsmValue()));
-        return node;
-    }
-
-
-    //TODO: lol what is the purpose of this class now
-    public static class GTFSStop extends Stop{
-
-        public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, GTFSWheelchairAccess wheelchairAccessibility) {
-            super(gtfsId, code, lat, lon, name, operator, wheelchairAccessibility);
-        }
-
-    }
 }

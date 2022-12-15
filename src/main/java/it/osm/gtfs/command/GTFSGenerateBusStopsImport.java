@@ -18,17 +18,11 @@ import it.osm.gtfs.enums.GTFSWheelchairAccess;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.BoundingBox;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.Stop.GTFSStop;
+import it.osm.gtfs.model.GTFSStop;
+import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.output.OSMBusImportGenerator;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMXMLUtils;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import org.fusesource.jansi.Ansi;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -36,6 +30,10 @@ import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -56,11 +54,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStops);
 
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
         //fase di matching delle fermate di OSM con quelle GTFS - in particolare la funzione matches() ritorna true se due fermate sono le stesse secondo l'algoritmo della funzione
         for (GTFSStop gtfsStop : gtfsStops){
-            for (Stop osmStop : osmStops){
+            for (OSMStop osmStop : osmStops){
                 if (gtfsStop.matches(osmStop)){
                     if (osmStop.stopMatchedWith != null || gtfsStop.stopMatchedWith != null){
                         System.err.println("Mupliple match found between this GTFS stop and other OSM stops:");
@@ -68,6 +66,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         System.err.println("Current-matching OSM stop: " + osmStop);
 
                         System.err.println("Already-matched GTFS stop: " + osmStop.stopMatchedWith);
+                        System.err.println("Already-matched OSM stop: " + gtfsStop.stopMatchedWith);
                         throw new IllegalArgumentException("Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
                     }
 
@@ -91,7 +90,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator bufferNotMatchedStops = new OSMBusImportGenerator(bb);
             OSMBusImportGenerator bufferMatchedStops = new OSMBusImportGenerator(bb);
 
-            for (Stop osmStop : osmStops) {
+            for (OSMStop osmStop : osmStops) {
                 if (osmStop.stopMatchedWith != null){
                     Element n = (Element) osmStop.originalXMLNode;
 

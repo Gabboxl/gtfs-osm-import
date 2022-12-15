@@ -15,12 +15,8 @@
 package it.osm.gtfs.input;
 
 import it.osm.gtfs.enums.GTFSWheelchairAccess;
-import it.osm.gtfs.model.Route;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.Trip;
+import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.model.Shape;
-import it.osm.gtfs.model.StopsList;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,8 +38,10 @@ import org.fusesource.jansi.Ansi;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
-    public static List<Stop.GTFSStop> readBusStop(String fName) throws IOException{
-        List<Stop.GTFSStop> result = new ArrayList<Stop.GTFSStop>();
+
+    //TODO: rename to plural readBusStops
+    public static List<GTFSStop> readBusStop(String fName) throws IOException{
+        List<GTFSStop> result = new ArrayList<GTFSStop>();
 
         String thisLine;
         String [] elements;
@@ -104,7 +102,7 @@ public class GTFSParser {
                         //this is a station (group of multiple stops)
                         System.err.println("GTFSParser: skipped station (group of multiple stops): " + elements[stopIdKey]);
                     }else{
-                        Stop.GTFSStop gs = new Stop.GTFSStop(elements[stopIdKey],
+                        GTFSStop gs = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey],
                                 Double.valueOf(elements[stopLatKey]),
                                 Double.valueOf(elements[stopLonKey]),
@@ -267,7 +265,7 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, StopsList> readStopTimes(String fName, Map<String, Stop> osmstops) throws IOException{
+    public static Map<String, StopsList> readStopTimes(String fName, Map<String, OSMStop> osmstops) throws IOException{
         Map<String, StopsList> result = new TreeMap<String, StopsList>();
         Set<String> missingStops = new HashSet<String>();
         int count = 0;

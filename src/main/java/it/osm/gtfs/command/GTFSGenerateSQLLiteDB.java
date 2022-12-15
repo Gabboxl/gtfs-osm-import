@@ -1,6 +1,7 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.OSMParser;
+import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Stop;
@@ -27,14 +28,13 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM stops...");
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
         System.out.println("Indexing OSM stops...");
-        Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         System.out.println("Parsing OSM relations...");
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH),
-                osmstopsOsmID);
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);
 
 
         GTFSGenerateSQLLiteDB generator = null;
@@ -89,10 +89,10 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
         statement.executeUpdate("CREATE INDEX relations ON relation_stops(relation_id ASC)");
     }
 
-    private void insertStops(List<Stop> stops) throws SQLException {
+    private void insertStops(List<OSMStop> stops) throws SQLException {
         PreparedStatement stm = connection
                 .prepareStatement("insert into stop values(?, ?, ?, ?, ?, ?, ?)");
-        for (Stop s : stops) {
+        for (OSMStop s : stops) {
             stm.setLong(1, Long.parseLong(s.getOSMId()));
             stm.setString(2, s.getCode());
             stm.setString(3, s.getName());
@@ -119,7 +119,9 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
         for (Relation r : rels) {
             for (Long k:r.getStops().keySet()){
                 stm.setLong(1, Long.parseLong(r.getId()));
-                stm.setLong(2, Long.parseLong(r.getStops().get(k).getOSMId()));
+                 OSMStop castedOsmStop = (OSMStop) r.getStops().get(k); //we force the cast to OSMStop type so we can access the getOSMId() method, this is not the best way as the stop CAN be a GTFSStop, so we need to review the types managed by the Relation class methods
+
+                stm.setLong(2, Long.parseLong(castedOsmStop.getOSMId()));
                 stm.setLong(3, k);
                 stm.executeUpdate();
             }

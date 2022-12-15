@@ -1,6 +1,7 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.OSMParser;
+import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Relation.OSMNode;
 import it.osm.gtfs.model.Relation.OSMRelationWayMember;
@@ -32,9 +33,9 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
         System.out.println("Step 1/4 Reading OSM Stops");
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
         System.out.println("Step 2/4 Indexing OSM Stops");
-        Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);
 
@@ -81,8 +82,8 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
 
         if (debug){
             for (long f = 1; f <= relation.getStops().size() ; f++){
-                Stop osm = relation.getStops().get(f);
-                System.out.println("Stop # " + f + "\t" + osm.getCode() + "\t" + osm.getOSMId() + "\t" + osm.getName());
+                OSMStop osmStop = relation.getStops().get(f); //not ideal casting here, need to review the StopsList class types
+                System.out.println("Stop # " + f + "\t" + osmStop.getCode() + "\t" + osmStop.getOSMId() + "\t" + osmStop.getName());
             }
         }
     }

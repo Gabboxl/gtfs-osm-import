@@ -15,14 +15,11 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.OSMParser;
+import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.DownloadUtils;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OsmosisUtils;
 import it.osm.gtfs.input.GTFSParser;
-import it.osm.gtfs.model.BoundingBox;
-import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.Stop.GTFSStop;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,8 +121,8 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
     }
 
     private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, InterruptedException{
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
-        Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
 
@@ -138,8 +135,8 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
     }
 
     private static void updateFullRels(Map<String, Integer> idWithVersion) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
-        List<Stop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
-        Map<String, Stop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
 
         List<File> sorted = new ArrayList<File>();
 

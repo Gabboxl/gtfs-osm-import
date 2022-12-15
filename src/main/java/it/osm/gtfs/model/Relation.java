@@ -2,8 +2,11 @@ package it.osm.gtfs.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class Relation extends StopsList{
+public class Relation {
+    private final String id;
     private String name;
     private Integer version;
     private String ref;
@@ -12,9 +15,73 @@ public class Relation extends StopsList{
     private RelationType type;
     private List<OSMRelationWayMember> wayMembers = new ArrayList<Relation.OSMRelationWayMember>();
 
+    private Map<Long, OSMStop> osmstops;
+
     public Relation(String id) {
-        super(id);
+        this.id = id;
+        osmstops = new TreeMap<Long, OSMStop>();
     }
+
+    public int getStopsAffinity(StopsList o) {
+        boolean exactMatch = true;
+        int affinity = 0;
+        for (OSMStop s:osmstops.values())
+            if (o.getStops().containsValue(s)){
+                affinity+= osmstops.size() - Math.abs((getKeysByValue(osmstops, s) - getKeysByValue(o.getStops(), s)));
+            }else{
+                affinity -= osmstops.size();
+                exactMatch = false;
+            }
+        int diff = Math.abs(o.getStops().size() - osmstops.size());
+
+        if (exactMatch && diff == 0)
+            return Integer.MAX_VALUE;
+
+        affinity -= diff;
+        return affinity;
+    }
+
+    private static <T, E> T getKeysByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public Map<Long, OSMStop> getStops() {
+        return osmstops;
+    }
+
+    public void setStops(Map<Long, OSMStop> s){
+        osmstops = s;
+    }
+
+
+    public boolean equalsStops(StopsList o) {
+        if (osmstops.size() != o.getStops().size())
+            return false;
+        for (Long key: o.getStops().keySet()){
+            Stop a = osmstops.get(key);
+            Stop b = o.getStops().get(key);
+            if (a == null || !a.equals(b))
+                return false;
+        }
+        return true;
+    }
+
+
+
+
+    public void pushPoint(Long seq, OSMStop stop){
+        osmstops.put(seq, stop);
+    }
+
+    public String getId() {
+        return id;
+    }
+
 
     public String getRef() {
         return ref;

@@ -15,6 +15,8 @@
 package it.osm.gtfs.input;
 
 import it.osm.gtfs.enums.GTFSWheelchairAccess;
+import it.osm.gtfs.model.GTFSStop;
+import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Relation.OSMNode;
@@ -52,10 +54,10 @@ import com.google.common.collect.Multimap;
 
 public class OSMParser {
 
-    public static Map<String, Stop> applyGTFSIndex(List<Stop> stops) {
-        final Map<String, Stop> result = new TreeMap<String, Stop>();
+    public static Map<String, OSMStop> applyGTFSIndex(List<OSMStop> stops) {
+        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
 
-        for (Stop stop : stops){
+        for (OSMStop stop : stops){
             if (stop.getGtfsId() != null && !stop.getGtfsId().equals("")){
                 result.put(stop.getGtfsId(), stop);
             }
@@ -64,10 +66,10 @@ public class OSMParser {
         return result;
     }
 
-    public static Map<String, Stop> applyOSMIndex(List<Stop> stops) {
-        final Map<String, Stop> result = new TreeMap<String, Stop>();
+    public static Map<String, OSMStop> applyOSMIndex(List<OSMStop> stops) {
+        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
 
-        for (Stop stop : stops){
+        for (OSMStop stop : stops){
             if (stop.getOSMId() != null){
                 result.put(stop.getOSMId(), stop);
             }
@@ -76,10 +78,10 @@ public class OSMParser {
         return result;
     }
 
-    public static List<Stop> readOSMStops(String fileName) throws ParserConfigurationException, SAXException, IOException{
-        List<Stop> result = new ArrayList<Stop>();
-        Multimap<String, Stop> refBuses = HashMultimap.create();
-        Multimap<String, Stop> refRails = HashMultimap.create();
+    public static List<OSMStop> readOSMStops(String fileName) throws ParserConfigurationException, SAXException, IOException{
+        List<OSMStop> result = new ArrayList<OSMStop>();
+        Multimap<String, OSMStop> refBuses = HashMultimap.create(); //?
+        Multimap<String, OSMStop> refRails = HashMultimap.create(); //??
 
         File file = new File(fileName);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -91,7 +93,7 @@ public class OSMParser {
 
         for (int s = 0; s < nodeList.getLength(); s++) {
             Node fstNode = nodeList.item(s);
-            Stop stop = new Stop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
+            OSMStop stop = new OSMStop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
             stop.originalXMLNode = fstNode;
             NodeList att = fstNode.getChildNodes();
             for (int t = 0; t < att.getLength(); t++) {
@@ -142,7 +144,7 @@ public class OSMParser {
                 if (stop.isBusStopPosition() == null || !stop.isBusStopPosition()){
                     if (stop.isTramStop()){
                         if (refRails.containsKey(stop.getCode())){
-                            for (Stop existingStop:refRails.get(stop.getCode())){
+                            for (OSMStop existingStop : refRails.get(stop.getCode())){
                                 if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
                                     System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
                                             " (node IDs :" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
@@ -152,7 +154,7 @@ public class OSMParser {
                         refRails.put(stop.getCode(), stop);
                     }else{
                         if (refBuses.containsKey(stop.getCode())){
-                            for (Stop existingStop:refBuses.get(stop.getCode())){
+                            for (OSMStop existingStop : refBuses.get(stop.getCode())){
                                 if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
                                     System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
                                             " (node IDs :" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
@@ -168,7 +170,7 @@ public class OSMParser {
         return result;
     }
 
-    public static List<Relation> readOSMRelations(File file, Map<String, Stop> stopsWithOSMIndex) throws SAXException, IOException{
+    public static List<Relation> readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException{
         NodeParser nodeParser;
         {
             XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -268,7 +270,7 @@ public class OSMParser {
     }
 
     private static class RelationParser extends DefaultHandler{
-        private Map<String, Stop> stopsWithOSMIndex;
+        private Map<String, OSMStop> stopsWithOSMIndex;
         private Map<Long, OSMWay> ways;
 
         private List<Relation> result = new ArrayList<Relation>();
@@ -279,7 +281,7 @@ public class OSMParser {
         private long seq = 1;
         private boolean failed = false;
 
-        private RelationParser(Map<String, Stop> stopsWithOSMIndex, Map<Long, OSMWay> ways) {
+        private RelationParser(Map<String, OSMStop> stopsWithOSMIndex, Map<Long, OSMWay> ways) {
             super();
             this.stopsWithOSMIndex = stopsWithOSMIndex;
             this.ways = ways;
@@ -301,13 +303,13 @@ public class OSMParser {
 
                 if (type.equals("node")){
                     if (role.equals("stop") || role.equals("platform")){
-                        Stop stop = stopsWithOSMIndex.get(ref);
+                        OSMStop stop = stopsWithOSMIndex.get(ref);
                         if (stop == null){
                             System.err.println("Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"?");
                             missingNodes.add(ref);
                             failed = true;
                         }
-                        currentRelation.pushPoint(seq++, stop, "");
+                        currentRelation.pushPoint(seq++, stop);
                     }else{
                         System.err.println("Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref);
                     }
