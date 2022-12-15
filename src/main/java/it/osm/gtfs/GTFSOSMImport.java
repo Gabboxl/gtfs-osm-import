@@ -165,7 +165,7 @@ public class GTFSOSMImport {
                 // start the shell and process input until the user quits with Ctrl-D
                 String line;
 
-                //visualizzo il menu appena avvio il tool
+                //show the help menu at startup of the interactive mode
                 systemRegistry.execute("help");
 
                 while (true) {
@@ -196,7 +196,6 @@ public class GTFSOSMImport {
         } else {
 
             CommandLine commandLine = new CommandLine(new GTFSOSMImport());
-
 
             int exitCode = commandLine.execute(args);
             System.exit(exitCode);

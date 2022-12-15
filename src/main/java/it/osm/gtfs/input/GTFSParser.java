@@ -40,7 +40,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class GTFSParser {
 
     //TODO: rename to plural readBusStops
-    public static List<GTFSStop> readBusStop(String fName) throws IOException{
+    public static List<GTFSStop> readStops(String fName) throws IOException{
         List<GTFSStop> result = new ArrayList<GTFSStop>();
 
         String thisLine;
