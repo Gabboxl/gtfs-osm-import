@@ -15,6 +15,7 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.enums.WheelchairAccess;
+import it.osm.gtfs.exceptions.MultipleMatchException;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.BoundingBox;
@@ -50,7 +51,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
 
     @Override
-    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException, IllegalArgumentException {
+    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException, MultipleMatchException {
         List<GTFSStop> gtfsStops = GTFSParser.readBusStop(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStops);
 
@@ -60,21 +61,26 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         for (GTFSStop gtfsStop : gtfsStops){
             for (OSMStop osmStop : osmStops){
                 if (gtfsStop.matches(osmStop)){
-                    if (osmStop.stopMatchedWith != null || gtfsStop.stopMatchedWith != null){
-                        System.err.println("Mupliple match found between this GTFS stop and other OSM stops:");
-                        System.err.println("GTFS stop: " + gtfsStop);
-                        System.err.println("Current-matching OSM stop: " + osmStop);
+                    if (osmStop.isTramStop()){
+                        if(gtfsStop.railwayStopMatchedWith != null){
+                            throw new MultipleMatchException(gtfsStop, osmStop, "Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
+                        }
 
-                        System.err.println("Already-matched GTFS stop: " + osmStop.stopMatchedWith);
-                        System.err.println("Already-matched OSM stop: " + gtfsStop.stopMatchedWith);
-                        throw new IllegalArgumentException("Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
+                        gtfsStop.railwayStopMatchedWith = osmStop;
+                        osmStop.stopMatchedWith = gtfsStop;
+
+                    }else {
+                        if(osmStop.stopMatchedWith != null || gtfsStop.stopMatchedWith != null){
+                            throw new MultipleMatchException(gtfsStop, osmStop, "Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
+                        }
+
+                        gtfsStop.stopsMatchedWith.add(osmStop);
+                        osmStop.stopsMatchedWith.add(gtfsStop);
+
+                        gtfsStop.stopMatchedWith = osmStop;
+                        osmStop.stopMatchedWith = gtfsStop;
                     }
 
-                    gtfsStop.stopsMatchedWith.add(osmStop);
-                    osmStop.stopsMatchedWith.add(gtfsStop);
-
-                    gtfsStop.stopMatchedWith = osmStop;
-                    osmStop.stopMatchedWith = gtfsStop;
                 }
             }
         }

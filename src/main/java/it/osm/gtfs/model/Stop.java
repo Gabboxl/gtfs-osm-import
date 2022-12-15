@@ -31,8 +31,12 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private WheelchairAccess wheelchairAccessibility;
     private Boolean isTramStop; //TODO: should we move this variable to the OSMStop class?
     private Boolean isBusStopPosition = false; //TODO: should we move this variable to the OSMStop class too?
+
+    //private Boolean isMetroStop; //TODO: should we add this check only for GTFS stops or also for osm stops, or not at all?
     public Stop stopMatchedWith;
-    public List<Stop> stopsMatchedWith = new ArrayList<Stop>();
+
+    //maybe we should also create an arraylist for railwayStops matched with?
+    public List<Stop> stopsMatchedWith = new ArrayList<Stop>(); //this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently unsupported in the tool
 
 
     protected Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {

@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 
 public class GTFSStop extends Stop {
 
+    public OSMStop railwayStopMatchedWith; //this variable is useful to handle cases where the city OSM mappers use to map the bus stop near the highway, and then the tram stop position on the railway for the same stop (like in Turin)
 
     public GTFSStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {
         super(gtfsId, code, lat, lon, name, operator, wheelchairAccessibility);
