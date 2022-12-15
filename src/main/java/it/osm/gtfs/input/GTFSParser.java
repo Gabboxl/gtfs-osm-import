@@ -38,8 +38,7 @@ import org.fusesource.jansi.Ansi;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
-
-    //TODO: rename to plural readBusStops
+    
     public static List<GTFSStop> readStops(String fName) throws IOException{
         List<GTFSStop> result = new ArrayList<GTFSStop>();
 
@@ -282,9 +281,6 @@ public class GTFSParser {
         }
         return result;
     }
-
-
-
 
 
     private static String[] getElementsFromLine(String thisLine) {
