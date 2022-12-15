@@ -77,21 +77,8 @@ public class GTFSParser {
                 //GTFS Brescia: if code isn't present we use id as code
                 if (stopCodeKey == -1)
                     stopCodeKey = stopIdKey;
-            }
-            else {
-                thisLine = thisLine.trim();
-
-                if(thisLine.contains("\"")) {
-                    String[] temp = thisLine.split("\"");
-                    for(int x=0; x<temp.length; x++){
-                        if(x%2==1) temp[x] = temp[x].replace(",", "");
-                    }
-                    thisLine = "";
-                    for(int x=0; x<temp.length; x++){
-                        thisLine = thisLine + temp[x];
-                    }
-                }
-                elements = thisLine.split(",");
+            } else {
+                elements = getElementsFromLine(thisLine);
 
                 //GTFS Milano: code column present but empty (using id as code)
                 String stopCode = elements[stopCodeKey];
@@ -143,21 +130,8 @@ public class GTFSParser {
                     else if(keys[i].equals("trip_id")) trip_id = i;
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
-            }
-            else {
-                thisLine = thisLine.trim();
-
-                if(thisLine.contains("\"")) {
-                    String[] temp = thisLine.split("\"");
-                    for(int x=0; x<temp.length; x++){
-                        if(x%2==1) temp[x] = temp[x].replace(",", "");
-                    }
-                    thisLine = "";
-                    for(int x=0; x<temp.length; x++){
-                        thisLine = thisLine + temp[x];
-                    }
-                }
-                elements = thisLine.split(",");
+            } else {
+                elements = getElementsFromLine(thisLine);
 
                 if (elements[shape_id].length() > 0){
                     result.add(new Trip(elements[trip_id], routes.get(elements[route_id]), elements[shape_id],
@@ -190,21 +164,8 @@ public class GTFSParser {
                     else if(keys[i].equals("shape_pt_sequence")) shape_pt_sequence = i;
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
-            }
-            else {
-                thisLine = thisLine.trim();
-
-                if(thisLine.contains("\"")) {
-                    String[] temp = thisLine.split("\"");
-                    for(int x=0; x<temp.length; x++){
-                        if(x%2==1) temp[x] = temp[x].replace(",", "");
-                    }
-                    thisLine = "";
-                    for(int x=0; x<temp.length; x++){
-                        thisLine = thisLine + temp[x];
-                    }
-                }
-                elements = thisLine.split(",");
+            } else {
+                elements = getElementsFromLine(thisLine);
 
                 if (elements[shape_id].length() > 0){
                     Shape s = result.get(elements[shape_id]);
@@ -240,21 +201,8 @@ public class GTFSParser {
                     else if(keys[i].equals("route_long_name")) route_long_name = i;
                     else if(keys[i].equals("agency_id")) agency_id = i;
                 }
-            }
-            else {
-                thisLine = thisLine.trim();
-
-                if(thisLine.contains("\"")) {
-                    String[] temp = thisLine.split("\"");
-                    for(int x=0; x<temp.length; x++){
-                        if(x%2==1) temp[x] = temp[x].replace(",", "");
-                    }
-                    thisLine = "";
-                    for(int x=0; x<temp.length; x++){
-                        thisLine = thisLine + temp[x];
-                    }
-                }
-                elements = thisLine.split(",");
+            } else {
+                 elements = getElementsFromLine(thisLine);
 
                 if (elements[route_id].length() > 0){
                     result.put(elements[route_id], new Route(elements[route_id],elements[route_short_name],elements[route_long_name], elements[agency_id]));
@@ -292,19 +240,7 @@ public class GTFSParser {
                     else if(keys[i].equals("stop_sequence")) stop_sequence = i;
                 }
             } else {
-                thisLine = thisLine.trim();
-
-                if(thisLine.contains("\"")) {
-                    String[] temp = thisLine.split("\"");
-                    for(int x=0; x<temp.length; x++){
-                        if(x%2==1) temp[x] = temp[x].replace(",", "");
-                    }
-                    thisLine = "";
-                    for(int x=0; x<temp.length; x++){
-                        thisLine = thisLine + temp[x];
-                    }
-                }
-                elements = thisLine.split(",");
+                elements = getElementsFromLine(thisLine);
 
                 if (elements[trip_id].length() > 0){
                     StopsList s = result.get(elements[trip_id]);
@@ -325,7 +261,9 @@ public class GTFSParser {
                 }
             }
         }
+
         br.close();
+
         if (missingStops.size() > 0)
             System.err.println("Warning: Some stops weren't found, not all trip have been generated.");
         return result;
@@ -344,4 +282,27 @@ public class GTFSParser {
         }
         return result;
     }
+
+
+
+
+
+    private static String[] getElementsFromLine(String thisLine) {
+        String[] elements;
+        thisLine = thisLine.trim();
+
+        if(thisLine.contains("\"")) {
+            String[] temp = thisLine.split("\"");
+            for(int x=0; x<temp.length; x++){
+                if(x%2==1) temp[x] = temp[x].replace(",", "");
+            }
+            thisLine = "";
+            for(int x=0; x<temp.length; x++){
+                thisLine = thisLine + temp[x];
+            }
+        }
+        elements = thisLine.split(",");
+        return elements;
+    }
+
 }
