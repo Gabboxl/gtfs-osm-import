@@ -38,7 +38,7 @@ import org.fusesource.jansi.Ansi;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
-    
+
     public static List<GTFSStop> readStops(String fName) throws IOException{
         List<GTFSStop> result = new ArrayList<GTFSStop>();
 
@@ -55,22 +55,23 @@ public class GTFSParser {
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
                 for(int i=0; i<keys.length; i++){
-                    if(keys[i].equals("stop_id")) stopIdKey = i;
-                    else if(keys[i].equals("stop_name")) stopNameKey = i;
-                    else if(keys[i].equals("stop_lat")) stopLatKey = i;
-                    else if(keys[i].equals("stop_lon")) stopLonKey = i;
-                    else if(keys[i].equals("stop_code")) stopCodeKey = i;
-                    else if(keys[i].equals("location_type")) locationTypeKey = i;
-                    else if(keys[i].equals("parent_station")) parentStationKey = i;
-                    else if(keys[i].equals("wheelchair_boarding")) wheelchairBoardingKey = i;
+                    switch (keys[i]) {
+                        case "stop_id" -> stopIdKey = i;
+                        case "stop_name" -> stopNameKey = i;
+                        case "stop_lat" -> stopLatKey = i;
+                        case "stop_lon" -> stopLonKey = i;
+                        case "stop_code" -> stopCodeKey = i;
+                        case "location_type" -> locationTypeKey = i;
+                        case "parent_station" -> parentStationKey = i;
+                        case "wheelchair_boarding" -> wheelchairBoardingKey = i;
+
 
                         // gtfs stop_url is mapped to source_ref tag in OSM
-                    else if(keys[i].equals("stop_url")){
-                        keysIndex.put("source_ref", i);
-                    }
-                    else {
-                        String t = "gtfs_"+keys[i];
-                        keysIndex.put(t, i);
+                        case "stop_url" -> keysIndex.put("source_ref", i);
+                        default -> {
+                            String t = "gtfs_" + keys[i];
+                            keysIndex.put(t, i);
+                        }
                     }
                 }
                 //GTFS Brescia: if code isn't present we use id as code
@@ -122,11 +123,13 @@ public class GTFSParser {
                 isFirstLine = false;
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
-                for(int i=0; i<keys.length; i++){
-                    if(keys[i].equals("route_id")) route_id = i;
-                    else if(keys[i].equals("trip_headsign")) trip_headsign = i;
-                    else if(keys[i].equals("shape_id")) shape_id = i;
-                    else if(keys[i].equals("trip_id")) trip_id = i;
+                for (int i=0; i<keys.length; i++) {
+                    switch (keys[i]) {
+                        case "route_id" -> route_id = i;
+                        case "trip_headsign" -> trip_headsign = i;
+                        case "shape_id" -> shape_id = i;
+                        case "trip_id" -> trip_id = i;
+                    }
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
             } else {
@@ -157,10 +160,12 @@ public class GTFSParser {
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
                 for(int i=0; i<keys.length; i++){
-                    if(keys[i].equals("shape_id")) shape_id = i;
-                    else if(keys[i].equals("shape_pt_lat")) shape_pt_lat = i;
-                    else if(keys[i].equals("shape_pt_lon")) shape_pt_lon = i;
-                    else if(keys[i].equals("shape_pt_sequence")) shape_pt_sequence = i;
+                    switch (keys[i]) {
+                        case "shape_id" -> shape_id = i;
+                        case "shape_pt_lat" -> shape_pt_lat = i;
+                        case "shape_pt_lon" -> shape_pt_lon = i;
+                        case "shape_pt_sequence" -> shape_pt_sequence = i;
+                    }
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
             } else {
@@ -195,10 +200,12 @@ public class GTFSParser {
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
                 for(int i=0; i<keys.length; i++){
-                    if(keys[i].equals("route_id")) route_id = i;
-                    else if(keys[i].equals("route_short_name")) route_short_name = i;
-                    else if(keys[i].equals("route_long_name")) route_long_name = i;
-                    else if(keys[i].equals("agency_id")) agency_id = i;
+                    switch (keys[i]) {
+                        case "route_id" -> route_id = i;
+                        case "route_short_name" -> route_short_name = i;
+                        case "route_long_name" -> route_long_name = i;
+                        case "agency_id" -> agency_id = i;
+                    }
                 }
             } else {
                  elements = getElementsFromLine(thisLine);
@@ -232,11 +239,13 @@ public class GTFSParser {
                 isFirstLine = false;
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
-                for(int i=0; i<keys.length; i++){
-                    if(keys[i].equals("trip_id")) trip_id = i;
-                    else if(keys[i].equals("arrival_time")) arrival_time = i;
-                    else if(keys[i].equals("stop_id")) stop_id = i;
-                    else if(keys[i].equals("stop_sequence")) stop_sequence = i;
+                for (int i=0; i<keys.length; i++) {
+                    switch (keys[i]) {
+                        case "trip_id" -> trip_id = i;
+                        case "arrival_time" -> arrival_time = i;
+                        case "stop_id" -> stop_id = i;
+                        case "stop_sequence" -> stop_sequence = i;
+                    }
                 }
             } else {
                 elements = getElementsFromLine(thisLine);
