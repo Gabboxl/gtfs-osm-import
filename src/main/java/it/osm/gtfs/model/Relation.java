@@ -41,6 +41,8 @@ public class Relation {
         return affinity;
     }
 
+
+    //TODO: maybe this function can be put in a separate Utils class
     private static <T, E> T getKeysByValue(Map<T, E> map, E value) {
         for (Map.Entry<T, E> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
@@ -142,7 +144,7 @@ public class Relation {
     public enum RelationType{
         SUBWAY(0), TRAM(1), BUS(2), TRAIN(3), LIGHT_RAIL(4);
 
-        private int dbId;
+        private final int dbId;
         RelationType(int dbId){
             this.dbId = dbId;
         }
