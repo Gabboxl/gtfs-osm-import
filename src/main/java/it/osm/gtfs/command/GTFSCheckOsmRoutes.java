@@ -3,23 +3,17 @@ package it.osm.gtfs.command;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Relation.OSMNode;
-import it.osm.gtfs.model.Relation.OSMRelationWayMember;
-import it.osm.gtfs.model.Stop;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.JOSMUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
