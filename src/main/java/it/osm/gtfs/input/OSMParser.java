@@ -102,33 +102,33 @@ public class OSMParser {
                     String key = attNode.getAttributes().getNamedItem("k").getNodeValue();
                     String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
 
-                    if (key.equals("ref"))
+                    if (key.equalsIgnoreCase("ref"))
                         osmStop.setCode(value);
-                    if (key.equals("name"))
+                    if (key.equalsIgnoreCase("name"))
                         osmStop.setName(value);
-                    if (key.equals("operator"))
+                    if (key.equalsIgnoreCase("operator"))
                         osmStop.setOperator(value);
-                    if (key.equals("gtfs_id"))
+                    if (key.equalsIgnoreCase("gtfs_id"))
                         osmStop.setGtfsId(value);
-                    if (key.equals("highway") && value.equals("bus_stop"))
+                    if (key.equalsIgnoreCase("highway") && value.equalsIgnoreCase("bus_stop"))
                         osmStop.setIsTramStop(false);
-                    if (key.equals("railway") && value.equals("tram_stop"))
+                    if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("tram_stop"))
                         osmStop.setIsTramStop(true);
-                    if (key.equals("railway") && value.equals("station"))
+                    if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("station"))
                         osmStop.setIsTramStop(true);
-                    if (key.equals("public_transport") && value.equals("stop_position") && osmStop.isTramStop() == null)
+                    if (key.equalsIgnoreCase("public_transport") && value.equalsIgnoreCase("stop_position") && osmStop.isTramStop() == null)
                         osmStop.setIsBusStopPosition(true);
-                    if (key.equals("train") && value.equals("yes"))
+                    if (key.equalsIgnoreCase("train") && value.equalsIgnoreCase("yes"))
                         osmStop.setIsTramStop(true);
-                    if (key.equals("tram") && value.equals("yes"))
+                    if (key.equalsIgnoreCase("tram") && value.equalsIgnoreCase("yes"))
                         osmStop.setIsTramStop(true);
-                    if (key.equals("bus") && value.equals("yes"))
+                    if (key.equalsIgnoreCase("bus") && value.equalsIgnoreCase("yes"))
                         osmStop.setIsTramStop(false);
-                    if (key.equals("wheelchair") && value.equals("no"))
+                    if (key.equalsIgnoreCase("wheelchair") && value.equalsIgnoreCase("no"))
                         osmStop.setWheelchairAccessibility(WheelchairAccess.NO);
-                    if (key.equals("wheelchair") && value.equals("limited"))
+                    if (key.equalsIgnoreCase("wheelchair") && value.equalsIgnoreCase("limited"))
                         osmStop.setWheelchairAccessibility(WheelchairAccess.LIMITED);
-                    if (key.equalsIgnoreCase(GTFSImportSettings.getInstance().getRevisedKey()) && value.equals("yes"))
+                    if (key.equalsIgnoreCase(GTFSImportSettings.getInstance().getRevisedKey()) && value.equalsIgnoreCase("yes"))
                         osmStop.setIsRevised(true);
 
                 }
@@ -246,16 +246,16 @@ public class OSMParser {
                 String key = attributes.getValue("k");
                 String value = attributes.getValue("v");
 
-                if (key.equals("oneway")){
-                    if (value.equals("yes") || value.equals("true")){
+                if (key.equalsIgnoreCase("oneway")){
+                    if (value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true")){
                         currentWay.oneway = true;
-                    }else if (value.equals("no") || value.equals("false")){
+                    }else if (value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false")){
                         currentWay.oneway = false;
                     }else{
                         System.err.println("Unhandled oneway attribute: " + value + " way id: " + currentWay.getId());
                     }
-                }else if (key.equals("junction")){
-                    if (value.equals("roundabout")){
+                }else if (key.equalsIgnoreCase("junction")){
+                    if (value.equalsIgnoreCase("roundabout")){
                         currentWay.oneway = true;
                     }
                 }
@@ -324,15 +324,15 @@ public class OSMParser {
                 }
             }else if (currentRelation != null && localName.equals("tag")){
                 String key = attributes.getValue("k");
-                if (key.equals("name"))
+                if (key.equalsIgnoreCase("name"))
                     currentRelation.setName(attributes.getValue("v"));
-                else if (key.equals("ref"))
+                else if (key.equalsIgnoreCase("ref"))
                     currentRelation.setRef(attributes.getValue("v"));
-                else if (key.equals("from"))
+                else if (key.equalsIgnoreCase("from"))
                     currentRelation.setFrom(attributes.getValue("v"));
-                else if (key.equals("to"))
+                else if (key.equalsIgnoreCase("to"))
                     currentRelation.setTo(attributes.getValue("v"));
-                else if (key.equals("route"))
+                else if (key.equalsIgnoreCase("route"))
                     try{
                         currentRelation.setType(RelationType.parse(attributes.getValue("v")));
                     }catch (IllegalArgumentException e){
