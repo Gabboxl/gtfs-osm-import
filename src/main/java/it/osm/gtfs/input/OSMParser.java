@@ -16,6 +16,7 @@ package it.osm.gtfs.input;
 
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.model.OSMStop;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.model.Relation.OSMNode;
@@ -91,8 +92,8 @@ public class OSMParser {
 
         for (int s = 0; s < nodeList.getLength(); s++) {
             Node fstNode = nodeList.item(s);
-            OSMStop stop = new OSMStop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
-            stop.originalXMLNode = fstNode;
+            OSMStop osmStop = new OSMStop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
+            osmStop.originalXMLNode = fstNode;
             NodeList att = fstNode.getChildNodes();
             for (int t = 0; t < att.getLength(); t++) {
                 Node attNode = att.item(t);
@@ -102,67 +103,70 @@ public class OSMParser {
                     String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
 
                     if (key.equals("ref"))
-                        stop.setCode(value);
+                        osmStop.setCode(value);
                     if (key.equals("name"))
-                        stop.setName(value);
+                        osmStop.setName(value);
                     if (key.equals("operator"))
-                        stop.setOperator(value);
+                        osmStop.setOperator(value);
                     if (key.equals("gtfs_id"))
-                        stop.setGtfsId(value);
+                        osmStop.setGtfsId(value);
                     if (key.equals("highway") && value.equals("bus_stop"))
-                        stop.setIsTramStop(false);
+                        osmStop.setIsTramStop(false);
                     if (key.equals("railway") && value.equals("tram_stop"))
-                        stop.setIsTramStop(true);
+                        osmStop.setIsTramStop(true);
                     if (key.equals("railway") && value.equals("station"))
-                        stop.setIsTramStop(true);
-                    if (key.equals("public_transport") && value.equals("stop_position") && stop.isTramStop() == null)
-                        stop.setIsBusStopPosition(true);
+                        osmStop.setIsTramStop(true);
+                    if (key.equals("public_transport") && value.equals("stop_position") && osmStop.isTramStop() == null)
+                        osmStop.setIsBusStopPosition(true);
                     if (key.equals("train") && value.equals("yes"))
-                        stop.setIsTramStop(true);
+                        osmStop.setIsTramStop(true);
                     if (key.equals("tram") && value.equals("yes"))
-                        stop.setIsTramStop(true);
+                        osmStop.setIsTramStop(true);
                     if (key.equals("bus") && value.equals("yes"))
-                        stop.setIsTramStop(false);
+                        osmStop.setIsTramStop(false);
                     if (key.equals("wheelchair") && value.equals("no"))
-                        stop.setWheelchairAccessibility(WheelchairAccess.NO);
+                        osmStop.setWheelchairAccessibility(WheelchairAccess.NO);
                     if (key.equals("wheelchair") && value.equals("limited"))
-                        stop.setWheelchairAccessibility(WheelchairAccess.LIMITED);
+                        osmStop.setWheelchairAccessibility(WheelchairAccess.LIMITED);
+                    if (key.equalsIgnoreCase(GTFSImportSettings.getInstance().getRevisedKey()) && value.equals("yes"))
+                        osmStop.setIsRevised(true);
+
                 }
             }
 
 
-            if (stop.isTramStop() == null)
-                if (stop.isBusStopPosition())
+            if (osmStop.isTramStop() == null)
+                if (osmStop.isBusStopPosition())
                     continue; //ignore unsupported stop positions (like ferries)
                 else
-                    throw new IllegalArgumentException("Unknown node type for node: " + stop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
+                    throw new IllegalArgumentException("Unknown node type for node: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
             //Check duplicate ref in osm
-            if (stop.getCode() != null){
-                if (stop.isBusStopPosition() == null || !stop.isBusStopPosition()){
-                    if (stop.isTramStop()){
-                        if (refRails.containsKey(stop.getCode())){
-                            for (OSMStop existingStop : refRails.get(stop.getCode())){
-                                if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
-                                    System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-                                            " (node IDs :" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
+            if (osmStop.getCode() != null){
+                if (osmStop.isBusStopPosition() == null || !osmStop.isBusStopPosition()){
+                    if (osmStop.isTramStop()){
+                        if (refRails.containsKey(osmStop.getCode())){
+                            for (OSMStop existingStop : refRails.get(osmStop.getCode())){
+                                if (OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
+                                    System.err.println("Warning: The ref " + osmStop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
+                                            " (node IDs :" + osmStop.getOSMId() + "," + existingStop.getOSMId() + ")");
                             }
                         }
 
-                        refRails.put(stop.getCode(), stop);
+                        refRails.put(osmStop.getCode(), osmStop);
                     }else{
-                        if (refBuses.containsKey(stop.getCode())){
-                            for (OSMStop existingStop : refBuses.get(stop.getCode())){
-                                if (OSMDistanceUtils.distVincenty(stop.getLat(), stop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
-                                    System.err.println("Warning: The ref " + stop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-                                            " (node IDs :" + stop.getOSMId() + "," + existingStop.getOSMId() + ")");
+                        if (refBuses.containsKey(osmStop.getCode())){
+                            for (OSMStop existingStop : refBuses.get(osmStop.getCode())){
+                                if (OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
+                                    System.err.println("Warning: The ref " + osmStop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
+                                            " (node IDs :" + osmStop.getOSMId() + "," + existingStop.getOSMId() + ")");
                             }
                         }
-                        refBuses.put(stop.getCode(), stop);
+                        refBuses.put(osmStop.getCode(), osmStop);
                     }
                 }
             }
-            result.add(stop);
+            result.add(osmStop);
         }
 
         return result;

@@ -21,8 +21,8 @@ public class StopsUtils {
 
         if (osmStop.getCode() != null && osmStop.getCode().equals(gtfsStop.getCode())){
 
-            if (distanceBetween < 70 || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) )){
-                //if the stops are less than 70m far away or are already linked with gtfsid TODO: or the revised key is already set to yes? maybe?
+            if (distanceBetween < 70 || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) && osmStop.isRevised())){
+                //if the stops are less than 70m far away OR are already linked with gtfsid AND the OSM stop is revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
                 return true;
             }else if (distanceBetween < 5000){
                 System.err.println("Warning: Same ref tag with dist > 70 m (and less than 10km) / " + debugData);
