@@ -24,6 +24,7 @@ import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.output.OSMBusImportGenerator;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMXMLUtils;
+import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -60,7 +61,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         //fase di matching delle fermate di OSM con quelle GTFS - in particolare la funzione matches() ritorna true se due fermate sono le stesse secondo l'algoritmo della funzione
         for (GTFSStop gtfsStop : gtfsStops){
             for (OSMStop osmStop : osmStops){
-                if (gtfsStop.matches(osmStop)){
+                if (StopsUtils.matches(gtfsStop, osmStop)){
                     if (osmStop.isTramStop()){
                         if(gtfsStop.railwayStopMatchedWith != null){
                             throw new MultipleMatchException(gtfsStop, osmStop, "Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
