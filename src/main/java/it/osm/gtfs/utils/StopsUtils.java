@@ -2,7 +2,6 @@ package it.osm.gtfs.utils;
 
 import it.osm.gtfs.model.GTFSStop;
 import it.osm.gtfs.model.OSMStop;
-import it.osm.gtfs.model.Stop;
 
 /**
  * this class mainly contains methods to automate things related to Stops
@@ -15,7 +14,7 @@ public class StopsUtils {
      * @param osmStop The OSM stop
      * @return Returns whether the two stops are the same or not (so whether is they are matched or not)
      */
-    public static boolean matches(GTFSStop gtfsStop, OSMStop osmStop) {
+    public static boolean match(GTFSStop gtfsStop, OSMStop osmStop) {
         double distanceBetween = OSMDistanceUtils.distVincenty(gtfsStop.getLat(), gtfsStop.getLon(), osmStop.getLat(), osmStop.getLon());
         String debugData = "GTFS Stop data: [" + gtfsStop + "] -> OSM Stop data: [" + osmStop +  "], exact distance between: " + distanceBetween + " m";
 

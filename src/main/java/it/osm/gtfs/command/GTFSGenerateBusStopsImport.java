@@ -61,7 +61,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         //fase di matching delle fermate di OSM con quelle GTFS - in particolare la funzione matches() ritorna true se due fermate sono le stesse secondo l'algoritmo della funzione
         for (GTFSStop gtfsStop : gtfsStops){
             for (OSMStop osmStop : osmStops){
-                if (StopsUtils.matches(gtfsStop, osmStop)){
+                if (StopsUtils.match(gtfsStop, osmStop)){
                     if (osmStop.isTramStop()){
                         if(gtfsStop.railwayStopMatchedWith != null){
                             throw new MultipleMatchException(gtfsStop, osmStop, "Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
