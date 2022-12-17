@@ -105,20 +105,20 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     if (!osmStop.gtfsStopMatchedWith.getGtfsId().equals(osmStop.getGtfsId())){
                         osm_with_different_gtfs_id++;
 
-                        OSMXMLUtils.addTagOrReplace(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
+                        OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
 
                         System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.gtfsStopMatchedWith.getGtfsId());
                     }
 
-                    OSMXMLUtils.addTagOrReplace(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
-                    OSMXMLUtils.addTagOrReplace(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
+                    OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
+                    OSMXMLUtils.addOrReplaceTagValue(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
 
-                    OSMXMLUtils.addTagOrReplace(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+                    OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 
                     //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
-                    WheelchairAccess wheelchairAccess = osmStop.gtfsStopMatchedWith.getWheelchairAccessibility();
-                    if(wheelchairAccess != null && wheelchairAccess != WheelchairAccess.UNKNOWN) {
-                        OSMXMLUtils.addTagOrReplace(originalNode, "wheelchair", wheelchairAccess.getOsmValue());
+                    WheelchairAccess gtfsWheelchairAccess = osmStop.gtfsStopMatchedWith.getWheelchairAccessibility();
+                    if(gtfsWheelchairAccess != null && gtfsWheelchairAccess != WheelchairAccess.UNKNOWN) {
+                        OSMXMLUtils.addOrReplaceTagValue(originalNode, "wheelchair", gtfsWheelchairAccess.getOsmValue());
                     }
 
                     if(osmStop.isTramStop()) {

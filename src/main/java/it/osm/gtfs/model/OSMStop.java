@@ -8,7 +8,6 @@ public class OSMStop extends Stop {
     private boolean isRevised = false;
 
     public GTFSStop gtfsStopMatchedWith;
-
     public Node originalXMLNode;
 
 

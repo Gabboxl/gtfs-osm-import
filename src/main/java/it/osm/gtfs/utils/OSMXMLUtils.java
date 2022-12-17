@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
 
 public class OSMXMLUtils {
 
-    public static void addTag(Element node, String key, String value) {
+    public static void addTagAndValue(Element node, String key, String value) {
         node.setAttribute("action", "modify");
         Element e = node.getOwnerDocument().createElement("tag");
         e.setAttribute("k", key);
@@ -30,10 +30,10 @@ public class OSMXMLUtils {
         node.appendChild(e);
     }
 
-    public static void addTagOrReplace(Element node, String key, String value) {
+    public static void addOrReplaceTagValue(Element node, String key, String value) {
         Element tag = getTagElement(node, key);
         if (tag == null){
-            addTag(node, key, value);
+            addTagAndValue(node, key, value);
         }else{
             node.setAttribute("action", "modify");
             tag.setAttribute("v", value);
@@ -42,7 +42,7 @@ public class OSMXMLUtils {
 
     public static void addTagIfNotExisting(Element node, String key, String value) {
         if (getTagElement(node, key) == null)
-            addTag(node, key, value);
+            addTagAndValue(node, key, value);
     }
 
     private static Element getTagElement(Element node, String key){
