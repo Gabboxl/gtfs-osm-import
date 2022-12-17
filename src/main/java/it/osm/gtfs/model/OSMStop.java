@@ -7,6 +7,8 @@ public class OSMStop extends Stop {
 
     private boolean isRevised = false;
 
+    public GTFSStop gtfsStopMatchedWith;
+
     public Node originalXMLNode;
 
 
@@ -14,7 +16,7 @@ public class OSMStop extends Stop {
         super(gtfsId, code, lat, lon, name, operator, wheelchairAccessibility);
     }
 
-    public String getOSMId(){
+    public String getOSMId() {
         return (originalXMLNode == null) ? null : originalXMLNode.getAttributes().getNamedItem("id").getNodeValue();
     }
 

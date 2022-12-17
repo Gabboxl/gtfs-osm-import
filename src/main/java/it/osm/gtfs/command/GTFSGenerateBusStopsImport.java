@@ -68,18 +68,18 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         }
 
                         gtfsStop.railwayStopMatchedWith = osmStop;
-                        osmStop.stopMatchedWith = gtfsStop;
+                        osmStop.gtfsStopMatchedWith = gtfsStop;
 
                     }else {
-                        if(osmStop.stopMatchedWith != null || gtfsStop.stopMatchedWith != null){
+                        if(osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null){
                             throw new MultipleMatchException(gtfsStop, osmStop, "Multiple match found, this is currently unsupported. The cycle will continue to check all matches.");
                         }
 
                         gtfsStop.stopsMatchedWith.add(osmStop);
                         osmStop.stopsMatchedWith.add(gtfsStop);
 
-                        gtfsStop.stopMatchedWith = osmStop;
-                        osmStop.stopMatchedWith = gtfsStop;
+                        gtfsStop.osmStopMatchedWith = osmStop;
+                        osmStop.gtfsStopMatchedWith = gtfsStop;
                     }
 
                 }
@@ -94,43 +94,44 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             int matched_stops = 0;
             int not_matched_osm_stops = 0;
             int osm_with_different_gtfs_id = 0; //this can be removed as it serves no purpose actually
+
             OSMBusImportGenerator bufferNotMatchedStops = new OSMBusImportGenerator(bb);
             OSMBusImportGenerator bufferMatchedStops = new OSMBusImportGenerator(bb);
 
             for (OSMStop osmStop : osmStops) {
-                if (osmStop.stopMatchedWith != null){
-                    Element n = (Element) osmStop.originalXMLNode;
+                if (osmStop.gtfsStopMatchedWith != null){
+                    Element originalNode = (Element) osmStop.originalXMLNode;
 
-                    if (!osmStop.stopMatchedWith.getGtfsId().equals(osmStop.getGtfsId())){
+                    if (!osmStop.gtfsStopMatchedWith.getGtfsId().equals(osmStop.getGtfsId())){
                         osm_with_different_gtfs_id++;
 
-                        OSMXMLUtils.addTagOrReplace(n, "gtfs_id", osmStop.stopMatchedWith.getGtfsId());
+                        OSMXMLUtils.addTagOrReplace(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
 
-                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.stopMatchedWith.getGtfsId());
+                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but in GTFS has gtfs_id: " + osmStop.gtfsStopMatchedWith.getGtfsId());
                     }
 
-                    OSMXMLUtils.addTagOrReplace(n, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.stopMatchedWith.getName()));
-                    OSMXMLUtils.addTagOrReplace(n, "operator", GTFSImportSettings.getInstance().getOperator());
+                    OSMXMLUtils.addTagOrReplace(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
+                    OSMXMLUtils.addTagOrReplace(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
 
-                    OSMXMLUtils.addTagOrReplace(n, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+                    OSMXMLUtils.addTagOrReplace(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 
                     //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
-                    WheelchairAccess wheelchairAccess = osmStop.getWheelchairAccessibility();
+                    WheelchairAccess wheelchairAccess = osmStop.gtfsStopMatchedWith.getWheelchairAccessibility();
                     if(wheelchairAccess != null && wheelchairAccess != WheelchairAccess.UNKNOWN) {
-                        OSMXMLUtils.addTagOrReplace(n, "wheelchair", wheelchairAccess.getOsmValue());
+                        OSMXMLUtils.addTagOrReplace(originalNode, "wheelchair", wheelchairAccess.getOsmValue());
                     }
 
                     if(osmStop.isTramStop()) {
-                        //OSMXMLUtils.addTagIfNotExisting(n, "tram", "yes");
-                        OSMXMLUtils.addTagIfNotExisting(n, "public_transport", "stop_position");
+                        //OSMXMLUtils.addTagIfNotExisting(originalNode, "tram", "yes");
+                        OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "stop_position");
                     } else {
-                        OSMXMLUtils.addTagIfNotExisting(n, "bus", "yes");
-                        OSMXMLUtils.addTagIfNotExisting(n, "highway", "bus_stop");
-                        OSMXMLUtils.addTagIfNotExisting(n, "public_transport", "platform");
+                        OSMXMLUtils.addTagIfNotExisting(originalNode, "bus", "yes");
+                        OSMXMLUtils.addTagIfNotExisting(originalNode, "highway", "bus_stop");
+                        OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "platform");
                     }
 
                     //add the node to the buffer of matched stops
-                    bufferMatchedStops.appendNode(n);
+                    bufferMatchedStops.appendNode(originalNode);
                     matched_stops++;
                 }else{
 
@@ -177,7 +178,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
             for (GTFSStop gtfsStop:gtfsStops){
-                if (gtfsStop.stopMatchedWith == null && gtfsStop.stopsMatchedWith.size() == 0){
+                if (gtfsStop.osmStopMatchedWith == null && gtfsStop.stopsMatchedWith.size() == 0){
                     new_stops_from_gtfs++;
 
                     //we create the new node with new tags here
