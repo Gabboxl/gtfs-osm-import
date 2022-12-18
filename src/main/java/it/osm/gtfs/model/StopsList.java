@@ -22,14 +22,14 @@ import java.util.TreeMap;
 public class StopsList {
     private final String id;
     private Map<Long, OSMStop> stops;
-    private Map<Long, String> stopsTime;
+    private Map<Long, String> stopsTimes;
     private Boolean valid = true;
 
     public StopsList(String id) {
         super();
         this.id = id;
         stops = new TreeMap<Long, OSMStop>();
-        stopsTime = new TreeMap<Long, String>();
+        stopsTimes = new TreeMap<Long, String>();
     }
 
     public Boolean isValid() {
@@ -46,7 +46,7 @@ public class StopsList {
 
     public void pushPoint(Long seq, OSMStop stop, String arrival_time){
         stops.put(seq, stop);
-        stopsTime.put(seq, arrival_time);
+        stopsTimes.put(seq, arrival_time);
     }
 
     public String getRelationAsStopList(Trip t, Route r){
@@ -66,12 +66,12 @@ public class StopsList {
         stops = s;
     }
 
-    public Map<Long, String> getStopsTime() {
-        return stopsTime;
+    public Map<Long, String> getStopsTimes() {
+        return stopsTimes;
     }
 
-    public void setStopsTime(Map<Long, String> s){
-        stopsTime = s;
+    public void setStopsTimes(Map<Long, String> s){
+        stopsTimes = s;
     }
 
     public boolean equalsStops(StopsList o) {

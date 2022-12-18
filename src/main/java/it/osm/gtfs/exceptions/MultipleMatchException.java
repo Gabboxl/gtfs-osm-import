@@ -10,6 +10,6 @@ public class MultipleMatchException extends Exception {
         System.err.println("current GTFS stop: " + gtfsStop);
         System.err.println("Current-matching OSM stop: " + osmStop);
 
-        System.err.println("Already-matched OSM stop: " + gtfsStop.stopMatchedWith);
+        System.err.println("Already-matched OSM stop: " + gtfsStop.osmStopMatchedWith);
     }
 }
