@@ -34,8 +34,8 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
 
     //private Boolean isMetroStop; //TODO: should we add this check only for GTFS stops or also for osm stops, or not at all?
 
-    //maybe we should also create an arraylist for railwayStops matched with also?
-    public List<Stop> stopsMatchedWith = new ArrayList<Stop>(); //this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently unsupported in the tool
+    //TODO: maybe we should also create anF arraylist for railwayStops matched with also?
+    public List<Stop> stopsMatchedWith = new ArrayList<Stop>(); //TODO: this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently unsupported in the tool
 
 
     protected Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {

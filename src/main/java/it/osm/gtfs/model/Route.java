@@ -19,17 +19,21 @@ import java.util.Set;
 
 public class Route implements Comparable<Route> {
     private final String id;
+    private final String agencyId;
     private final String shortName;
     private final String longName;
-    private final String agencyId;
+    private final String routeType;
     private final Set<String> shapesIDs;
 
-    public Route(String id, String shortName, String longName, String agencyId) {
+    public Route(String id, String agencyId, String longName, String shortName, String route_type) {
         super();
         this.id = id;
+        this.agencyId = agencyId;
         this.shortName = shortName;
         this.longName = longName;
-        this.agencyId = agencyId;
+        this.routeType = route_type;
+
+
         shapesIDs = new HashSet<String>();
     }
 
@@ -47,6 +51,10 @@ public class Route implements Comparable<Route> {
 
     public String getAgencyId() {
         return agencyId;
+    }
+
+    public String getRouteType() {
+        return routeType;
     }
 
     public Set<String> getShapesIDs() {

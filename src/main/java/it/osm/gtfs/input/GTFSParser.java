@@ -74,6 +74,7 @@ public class GTFSParser {
                         }
                     }
                 }
+
                 //GTFS Brescia: if code isn't present we use id as code
                 if (stopCodeKey == -1)
                     stopCodeKey = stopIdKey;
@@ -94,7 +95,7 @@ public class GTFSParser {
                                 Double.valueOf(elements[stopLatKey]),
                                 Double.valueOf(elements[stopLonKey]),
                                 elements[stopNameKey],
-                                null, //we probably should find a way to get the real operator from GTFS for GTFS-type stops
+                                null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops
                                 WheelchairAccess.values()[Integer.parseInt(elements[wheelchairBoardingKey])]); //this is not ideal as we are using the value as index of the enums but it works (we should create a lookup method with a for cycle)
                         if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gs)){
                             result.add(gs);
@@ -190,7 +191,7 @@ public class GTFSParser {
 
         String thisLine;
         String [] elements;
-        int route_id=-1, route_short_name=-1, route_long_name=-1, agency_id = -1;
+        int route_id=-1, agency_id = -1, route_short_name=-1, route_long_name=-1, route_type=-1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
@@ -202,16 +203,17 @@ public class GTFSParser {
                 for(int i=0; i<keys.length; i++){
                     switch (keys[i]) {
                         case "route_id" -> route_id = i;
+                        case "agency_id" -> agency_id = i;
                         case "route_short_name" -> route_short_name = i;
                         case "route_long_name" -> route_long_name = i;
-                        case "agency_id" -> agency_id = i;
+                        case "route_type" -> route_type = i;
                     }
                 }
             } else {
                  elements = getElementsFromLine(thisLine);
 
                 if (elements[route_id].length() > 0){
-                    result.put(elements[route_id], new Route(elements[route_id],elements[route_short_name],elements[route_long_name], elements[agency_id]));
+                    result.put(elements[route_id], new Route(elements[route_id], elements[agency_id], elements[route_long_name], elements[route_short_name], elements[route_type]));
                 }
             }
         }
