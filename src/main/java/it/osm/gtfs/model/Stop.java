@@ -29,7 +29,6 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private String operator;
     private WheelchairAccess wheelchairAccessibility;
     private Boolean isTramStop; //TODO: should we move this variable to the OSMStop class?
-    private Boolean isBusStopPosition = false; //TODO: should we move this variable to the OSMStop class too?
 
     //private Boolean isMetroStop; //TODO: should we add this check only for GTFS stops or also for osm stops, or not at all?
 
@@ -72,17 +71,12 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public Boolean isTramStop(){
         return isTramStop;
     }
-    public Boolean isBusStopPosition(){
-        return isBusStopPosition;
-    }
 
 
     public void setIsTramStop(Boolean isTramStop){
         this.isTramStop = isTramStop;
     }
-    public void setIsBusOrTramStopPosition(Boolean isBusStopPosition){
-        this.isBusStopPosition = isBusStopPosition;
-    }
+
     public void setGtfsId(String gtfsId) {
         this.gtfsId = gtfsId;
     }

@@ -7,6 +7,8 @@ public class OSMStop extends Stop {
 
     private boolean isRevised = false;
 
+    private Boolean isBusOrTramStopPosition = false; //TODO: maybe rename to just isStopPosition?
+
     public GTFSStop gtfsStopMatchedWith;
     public Node originalXMLNode;
 
@@ -23,6 +25,14 @@ public class OSMStop extends Stop {
         this.isRevised = isRevised;
     }
 
+    public void setIsBusOrTramStopPosition(Boolean isBusStopPosition){
+        this.isBusOrTramStopPosition = isBusStopPosition;
+    }
+
+    public Boolean isBusOrTramStopPosition(){
+        return isBusOrTramStopPosition;
+    }
+
     public boolean isRevised() {
         return isRevised;
     }
@@ -33,7 +43,7 @@ public class OSMStop extends Stop {
         return "Stop [gtfsId=" + getGtfsId() + ", code=" + getCode() + ", lat=" + getLat()
                 + ", lon=" + getLon() + ", name=" + getName() + ", operator=" + getOperator() + ", accessibility=" + getWheelchairAccessibility() +
                 ((originalXMLNode != null) ? ", osmid=" + getOSMId() : "" )
-                + ", isTramStop=" + isTramStop() + ", isBusStopPosition=" + isBusStopPosition() +
+                + ", isTramStop=" + isTramStop() + ", isBusStopPosition=" + isBusOrTramStopPosition() +
                 ", isRevised=" + isRevised() + "]";
     }
 }
