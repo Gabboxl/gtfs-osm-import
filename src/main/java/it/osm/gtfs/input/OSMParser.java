@@ -136,14 +136,14 @@ public class OSMParser {
 
 
             if (osmStop.isTramStop() == null)
-                if (osmStop.isBusStopPosition())
+                if (osmStop.isBusOrTramStopPosition())
                     continue; //ignore unsupported stop positions (like ferries)
                 else
                     throw new IllegalArgumentException("Unknown node type for node: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
             //Check duplicate ref in osm
             if (osmStop.getCode() != null){
-                if (osmStop.isBusStopPosition() == null || !osmStop.isBusStopPosition()){
+                if (osmStop.isBusOrTramStopPosition() == null || !osmStop.isBusOrTramStopPosition()){
                     if (osmStop.isTramStop()){
                         if (refRails.containsKey(osmStop.getCode())){
                             for (OSMStop existingStop : refRails.get(osmStop.getCode())){
