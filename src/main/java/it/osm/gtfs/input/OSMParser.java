@@ -117,7 +117,7 @@ public class OSMParser {
                     if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("station"))
                         osmStop.setIsTramStop(true);
                     if (key.equalsIgnoreCase("public_transport") && value.equalsIgnoreCase("stop_position") && osmStop.isTramStop() == null)
-                        osmStop.setIsBusStopPosition(true);
+                        osmStop.setIsBusOrTramStopPosition(true);
                     if (key.equalsIgnoreCase("train") && value.equalsIgnoreCase("yes"))
                         osmStop.setIsTramStop(true);
                     if (key.equalsIgnoreCase("tram") && value.equalsIgnoreCase("yes"))

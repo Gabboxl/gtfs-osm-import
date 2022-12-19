@@ -16,7 +16,6 @@ package it.osm.gtfs.model;
 
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.OSMDistanceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +80,7 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public void setIsTramStop(Boolean isTramStop){
         this.isTramStop = isTramStop;
     }
-    public void setIsBusStopPosition(Boolean isBusStopPosition){
+    public void setIsBusOrTramStopPosition(Boolean isBusStopPosition){
         this.isBusStopPosition = isBusStopPosition;
     }
     public void setGtfsId(String gtfsId) {
