@@ -25,7 +25,7 @@ public class StopsUtils {
                 //if the stops are less than 15m far away (with only the ref code in common) OR are already linked with gtfsid AND the OSM stop is already revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
                 return true;
             } else if (distanceBetween < 1000) {
-                System.err.println("Warning: Stops with same ref-code tag with dist > 5 m (and less than 1km) / " + debugData);
+                System.err.println("Warning: Too distant osm-gtfs stop (with dist > 15 m and less than 1km) / " + debugData);
 
                 osmStop.setNeedsPositionReview(true); //the position of the osm stop needs to be reviewed as it most probably may have changed
 

@@ -48,6 +48,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
     Boolean checkStopsWithAnyOperatorTagValue = false;
 
     @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review, for every node that is too distant from the GTFS coords generates a new stop, and then it just generates the new change files.")
+    Boolean noGuiReview = false;
 
 
     @Override
@@ -57,7 +58,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
-        //matching phase between GTFS and OSM stops - check the StopUtils' match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
+        //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
         for (GTFSStop gtfsStop : gtfsStopsList){
             for (OSMStop osmStop : osmStopsList){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
@@ -108,7 +109,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             }
         }
 
-        //Stops matched with gtfs_id (also checking stops that didn't get matched)
+        //second matching phase by checking all osm stops again (also checking stops that didn't get matched && those that we don't consider matched)
         {
             //TODO: check if other tags of the node are in line with GTFS data
 
@@ -208,8 +209,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             int new_stops_from_gtfs = 0;
             OSMBusImportGenerator buffer = new OSMBusImportGenerator(bb);
 
-            for (GTFSStop gtfsStop:gtfsStopsList){
-                if (gtfsStop.osmStopMatchedWith == null && gtfsStop.stopsMatchedWith.size() == 0){
+            for (GTFSStop gtfsStop:gtfsStopsList) {
+                if (gtfsStop.osmStopMatchedWith == null && gtfsStop.stopsMatchedWith.size() == 0 || (gtfsStop.osmStopMatchedWith != null && gtfsStop.osmStopMatchedWith.needsPositionReview() && noGuiReview)){
                     new_stops_from_gtfs++;
 
                     //we create the new node with new tags here
