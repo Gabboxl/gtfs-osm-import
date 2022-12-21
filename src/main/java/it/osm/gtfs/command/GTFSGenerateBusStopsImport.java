@@ -45,7 +45,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsWithDifferentOperatorTagValue = false;
+    Boolean checkStopsWithAnyOperatorTagValue = false;
 
     //TODO: create a gui to review stop by stop before & after with two maps side by side the changes of every stop after having matched them etc -  very simple
     //@CommandLine.Option(names = {"-r", "--review"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
@@ -149,30 +149,29 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     //add the node to the buffer of matched stops
                     bufferMatchedStops.appendNode(originalNode);
                     matched_stops++;
-                }else{
 
+                } else {
+                    String notMatchedStringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " didn't get matched to a GTFS stop as either they are too distant or the ref code is no more available in gtfs.";
 
-                    if(checkStopsWithDifferentOperatorTagValue) {
-                        //System.out.println(osmStop.getOperator());
-                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop didn't get matched to a GTFS stop as they are too distant or ref code is no more available.");
-
+                    //if the user wants to consider any stop with any operator tag value
+                    if(checkStopsWithAnyOperatorTagValue) {
+                         //System.out.println(osmStop.getOperator());
+                        System.out.println(notMatchedStringOutput);
 
                         not_matched_osm_stops++;
-                        //add the node to the buffer of not matched stops
+
                         bufferNotMatchedStops.appendNode(originalNode);
 
                     } else {
-
-                        System.out.println("OSM Stop node id " + osmStop.getOSMId() + " (ref " + osmStop.getCode() + ")" + " has gtfs_id: " + osmStop.getGtfsId() + " but the stop didn't get matched to a GTFS stop as they are too distant or ref code is no more available.");
-
-
-                        if(osmStop.getOperator() != null && osmStop.getOperator().equals(GTFSImportSettings.getInstance().getOperator())){
-                            //add the node to the buffer of not matched stops
-
-                            //System.out.println(osmStop.getOperator());
+                        if(osmStop.getOperator() != null && osmStop.getOperator().equals(GTFSImportSettings.getInstance().getOperator())) {
+                            System.out.println(notMatchedStringOutput);
 
                             bufferNotMatchedStops.appendNode(originalNode);
                             not_matched_osm_stops++;
+                        } else {
+                            String operatorTagNotMatchedOutput = "Skipping OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " as its operator tag value is different than the one specified in the properties file.";
+
+                            System.out.println(operatorTagNotMatchedOutput);
                         }
                     }
                 }
