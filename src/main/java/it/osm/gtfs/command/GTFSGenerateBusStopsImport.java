@@ -12,6 +12,7 @@
  limitations under the License.
 
  **/
+
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.enums.WheelchairAccess;
@@ -53,6 +54,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException, MultipleMatchException {
+
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
 
@@ -186,12 +188,12 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 bufferMatchedStops.end();
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
 
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")"));
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
 
                 if (noGuiReview) {
                     System.out.println(ansi().fg(Ansi.Color.YELLOW).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of these with the updated coordinates.").reset());
                 } else {
-                    System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stops that need manual position review: ").reset().a(stopsToReview));
+                    System.out.println("(" + ansi().fg(Ansi.Color.CYAN).a("Stops that need manual position review: ").reset().a(stopsToReview) + ")");
                 }
             } else {
                 System.out.println(ansi().fg(Ansi.Color.YELLOW).a("No OSM stop got matched with GTFS data!").reset());
