@@ -47,8 +47,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsWithAnyOperatorTagValue = false;
 
-    @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review and just generates the new changes files.")
-    Boolean noGuiReview = false;
+    @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review, for every node that is too distant from the GTFS coords generates a new stop, and then it just generates the new change files.")
 
 
     @Override
@@ -73,7 +72,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                                 continue;
                             }
 
-                            gtfsStop.osmStopMatchedWith.gtfsStopMatchedWith = null;
+                            gtfsStop.railwayStopMatchedWith.gtfsStopMatchedWith = null;
 
                         }
 
@@ -93,6 +92,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                             //in case the current loop stop is the closest one to the gtfs coordinates, we remove the matched gtfs stop from the  already matched osm stop
                             gtfsStop.osmStopMatchedWith.gtfsStopMatchedWith = null;
+                            //gtfsStop.osmStopMatchedWith = null; nope because we just replace 5 lines later
                         }
 
                         gtfsStop.stopsMatchedWith.add(osmStop);
@@ -125,7 +125,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 //we check if the osm stop got matched with a gtfs stop AND only IF the osm stop needs the position review but the user doesn't want to review the stops then we consider the stop as not matched and we handle it in the else case
                 if (osmStop.gtfsStopMatchedWith != null && !(osmStop.needsPositionReview() && noGuiReview)){
 
-                    if(osmStop.needsPositionReview()){
+                    if (osmStop.needsPositionReview()) {
                         stopsToReview++;
                     }
 
@@ -141,7 +141,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         OSMXMLUtils.addOrReplaceTagValue(originalNode, "wheelchair", gtfsWheelchairAccess.getOsmValue());
                     }
 
-                    if(osmStop.isTramStop()) {
+                    if (osmStop.isTramStop()) {
                         //OSMXMLUtils.addTagIfNotExisting(originalNode, "tram", "yes");
                         OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "stop_position");
                     } else {
@@ -188,7 +188,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")"));
 
                 if (noGuiReview) {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of these.").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of these with the updated coordinates.").reset());
                 } else {
                     System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stops that need manual position review: ").reset().a(stopsToReview));
                 }
@@ -222,7 +222,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             if (new_stops_from_gtfs > 0){
                 buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm"));
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm)").reset());
-            }else{
+            } else {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs));
             }
         }
