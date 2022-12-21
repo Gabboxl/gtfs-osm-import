@@ -47,9 +47,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsWithAnyOperatorTagValue = false;
 
-    //TODO: create a gui to review stop by stop before & after with two maps side by side the changes of every stop after having matched them etc -  very simple
-    //@CommandLine.Option(names = {"-r", "--review"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    //Boolean needGuiReview;
+    @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review and just generates the new changes files.")
+    Boolean noGuiReview = false;
 
 
     @Override
@@ -115,6 +114,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
             int matched_stops = 0;
             int not_matched_osm_stops = 0;
+            int stopsToReview = 0;
 
             OSMBusImportGenerator bufferNotMatchedStops = new OSMBusImportGenerator(bb);
             OSMBusImportGenerator bufferMatchedStops = new OSMBusImportGenerator(bb);
@@ -122,8 +122,12 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             for (OSMStop osmStop : osmStopsList) {
                 Element originalNode = (Element) osmStop.originalXMLNode;
 
-                if (osmStop.gtfsStopMatchedWith != null){
+                //we check if the osm stop got matched with a gtfs stop AND only IF the osm stop needs the position review but the user doesn't want to review the stops then we consider the stop as not matched and we handle it in the else case
+                if (osmStop.gtfsStopMatchedWith != null && !(osmStop.needsPositionReview() && noGuiReview)){
 
+                    if(osmStop.needsPositionReview()){
+                        stopsToReview++;
+                    }
 
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
@@ -182,7 +186,13 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
 
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")"));
-            }else{
+
+                if (noGuiReview) {
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of these.").reset());
+                } else {
+                    System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stops that need manual position review: ").reset().a(stopsToReview));
+                }
+            } else {
                 System.out.println(ansi().fg(Ansi.Color.YELLOW).a("No OSM stop got matched with GTFS data!").reset());
             }
 

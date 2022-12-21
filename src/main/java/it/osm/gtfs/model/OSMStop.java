@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 
 public class OSMStop extends Stop {
 
+    private boolean needsPositionReview = false;
     private boolean isRevised = false;
 
     private Boolean isBusOrTramStopPosition = false; //TODO: maybe rename to just isStopPosition?
@@ -21,6 +22,10 @@ public class OSMStop extends Stop {
         return (originalXMLNode == null) ? null : originalXMLNode.getAttributes().getNamedItem("id").getNodeValue();
     }
 
+    public void setNeedsPositionReview(boolean needsGuiReview) {
+        this.needsPositionReview = needsGuiReview;
+    }
+
     public void setIsRevised(boolean isRevised) {
         this.isRevised = isRevised;
     }
@@ -35,6 +40,10 @@ public class OSMStop extends Stop {
 
     public boolean isRevised() {
         return isRevised;
+    }
+
+    public boolean needsPositionReview() {
+        return needsPositionReview;
     }
 
 
