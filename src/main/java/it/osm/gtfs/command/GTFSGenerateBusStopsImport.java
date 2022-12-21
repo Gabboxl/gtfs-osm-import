@@ -59,11 +59,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
-        //fase di matching delle fermate di OSM con quelle GTFS - in particolare la funzione matches() ritorna true se due fermate sono le stesse secondo l'algoritmo della funzione
+        //matching phase between GTFS and OSM stops - check the StopUtils' match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
         for (GTFSStop gtfsStop : gtfsStopsList){
             for (OSMStop osmStop : osmStopsList){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
-                    if (osmStop.isTramStop()){
+                    if (osmStop.isTramStop()) {
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
@@ -76,11 +76,9 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                             gtfsStop.osmStopMatchedWith.gtfsStopMatchedWith = null;
 
-                            //throw new MultipleMatchException(gtfsStop, osmStop, "Multiple railway stop match found, this is currently unsupported.");
                         }
 
                         gtfsStop.railwayStopMatchedWith = osmStop;
-
 
                     } else {
                         if(osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null){
@@ -96,8 +94,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                             //in case the current loop stop is the closest one to the gtfs coordinates, we remove the matched gtfs stop from the  already matched osm stop
                             gtfsStop.osmStopMatchedWith.gtfsStopMatchedWith = null;
-
-                            //throw new MultipleMatchException(gtfsStop, osmStop, "Multiple bus stop match found, this is currently unsupported.");
                         }
 
                         gtfsStop.stopsMatchedWith.add(osmStop);
@@ -115,9 +111,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         //Stops matched with gtfs_id (also checking stops that didn't get matched)
         {
-            //FIXME: check if other tags of the node are in line with GTFS data
+            //TODO: check if other tags of the node are in line with GTFS data
 
-            //TODO: probably the matched_stops counter can be moved and incremented in the first matching phase up there
             int matched_stops = 0;
             int not_matched_osm_stops = 0;
 
@@ -129,14 +124,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                 if (osmStop.gtfsStopMatchedWith != null){
 
+
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
-
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
-
-
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
-
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 
                     //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
@@ -189,6 +181,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             if (matched_stops > 0){
                 bufferMatchedStops.end();
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
+
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")"));
             }else{
                 System.out.println(ansi().fg(Ansi.Color.YELLOW).a("No OSM stop got matched with GTFS data!").reset());
@@ -214,7 +207,9 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                     buffer.appendNode(gtfsStop.getNewXMLNode(buffer));
                 }
             }
+
             buffer.end();
+
             if (new_stops_from_gtfs > 0){
                 buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm"));
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ".osm)").reset());
