@@ -81,7 +81,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
         String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
         File filebus = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nbus.osm");
-        urlbus = urlbus.replace(" ", "%20"); //fixo la richiesta sostituendo gli spazi con la codifica uri visto che la richeista è buggata con httpurlconnection e non va
+        urlbus = urlbus.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
         DownloadUtils.download(urlbus, filebus);
 
         Thread.sleep(1000L);
