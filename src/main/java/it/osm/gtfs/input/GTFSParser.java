@@ -221,13 +221,13 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, StopsList> readStopTimes(String fName, Map<String, OSMStop> osmstops) throws IOException{
+    public static Map<String, StopsList> readStopTimes(String fName, Map<String, OSMStop> osmstops) throws IOException {
         Map<String, StopsList> result = new TreeMap<String, StopsList>();
         Set<String> missingStops = new HashSet<String>();
         int count = 0;
 
         String thisLine;
-        String [] elements;
+        String [] thisLineElements;
         int trip_id=-1, stop_id=-1, stop_sequence=-1, arrival_time = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
@@ -239,8 +239,10 @@ public class GTFSParser {
 
             if (isFirstLine) {
                 isFirstLine = false;
+
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
+
                 for (int i=0; i<keys.length; i++) {
                     switch (keys[i]) {
                         case "trip_id" -> trip_id = i;
@@ -249,23 +251,30 @@ public class GTFSParser {
                         case "stop_sequence" -> stop_sequence = i;
                     }
                 }
-            } else {
-                elements = getElementsFromLine(thisLine);
 
-                if (elements[trip_id].length() > 0){
-                    StopsList s = result.get(elements[trip_id]);
-                    if (s == null){
-                        s = new StopsList(elements[trip_id]);
-                        result.put(elements[trip_id], s);
+            } else {
+                thisLineElements = getElementsFromLine(thisLine);
+
+                if (thisLineElements[trip_id].length() > 0){
+                    StopsList stopsList = result.get(thisLineElements[trip_id]);
+
+                    if (stopsList == null){
+                        stopsList = new StopsList(thisLineElements[trip_id]);
+                        result.put(thisLineElements[trip_id], stopsList);
                     }
-                    String gtfsID = elements[stop_id];
-                    if (osmstops.get(gtfsID) != null){
-                        s.pushPoint(Long.parseLong(elements[stop_sequence]), osmstops.get(gtfsID), elements[arrival_time]);
-                    }else{
-                        s.invalidate();
+
+                    String gtfsID = thisLineElements[stop_id];
+
+                    if (osmstops.get(gtfsID) != null) {
+
+                        stopsList.pushPoint(Long.parseLong(thisLineElements[stop_sequence]), osmstops.get(gtfsID), thisLineElements[arrival_time]);
+                    } else {
+                        stopsList.invalidate();
+
                         if (!missingStops.contains(gtfsID)){
                             missingStops.add(gtfsID);
-                            System.err.println("Warning: No stop found with gtfs_id = " + gtfsID + ". This Trip " + elements[trip_id] + " and maybe others won't be generated!");
+                            System.err.println("Warning: No stop found with gtfs_id = " + gtfsID + ". This Trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
+                            System.err.println("Make sure the OSM stops have updated GTFS data applied!");
                         }
                     }
                 }
@@ -275,7 +284,7 @@ public class GTFSParser {
         br.close();
 
         if (missingStops.size() > 0)
-            System.err.println("Warning: Some stops weren't found, not all trip have been generated.");
+            System.err.println("Warning: Some stops weren't found, not all trips have been generated.");
         return result;
     }
 
