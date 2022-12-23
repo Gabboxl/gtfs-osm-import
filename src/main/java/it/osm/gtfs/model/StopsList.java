@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-//probably this is only a list of gtfsstops? ?
 public class StopsList {
     private final String id;
     private Map<Long, OSMStop> stops;

@@ -4,6 +4,7 @@ import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.model.Relation;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
@@ -29,7 +30,7 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
         System.out.println("Step 1/4 Reading OSM Stops");
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
         System.out.println("Step 2/4 Indexing OSM Stops");
-        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);
 

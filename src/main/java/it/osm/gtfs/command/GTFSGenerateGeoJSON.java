@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import it.osm.gtfs.utils.StopsUtils;
 import org.json.JSONException;
 import org.json.JSONStringer;
 import org.json.JSONWriter;
@@ -41,7 +42,7 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
         System.out.println("Indexing OSM Stops...");
-        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         System.out.println("Parsing OSM Relations...");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH),

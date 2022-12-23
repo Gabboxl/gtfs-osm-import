@@ -33,6 +33,7 @@ import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import it.osm.gtfs.utils.StopsUtils;
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.Multimap;
@@ -44,8 +45,8 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
-        Map<String, OSMStop> osmstopsGTFSId = OSMParser.applyGTFSIndex(osmStops);
-        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsGTFSId = StopsUtils.getGTFSIdOSMStopMap(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);

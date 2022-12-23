@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,30 +51,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public class OSMParser {
-
-    public static Map<String, OSMStop> applyGTFSIndex(List<OSMStop> stops) {
-        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
-
-        for (OSMStop stop : stops){
-            if (stop.getGtfsId() != null && !stop.getGtfsId().equals("")){
-                result.put(stop.getGtfsId(), stop);
-            }
-        }
-
-        return result;
-    }
-
-    public static Map<String, OSMStop> applyOSMIndex(List<OSMStop> stops) {
-        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
-
-        for (OSMStop stop : stops){
-            if (stop.getOSMId() != null){
-                result.put(stop.getOSMId(), stop);
-            }
-        }
-
-        return result;
-    }
 
     public static List<OSMStop> readOSMStops(String fileName) throws ParserConfigurationException, SAXException, IOException{
         List<OSMStop> result = new ArrayList<OSMStop>();

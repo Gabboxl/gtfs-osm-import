@@ -32,6 +32,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 import com.google.common.collect.Multimap;
+import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
@@ -49,7 +50,7 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
-        Map<String, OSMStop> osmstops = OSMParser.applyGTFSIndex(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH));
+        Map<String, OSMStop> osmstops = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH));
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
         Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstops);

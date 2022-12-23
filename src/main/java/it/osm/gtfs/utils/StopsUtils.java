@@ -3,6 +3,10 @@ package it.osm.gtfs.utils;
 import it.osm.gtfs.model.GTFSStop;
 import it.osm.gtfs.model.OSMStop;
 
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * this class contains methods to automate things related to Stops
  */
@@ -42,4 +46,27 @@ public class StopsUtils {
     }
 
 
+    public static Map<String, OSMStop> getGTFSIdOSMStopMap(List<OSMStop> stops) {
+        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
+
+        for (OSMStop stop : stops){
+            if (stop.getGtfsId() != null && !stop.getGtfsId().equals("")){
+                result.put(stop.getGtfsId(), stop);
+            }
+        }
+
+        return result;
+    }
+
+    public static Map<String, OSMStop> getOSMIdOSMStopMap(List<OSMStop> stops) {
+        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
+
+        for (OSMStop stop : stops){
+            if (stop.getOSMId() != null){
+                result.put(stop.getOSMId(), stop);
+            }
+        }
+
+        return result;
+    }
 }

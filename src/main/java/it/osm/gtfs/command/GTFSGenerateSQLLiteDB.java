@@ -4,7 +4,6 @@ import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Stop;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import it.osm.gtfs.utils.StopsUtils;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
@@ -31,7 +31,7 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
 
         System.out.println("Indexing OSM stops...");
-        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         System.out.println("Parsing OSM relations...");
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);

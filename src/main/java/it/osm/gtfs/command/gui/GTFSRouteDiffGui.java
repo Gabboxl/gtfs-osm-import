@@ -34,6 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.xml.parsers.ParserConfigurationException;
 
+import it.osm.gtfs.utils.StopsUtils;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.util.logging.Logger;
@@ -104,8 +105,8 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         List<Trip> trips;
 
         osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
-        osmstopsGTFSId = OSMParser.applyGTFSIndex(osmStops);
-        osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        osmstopsGTFSId = StopsUtils.getGTFSIdOSMStopMap(osmStops);
+        osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         osmRels = convertoToWigthed(OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID));
 
         routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);

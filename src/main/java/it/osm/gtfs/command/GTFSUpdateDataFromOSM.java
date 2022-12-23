@@ -32,6 +32,7 @@ import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.xml.sax.SAXException;
@@ -122,7 +123,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
     private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, InterruptedException{
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
-        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
 
@@ -136,7 +137,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
     private static void updateFullRels(Map<String, Integer> idWithVersion) throws ParserConfigurationException, SAXException, IOException, InterruptedException{
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
-        Map<String, OSMStop> osmstopsOsmID = OSMParser.applyOSMIndex(osmStops);
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         List<File> sorted = new ArrayList<File>();
 
