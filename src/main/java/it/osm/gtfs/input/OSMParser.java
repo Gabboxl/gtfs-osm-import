@@ -113,7 +113,7 @@ public class OSMParser {
                 }
             }
 
-            //if the current osm stop has a different operator tag value than the one specified in the properties then we skip it
+            //if the current osm stop has a different operator tag value than the one specified in the properties we skip it
             if(!readStopsOfAnyOperator && (osmStop.getOperator() == null || !osmStop.getOperator().equalsIgnoreCase(GTFSImportSettings.getInstance().getOperator()))) {
                 //System.out.println(osmStop.getOperator());
 
