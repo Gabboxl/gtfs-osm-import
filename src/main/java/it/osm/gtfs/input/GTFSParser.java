@@ -221,7 +221,7 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, StopsList> readStopTimes(String fName, Map<String, OSMStop> osmStopsMap) throws IOException {
+    public static Map<String, StopsList> readStopTimes(String fName, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
         Map<String, StopsList> result = new TreeMap<String, StopsList>();
         Set<String> missingStops = new HashSet<String>();
         int count = 0;
@@ -264,17 +264,17 @@ public class GTFSParser {
                         result.put(thisLineElements[trip_id], stopsList);
                     }
 
-                    String gtfsID = thisLineElements[stop_id];
+                    String thisLineGtfsID = thisLineElements[stop_id];
 
-                    if (osmStopsMap.get(gtfsID) != null) {
+                    if (gtfsIdOsmStopMap.get(thisLineGtfsID) != null) {
 
-                        stopsList.pushPoint(Long.parseLong(thisLineElements[stop_sequence]), osmStopsMap.get(gtfsID), thisLineElements[arrival_time]);
+                        stopsList.pushPoint(Long.parseLong(thisLineElements[stop_sequence]), gtfsIdOsmStopMap.get(thisLineGtfsID), thisLineElements[arrival_time]);
                     } else {
                         stopsList.invalidate();
 
-                        if (!missingStops.contains(gtfsID)) {
-                            missingStops.add(gtfsID);
-                            System.err.println("Warning: No stop found with gtfs_id = " + gtfsID + ". This Trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
+                        if (!missingStops.contains(thisLineGtfsID)) {
+                            missingStops.add(thisLineGtfsID);
+                            System.err.println("Warning: No stop found with gtfs_id = " + thisLineGtfsID + ". This Trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
                             System.err.println("Make sure you imported the new GTFS stops data into OSM before running this command!");
                         }
                     }

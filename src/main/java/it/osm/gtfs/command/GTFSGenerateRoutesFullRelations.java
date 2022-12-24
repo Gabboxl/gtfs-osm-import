@@ -46,13 +46,13 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
-        Map<String, OSMStop> osmstops = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue));
+        Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue));
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
-        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstops);
+        Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, gtfsIdOsmStopMap);
         List<Trip> trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, stopTimes);
-        BoundingBox bb = new BoundingBox(osmstops.values());
+        BoundingBox bb = new BoundingBox(gtfsIdOsmStopMap.values());
 
         //sorting set
         Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);

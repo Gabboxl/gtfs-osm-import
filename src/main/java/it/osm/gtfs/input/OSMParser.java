@@ -127,6 +127,7 @@ public class OSMParser {
                 else
                     throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
+                //TODO: maybe this code could be a duplicate of the multiple-matching stops code in GTFSGenerateBusStopsImport?
             //Check duplicate ref in osm
             if (osmStop.getCode() != null){
                 if (osmStop.isBusOrTramStopPosition() == null || !osmStop.isBusOrTramStopPosition()){
