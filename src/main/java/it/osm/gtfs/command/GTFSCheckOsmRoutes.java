@@ -24,11 +24,14 @@ public class GTFSCheckOsmRoutes implements Callable<Void> {
     @CommandLine.Option(names = "--osmid", interactive = true)
     String osmId;
 
+    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
+    Boolean checkStopsOfAnyOperatorTagValue = false;
+
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
         System.out.println("Step 1/4 Reading OSM Stops");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
         System.out.println("Step 2/4 Indexing OSM Stops");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");

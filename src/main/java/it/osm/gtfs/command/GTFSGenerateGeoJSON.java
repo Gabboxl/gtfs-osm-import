@@ -36,10 +36,13 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
 public class GTFSGenerateGeoJSON implements Callable<Void> {
 
+    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
+    Boolean checkStopsOfAnyOperatorTagValue = false;
+
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM Stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);

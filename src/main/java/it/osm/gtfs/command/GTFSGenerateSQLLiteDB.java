@@ -25,10 +25,13 @@ import javax.xml.parsers.ParserConfigurationException;
 @CommandLine.Command(name = "sqlite", description = "Generate a sqlite db containg osm relations")
 public class GTFSGenerateSQLLiteDB implements Callable<Void> {
 
+    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
+    Boolean checkStopsOfAnyOperatorTagValue = false;
+
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);

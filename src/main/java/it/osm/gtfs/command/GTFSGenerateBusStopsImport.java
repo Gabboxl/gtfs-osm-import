@@ -46,7 +46,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsWithAnyOperatorTagValue = false;
+    Boolean checkStopsOfAnyOperatorTagValue = false;
 
     @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review, for every node that is too distant from the GTFS coords generates a new stop, and then it just generates the new change files.")
     Boolean noGuiReview = false;
@@ -58,7 +58,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
 
-        List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH);
+        List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
         //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
         for (GTFSStop gtfsStop : gtfsStopsList){
@@ -128,10 +128,6 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 //we check if the osm stop got matched with a gtfs stop AND only IF the osm stop needs the position review but the user doesn't want to review the stops then we consider the stop as not matched and we handle it in the else case
                 if (osmStop.gtfsStopMatchedWith != null && !(osmStop.needsPositionReview() && noGuiReview)){
 
-                    if (osmStop.needsPositionReview()) {
-                        stopsToReview++;
-                    }
-
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
                     OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
@@ -153,6 +149,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "platform");
                     }
 
+                    if (osmStop.needsPositionReview()) {
+                        stopsToReview++;
+                    }
+
                     //add the node to the buffer of matched stops
                     bufferMatchedStops.appendNode(originalNode);
                     matched_stops++;
@@ -160,29 +160,15 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 } else {
                     String notMatchedStringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " didn't get matched to a GTFS stop as either they are too distant or the ref code is no more available in gtfs.";
 
-                    //if the user wants to consider any stop with any operator tag value
-                    if(checkStopsWithAnyOperatorTagValue) {
-                         //System.out.println(osmStop.getOperator());
-                        System.out.println(notMatchedStringOutput);
+                    System.out.println(notMatchedStringOutput);
 
-                        not_matched_osm_stops++;
+                    not_matched_osm_stops++;
 
-                        bufferNotMatchedStops.appendNode(originalNode);
+                    bufferNotMatchedStops.appendNode(originalNode);
 
-                    } else {
-                        if(osmStop.getOperator() != null && osmStop.getOperator().equals(GTFSImportSettings.getInstance().getOperator())) {
-                            System.out.println(notMatchedStringOutput);
-
-                            bufferNotMatchedStops.appendNode(originalNode);
-                            not_matched_osm_stops++;
-                        } else {
-                            String operatorTagNotMatchedOutput = "Skipping OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " as its operator tag value is different than the one specified in the properties file.";
-
-                            System.out.println(operatorTagNotMatchedOutput);
-                        }
-                    }
                 }
             }
+
 
             if (matched_stops > 0){
                 bufferMatchedStops.end();

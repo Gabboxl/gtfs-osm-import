@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
+import org.fusesource.jansi.Ansi;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -50,10 +51,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class OSMParser {
 
-    public static List<OSMStop> readOSMStops(String fileName) throws ParserConfigurationException, SAXException, IOException{
-        List<OSMStop> result = new ArrayList<OSMStop>();
+    public static List<OSMStop> readOSMStops(String fileName, boolean readStopsOfAnyOperator) throws ParserConfigurationException, SAXException, IOException {
+        List<OSMStop> osmStopsListOutput = new ArrayList<OSMStop>();
         Multimap<String, OSMStop> refBuses = HashMultimap.create(); //?
         Multimap<String, OSMStop> refRails = HashMultimap.create(); //??
 
@@ -70,6 +73,7 @@ public class OSMParser {
             OSMStop osmStop = new OSMStop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
             osmStop.originalXMLNode = fstNode;
             NodeList att = fstNode.getChildNodes();
+
             for (int t = 0; t < att.getLength(); t++) {
                 Node attNode = att.item(t);
 
@@ -109,12 +113,19 @@ public class OSMParser {
                 }
             }
 
+            //if the current osm stop has a different operator tag value than the one specified in the properties then we skip it
+            if(!readStopsOfAnyOperator && (osmStop.getOperator() == null || !osmStop.getOperator().equalsIgnoreCase(GTFSImportSettings.getInstance().getOperator()))) {
+                //System.out.println(osmStop.getOperator());
+
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM Stop node ID " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " as its operator tag value (" + osmStop.getOperator() +") is different than the one specified in the properties file.").reset());
+                continue;
+            }
 
             if (osmStop.isTramStop() == null)
                 if (osmStop.isBusOrTramStopPosition())
                     continue; //ignore unsupported stop positions (like ferries)
                 else
-                    throw new IllegalArgumentException("Unknown node type for node: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
+                    throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
             //Check duplicate ref in osm
             if (osmStop.getCode() != null){
@@ -141,10 +152,10 @@ public class OSMParser {
                     }
                 }
             }
-            result.add(osmStop);
+            osmStopsListOutput.add(osmStop);
         }
 
-        return result;
+        return osmStopsListOutput;
     }
 
     public static List<Relation> readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException{
