@@ -45,10 +45,10 @@ import org.xml.sax.SAXException;
 public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, KeyListener {
     private static final long serialVersionUID = 1L;
 
-    private JList<String> gtfsList;
-    private JList<String> gtfsStopList;
-    private JList<String> osmStopList;
-    private JList<String> osmList;
+    private final JList<String> gtfsList;
+    private final JList<String> gtfsStopList;
+    private final JList<String> osmStopList;
+    private final JList<String> osmList;
 
     List<Trip> uniqueTrips;
     Set<Trip> uniqueTripsMarkerOk = new HashSet<Trip>();
