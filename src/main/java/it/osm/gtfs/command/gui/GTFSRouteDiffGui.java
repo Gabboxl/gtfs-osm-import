@@ -68,7 +68,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         populateMatchedGTFSTrips();
         {
             gtfsList = createEmptyJList();
-            gtfsList.setCellRenderer(new GTFSListCellRendered());
+            gtfsList.setCellRenderer(new GTFSListCellRenderer());
             gtfsList.addListSelectionListener(this);
             gtfsList.addKeyListener(this);
             updateGTFSBind();
@@ -76,13 +76,13 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         }
         {
             gtfsStopList = createEmptyJList();
-            gtfsStopList.setCellRenderer(new GTFSStopsCellRendered());
+            gtfsStopList.setCellRenderer(new GTFSStopsCellRenderer());
             updateStopBinding(currentGTFSStops, gtfsStopList);
             add(new JScrollPane(gtfsStopList));
         }
         {
             osmStopList = createEmptyJList();
-            osmStopList.setCellRenderer(new OSMStopsCellRendered());
+            osmStopList.setCellRenderer(new OSMStopsCellRenderer());
             updateStopBinding(currentOSMStops, osmStopList);
             add(new JScrollPane(osmStopList));
         }
@@ -321,7 +321,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         }
     }
 
-    public class GTFSListCellRendered extends DefaultListCellRenderer{
+    public class GTFSListCellRenderer extends DefaultListCellRenderer{
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -335,7 +335,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             return c;
         }
     }
-    public class GTFSStopsCellRendered extends DefaultListCellRenderer{
+    public class GTFSStopsCellRenderer extends DefaultListCellRenderer{
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -347,7 +347,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             return c;
         }
     }
-    public class OSMStopsCellRendered extends DefaultListCellRenderer{
+    public class OSMStopsCellRenderer extends DefaultListCellRenderer{
         private static final long serialVersionUID = 1L;
 
         @Override
