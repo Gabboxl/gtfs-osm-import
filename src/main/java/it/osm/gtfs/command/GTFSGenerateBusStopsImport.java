@@ -16,7 +16,6 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.enums.WheelchairAccess;
-import it.osm.gtfs.exceptions.MultipleMatchException;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.BoundingBox;
@@ -53,7 +52,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
 
     @Override
-    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException, MultipleMatchException {
+    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
 
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
