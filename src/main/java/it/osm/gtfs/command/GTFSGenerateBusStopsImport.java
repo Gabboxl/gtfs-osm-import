@@ -195,7 +195,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
 
                 if (noGuiReview) {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of these with the updated coordinates.").reset());
+                    System.out.println(ansi().fg(Ansi.Color.CYAN).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of those removed stops with the updated coordinates.").reset());
                 } else {
                     System.out.println("(" + ansi().fg(Ansi.Color.CYAN).a("Stops that need manual position review: ").reset().a(stopsToReview) + ")");
                 }
@@ -213,20 +213,22 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         //stops position review with GUI
         //TODO: only execute if the noreview flag is set to false
         {
-            System.out.println("Starting stop positions review...");
+            if(!noGuiReview) {
+                System.out.println("Starting stop positions review...");
 
-            final Object lockObject = new Object();
+                final Object lockObject = new Object();
 
-            final GTFSStopsReviewGui reviewGui = new GTFSStopsReviewGui(osmStopsToReview, finalGeopositions, lockObject);
+                final GTFSStopsReviewGui reviewGui = new GTFSStopsReviewGui(osmStopsToReview, finalGeopositions, lockObject);
 
-            synchronized(lockObject) { //i don't really know if this lock-sync thing is really needed to make the tool stay up when the gui is started
+                synchronized (lockObject) { //i don't really know if this lock-sync thing is really needed to make the tool stay up when the gui is started
                     try {
                         lockObject.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                }
+                System.out.println("Stop review done");
             }
-            System.out.println("Stop review done");
 
 
         }
