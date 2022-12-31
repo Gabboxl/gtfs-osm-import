@@ -354,7 +354,7 @@ public class GTFSStopsReviewGui
         });
 
         constraints.fill = GridBagConstraints.NONE;
-        constraints.ipady = 0;       //reset to default
+        constraints.ipady = 10;       //reset to default
         constraints.weighty = 0;   //request any extra vertical space
         constraints.anchor = GridBagConstraints.CENTER; //bottom of space
         constraints.insets = new Insets(10,0,0,0);  //top padding
@@ -376,7 +376,7 @@ public class GTFSStopsReviewGui
         });
 
         constraints.fill = GridBagConstraints.NONE;
-        constraints.ipady = 0;       //reset to default
+        constraints.ipady = 10;       //reset to default
         constraints.weighty = 0;   //request any extra vertical space
         constraints.anchor = GridBagConstraints.CENTER; //bottom of space
         constraints.insets = new Insets(10,0,0,0);  //top padding
