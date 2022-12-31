@@ -66,7 +66,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
 
             for (Trip trip:uniqueTrips){
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating full way-matched relations...").reset());
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
 
                 int count = Collections.frequency(allTrips, trip);
 
@@ -93,13 +93,16 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                 f.close();
             }
 
-            System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
 
-            if(includeStopsOnly == null || !includeStopsOnly) {
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nBe aware that the IDs of OSM's ways can change anytime!").reset());
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nThis means you can encounter problems when uploading the relations to OSM in a different time window.").reset());
-            }
         }
+
+        System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
+
+        if(includeStopsOnly == null || !includeStopsOnly) {
+            System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nBe aware that the IDs of OSM's ways can change anytime!").reset());
+            System.out.println(ansi().fg(Ansi.Color.YELLOW).a("This means you can encounter problems when uploading the relations to OSM in a different time window.").reset());
+        }
+
         return null;
     }
 }

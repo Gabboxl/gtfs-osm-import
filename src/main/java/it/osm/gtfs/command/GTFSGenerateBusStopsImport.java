@@ -180,6 +180,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                     not_matched_osm_stops++;
 
+                    //TODO: for not matched stops we should signal that the node should be removed in the XML, like action = delete or something like that
                     bufferNotMatchedStops.appendNode(originalNode);
 
                 }
@@ -210,6 +211,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         }
 
         //stops position review with GUI
+        //TODO: only execute if the noreview flag is set to false
         {
             System.out.println("Starting stop positions review...");
 
