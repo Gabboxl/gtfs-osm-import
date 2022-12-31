@@ -195,8 +195,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         }
 
         //stops position review with GUI
-        //TODO: only execute if the noreview flag is set to false
         {
+            //only execute if the noreview flag is set to false
             if(!noGuiReview) {
                 System.out.println("Starting stop positions review...");
 
