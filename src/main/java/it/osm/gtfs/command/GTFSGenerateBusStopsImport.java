@@ -16,7 +16,6 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.command.gui.GTFSStopsReviewGui;
-import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.BoundingBox;
@@ -57,7 +56,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
     final ArrayList<OSMStop> osmStopsToReview = new ArrayList<>(); //TODO: maybe find a better place for these two variables?
 
-    final Map<OSMStop, GeoPosition> finalGeopositions = new HashMap<>();
+    final Map<OSMStop, GeoPosition> finalReviewedGeopositions = new HashMap<>();
 
 
     @Override
@@ -171,17 +170,53 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             }
 
 
+
+            //stops position review with GUI
+                //only execute if the noreview flag is set to false
+                if(!noGuiReview && !osmStopsToReview.isEmpty()) {
+                    System.out.println("Starting stop positions review...");
+
+                    final Object lockObject = new Object();
+
+                    final GTFSStopsReviewGui reviewGui = new GTFSStopsReviewGui(osmStopsToReview, finalReviewedGeopositions, lockObject);
+
+                    synchronized (lockObject) { //i don't really know if this lock-sync thing is really needed to make the tool stay up when the gui is started
+                        try {
+                            lockObject.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    System.out.println("Stop review done");
+                    System.out.println("Saving accepted coordinates...");
+
+                    for (OSMStop reviewedOsmStop : osmStopsToReview){
+                        Element originalNode = (Element) reviewedOsmStop.originalXMLNode;
+
+                        GeoPosition chosenGeoPosition = finalReviewedGeopositions.get(reviewedOsmStop);
+
+                        //we set the new chosen coordinates to the node
+                        originalNode.setAttribute("lat", String.valueOf(chosenGeoPosition.getLatitude()));
+                        originalNode.setAttribute("lon", String.valueOf(chosenGeoPosition.getLatitude()));
+
+                        //we add the node with new coords to the matched stops buffer
+                        bufferMatchedStops.appendNode(originalNode);
+                    }
+                }
+
+
             if (matched_stops > 0) {
                 bufferMatchedStops.end();
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
 
 
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Total Matched OSM stops with GTFS data: ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
 
                 if (noGuiReview) {
-                    System.out.println(ansi().fg(Ansi.Color.CYAN).a("You chose to not review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of those removed stops with the updated coordinates.").reset());
+                    System.out.println(ansi().fg(Ansi.Color.CYAN).a("You chose to NOT review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of those removed stops with the updated coordinates.").reset());
                 } else {
-                    System.out.println("(" + ansi().fg(Ansi.Color.CYAN).a("Stops that need manual position review: ").reset().a(stopsToReview) + ")");
+                    System.out.println("(" + ansi().fg(Ansi.Color.CYAN).a("Matched stops that need manual position review: ").reset().a(stopsToReview) + ")");
                 }
             } else {
                 System.out.println(ansi().fg(Ansi.Color.YELLOW).a("No OSM stop got matched with GTFS data!").reset());
@@ -192,30 +227,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 bufferNotMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS));
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("NOT MATCHED OSM stops that should be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")").reset());
             }
-        }
-
-        //stops position review with GUI
-        {
-            //only execute if the noreview flag is set to false
-            if(!noGuiReview) {
-                System.out.println("Starting stop positions review...");
-
-                final Object lockObject = new Object();
-
-                final GTFSStopsReviewGui reviewGui = new GTFSStopsReviewGui(osmStopsToReview, finalGeopositions, lockObject);
-
-                synchronized (lockObject) { //i don't really know if this lock-sync thing is really needed to make the tool stay up when the gui is started
-                    try {
-                        lockObject.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                System.out.println("Stop review done");
-            }
-
 
         }
+
+
 
         //new stops from gtfs data
         {

@@ -64,12 +64,12 @@ public class GTFSStopsReviewGui
 
     final ArrayList<OSMStop> osmStopsToReview;
 
-    final Map<OSMStop, GeoPosition> finalGeopositions;
+    final Map<OSMStop, GeoPosition> finalReviewedGeopositions;
 
 
-    public GTFSStopsReviewGui(ArrayList<OSMStop> osmStopsToReview, Map<OSMStop, GeoPosition> finalGeopositions, Object lockObject) {
+    public GTFSStopsReviewGui(ArrayList<OSMStop> osmStopsToReview, Map<OSMStop, GeoPosition> finalReviewedGeopositions, Object lockObject) {
         this.osmStopsToReview = osmStopsToReview;
-        this.finalGeopositions = finalGeopositions;
+        this.finalReviewedGeopositions = finalReviewedGeopositions;
 
 
         osmCoordsStopMap = new JXMapKit();
@@ -347,7 +347,7 @@ public class GTFSStopsReviewGui
 
             OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
 
-            finalGeopositions.put(currentStop, currentStop.getGeoPosition()); //we put the OSM coords in the map
+            finalReviewedGeopositions.put(currentStop, currentStop.getGeoPosition()); //we put the OSM coords in the map
 
 
             nextStopToReview(); //TODO: to substitute with nextstoptoreview()
@@ -370,7 +370,7 @@ public class GTFSStopsReviewGui
         btChooseGTFS.addActionListener(actionEvent -> {
             OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
 
-            finalGeopositions.put(currentStop, currentStop.gtfsStopMatchedWith.getGeoPosition()); //we put the GTFS coords in the map
+            finalReviewedGeopositions.put(currentStop, currentStop.gtfsStopMatchedWith.getGeoPosition()); //we put the GTFS coords in the map
 
             nextStopToReview(); //TODO: to substitute with nextstoptoreview()
         });
@@ -488,7 +488,7 @@ public class GTFSStopsReviewGui
 
         OSMStop newstop;
 
-        while (reorderiterator.hasNext() && finalGeopositions.containsKey(reorderedArray.get(reorderiterator.nextIndex()))){
+        while (reorderiterator.hasNext() && finalReviewedGeopositions.containsKey(reorderedArray.get(reorderiterator.nextIndex()))){
             newstop = reorderiterator.next();
         }
 
@@ -567,11 +567,11 @@ public class GTFSStopsReviewGui
 
             setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith.getName()) + " (ref: " + thisCellStop.getCode() + ")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
 
-            if (finalGeopositions.get(thisCellStop) != null && finalGeopositions.get(thisCellStop).equals(thisCellStop.getGeoPosition())){ //the user accepted the OSM coordinates
+            if (finalReviewedGeopositions.get(thisCellStop) != null && finalReviewedGeopositions.get(thisCellStop).equals(thisCellStop.getGeoPosition())){ //the user accepted the OSM coordinates
                 setBackground(new Color(120, 255, 120));
 
                 setText(getText() + " / OSM Accepted");
-            } else if (finalGeopositions.get(thisCellStop) != null && finalGeopositions.get(thisCellStop).equals(thisCellStop.gtfsStopMatchedWith.getGeoPosition())){ //the user accepted the GTFS coordinates
+            } else if (finalReviewedGeopositions.get(thisCellStop) != null && finalReviewedGeopositions.get(thisCellStop).equals(thisCellStop.gtfsStopMatchedWith.getGeoPosition())){ //the user accepted the GTFS coordinates
                 setBackground(new Color(138, 234, 255));
 
                 setText(getText() + " / GTFS Accepted");
