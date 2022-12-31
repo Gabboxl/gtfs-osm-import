@@ -153,8 +153,9 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                         //add the node to the buffer of matched stops
                         bufferMatchedStops.appendNode(originalNode);
-                        matched_stops++;
                     }
+
+                    matched_stops++;
 
                 } else {
                     String notMatchedStringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " didn't get matched to a GTFS stop as either they are too distant or the ref code is no more available in gtfs.";
