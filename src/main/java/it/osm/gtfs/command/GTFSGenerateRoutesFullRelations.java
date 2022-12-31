@@ -38,7 +38,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "fullrels", description = "Generate full releations including ways and stops (very long!)")
 public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-s", "--stops"}, description = "Generate stops-only relations (skips ways matching)")
+    @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips ways matching)")
     Boolean noOsmWayMatching = false;
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
