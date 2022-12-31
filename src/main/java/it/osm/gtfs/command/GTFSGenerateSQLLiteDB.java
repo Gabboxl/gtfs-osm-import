@@ -99,10 +99,10 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
             stm.setLong(1, Long.parseLong(s.getOSMId()));
             stm.setString(2, s.getCode());
             stm.setString(3, s.getName());
-            stm.setDouble(4, s.getLat());
-            stm.setDouble(5, s.getLon());
-            stm.setLong(6, getTileX(s.getLat(), s.getLon(), 18, 256));
-            stm.setLong(7, getTileY(s.getLat(), s.getLon(), 18, 256));
+            stm.setDouble(4, s.getGeoPosition().getLatitude());
+            stm.setDouble(5, s.getGeoPosition().getLongitude());
+            stm.setLong(6, getTileX(s.getGeoPosition().getLatitude(), s.getGeoPosition().getLongitude(), 18, 256));
+            stm.setLong(7, getTileY(s.getGeoPosition().getLatitude(), s.getGeoPosition().getLongitude(), 18, 256));
             stm.executeUpdate();
         }
     }

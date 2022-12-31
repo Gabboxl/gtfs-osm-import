@@ -73,6 +73,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
         }else{
             gs.setCode(fixBusStopRef(gs.getCode()));
         }
+        //TODO: codice da revisionare per ref non numerici
 		/*try{
 			Integer.parseInt(gs.getCode());
 		}catch(Exception e){

@@ -1,6 +1,7 @@
 package it.osm.gtfs.model;
 
 import it.osm.gtfs.enums.WheelchairAccess;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.w3c.dom.Node;
 
 public class OSMStop extends Stop {
@@ -14,8 +15,8 @@ public class OSMStop extends Stop {
     public Node originalXMLNode;
 
 
-    public OSMStop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {
-        super(gtfsId, code, lat, lon, name, operator, wheelchairAccessibility);
+    public OSMStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, WheelchairAccess wheelchairAccessibility) {
+        super(gtfsId, code, geoPosition, name, operator, wheelchairAccessibility);
     }
 
     public String getOSMId() {
@@ -49,8 +50,8 @@ public class OSMStop extends Stop {
 
     @Override
     public String toString() {
-        return "Stop [gtfsId=" + getGtfsId() + ", code=" + getCode() + ", lat=" + getLat()
-                + ", lon=" + getLon() + ", name=" + getName() + ", operator=" + getOperator() + ", accessibility=" + getWheelchairAccessibility() +
+        return "Stop [gtfsId=" + getGtfsId() + ", code=" + getCode() + ", lat=" + getGeoPosition().getLatitude()
+                + ", lon=" + getGeoPosition().getLongitude() + ", name=" + getName() + ", operator=" + getOperator() + ", accessibility=" + getWheelchairAccessibility() +
                 ((originalXMLNode != null) ? ", osmid=" + getOSMId() : "" )
                 + ", isTramStop=" + isTramStop() + ", isBusStopPosition=" + isBusOrTramStopPosition() +
                 ", isRevised=" + isRevised() + "]";

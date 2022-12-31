@@ -16,6 +16,7 @@ package it.osm.gtfs.model;
 
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,9 @@ import java.util.List;
 public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private String gtfsId;
     private String code;
-    private Double lat;
-    private Double lon;
+
+    //TODO: maybe we should borrow the GeoPosition class from jxmapviewer and create a copy for ourselves
+    private GeoPosition geoPosition;
     private String name;
     private String operator;
     private WheelchairAccess wheelchairAccessibility;
@@ -36,12 +38,11 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public List<Stop> stopsMatchedWith = new ArrayList<Stop>(); //TODO: this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently semi-supported but not handled in a GUI in the tool
 
 
-    protected Stop(String gtfsId, String code, Double lat, Double lon, String name, String operator, WheelchairAccess wheelchairAccessibility) {
+    protected Stop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, WheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;
         this.code = code;
-        this.lat = lat;
-        this.lon = lon;
+        this.geoPosition = geoPosition;
         this.name = name;
         this.operator = operator;
         this.wheelchairAccessibility = wheelchairAccessibility;
@@ -53,12 +54,10 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public String getCode() {
         return code;
     }
-    public Double getLat() {
-        return lat;
+    public GeoPosition getGeoPosition() {
+        return  geoPosition;
     }
-    public Double getLon() {
-        return lon;
-    }
+
     public String getName() {
         return name;
     }
@@ -85,12 +84,8 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
         this.code = GTFSImportSettings.getInstance().getPlugin().fixBusStopRef(code);
     }
 
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public void setLon(Double lon) {
-        this.lon = lon;
+    public void setGeoPosition(GeoPosition geoPosition) {
+            this.geoPosition = geoPosition;
     }
 
     public void setName(String name) {

@@ -20,7 +20,7 @@ public class StopsUtils {
      */
     public static boolean match(GTFSStop gtfsStop, OSMStop osmStop) {
 
-        double distanceBetween = OSMDistanceUtils.distVincenty(gtfsStop.getLat(), gtfsStop.getLon(), osmStop.getLat(), osmStop.getLon());
+        double distanceBetween = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
         String debugData = "GTFS Stop data: [" + gtfsStop + "] -> OSM Stop data: [" + osmStop +  "], exact distance between: " + distanceBetween + " m";
 
         if (osmStop.getCode() != null && osmStop.getCode().equals(gtfsStop.getCode())) {

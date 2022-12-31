@@ -15,7 +15,14 @@
  **/
 package it.osm.gtfs.utils;
 
+import org.jxmapviewer.viewer.GeoPosition;
+
 public class OSMDistanceUtils {
+
+    public static double distVincenty(GeoPosition geoPosition1, GeoPosition geoPosition2) {
+        return distVincenty(geoPosition1.getLatitude(), geoPosition1.getLongitude(), geoPosition2.getLatitude(), geoPosition2.getLongitude());
+    }
+
     /**
      * Calculates geodetic distance between two points specified by latitude/longitude using
      * Vincenty inverse formula for ellipsoids

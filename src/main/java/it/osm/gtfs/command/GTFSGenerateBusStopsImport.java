@@ -15,6 +15,7 @@
 
 package it.osm.gtfs.command;
 
+import it.osm.gtfs.command.gui.GTFSStopsReviewGui;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
@@ -27,6 +28,7 @@ import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.utils.OSMXMLUtils;
 import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
@@ -35,7 +37,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -50,6 +55,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
     @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review, for every node that is too distant from the GTFS coords generates a new stop, and then it just generates the new change files.")
     Boolean noGuiReview = false;
 
+    final ArrayList<OSMStop> osmStopsToReview = new ArrayList<>(); //TODO: maybe find a better place for these two variables?
+
+    final Map<OSMStop, GeoPosition> finalGeopositions = new HashMap<>();
+
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
@@ -59,16 +68,21 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
         List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
+
+        //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
+        List<OSMStop> halfosm = osmStopsList.subList(0, 500);
+
+
         //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
         for (GTFSStop gtfsStop : gtfsStopsList){
-            for (OSMStop osmStop : osmStopsList){
+            for (OSMStop osmStop : halfosm){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
                     if (osmStop.isTramStop()) {
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getLat(), gtfsStop.getLon(), osmStop.getLat(), osmStop.getLon());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getLat(), gtfsStop.getLon(), gtfsStop.railwayStopMatchedWith.getLat(), gtfsStop.railwayStopMatchedWith.getLon());
+                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
+                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLongitude());
 
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop){
                                 continue;
@@ -82,8 +96,8 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                     } else {
                         if(osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null){
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getLat(), gtfsStop.getLon(), osmStop.getLat(), osmStop.getLon());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getLat(), gtfsStop.getLon(), gtfsStop.osmStopMatchedWith.getLat(), gtfsStop.osmStopMatchedWith.getLon());
+                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
+                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLongitude());
 
                             //in case of multiple matching we check what stop is the closest one to the gtfs coordinates between the current loop stop and the already-matched stop
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop){
@@ -148,7 +162,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "platform");
                     }
 
+                    //for stops that need a position review
                     if (osmStop.needsPositionReview()) {
+
+                        osmStopsToReview.add(osmStop);
                         stopsToReview++;
                     }
 
@@ -169,9 +186,10 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
             }
 
 
-            if (matched_stops > 0){
+            if (matched_stops > 0) {
                 bufferMatchedStops.end();
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
+
 
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Matched OSM stops with GTFS data with updated metadata applied (new gtfs ids, names etc.): ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
 
@@ -189,6 +207,26 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 bufferNotMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS));
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("NOT MATCHED OSM stops that should be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")"));
             }
+        }
+
+        //stops position review with GUI
+        {
+            System.out.println("Starting stop positions review...");
+
+            final Object lockObject = new Object();
+
+            final GTFSStopsReviewGui reviewGui = new GTFSStopsReviewGui(osmStopsToReview, finalGeopositions, lockObject);
+
+            synchronized(lockObject) { //i don't really know if this lock-sync thing is really needed to make the tool stay up when the gui is started
+                    try {
+                        lockObject.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+            }
+            System.out.println("Stop review done");
+
+
         }
 
         //new stops from gtfs data

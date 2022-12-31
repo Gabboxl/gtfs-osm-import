@@ -28,16 +28,16 @@ public class BoundingBox {
 
     public BoundingBox(Collection<? extends Stop> stops){
         Stop first = stops.iterator().next();
-        minLat = first.getLat();
-        minLon = first.getLon();
-        maxLat = first.getLat();
-        maxLon = first.getLon();
+        minLat = first.getGeoPosition().getLatitude();
+        minLon = first.getGeoPosition().getLongitude();
+        maxLat = first.getGeoPosition().getLatitude();
+        maxLon = first.getGeoPosition().getLongitude();
 
         for (Stop s:stops){
-            minLat = Math.min(minLat, s.getLat());
-            minLon = Math.min(minLon, s.getLon());
-            maxLat = Math.max(maxLat, s.getLat());
-            maxLon = Math.max(maxLon, s.getLon());
+            minLat = Math.min(minLat, s.getGeoPosition().getLatitude());
+            minLon = Math.min(minLon, s.getGeoPosition().getLongitude());
+            maxLat = Math.max(maxLat, s.getGeoPosition().getLatitude());
+            maxLon = Math.max(maxLon, s.getGeoPosition().getLongitude());
         }
         //expand the bbox to fit point near the border
         minLat -= 0.01;

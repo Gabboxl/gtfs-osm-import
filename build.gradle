@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1' //questo è da rimuovere quando la versione modificata di graphhopper-core non sarà più necessaria, credo
     implementation 'org.slf4j:slf4j-simple:2.0.5' //anche questa come quello sopra
 
+    implementation 'org.jxmapviewer:jxmapviewer2:2.6'
 
     implementation 'info.picocli:picocli:4.7.0'
     implementation 'info.picocli:picocli-shell-jline3:4.7.0'

@@ -111,7 +111,7 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
             return "bus_stop";
         }
         public MfGeometry getMfGeometry() {
-            return new MfGeometry(new GeometryFactory().createPoint(new Coordinate(stop.getLon(), stop.getLat())));
+            return new MfGeometry(new GeometryFactory().createPoint(new Coordinate(stop.getGeoPosition().getLongitude(), stop.getGeoPosition().getLatitude())));
         }
         public void toJSON(JSONWriter builder) throws JSONException {
             builder.key("name").value(stop.getName());

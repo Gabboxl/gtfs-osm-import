@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.fusesource.jansi.Ansi;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -70,7 +71,7 @@ public class OSMParser {
 
         for (int s = 0; s < nodeList.getLength(); s++) {
             Node fstNode = nodeList.item(s);
-            OSMStop osmStop = new OSMStop(null, null, Double.valueOf(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.valueOf(fstNode.getAttributes().getNamedItem("lon").getNodeValue()), null, null, null);
+            OSMStop osmStop = new OSMStop(null, null, new GeoPosition(Double.parseDouble(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.parseDouble(fstNode.getAttributes().getNamedItem("lon").getNodeValue())), null, null, null);
             osmStop.originalXMLNode = fstNode;
             NodeList att = fstNode.getChildNodes();
 
@@ -134,7 +135,7 @@ public class OSMParser {
                     if (osmStop.isTramStop()){
                         if (refRails.containsKey(osmStop.getCode())){
                             for (OSMStop existingStop : refRails.get(osmStop.getCode())){
-                                if (OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
+                                if (OSMDistanceUtils.distVincenty(osmStop.getGeoPosition(), existingStop.getGeoPosition()) < 500)
                                     System.err.println("Warning: The ref " + osmStop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
                                             " (node IDs :" + osmStop.getOSMId() + "," + existingStop.getOSMId() + ")");
                             }
@@ -144,7 +145,7 @@ public class OSMParser {
                     }else{
                         if (refBuses.containsKey(osmStop.getCode())){
                             for (OSMStop existingStop : refBuses.get(osmStop.getCode())){
-                                if (OSMDistanceUtils.distVincenty(osmStop.getLat(), osmStop.getLon(), existingStop.getLat(), existingStop.getLon()) < 500)
+                                if (OSMDistanceUtils.distVincenty(osmStop.getGeoPosition(), existingStop.getGeoPosition()) < 500)
                                     System.err.println("Warning: The ref " + osmStop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
                                             " (node IDs :" + osmStop.getOSMId() + "," + existingStop.getOSMId() + ")");
                             }

@@ -24,7 +24,7 @@ import java.net.*;
 public class DownloadUtils {
     private static final int TIMEOUT = 30*60000;
 
-    public static void download(String url, File dest) throws MalformedURLException, IOException{
+    public static void download(String url, File dest) throws IOException{
         int retry = 0;
         while (++retry <= 3){
             System.out.println("Downloading " + url + " Retry count: " + retry);

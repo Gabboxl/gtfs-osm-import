@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.fusesource.jansi.Ansi;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -91,9 +92,8 @@ public class GTFSParser {
                         System.err.println("GTFSParser: skipped station (group of multiple stops): " + elements[stopIdKey]);
                     }else{
                         GTFSStop gs = new GTFSStop(elements[stopIdKey],
-                                elements[stopCodeKey],
-                                Double.valueOf(elements[stopLatKey]),
-                                Double.valueOf(elements[stopLonKey]),
+                                elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
+                                Double.parseDouble(elements[stopLonKey])),
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops
                                 WheelchairAccess.values()[Integer.parseInt(elements[wheelchairBoardingKey])]); //this is not ideal as we are using the value as index of the enums but it works (we should create a lookup method with a for cycle)
