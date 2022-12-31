@@ -141,37 +141,20 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                 //we check if the osm stop got matched with a gtfs stop AND only IF the osm stop needs the position review but the user doesn't want to review the stops then we consider the stop as not matched and we handle it in the else case
                 if (osmStop.gtfsStopMatchedWith != null && !(osmStop.needsPositionReview() && noGuiReview)){
 
-                    OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
-                    OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
-                    OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
-                    OSMXMLUtils.addOrReplaceTagValue(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
-                    OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
-
-                    //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
-                    WheelchairAccess gtfsWheelchairAccess = osmStop.gtfsStopMatchedWith.getWheelchairAccessibility();
-                    if(gtfsWheelchairAccess != null && gtfsWheelchairAccess != WheelchairAccess.UNKNOWN) {
-                        OSMXMLUtils.addOrReplaceTagValue(originalNode, "wheelchair", gtfsWheelchairAccess.getOsmValue());
-                    }
-
-                    if (osmStop.isTramStop()) {
-                        //OSMXMLUtils.addTagIfNotExisting(originalNode, "tram", "yes");
-                        OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "stop_position");
-                    } else {
-                        OSMXMLUtils.addTagIfNotExisting(originalNode, "bus", "yes");
-                        OSMXMLUtils.addTagIfNotExisting(originalNode, "highway", "bus_stop");
-                        OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "platform");
-                    }
+                    //we update the XML data according to the relative GTFS stop data
+                    StopsUtils.updateOSMNodeMetadata(osmStop);
 
                     //for stops that need a position review
                     if (osmStop.needsPositionReview()) {
 
                         osmStopsToReview.add(osmStop);
                         stopsToReview++;
-                    }
+                    } else { //we will add the stops that need review to the matched file after the review later
 
-                    //add the node to the buffer of matched stops
-                    bufferMatchedStops.appendNode(originalNode);
-                    matched_stops++;
+                        //add the node to the buffer of matched stops
+                        bufferMatchedStops.appendNode(originalNode);
+                        matched_stops++;
+                    }
 
                 } else {
                     String notMatchedStringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " didn't get matched to a GTFS stop as either they are too distant or the ref code is no more available in gtfs.";

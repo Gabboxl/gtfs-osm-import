@@ -1,7 +1,9 @@
 package it.osm.gtfs.utils;
 
+import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.model.GTFSStop;
 import it.osm.gtfs.model.OSMStop;
+import org.w3c.dom.Element;
 
 import java.util.List;
 import java.util.Map;
@@ -68,5 +70,32 @@ public class StopsUtils {
         }
 
         return result;
+    }
+
+
+    public static void updateOSMNodeMetadata(OSMStop osmStop){
+        Element originalNode = (Element) osmStop.originalXMLNode;
+
+        OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
+        OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
+        OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
+        OSMXMLUtils.addOrReplaceTagValue(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
+        OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+
+        //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
+        WheelchairAccess gtfsWheelchairAccess = osmStop.gtfsStopMatchedWith.getWheelchairAccessibility();
+        if(gtfsWheelchairAccess != null && gtfsWheelchairAccess != WheelchairAccess.UNKNOWN) {
+            OSMXMLUtils.addOrReplaceTagValue(originalNode, "wheelchair", gtfsWheelchairAccess.getOsmValue());
+        }
+
+        if (osmStop.isTramStop()) {
+            //OSMXMLUtils.addTagIfNotExisting(originalNode, "tram", "yes");
+            OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "stop_position");
+        } else {
+            OSMXMLUtils.addTagIfNotExisting(originalNode, "bus", "yes");
+            OSMXMLUtils.addTagIfNotExisting(originalNode, "highway", "bus_stop");
+            OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "platform");
+        }
+
     }
 }
