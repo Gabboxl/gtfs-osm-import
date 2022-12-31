@@ -48,7 +48,7 @@ public class OSMBusImportGenerator implements IElementCreator{
 
         root = document.createElement("osm");
         root.setAttribute("version", "0.6");
-        root.setAttribute("generator", "GTFSImport");
+        root.setAttribute("generator", "GTFSOSMImport");
         document.appendChild(root);
         root.appendChild(bb.getXMLTag(this));
     }
@@ -69,7 +69,7 @@ public class OSMBusImportGenerator implements IElementCreator{
         xformer.transform(source, result);
     }
 
-    public void appendNode(Element n) throws TransformerException {
+    public void appendNode(Element n) {
         if (completed)
             throw new IllegalArgumentException("This buffer is already closed.");
         root.appendChild(document.importNode(n, true));

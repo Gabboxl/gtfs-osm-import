@@ -67,7 +67,7 @@ public class BoundingBox {
         e.setAttribute("minlon", minLon.toString());
         e.setAttribute("maxlat", maxLat.toString());
         e.setAttribute("maxlon", maxLon.toString());
-        e.setAttribute("origin", "GTFSImport");
+        e.setAttribute("origin", "GTFSOSMImport");
         return e;
     }
 
