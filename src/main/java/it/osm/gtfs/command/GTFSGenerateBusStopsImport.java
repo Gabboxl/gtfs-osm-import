@@ -70,12 +70,12 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
 
         //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
-        List<OSMStop> halfosm = osmStopsList.subList(0, 500);
+        //List<OSMStop> halfosm = osmStopsList.subList(0, 500);
 
 
         //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
         for (GTFSStop gtfsStop : gtfsStopsList){
-            for (OSMStop osmStop : halfosm){
+            for (OSMStop osmStop : osmStopsList){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
                     if (osmStop.isTramStop()) {
 
