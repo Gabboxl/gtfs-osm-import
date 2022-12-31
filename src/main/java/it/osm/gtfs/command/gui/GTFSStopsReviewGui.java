@@ -49,6 +49,9 @@ public class GTFSStopsReviewGui
 
     final JButton btChooseGTFS;
 
+    final JButton btSkipStop;
+
+
     final JButton btCloseWindow;
 
     String infoListReviewText = "<html><b>Stop review list:</b> (you can select any stop from this list to review it again)</html>";
@@ -349,8 +352,7 @@ public class GTFSStopsReviewGui
 
             finalReviewedGeopositions.put(currentStop, currentStop.getGeoPosition()); //we put the OSM coords in the map
 
-
-            nextStopToReview(); //TODO: to substitute with nextstoptoreview()
+            nextStopToReview();
         });
 
         constraints.fill = GridBagConstraints.NONE;
@@ -372,7 +374,7 @@ public class GTFSStopsReviewGui
 
             finalReviewedGeopositions.put(currentStop, currentStop.gtfsStopMatchedWith.getGeoPosition()); //we put the GTFS coords in the map
 
-            nextStopToReview(); //TODO: to substitute with nextstoptoreview()
+            nextStopToReview();
         });
 
         constraints.fill = GridBagConstraints.NONE;
@@ -387,16 +389,34 @@ public class GTFSStopsReviewGui
         frame.add(btChooseGTFS, constraints);
 
 
+        btSkipStop = new JButton("Skip stop");
+        btSkipStop.addActionListener(actionEvent -> {
+            nextStopToReview();
+        });
+
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.ipady = 5;
+        constraints.weighty = 0;
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.insets = new Insets(10,0,0,0);
+        constraints.gridx = GridBagConstraints.REMAINDER;
+        constraints.gridy = GridBagConstraints.RELATIVE;
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.weightx = 0;
+        frame.add(btSkipStop, constraints);
+
+
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 1;
         constraints.weighty = 0.1; //set this to 1 when no other components use the 1 at weighty
-        constraints.anchor = GridBagConstraints.CENTER;
-        constraints.gridx = 0;
-        constraints.gridy = 7;
-        constraints.gridwidth = 2;
 
-        frame.add(new JLabel(" "), constraints);  // blank JLabel
+        constraints.gridy = GridBagConstraints.RELATIVE; //this is the last element of the column
+        constraints.gridx = GridBagConstraints.REMAINDER; //the only element of the row
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        frame.add(new JLabel(" ", SwingConstants.CENTER), constraints);  // blank JLabel
 
 
 
