@@ -64,4 +64,8 @@ public class OSMXMLUtils {
         tag.setAttribute("v", value);
         return tag;
     }
+
+    public static void addOSMDeleteActionAttribute(Element node) {
+        node.setAttribute("action", "delete");
+    }
 }

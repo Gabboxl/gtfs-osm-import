@@ -162,11 +162,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                     System.out.println(notMatchedStringOutput);
 
-                    not_matched_osm_stops++;
-
-                    //TODO: for not matched stops we should signal that the node should be removed in the XML, like action = delete or something like that
+                    //for the not matched stops we add the action=delete keyvalue so that JOSM knows that these stops need to be deleted on upload i think
+                    OSMXMLUtils.addOSMDeleteActionAttribute(originalNode);
                     bufferNotMatchedStops.appendNode(originalNode);
 
+                    not_matched_osm_stops++;
                 }
             }
 
