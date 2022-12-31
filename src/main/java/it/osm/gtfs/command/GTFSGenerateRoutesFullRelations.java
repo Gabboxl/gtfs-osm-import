@@ -39,7 +39,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
     @CommandLine.Option(names = {"-s", "--stops"}, description = "Generate stops-only relations (skips ways matching)")
-    Boolean includeStopsOnly;
+    Boolean noOsmWayMatching = false;
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsOfAnyOperatorTagValue = false;
@@ -66,7 +66,6 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
 
             for (Trip trip:uniqueTrips){
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
 
                 int count = Collections.frequency(allTrips, trip);
 
@@ -74,7 +73,9 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                 StopsList stops = stopTimes.get(trip.getTripID());
                 List<Integer> osmWayIds = null;
 
-                if(includeStopsOnly == null || !includeStopsOnly) {
+                if(!noOsmWayMatching) {
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
+
                     Shape shape = shapes.get(trip.getShapeID());
 
                     String xmlGPXShape = shape.getGPXasShape(route.getShortName());
@@ -82,7 +83,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = new GTFSMatchGPX().runMatch(xmlGPXShape);
                 }else {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relations...").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
                 }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
@@ -93,12 +94,11 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                 f.close();
             }
 
-
         }
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
 
-        if(includeStopsOnly == null || !includeStopsOnly) {
+        if(!noOsmWayMatching) {
             System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nBe aware that the IDs of OSM's ways can change anytime!").reset());
             System.out.println(ansi().fg(Ansi.Color.YELLOW).a("This means you can encounter problems when uploading the relations to OSM in a different time window.").reset());
         }
