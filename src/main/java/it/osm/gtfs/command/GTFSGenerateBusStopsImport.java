@@ -198,7 +198,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                         //we set the new chosen coordinates to the node
                         originalNode.setAttribute("lat", String.valueOf(chosenGeoPosition.getLatitude()));
-                        originalNode.setAttribute("lon", String.valueOf(chosenGeoPosition.getLatitude()));
+                        originalNode.setAttribute("lon", String.valueOf(chosenGeoPosition.getLongitude()));
 
                         //we add the node with new coords to the matched stops buffer
                         bufferMatchedStops.appendNode(originalNode);
