@@ -55,11 +55,13 @@ public class GTFSStopsReviewGui
     final JButton btCloseWindow;
 
     String infoListReviewText = "<html><b>Stop review list:</b> (you can select any stop from this list to review it again)</html>";
-    String infoStopText = "<html><b>Current stop ref code:</b> <i>%s</i> </html>";
+    String infoStopText1 = "<html><b>Current stop:</b> ref=<i>%s</i> name=<i>%s</i></body></html>";
+    String infoStopText2 = "<html><b>Reviewed stops:</b> %s/<b>%s</b> </html>";
     String textLabOsmCoords = "Current OSM stop coordinates on map (%f, %f):";
     String textLabGtfsCoords = "New GTFS stop coordinates on map (%f, %f):";
 
     final JLabel labInfoStop1;
+    final JLabel labInfoStop2;
 
     final JLabel labInfoReviewList;
 
@@ -246,17 +248,35 @@ public class GTFSStopsReviewGui
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.weighty = 0;
+        constraints.gridheight = 2;
+        constraints.weighty = 0.2;
         frame.add(scrollPaneStops, constraints);
 
         // Add an empty label to the second column to take up the other half of the available space (thx chatgpt)
-        labInfoStop1 = new JLabel(infoStopText);
+        labInfoStop1 = new JLabel(infoStopText1);
         labInfoStop1.setFont(new Font(null, Font.PLAIN, 18));
+
+        Dimension d = labInfoStop1.getSize();
+        labInfoStop1.setPreferredSize(d); //THIS fixes the extremely weird big size of a jlabel that uses html. in fact without setting a very little preferred size, html acts weird and accupies too much space but wrapping text without using the space it has. lol
+
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 0.5;
+        constraints.gridheight = 1;
+        constraints.gridwidth = 1;
         constraints.gridx = 1;
         constraints.insets = new Insets(0,10,0,0);
         frame.add(labInfoStop1, constraints);
+
+        labInfoStop2 = new JLabel(infoStopText2);
+        labInfoStop2.setFont(new Font(null, Font.PLAIN, 18));
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 0.5;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.gridx = 1;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(0,10,0,0);
+        frame.add(labInfoStop2, constraints);
 
 
         labOsmCoords = new JLabel(textLabOsmCoords);
@@ -268,7 +288,7 @@ public class GTFSStopsReviewGui
         constraints.insets = new Insets(10,20,0,0);
         constraints.gridx = 0;
         constraints.gridwidth = 2;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.weightx = 0;
         frame.add(labOsmCoords, constraints);
 
@@ -282,7 +302,7 @@ public class GTFSStopsReviewGui
         constraints.insets = new Insets(10,10,0,0);
         constraints.gridx = 1;
         constraints.gridwidth = 2;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.weightx = 0;
         frame.add(labGtfsCoords, constraints);
 
@@ -298,7 +318,7 @@ public class GTFSStopsReviewGui
         constraints.insets = new Insets(10,10,0,0);
         constraints.gridx = 0;
         constraints.gridwidth = 2;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.weightx = 0;
         frame.add(labReviewCompleted, constraints);
 
@@ -315,7 +335,7 @@ public class GTFSStopsReviewGui
         constraints.insets = new Insets(20,0,0,0);  //top padding
         constraints.gridx = 0;       //aligned with button 2
         constraints.gridwidth = 2;   //2 columns wide
-        constraints.gridy = 5;       //third row
+        constraints.gridy = 6;       //third row
         frame.add(btCloseWindow, constraints);
 
 
@@ -323,7 +343,7 @@ public class GTFSStopsReviewGui
         constraints.anchor = GridBagConstraints.SOUTHEAST;
         constraints.ipady = 10; //how much to add to the size of the component in y or x axis
         constraints.gridx = 0;
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         constraints.gridheight = 1;
         constraints.gridwidth = 1;
         constraints.insets.left = 20;
@@ -335,7 +355,7 @@ public class GTFSStopsReviewGui
         constraints.fill = GridBagConstraints.BOTH;
         constraints.ipady = 10;
         constraints.gridx = 1;
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         constraints.gridheight = 1;
         constraints.gridwidth = 1;
         constraints.insets.left = 10;
@@ -362,7 +382,7 @@ public class GTFSStopsReviewGui
         constraints.insets = new Insets(10,0,0,0);  //top padding
         constraints.gridx = 0;       //aligned with button 2
         constraints.gridwidth = 1;   //2 columns wide
-        constraints.gridy = 6;       //row
+        constraints.gridy = 7;       //row
         constraints.weightx = 0;
         frame.add(btChooseOSM, constraints);
 
@@ -384,7 +404,7 @@ public class GTFSStopsReviewGui
         constraints.insets = new Insets(10,0,0,0);  //top padding
         constraints.gridx = 1;       //aligned with button 2
         constraints.gridwidth = 1;   //2 columns wide
-        constraints.gridy = 6;       //row
+        constraints.gridy = 7;       //row
         constraints.weightx = 0;
         frame.add(btChooseGTFS, constraints);
 
@@ -542,6 +562,7 @@ public class GTFSStopsReviewGui
         labGtfsCoords.setVisible(true);
         btChooseOSM.setVisible(true);
         btChooseGTFS.setVisible(true);
+        btSkipStop.setVisible(true);
 
         labReviewCompleted.setVisible(false);
         btCloseWindow.setVisible(false);
@@ -554,6 +575,7 @@ public class GTFSStopsReviewGui
         labGtfsCoords.setVisible(false);
         btChooseOSM.setVisible(false);
         btChooseGTFS.setVisible(false);
+        btSkipStop.setVisible(false);
 
         labReviewCompleted.setVisible(true);
         btCloseWindow.setVisible(true);
@@ -571,7 +593,8 @@ public class GTFSStopsReviewGui
 
 
         //we update the variout interface texts
-        labInfoStop1.setText(String.format(infoStopText, currentStop.getCode()));
+        labInfoStop1.setText(String.format(infoStopText1, currentStop.getCode(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(currentStop.gtfsStopMatchedWith.getName())));
+        labInfoStop2.setText(String.format(infoStopText2, finalReviewedGeopositions.size(), osmStopsToReview.size()));
         labOsmCoords.setText(String.format(textLabOsmCoords, osmStopCoords.getLatitude(), osmStopCoords.getLongitude()));
         labGtfsCoords.setText(String.format(textLabGtfsCoords, gtfsStopCoords.getLatitude(), gtfsStopCoords.getLongitude()));
 
