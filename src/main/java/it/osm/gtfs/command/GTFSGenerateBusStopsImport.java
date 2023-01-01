@@ -69,17 +69,23 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
 
         //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
-        //List<OSMStop> halfosm = osmStopsList.subList(0, 500);
+        osmStopsList = osmStopsList.subList(0, 500);
 
 
         //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
         for (GTFSStop gtfsStop : gtfsStopsList){
+
             for (OSMStop osmStop : osmStopsList){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
                     if (osmStop.isTramStop()) {
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
+                            System.err.println("Multiple match found between this GTFS stop and other OSM stops:");
+                            System.err.println("current GTFS stop: " + gtfsStop);
+                            System.err.println("Current-matching OSM stop: " + osmStop);
+                            System.err.println("Already-matched OSM stop: " + gtfsStop.osmStopMatchedWith);
+
                             double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
                             double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLongitude());
 
@@ -95,6 +101,11 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
 
                     } else {
                         if(osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null){
+                            System.err.println("Multiple match found between this GTFS stop and other OSM stops:");
+                            System.err.println("current GTFS stop: " + gtfsStop);
+                            System.err.println("Current-matching OSM stop: " + osmStop);
+                            System.err.println("Already-matched OSM stop: " + gtfsStop.osmStopMatchedWith);
+
                             double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
                             double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLongitude());
 
