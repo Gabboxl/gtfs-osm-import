@@ -32,6 +32,7 @@ import picocli.CommandLine;
 import picocli.shell.jline3.PicocliCommands;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -49,7 +50,6 @@ import java.util.function.Supplier;
         GTFSGenerateRoutesDiff.class
 })
 public class GTFSOSMImport {
-
     @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
     public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
         final Object lock = new Object();
@@ -185,6 +185,16 @@ public class GTFSOSMImport {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+
+    @CommandLine.Command(description = "Main command - it executes both the update & stops commands.")
+    void start() throws IOException, ParserConfigurationException, InterruptedException, SAXException, TransformerException {
+
+        //TODO: support command options of these two classes in the start command also / or use shared options i think
+        new GTFSUpdateDataFromOSM().call();
+        new GTFSGenerateBusStopsImport().call();
+
     }
 
     public static void main(String[] args) {
