@@ -61,14 +61,14 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
                 routes, new HashMap<String, StopsList>());
 
         //sorting set
-        Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
-        Set<String> keys = new TreeSet<String>(grouppedTrips.keySet());
+        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
+        Set<String> keys = new TreeSet<String>(groupedTrips.keySet());
 
         new File(GTFSImportSettings.getInstance().getOutputPath() + "gpx").mkdirs();
 
         int id = 10000;
         for (String k:keys){
-            Collection<Trip> allTrips = grouppedTrips.get(k);
+            Collection<Trip> allTrips = groupedTrips.get(k);
             Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
 
             for (Trip trip:uniqueTrips){

@@ -57,8 +57,8 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
         BoundingBox bb = new BoundingBox(gtfsIdOsmStopMap.values());
 
         //sorting set
-        Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
-        Set<String> keys = new TreeSet<>(grouppedTrips.keySet());
+        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
+        Set<String> keys = new TreeSet<>(groupedTrips.keySet());
 
         //download of updated OSM ways in the GTFS bounding box
 
@@ -73,7 +73,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
         int id = 10000;
         for (String k:keys){
-            Collection<Trip> allTrips = grouppedTrips.get(k);
+            Collection<Trip> allTrips = groupedTrips.get(k);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
             for (Trip trip : uniqueTrips){
