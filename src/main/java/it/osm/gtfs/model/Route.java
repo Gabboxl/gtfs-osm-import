@@ -25,13 +25,13 @@ public class Route implements Comparable<Route> {
     private final String routeType;
     private final Set<String> shapesIDs;
 
-    public Route(String id, String agencyId, String longName, String shortName, String route_type) {
+    public Route(String id, String agencyId, String longName, String shortName, String routeType) {
         super();
         this.id = id;
         this.agencyId = agencyId;
         this.shortName = shortName;
         this.longName = longName;
-        this.routeType = route_type;
+        this.routeType = routeType;
 
 
         shapesIDs = new HashSet<>();
