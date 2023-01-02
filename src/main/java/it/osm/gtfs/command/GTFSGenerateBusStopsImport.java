@@ -199,20 +199,27 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
                         }
                     }
 
-                    System.out.println("Stop review done");
-                    System.out.println("Saving accepted coordinates...");
+                    if(osmStopsToReview.size() == finalReviewedGeopositions.size()) {
+                        System.out.println("Stop review done");
+                        System.out.println("Saving accepted coordinates...");
 
-                    for (OSMStop reviewedOsmStop : osmStopsToReview){
-                        Element originalNode = (Element) reviewedOsmStop.originalXMLNode;
+                        for (OSMStop reviewedOsmStop : osmStopsToReview) {
+                            Element originalNode = (Element) reviewedOsmStop.originalXMLNode;
 
-                        GeoPosition chosenGeoPosition = finalReviewedGeopositions.get(reviewedOsmStop);
+                            GeoPosition chosenGeoPosition = finalReviewedGeopositions.get(reviewedOsmStop);
 
-                        //we set the new chosen coordinates to the node
-                        originalNode.setAttribute("lat", String.valueOf(chosenGeoPosition.getLatitude()));
-                        originalNode.setAttribute("lon", String.valueOf(chosenGeoPosition.getLongitude()));
+                            //we set the new chosen coordinates to the node
+                            originalNode.setAttribute("lat", String.valueOf(chosenGeoPosition.getLatitude()));
+                            originalNode.setAttribute("lon", String.valueOf(chosenGeoPosition.getLongitude()));
 
-                        //we add the node with new coords to the matched stops buffer
-                        bufferMatchedStops.appendNode(originalNode);
+                            //we add the node with new coords to the matched stops buffer
+                            bufferMatchedStops.appendNode(originalNode);
+                        }
+                    } else {
+                        System.err.println("Stop locations review not completed. \n If you don't want to review the stops manually you can use the --noreview command option.");
+                        System.err.println("No stop data will be saved. You may run the tool again to restart the review.");
+
+                        return null; //we end this command
                     }
                 }
 
