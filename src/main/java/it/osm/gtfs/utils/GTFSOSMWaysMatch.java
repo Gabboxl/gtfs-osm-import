@@ -37,9 +37,8 @@ public class GTFSOSMWaysMatch {
     private GraphHopper hopper;
     private Translation tr;
     private boolean withRoute;
-    private ArrayList<Integer> matchWayIDs = null;
 
-    public ArrayList<Integer> runMatch(String xmlGPXString) throws IOException {
+    public ArrayList<Integer> runMatch(String xmlGPXData) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSMatchGPX.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
@@ -64,7 +63,7 @@ public class GTFSOSMWaysMatch {
         xmlMapper = new XmlMapper();
 
         //si matchaa
-        matchWayIDs = matchGPX(xmlGPXString);
+        ArrayList<Integer> matchWayIDs = matchGPX(xmlGPXData);
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("GPS import took: ").reset().a(importSW.getSeconds() + " s").fg(Ansi.Color.GREEN).a(", match took: ").reset().a(matchSW.getSeconds() + " s"));
 
