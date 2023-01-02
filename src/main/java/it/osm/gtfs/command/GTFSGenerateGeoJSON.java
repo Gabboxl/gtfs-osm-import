@@ -42,7 +42,7 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM Stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);

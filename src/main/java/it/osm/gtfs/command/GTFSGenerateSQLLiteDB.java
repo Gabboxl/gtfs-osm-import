@@ -31,7 +31,7 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);

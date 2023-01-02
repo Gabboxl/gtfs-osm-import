@@ -65,7 +65,7 @@ public class GTFSGenerateBusStopsImport implements Callable<Void> {
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
 
-        List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
 
 
         //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
