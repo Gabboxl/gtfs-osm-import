@@ -20,6 +20,7 @@ import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.model.*;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.GTFSOSMWaysMatch;
 import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
@@ -81,7 +82,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                     String xmlGPXShape = shape.getGPXasShape(route.getShortName());
 
                     //TODO: need to check if the way matches are ordered well
-                    osmWayIds = new GTFSMatchGPX().runMatch(xmlGPXShape);
+                    osmWayIds = new GTFSOSMWaysMatch().runMatch(xmlGPXShape);
                 }else {
                     System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
                 }
