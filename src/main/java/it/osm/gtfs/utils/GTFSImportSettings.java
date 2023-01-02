@@ -158,7 +158,7 @@ public class GTFSImportSettings {
     public String getRevisedKey() {
         if (revisedKey == null){
             synchronized (this) {
-                revisedKey = properties.getProperty("revisedkey");
+                revisedKey = properties.getProperty("revised_key");
                 if (revisedKey == null)
                     throw new IllegalArgumentException("Please set a valid operator.");
             }
