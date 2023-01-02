@@ -293,9 +293,9 @@ public class GTFSParser {
         br.close();
 
         if (missingStops.size() > 0) {
-            System.err.println("Warning: Some stops weren't found, not all trips have been generated.");
+            System.err.println("\nError: Some stops weren't found, not all trips have been generated.");
             System.err.println("Make sure you imported the new GTFS stops data into OSM before running this command!");
-            System.err.println("Run the GTFSOSMImport \"start\" command, upload the new stops to OSM and then run this command again!");
+            System.err.println("Run the GTFSOSMImport \"start\" command to create the new stops, upload the new stops to OSM and then run this command again!");
         }
 
         return result;
