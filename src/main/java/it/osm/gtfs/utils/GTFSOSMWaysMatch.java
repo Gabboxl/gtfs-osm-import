@@ -37,10 +37,12 @@ public class GTFSOSMWaysMatch {
 
         hopper = new GraphHopper().init(graphHopperConfiguration);
         hopper.importOrLoad();
-        //hopper.setEncodedValuesString("osm_way_id"); x tag personalizzati senza specificarli in graphopper.yml
 
         //we programmatically set the OSM ways data file as using the yml doesn't work for custom paths on different machines
         hopper.setOSMFile(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
+
+        //programmatically set additional values to be assigned to every graphhopper's edge for a later use (in our case we need the osm way ids ofr every graphhopper's edge)
+        hopper.setEncodedValuesString("osm_way_id"); //ricorda, se vuoi cambiare/aggiungere questi encoded values, devi rigenerare tutti i graph cancellando da cache dei graph in modo che vengano aggiunti i nuovi valori scelti a ogni edge
 
         PMap hints = new PMap();
         String profile_graphhopper = "car"; //TODO: maybe remove this as it is already specified in the yml file?
