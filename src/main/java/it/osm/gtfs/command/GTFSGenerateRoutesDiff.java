@@ -47,7 +47,7 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
 
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOP_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
         Map<String, OSMStop> osmstopsGTFSId = StopsUtils.getGTFSIdOSMStopMap(osmStops);
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);
