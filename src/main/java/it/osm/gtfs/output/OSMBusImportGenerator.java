@@ -67,6 +67,9 @@ public class OSMBusImportGenerator implements IElementCreator{
         Result result = new StreamResult(outputStream);
         Transformer xformer = TransformerFactory.newInstance().newTransformer();
         xformer.transform(source, result);
+
+        //we close the file stream
+        outputStream.close();
     }
 
     public void appendNode(Element n) {
