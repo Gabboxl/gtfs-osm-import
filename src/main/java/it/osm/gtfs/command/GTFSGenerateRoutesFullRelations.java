@@ -35,10 +35,10 @@ import java.util.concurrent.Callable;
 import static org.fusesource.jansi.Ansi.ansi;
 
 
-@CommandLine.Command(name = "fullrels", description = "Generate full releations including ways and stops (very long!)")
+@CommandLine.Command(name = "fullrels", description = "Generate full relations including ways and stops (very long!)")
 public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips ways matching)")
+    @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips OSM ways matching)")
     Boolean noOsmWayMatching = false;
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
@@ -56,14 +56,14 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
         //sorting set
         Multimap<String, Trip> grouppedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
-        Set<String> keys = new TreeSet<String>(grouppedTrips.keySet());
+        Set<String> keys = new TreeSet<>(grouppedTrips.keySet());
 
         new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
 
         int id = 10000;
         for (String k:keys){
             Collection<Trip> allTrips = grouppedTrips.get(k);
-            Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
+            Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
             for (Trip trip:uniqueTrips){
 
