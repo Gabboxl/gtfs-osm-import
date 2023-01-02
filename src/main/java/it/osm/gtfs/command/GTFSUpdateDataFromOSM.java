@@ -98,7 +98,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         urltrm = urltrm.replace(" ", "%20");
         DownloadUtils.download(urltrm, filetrm);
 
-        Thread.sleep(3000L);
+        Thread.sleep(2000L);
 
         String urlmtr = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
         File filemtr = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nmetro.osm");

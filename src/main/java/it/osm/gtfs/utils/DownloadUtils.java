@@ -51,7 +51,7 @@ public class DownloadUtils {
 
                 bout.close();
                 in.close();
-                
+
                 return;
             } catch (SocketTimeoutException | ConnectException e) {
                 e.printStackTrace();
