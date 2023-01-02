@@ -34,7 +34,7 @@ public class Route implements Comparable<Route> {
         this.routeType = route_type;
 
 
-        shapesIDs = new HashSet<String>();
+        shapesIDs = new HashSet<>();
     }
 
     public String getId() {

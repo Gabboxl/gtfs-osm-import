@@ -66,7 +66,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             Collection<Trip> allTrips = grouppedTrips.get(k);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
-            for (Trip trip:uniqueTrips){
+            for (Trip trip : uniqueTrips){
 
                 int count = Collections.frequency(allTrips, trip);
 

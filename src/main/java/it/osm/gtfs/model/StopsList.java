@@ -27,8 +27,8 @@ public class StopsList {
     public StopsList(String id) {
         super();
         this.id = id;
-        stops = new TreeMap<Long, OSMStop>();
-        stopsTimes = new TreeMap<Long, String>();
+        stops = new TreeMap<>();
+        stopsTimes = new TreeMap<>();
     }
 
     public Boolean isValid() {

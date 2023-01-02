@@ -27,6 +27,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 @CommandLine.Command(name = "match", description = "Match gpx files to OSM ways data to generate precise relations (this command will be removed soon)")
 public class GTFSMatchGPXFile implements Callable<Void> {
+    //TODO: make this command match both folders or individual files given the path in input
 
 
     //@CommandLine.Option(names = {"-f", "--file"}, description = "export to file")

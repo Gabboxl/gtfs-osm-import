@@ -25,7 +25,7 @@ public class Shape {
     public Shape(String id) {
         super();
         this.id = id;
-        points = new TreeMap<Long, Shape.ShapePoint>();
+        points = new TreeMap<>();
     }
 
     public void pushPoint(Long seq, Double lat, Double lon){
