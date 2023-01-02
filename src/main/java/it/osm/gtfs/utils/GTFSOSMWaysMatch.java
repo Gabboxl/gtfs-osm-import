@@ -44,6 +44,8 @@ public class GTFSOSMWaysMatch {
         //programmatically set additional values to be assigned to every graphhopper's edge for a later use (in our case we need the osm way ids ofr every graphhopper's edge)
         hopper.setEncodedValuesString("osm_way_id"); //ricorda, se vuoi cambiare/aggiungere questi encoded values, devi rigenerare tutti i graph cancellando da cache dei graph in modo che vengano aggiunti i nuovi valori scelti a ogni edge
 
+
+
         PMap hints = new PMap();
         String profile_graphhopper = "car"; //TODO: maybe remove this as it is already specified in the yml file?
         hints.putObject("profile", profile_graphhopper);
@@ -101,6 +103,7 @@ public class GTFSOSMWaysMatch {
                 var edgeState = edgeMatch.getEdgeState();
 
                 try {
+                    //we get the osm way id associated to this Graphhopper's edge, which is an encoded value
                     var osmWayEncodedValue = hopper.getEncodingManager().getIntEncodedValue(OSMWayID.KEY);
                     Integer osmWayID = edgeState.get(osmWayEncodedValue);
 
