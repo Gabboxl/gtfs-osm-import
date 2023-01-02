@@ -39,7 +39,7 @@ public class GTFSImportSettings {
     public static final String OSM_STOP_FILE_PATH = getInstance().getOsmDataPath() + OSM_STOP_FILE_NAME;
     public static final String OUTPUT_MATCHED_WITH_UPDATED_METADATA = "gtfs_import_matched_with_updated_metadata.osm";
     public static final String OUTPUT_NOT_MATCHED_STOPS = "gtfs_import_not_matched_stops.osm";
-    public static final String OUTPUT_NEW_STOPS_FROM_GTFS = "gtfs_import_new_stops_from_gtfs";
+    public static final String OUTPUT_NEW_STOPS_FROM_GTFS = "gtfs_import_new_stops_from_gtfs.osm";
 
     private final Properties properties;
 
