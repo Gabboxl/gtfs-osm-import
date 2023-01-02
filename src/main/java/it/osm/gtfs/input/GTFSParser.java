@@ -14,13 +14,18 @@
  **/
 package it.osm.gtfs.input;
 
+import com.graphhopper.routing.FlexiblePathCalculator;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -221,7 +226,7 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, StopsList> readStopTimes(String fName, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
+    public static Map<String, StopsList> readStopTimes(String filePathName, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
         Map<String, StopsList> result = new TreeMap<String, StopsList>();
         Set<String> missingStops = new HashSet<String>();
         int count = 0;
@@ -230,13 +235,17 @@ public class GTFSParser {
         String [] thisLineElements;
         int trip_id=-1, stop_id=-1, stop_sequence=-1, arrival_time = -1;
 
-        BufferedReader br = new BufferedReader(new FileReader(fName));
+        Path filePath = Paths.get(filePathName);
+
+        long numberOfLines = Files.lines(filePath).count();
+
+        BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             count ++;
 
             if (count % 100000 == 0)
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Stop times read so far: ").reset().a(count));
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Stop times read so far: ").reset().a(count + "/" + numberOfLines));
 
             if (isFirstLine) {
                 isFirstLine = false;
