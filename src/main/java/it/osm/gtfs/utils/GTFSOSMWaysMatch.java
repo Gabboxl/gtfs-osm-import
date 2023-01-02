@@ -5,7 +5,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.GraphHopperConfig;
-import com.graphhopper.ResponsePath;
 import com.graphhopper.jackson.Gpx;
 import com.graphhopper.matching.EdgeMatch;
 import com.graphhopper.matching.MapMatching;
@@ -13,18 +12,11 @@ import com.graphhopper.matching.MatchResult;
 import com.graphhopper.matching.Observation;
 import com.graphhopper.routing.ev.OSMWayID;
 import com.graphhopper.util.*;
-import it.osm.gtfs.command.GTFSMatchGPX;
+import it.osm.gtfs.command.GTFSMatchGPXFile;
 import org.fusesource.jansi.Ansi;
 
-import javax.annotation.Nullable;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -41,7 +33,7 @@ public class GTFSOSMWaysMatch {
     public ArrayList<Integer> runMatch(String xmlGPXData) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
-        GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSMatchGPX.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
+        GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSMatchGPXFile.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
 
         hopper = new GraphHopper().init(graphHopperConfiguration);
         hopper.importOrLoad();
