@@ -52,7 +52,7 @@ public class DownloadUtils {
                 in.close();
                 return;
             }catch(SocketTimeoutException | ConnectException e){
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
         throw new SocketTimeoutException();
