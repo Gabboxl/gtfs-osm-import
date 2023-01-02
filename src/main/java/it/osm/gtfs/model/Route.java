@@ -23,7 +23,6 @@ public class Route implements Comparable<Route> {
     private final String shortName;
     private final String longName;
     private final String routeType;
-    private final Set<String> shapesIDs; //TODO: this isn't used anywhere
 
     public Route(String id, String agencyId, String longName, String shortName, String routeType) {
         super();
@@ -32,8 +31,6 @@ public class Route implements Comparable<Route> {
         this.shortName = shortName;
         this.longName = longName;
         this.routeType = routeType;
-
-        shapesIDs = new HashSet<>();
     }
 
     public String getId() {
@@ -56,13 +53,6 @@ public class Route implements Comparable<Route> {
         return routeType;
     }
 
-    public Set<String> getShapesIDs() {
-        return shapesIDs;
-    }
-
-    public void putShape(String id){
-        shapesIDs.add(id);
-    }
 
     @Override
     public boolean equals(Object other) {
