@@ -41,6 +41,9 @@ public class GTFSImportSettings {
     public static final String OUTPUT_NOT_MATCHED_STOPS = "gtfs_import_not_matched_stops.osm";
     public static final String OUTPUT_NEW_STOPS_FROM_GTFS = "gtfs_import_new_stops_from_gtfs.osm";
 
+    public static final String OSM_OVERPASS_WAYS_FILE_NAME = "overpassways.osm";
+    public static final String OSM_OVERPASS_WAYS_FILE_PATH = getInstance().getOsmDataPath() + OSM_OVERPASS_WAYS_FILE_NAME;
+
     private final Properties properties;
 
     private GTFSImportSettings() {
