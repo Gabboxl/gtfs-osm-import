@@ -78,9 +78,9 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
 
                 if(asWaypoints){
-                    f.write(shape.getGPXasWaypoints(route.getShortName()).getBytes());
+                    f.write(shape.getGPXwithWaypoints(route.getShortName()).getBytes());
                 }else{
-                    f.write(shape.getGPXasShape(route.getShortName()).getBytes());
+                    f.write(shape.getGPXasSegment(route.getShortName()).getBytes());
                 }
 
                 f.close();

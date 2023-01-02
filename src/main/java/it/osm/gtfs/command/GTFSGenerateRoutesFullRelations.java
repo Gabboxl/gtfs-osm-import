@@ -79,7 +79,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
                     Shape shape = shapes.get(trip.getShapeId());
 
-                    String xmlGPXShape = shape.getGPXasShape(route.getShortName());
+                    String xmlGPXShape = shape.getGPXasSegment(route.getShortName());
 
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = new GTFSOSMWaysMatch().runMatch(xmlGPXShape);
