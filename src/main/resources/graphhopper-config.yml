@@ -2,7 +2,9 @@
 
 
   # OpenStreetMap input file PBF or XML, can be changed via command line -Ddw.graphhopper.datareader.file=some.pbf
-  datareader.file: "src/main/resources/nord-ovest-latest.osm.pbf"
+  #datareader.file: "src/main/resources/nord-ovest-latest.osm.pbf"
+  #datareader.file: "src/main/resources/overpassways.xml" #---file osm impostato nel codice grazie alla funzione setOSMFile()
+
   # Local folder used by graphhopper to store its data
   graph.location: graph-cache #TODO: trovare un modo per non usare la cache, magari mettendo un prompt prima di eseguire il matching in gtfs-osm-import chiedendo se si vuole veramente usare
 
