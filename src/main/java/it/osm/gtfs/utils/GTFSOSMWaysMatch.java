@@ -30,8 +30,6 @@ import java.util.List;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSOSMWaysMatch {
-    private String instructions_locale = "";
-    private String profile_graphhopper = "car";
     private StopWatch importSW;
     private StopWatch matchSW;
     private XmlMapper xmlMapper;
@@ -51,6 +49,7 @@ public class GTFSOSMWaysMatch {
         //hopper.setEncodedValuesString("osm_way_id"); x tag personalizzati senza specificarli in graphopper.yml
 
         PMap hints = new PMap();
+        String profile_graphhopper = "car"; //TODO: maybe remove this as it is already specified in the yml file?
         hints.putObject("profile", profile_graphhopper);
         mapMatching = MapMatching.fromGraphHopper(hopper, hints);
         mapMatching.setTransitionProbabilityBeta(2.0);
@@ -59,6 +58,7 @@ public class GTFSOSMWaysMatch {
         importSW = new StopWatch();
         matchSW = new StopWatch();
 
+        String instructions_locale = ""; //TODO: maybe remove this as it is already specified in the yml file? or not
         tr = new TranslationMap().doImport().getWithFallBack(Helper.getLocale(instructions_locale));
         withRoute = !instructions_locale.isEmpty();
         xmlMapper = new XmlMapper();
