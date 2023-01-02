@@ -15,7 +15,6 @@
 package it.osm.gtfs.model;
 
 
-
 public class Trip implements Comparable<Trip> {
     private final Route route;
     private final String shapeId;
@@ -55,12 +54,22 @@ public class Trip implements Comparable<Trip> {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Trip)) {
+            return false;
+        }
+
         Trip other = (Trip) obj;
-        return (other.route.equals(route) &&
-                other.shapeId.equals(shapeId) &&
+        return (other.route.equals(route) && other.shapeId.equals(shapeId) &&
                 ((other.stopList == null && stopList == null) ||
                         (other.stopList != null && other.stopList.equalsStops(stopList))));
     }
+
     @Override
     public int hashCode() {
         return route.getId().hashCode() + shapeId.hashCode();
