@@ -72,7 +72,7 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
 
             for (Trip trip : uniqueTrips){
                 Route route = routes.get(trip.getRoute().getId());
-                StopsList s = stopTimes.get(trip.getTripID());
+                StopsList s = stopTimes.get(trip.getTripId());
                 if (GTFSImportSettings.getInstance().getPlugin().isValidTrip(allTrips, uniqueTrips, trip, s)){
                     if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(route)){
                         Relation found = null;
@@ -101,14 +101,14 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
                             osmRelationFoundInGTFS.add(found);
                         }else{
                             tripsNotFoundInOSM.add(trip);
-                            System.err.println("Warning: tripid: " + trip.getTripID() + " (" + trip.getName() + ") not found in OSM, details below." );
-                            System.err.println("Details: shapeid: " + trip.getShapeID() + " shortname: " + route.getShortName() + " longname:" + route.getLongName());
+                            System.err.println("Warning: tripid: " + trip.getTripId() + " (" + trip.getName() + ") not found in OSM, details below." );
+                            System.err.println("Details: shapeid: " + trip.getShapeId() + " shortname: " + route.getShortName() + " longname:" + route.getLongName());
                         }
                     }else{
-                        System.err.println("Warning: tripid: " + trip.getTripID() + " skipped (invalidated route by plugin)." );
+                        System.err.println("Warning: tripid: " + trip.getTripId() + " skipped (invalidated route by plugin)." );
                     }
                 }else{
-                    System.err.println("Warning: tripid: " + trip.getTripID() + " skipped (invalidated trip by plugin)." );
+                    System.err.println("Warning: tripid: " + trip.getTripId() + " skipped (invalidated trip by plugin)." );
                 }
             }
         }
@@ -122,8 +122,8 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
         System.out.println("---");
 
         for (Trip trip : tripsNotFoundInOSM){
-            System.out.println("Trip " + trip.getTripID() + " (" + routes.get(trip.getRoute().getId()).getShortName() + " - " + trip.getName() + ") not found in OSM ");
-            StopsList stopGTFS = stopTimes.get(trip.getTripID());
+            System.out.println("Trip " + trip.getTripId() + " (" + routes.get(trip.getRoute().getId()).getShortName() + " - " + trip.getName() + ") not found in OSM ");
+            StopsList stopGTFS = stopTimes.get(trip.getTripId());
             System.out.println("Progressivo \tGTFS\tOSM");
 
             for (long f = 1; f <= stopGTFS.getStops().size() ; f++){
@@ -139,8 +139,8 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
 
             Affinity affinityGTFS = affinities.get(relation);
             System.out.println("Relation " + relation.getId() + " (" + relation.getName() + ") NOT matched in GTFS ");
-            System.out.println("Best match (" + affinityGTFS.affinity + "): id: " + affinityGTFS.trip.getTripID() + " " + routes.get(affinityGTFS.trip.getRoute().getId()).getShortName() + " " + affinityGTFS.trip.getName());
-            StopsList stopGTFS = stopTimes.get(affinityGTFS.trip.getTripID());
+            System.out.println("Best match (" + affinityGTFS.affinity + "): id: " + affinityGTFS.trip.getTripId() + " " + routes.get(affinityGTFS.trip.getRoute().getId()).getShortName() + " " + affinityGTFS.trip.getName());
+            StopsList stopGTFS = stopTimes.get(affinityGTFS.trip.getTripId());
 
             long max = Math.max(stopGTFS.getStops().size(), relation.getStops().size());
 

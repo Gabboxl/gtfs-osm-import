@@ -295,7 +295,7 @@ public class GTFSParser {
         Multimap<String, Trip> result = ArrayListMultimap.create();
         for (Trip t:trips){
             Route r = routes.get(t.getRoute().getId());
-            StopsList s = stopTimes.get(t.getTripID());
+            StopsList s = stopTimes.get(t.getTripId());
 
             if (s.isValid()){
                 result.put(r.getShortName(), t);

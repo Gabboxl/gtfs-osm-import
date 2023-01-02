@@ -71,20 +71,20 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                 int count = Collections.frequency(allTrips, trip);
 
                 Route route = routes.get(trip.getRoute().getId());
-                StopsList stops = stopTimes.get(trip.getTripID());
+                StopsList stops = stopTimes.get(trip.getTripId());
                 List<Integer> osmWayIds = null;
 
                 if(!noOsmWayMatching) {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getName() + " tripID=" + trip.getTripId() +  " ...").reset());
 
-                    Shape shape = shapes.get(trip.getShapeID());
+                    Shape shape = shapes.get(trip.getShapeId());
 
                     String xmlGPXShape = shape.getGPXasShape(route.getShortName());
 
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = new GTFSOSMWaysMatch().runMatch(xmlGPXShape);
                 }else {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getName() + " tripID=" + trip.getTripID() +  " ...").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getName() + " tripID=" + trip.getTripId() +  " ...").reset());
                 }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");

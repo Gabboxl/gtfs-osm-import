@@ -18,22 +18,22 @@ package it.osm.gtfs.model;
 
 public class Trip implements Comparable<Trip> {
     private final Route route;
-    private final String shapeID;
-    private final String tripID;
+    private final String shapeId;
+    private final String tripId;
     private final String name;
     private final StopsList stopList;
 
-    public Trip(String tripID, Route route, String shapeID, String name, StopsList stopList) {
+    public Trip(String tripId, Route route, String shapeId, String name, StopsList stopList) {
         super();
         this.route = route;
-        this.shapeID = shapeID;
-        this.tripID = tripID;
+        this.shapeId = shapeId;
+        this.tripId = tripId;
         this.name = name;
         this.stopList = stopList;
     }
 
-    public String getTripID() {
-        return tripID;
+    public String getTripId() {
+        return tripId;
     }
 
     @Deprecated
@@ -45,8 +45,8 @@ public class Trip implements Comparable<Trip> {
         return route;
     }
 
-    public String getShapeID() {
-        return shapeID;
+    public String getShapeId() {
+        return shapeId;
     }
 
     public String getName() {
@@ -57,20 +57,20 @@ public class Trip implements Comparable<Trip> {
     public boolean equals(Object obj) {
         Trip other = (Trip) obj;
         return (other.route.equals(route) &&
-                other.shapeID.equals(shapeID) &&
+                other.shapeId.equals(shapeId) &&
                 ((other.stopList == null && stopList == null) ||
                         (other.stopList != null && other.stopList.equalsStops(stopList))));
     }
     @Override
     public int hashCode() {
-        return route.getId().hashCode() + shapeID.hashCode();
+        return route.getId().hashCode() + shapeId.hashCode();
     }
 
     @Override
     public int compareTo(Trip o) {
         int a = route.compareTo(o.route);
         if (a == 0){
-            a = shapeID.compareTo(o.shapeID);
+            a = shapeId.compareTo(o.shapeId);
             if (a == 0 && stopList != null && o.getStopTime() != null){
                 if ((o.stopList != null && o.stopList.equalsStops(stopList))){
                     return 0;

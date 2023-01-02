@@ -117,7 +117,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         uniqueTrips = new ArrayList<Trip>();
         for (Trip trip:uniqueTripSet){
             if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(routes.get(trip.getRoute().getId())) &&
-                    GTFSImportSettings.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, stopTimes.get(trip.getTripID()))){
+                    GTFSImportSettings.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, stopTimes.get(trip.getTripId()))){
                 uniqueTrips.add(trip);
             }
         }
@@ -138,7 +138,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         }
 
         for (Trip t:uniqueTrips){
-            if (tripIdMarkers.contains(t.getTripID())){
+            if (tripIdMarkers.contains(t.getTripId())){
                 uniqueTripsMarkerIgnore.add(t);
             }
             for (WeightedRelation r:osmRels){
@@ -190,7 +190,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
                 try {
                     bw = new BufferedWriter(new FileWriter("tripmarker.txt"));
                     for (Trip t:uniqueTripsMarkerIgnore){
-                        bw.write(t.getTripID()+"\n");
+                        bw.write(t.getTripId()+"\n");
                     }
                     bw.close();
                 } catch (IOException e) {

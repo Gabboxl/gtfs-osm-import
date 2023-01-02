@@ -73,7 +73,7 @@ public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
             for (Trip trip:uniqueTrips){
                 Route route = routes.get(trip.getRoute().getId());
-                Shape shape = shapes.get(trip.getShapeID());
+                Shape shape = shapes.get(trip.getShapeId());
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
 

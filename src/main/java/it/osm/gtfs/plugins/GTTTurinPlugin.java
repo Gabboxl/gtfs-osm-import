@@ -108,10 +108,10 @@ public class GTTTurinPlugin implements GTFSPlugin {
         if (s.getStopsTimes().get(1L) == null)
             return false;
         else if (frequency <= 1){
-            System.err.println("GTTPlugin: Ignoring trip " + trip.getTripID() + " found only one, may not be a valid route");
+            System.err.println("GTTPlugin: Ignoring trip " + trip.getTripId() + " found only one, may not be a valid route");
             return false;
         }else if (frequency <= 4 && (s.getStopsTimes().get(1L).startsWith("04") || s.getStopsTimes().get(1L).startsWith("05") || s.getStopsTimes().get(1L).startsWith("06"))){
-            System.err.println("GTTPlugin: Ignoring trip " + trip.getTripID() + " found only four times in early morning, may be a warmup route");
+            System.err.println("GTTPlugin: Ignoring trip " + trip.getTripId() + " found only four times in early morning, may be a warmup route");
             return false;
         }
         return true;
