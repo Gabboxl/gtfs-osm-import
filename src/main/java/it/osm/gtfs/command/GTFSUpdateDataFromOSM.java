@@ -82,28 +82,28 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
         File filebus = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nbus.osm");
         urlbus = urlbus.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
-        DownloadUtils.download(urlbus, filebus);
+        DownloadUtils.download(urlbus, filebus, false);
 
         Thread.sleep(1000L);
 
         String urlstop = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
         File filestop = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nstop.osm");
         urlstop = urlstop.replace(" ", "%20");
-        DownloadUtils.download(urlstop, filestop);
+        DownloadUtils.download(urlstop, filestop, false);
 
         Thread.sleep(1000L);
 
         String urltrm = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
         File filetrm = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_ntram.osm");
         urltrm = urltrm.replace(" ", "%20");
-        DownloadUtils.download(urltrm, filetrm);
+        DownloadUtils.download(urltrm, filetrm, false);
 
         Thread.sleep(2000L);
 
         String urlmtr = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
         File filemtr = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nmetro.osm");
         urlmtr = urlmtr.replace(" ", "%20");
-        DownloadUtils.download(urlmtr, filemtr);
+        DownloadUtils.download(urlmtr, filemtr, false);
 
         List<File> input = new ArrayList<File>();
         input.add(filebus);
@@ -118,7 +118,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
     private static void updateBaseRels() throws IOException{
         String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];out meta;";
         File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_rels.osm");
-        DownloadUtils.download(urlrel, filerel);
+        DownloadUtils.download(urlrel, filerel, false);
     }
 
     private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, InterruptedException{
@@ -171,7 +171,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
             if (!uptodate){
                 File filerelation = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_r" + relationId + ".osm");
                 String url = GTFSImportSettings.OSM_API_SERVER + "relation/" + relationId + "/full";
-                DownloadUtils.download(url, filerelation);
+                DownloadUtils.download(url, filerelation, false);
 
                 Pipeline current = OsmosisUtils.runOsmosisSort(filerelation, filesorted);
                 OsmosisUtils.checkProcessOutput(previousTask);

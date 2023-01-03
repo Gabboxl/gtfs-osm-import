@@ -70,7 +70,6 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
 
 
-        
         //download of updated OSM ways in the GTFS bounding box
         if(!skipOsmWaysUpdate) {
 
@@ -80,7 +79,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
             File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
             urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
-            DownloadUtils.download(urlhighways, fileOverpassHighways);
+            DownloadUtils.download(urlhighways, fileOverpassHighways, true);
         }
 
 

@@ -22,14 +22,19 @@ import java.net.URL;
 public class DownloadUtils {
     private static final int TIMEOUT = 30 * 60000;
 
-    public static void download(String url, File dest) throws IOException {
+    public static void download(String url, File dest, boolean useGzipCompression) throws IOException {
         int retry = 0;
         while (++retry <= 3) {
-            System.out.println("Downloading " + url + " Retry count: " + retry);
+            System.out.println("Downloading (retry count: " + retry + "):" + url);
             try {
                 //System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+
+                if(useGzipCompression) {
+                    conn.setRequestProperty("Accept-Encoding", "gzip");
+                }
+
                 //conn.setConnectTimeout(TIMEOUT);
                 //conn.setReadTimeout(TIMEOUT);
                 conn.setRequestMethod("GET");
