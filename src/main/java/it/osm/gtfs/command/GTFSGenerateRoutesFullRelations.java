@@ -64,6 +64,10 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
         Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
         Set<String> keys = new TreeSet<>(groupedTrips.keySet());
 
+
+        //delete old graphhopper cache TODO: i think this path won't be the default for when people will be using this tool from the jar file
+        FileUtils.deleteDirectory(new File("graph-cache/"));
+
         //download of updated OSM ways in the GTFS bounding box
 
         String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
