@@ -33,7 +33,7 @@ public class GTFSOSMWaysMatch {
     public ArrayList<Integer> runMatch(String xmlGPXData) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
-        GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSMatchGPXFile.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
+        GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSOSMWaysMatch.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
 
         hopper = new GraphHopper().init(graphHopperConfiguration);
         hopper.importOrLoad();
