@@ -44,6 +44,9 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
     @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips OSM ways matching)")
     Boolean noOsmWayMatching = false;
 
+    @CommandLine.Option(names = {"-s", "--skipdownload"}, description = "Skip download of updated OSM ways")
+    Boolean skipOsmWaysUpdate = false;
+
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsOfAnyOperatorTagValue = false;
 
@@ -66,16 +69,19 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
         Set<String> keys = new TreeSet<>(groupedTrips.keySet());
 
 
-        //delete old graphhopper cache TODO: i think this path won't be the default for when people will be using this tool from the jar file
-        FileUtils.deleteDirectory(new File("graph-cache/"));
 
+        
         //download of updated OSM ways in the GTFS bounding box
+        if(!skipOsmWaysUpdate) {
 
-        String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
-        File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
-        urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
-        DownloadUtils.download(urlhighways, fileOverpassHighways);
+            //delete old graphhopper cache TODO: i think this path won't be the default for when people will be using this tool from the jar file
+            FileUtils.deleteDirectory(new File("graph-cache/"));
 
+            String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
+            File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
+            urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
+            DownloadUtils.download(urlhighways, fileOverpassHighways);
+        }
 
 
         new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
