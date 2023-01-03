@@ -23,6 +23,7 @@ import it.osm.gtfs.utils.DownloadUtils;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.GTFSOSMWaysMatch;
 import it.osm.gtfs.utils.StopsUtils;
+import org.apache.commons.io.FileUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
