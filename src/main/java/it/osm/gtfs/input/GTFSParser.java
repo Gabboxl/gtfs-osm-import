@@ -283,7 +283,7 @@ public class GTFSParser {
 
                         if (!missingStops.contains(thisLineGtfsID)) {
                             missingStops.add(thisLineGtfsID);
-                            System.err.println("Warning: No OSM stop found with gtfs_id = " + thisLineGtfsID + ". This Trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
+                            System.err.println("Warning: No OSM stop found with gtfs_id=" + thisLineGtfsID + ". The trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
                         }
                     }
                 }
