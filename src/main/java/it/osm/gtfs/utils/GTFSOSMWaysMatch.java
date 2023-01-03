@@ -12,7 +12,6 @@ import com.graphhopper.matching.MatchResult;
 import com.graphhopper.matching.Observation;
 import com.graphhopper.routing.ev.OSMWayID;
 import com.graphhopper.util.*;
-import it.osm.gtfs.command.GTFSMatchGPXFile;
 import org.fusesource.jansi.Ansi;
 
 import java.io.IOException;
@@ -36,15 +35,15 @@ public class GTFSOSMWaysMatch {
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSOSMWaysMatch.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
 
         hopper = new GraphHopper().init(graphHopperConfiguration);
-        hopper.importOrLoad();
+
 
         //we programmatically set the OSM ways data file as using the yml doesn't work for custom paths on different machines
-        hopper.setOSMFile(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
+        hopper.setOSMFile("C:/Users/Gabriele/Desktop/osm/gtfsimport/osmdata/overpassways.osm");
 
         //programmatically set additional values to be assigned to every graphhopper's edge for a later use (in our case we need the osm way ids ofr every graphhopper's edge)
         hopper.setEncodedValuesString("osm_way_id"); //ricorda, se vuoi cambiare/aggiungere questi encoded values, devi rigenerare tutti i graph cancellando da cache dei graph in modo che vengano aggiunti i nuovi valori scelti a ogni edge
 
-
+        hopper.importOrLoad();
 
         PMap hints = new PMap();
         String profile_graphhopper = "car"; //TODO: maybe remove this as it is already specified in the yml file?
