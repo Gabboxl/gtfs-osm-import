@@ -40,6 +40,8 @@ public class GTFSMatchGPXFile implements Callable<Void> {
         //List of all files and directories
         File[] gpx_files_list = directoryPath.listFiles();
 
+
+
         assert gpx_files_list != null; //mi assicuro che la cartella dei file gpx sia piena almeno, altrimenti genera un'eccezione
         for (File gpxFile : gpx_files_list) {
 
@@ -48,7 +50,7 @@ public class GTFSMatchGPXFile implements Callable<Void> {
             String outFile = gpxFile.getAbsolutePath() + ".res.gpx";
 
 
-            new GTFSOSMWaysMatch().runMatch(Files.readString(gpxFile.toPath()), false);
+           // new GTFSOSMWaysMatch().initMatch(Files.readString(gpxFile.toPath()), false);
 
             System.out.println("\tExport results to:" + outFile);
         }

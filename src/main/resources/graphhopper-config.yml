@@ -7,7 +7,7 @@
 
 
   # Local folder used by graphhopper to store its data
-  graph.location: dummylocation # this is a dummy name as we need to remove the init() function or at least remove the throw exception when ther eisnt any name specified in the yml file
+  graph.location: dummylocation # todo: this is a dummy name as we need to remove the init() function or at least remove the throw exception when ther eisnt any name specified in the yml file
 
 
   ##### Vehicles #####

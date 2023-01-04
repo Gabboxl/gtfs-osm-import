@@ -29,7 +29,7 @@ public class GTFSOSMWaysMatch {
     private Translation tr;
     private boolean withRoute;
 
-    public ArrayList<Integer> runMatch(String xmlGPXData, boolean deletePreviousCacheData) throws IOException {
+    public GTFSOSMWaysMatch initMatch(boolean deletePreviousCacheData) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSOSMWaysMatch.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
@@ -64,15 +64,14 @@ public class GTFSOSMWaysMatch {
         withRoute = !instructions_locale.isEmpty();
         xmlMapper = new XmlMapper();
 
-        //si matchaa
-        ArrayList<Integer> matchWayIDs = matchGPX(xmlGPXData);
-
-        System.out.println(ansi().fg(Ansi.Color.GREEN).a("GPS import took: ").reset().a(importSW.getSeconds() + " s").fg(Ansi.Color.GREEN).a(", match took: ").reset().a(matchSW.getSeconds() + " s"));
-
-        return matchWayIDs;
+        return this;
     }
 
-    private ArrayList<Integer> matchGPX(String xmlGpxData){
+    public ArrayList<Integer> matchGPX(String xmlGpxData){
+       if(!hopper.getFullyLoaded()) {
+           throw new IllegalStateException("You must call initMatch() first to initialize GraphHopper and use the returned instance before matching files!");
+       }
+
         try {
             importSW.start();
 
@@ -88,6 +87,9 @@ public class GTFSOSMWaysMatch {
 
             List<Observation> measurements = GpxConversions.getEntries(gpx.trk.get(0));
             importSW.stop();
+
+            System.out.println(ansi().fg(Ansi.Color.GREEN).a("GPS import took: ").reset().a(importSW.getSeconds() + " s").fg(Ansi.Color.GREEN).a(", match took: ").reset().a(matchSW.getSeconds() + " s"));
+
 
             matchSW.start();
             MatchResult matchResult = mapMatching.match(measurements);
