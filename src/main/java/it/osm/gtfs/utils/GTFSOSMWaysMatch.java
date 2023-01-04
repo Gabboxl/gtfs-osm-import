@@ -35,6 +35,7 @@ public class GTFSOSMWaysMatch {
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSOSMWaysMatch.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
 
         hopper = new GraphHopper().init(graphHopperConfiguration);
+        hopper.setGraphHopperLocation(GTFSImportSettings.getInstance().getCachePath() + "graph-cache/");
 
 
         //we programmatically set the OSM ways data file as using the yml doesn't work for custom paths on different machines
