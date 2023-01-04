@@ -48,7 +48,7 @@ public class GTFSMatchGPXFile implements Callable<Void> {
             String outFile = gpxFile.getAbsolutePath() + ".res.gpx";
 
 
-            new GTFSOSMWaysMatch().runMatch(Files.readString(gpxFile.toPath()));
+            new GTFSOSMWaysMatch().runMatch(Files.readString(gpxFile.toPath()), false);
 
             System.out.println("\tExport results to:" + outFile);
         }

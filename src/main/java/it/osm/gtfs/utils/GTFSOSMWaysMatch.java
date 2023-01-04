@@ -29,7 +29,7 @@ public class GTFSOSMWaysMatch {
     private Translation tr;
     private boolean withRoute;
 
-    public ArrayList<Integer> runMatch(String xmlGPXData) throws IOException {
+    public ArrayList<Integer> runMatch(String xmlGPXData, boolean deletePreviousCacheData) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()); // jackson databind
         GraphHopperConfig graphHopperConfiguration = objectMapper.readValue(GTFSOSMWaysMatch.class.getResourceAsStream("/graphhopper-config.yml"), GraphHopperConfig.class);
@@ -37,6 +37,9 @@ public class GTFSOSMWaysMatch {
         hopper = new GraphHopper().init(graphHopperConfiguration);
         hopper.setGraphHopperLocation(GTFSImportSettings.getInstance().getCachePath() + "graph-cache/");
 
+        if (deletePreviousCacheData) {
+            hopper.clean();
+        }
 
         //we programmatically set the OSM ways data file as using the yml doesn't work for custom paths on different machines
         hopper.setOSMFile("C:/Users/Gabriele/Desktop/osm/gtfsimport/osmdata/overpassways.osm");

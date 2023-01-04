@@ -73,9 +73,6 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
         //download of updated OSM ways in the GTFS bounding box
         if(!skipOsmWaysUpdate) {
 
-            //delete old graphhopper cache TODO: i think this path won't be the default for when people will be using this tool from the jar file
-            FileUtils.deleteDirectory(new File("graph-cache/"));
-
             String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
             File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
             urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
@@ -106,7 +103,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                     String xmlGPXShape = shape.getGPXasSegment(route.getShortName());
 
                     //TODO: need to check if the way matches are ordered well
-                    osmWayIds = new GTFSOSMWaysMatch().runMatch(xmlGPXShape);
+                    osmWayIds = new GTFSOSMWaysMatch().runMatch(xmlGPXShape, !skipOsmWaysUpdate); //delete old
                 }else {
                     System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getName() + " tripID=" + trip.getTripId() +  " ...").reset());
                 }
