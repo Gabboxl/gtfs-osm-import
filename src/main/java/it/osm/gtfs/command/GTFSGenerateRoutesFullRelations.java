@@ -124,7 +124,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
         if(!noOsmWayMatching) {
             System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nBe aware that the IDs of OSM's ways can change anytime!").reset());
-            System.out.println(ansi().fg(Ansi.Color.YELLOW).a("This means you can encounter problems when uploading the relations to OSM in a different time window.").reset());
+            System.out.println(ansi().fg(Ansi.Color.YELLOW).a("This means you can encounter problems if you upload these relations to OSM later as matched OSM ways could be changed/removed and a new match would be required.").reset());
         }
 
         return null;
