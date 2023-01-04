@@ -79,6 +79,8 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
             DownloadUtils.download(urlhighways, fileOverpassHighways, true);
         }
 
+        GTFSOSMWaysMatch osmmatchinstance = new GTFSOSMWaysMatch().initMatch(!skipOsmWaysUpdate);
+
 
         new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
 
@@ -103,7 +105,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
                     String xmlGPXShape = shape.getGPXasSegment(route.getShortName());
 
                     //TODO: need to check if the way matches are ordered well
-                    osmWayIds = new GTFSOSMWaysMatch().runMatch(xmlGPXShape, !skipOsmWaysUpdate); //delete old
+                    osmWayIds = osmmatchinstance.matchGPX(xmlGPXShape);
                 }else {
                     System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getName() + " tripID=" + trip.getTripId() +  " ...").reset());
                 }

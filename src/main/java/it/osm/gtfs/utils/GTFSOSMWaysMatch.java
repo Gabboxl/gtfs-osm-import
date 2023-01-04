@@ -88,7 +88,7 @@ public class GTFSOSMWaysMatch {
 
             List<Observation> measurements = GpxConversions.getEntries(gpx.trk.get(0));
             importSW.stop();
-            
+
 
             matchSW.start();
             MatchResult matchResult = mapMatching.match(measurements);
