@@ -56,8 +56,6 @@ public class GTFSOSMWaysMatch {
         mapMatching.setTransitionProbabilityBeta(2.0);
         mapMatching.setMeasurementErrorSigma(40);
 
-        importSW = new StopWatch();
-        matchSW = new StopWatch();
 
         String instructions_locale = ""; //TODO: maybe remove this as it is already specified in the yml file? or not
         tr = new TranslationMap().doImport().getWithFallBack(Helper.getLocale(instructions_locale));
@@ -73,6 +71,9 @@ public class GTFSOSMWaysMatch {
        }
 
         try {
+            importSW = new StopWatch();
+            matchSW = new StopWatch();
+
             importSW.start();
 
             Gpx gpx = xmlMapper.readValue(xmlGpxData, Gpx.class);
@@ -87,9 +88,7 @@ public class GTFSOSMWaysMatch {
 
             List<Observation> measurements = GpxConversions.getEntries(gpx.trk.get(0));
             importSW.stop();
-
-            System.out.println(ansi().fg(Ansi.Color.GREEN).a("GPS import took: ").reset().a(importSW.getSeconds() + " s").fg(Ansi.Color.GREEN).a(", match took: ").reset().a(matchSW.getSeconds() + " s"));
-
+            
 
             matchSW.start();
             MatchResult matchResult = mapMatching.match(measurements);
@@ -97,6 +96,8 @@ public class GTFSOSMWaysMatch {
 
             System.out.println("\tMatches:\t" + matchResult.getEdgeMatches().size() + ", GPS entries:" + measurements.size());
             System.out.println("\tGPX length:\t" + (float) matchResult.getGpxEntriesLength() + " vs " + (float) matchResult.getMatchLength());
+
+            System.out.println(ansi().fg(Ansi.Color.GREEN).a("GPS import took: ").reset().a(importSW.getSeconds() + " s").fg(Ansi.Color.GREEN).a(", match took: ").reset().a(matchSW.getSeconds() + " s"));
 
 
             //prendo gli id delle vie per ogni edge virtuale creato da graphhopper e li metto in un array
