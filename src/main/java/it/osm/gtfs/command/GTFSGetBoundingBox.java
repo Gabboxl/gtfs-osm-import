@@ -36,9 +36,9 @@ public class GTFSGetBoundingBox implements Callable<Void> {
         //Bus
         System.out.println("API link buses: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery());
         //Tram
-        System.out.println("API links trams: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
+        System.out.println("API link trams: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
         //Metro
-        System.out.println("API links trams: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
+        System.out.println("API link metro: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
         return null;
     }
 
