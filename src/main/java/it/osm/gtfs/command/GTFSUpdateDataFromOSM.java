@@ -54,16 +54,17 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
             File cachedirectory = new File(GTFSImportSettings.getInstance().getCachePath());
             File osmdatadirectory = new File(GTFSImportSettings.getInstance().getOsmDataPath());
 
-            if ((cachedirectory.mkdirs() || cachedirectory.isDirectory()) && (osmdatadirectory.mkdirs() || osmdatadirectory.isDirectory())) { //controllo che sia stata creata la directori o se esiste gia'
-                updateBusStops();
-                updateBaseRels();
-                updateFullRels();
+            cachedirectory.mkdirs();
+            osmdatadirectory.mkdirs();
 
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. You can now generate the bus stops import.").reset());
-            } else {
-                System.err.println("Error during the creation of the cache directory for gtfs-osm-import.");
-            }
-        }else {
+            updateGTFSData();
+            updateBusStops();
+            updateBaseRels();
+            updateFullRels();
+
+            System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. You can now generate the bus stops import.").reset());
+
+        } else {
             StringTokenizer st = new StringTokenizer(relation, " ,\n\t");
             Map<String, Integer> idWithVersion = new HashMap<String, Integer>();
             while (st.hasMoreTokens()){
@@ -75,8 +76,13 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
         return null;
     }
 
+    private static void updateGTFSData() {
+        System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Downloading and extracting GTFS data from " + GTFSImportSettings.getInstance().getGTFSZipUrl() + "...").reset());
+        DownloadUtils.downloadZip(GTFSImportSettings.getInstance().getGTFSZipUrl(), GTFSImportSettings.getInstance().getGTFSDataPath());
+    }
+
     private static void updateBusStops() throws IOException, InterruptedException{
-        List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
+        List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfs);
 
         String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();

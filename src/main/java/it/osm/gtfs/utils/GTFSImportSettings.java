@@ -63,20 +63,16 @@ public class GTFSImportSettings {
         return SettingsHolder.INSTANCE;
     }
 
-    private String gtfsPath = null;
-    public String getGTFSPath() {
-        if (gtfsPath == null){
+    private String gtfsZipUrl = null;
+    public String getGTFSZipUrl() {
+        if (gtfsZipUrl == null) {
             synchronized (this) {
-                gtfsPath = properties.getProperty("gtfs_path");
-                if (gtfsPath == null)
-                    throw new IllegalArgumentException("Please set a valid gtfs-path.");
-                if (!gtfsPath.endsWith(File.separator))
-                    gtfsPath = gtfsPath + File.separator;
-                if (!new File(gtfsPath).isDirectory())
-                    throw new IllegalArgumentException("Please set a valid gtfs-path.");
+                gtfsZipUrl = properties.getProperty("gtfs_zip_url");
+                if (gtfsZipUrl == null)
+                    throw new IllegalArgumentException("Please set a valid output-path.");
             }
         }
-        return gtfsPath;
+        return gtfsZipUrl;
     }
 
     private String outputPath = null;
@@ -103,7 +99,7 @@ public class GTFSImportSettings {
         return getCachePath() + "osmdata" + File.separator;
     }
 
-    public String getGtfsDataPath() {
+    public String getGTFSDataPath() {
         return getCachePath() + "gtfsdata" + File.separator;
     }
 

@@ -63,4 +63,14 @@ public class DownloadUtils {
         }
         throw new SocketTimeoutException();
     }
+
+    public static void downloadZip(String zipUrl, String extractDir) {
+        try {
+            URL url = new URL(zipUrl);
+            ZipUtils.unzipToDirectory(url.openStream(), extractDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

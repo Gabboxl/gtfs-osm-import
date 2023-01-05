@@ -84,7 +84,7 @@ public class GTFSOSMImport {
     @CommandLine.Command(description = "Display current configuration")
     void conf(){
         System.out.println("Current Configuration:\n" +
-                "GTFS path: " + GTFSImportSettings.getInstance().getGTFSPath() + "\n" +
+                "GTFS path: " + GTFSImportSettings.getInstance().getGTFSDataPath() + "\n" +
                 "Output path: " + GTFSImportSettings.getInstance().getOutputPath() + "\n" +
                 "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
                 "Revised key: " + GTFSImportSettings.getInstance().getRevisedKey() + "\n" +

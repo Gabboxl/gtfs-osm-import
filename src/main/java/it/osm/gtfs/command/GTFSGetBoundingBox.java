@@ -29,7 +29,7 @@ public class GTFSGetBoundingBox implements Callable<Void> {
 
     @Override
     public Void call() throws IOException {
-        List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
+        List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfs);
 
         System.out.println("GTFS " + bb);
