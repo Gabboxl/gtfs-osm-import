@@ -37,7 +37,7 @@ import java.util.concurrent.Callable;
 import static org.fusesource.jansi.Ansi.ansi;
 
 
-@CommandLine.Command(name = "fullrels", description = "Generate full relations including ways and stops (very long!)")
+@CommandLine.Command(name = "fullrels", mixinStandardHelpOptions = true, description = "Generate full relations including ways and stops (very long!)")
 public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
 
     @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips OSM ways matching)")
