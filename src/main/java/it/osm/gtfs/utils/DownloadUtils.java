@@ -23,9 +23,11 @@ public class DownloadUtils {
     private static final int TIMEOUT = 30 * 60000;
 
     public static void download(String url, File dest, boolean useGzipCompression) throws IOException {
-        int retry = 0;
-        while (++retry <= 3) {
-            System.out.println("Downloading (retry count: " + retry + "):" + url);
+        int currentretry = 0;
+        final int MAX_RETRIES = 3;
+
+        while (++currentretry <= MAX_RETRIES) {
+            System.out.println("Downloading (retry count: " + currentretry + "/" + MAX_RETRIES + "):" + url);
             try {
                 //System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 
@@ -38,10 +40,7 @@ public class DownloadUtils {
                 //conn.setConnectTimeout(TIMEOUT);
                 //conn.setReadTimeout(TIMEOUT);
                 conn.setRequestMethod("GET");
-                //conn.addRequestProperty("Host", "overpass-api.de");
-                //conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
                 //System.out.println(conn.getRequestProperties());
-
 
                 InputStream in = conn.getInputStream();
                 FileOutputStream fos = new FileOutputStream(dest);
