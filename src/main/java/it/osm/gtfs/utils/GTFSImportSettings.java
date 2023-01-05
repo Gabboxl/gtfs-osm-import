@@ -100,11 +100,11 @@ public class GTFSImportSettings {
     }
 
     public String getOsmDataPath() {
-        return getOutputPath() + File.separator + "osmdata" + File.separator;
+        return getCachePath() + "osmdata" + File.separator;
     }
 
     public String getGtfsDataPath() {
-        return getOutputPath() + File.separator + "gtfsdata" + File.separator;
+        return getCachePath() + "gtfsdata" + File.separator;
     }
 
     private GTFSPlugin plugin = null;
