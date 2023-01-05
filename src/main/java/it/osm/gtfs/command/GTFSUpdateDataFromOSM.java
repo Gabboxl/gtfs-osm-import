@@ -62,7 +62,7 @@ public class GTFSUpdateDataFromOSM implements Callable<Void> {
             updateBaseRels();
             updateFullRels();
 
-            System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. You can now generate the bus stops import.").reset());
+            System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. The bus stops import can now be generated.").reset());
 
         } else {
             StringTokenizer st = new StringTokenizer(relation, " ,\n\t");
