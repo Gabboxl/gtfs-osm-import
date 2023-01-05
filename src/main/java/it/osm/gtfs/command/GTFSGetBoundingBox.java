@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "bbox", description = "Get the Bounding Box of the GTFS File and api links")
+@CommandLine.Command(name = "bbox", mixinStandardHelpOptions = true, description = "Get the Bounding Box of the GTFS File and api links")
 public class GTFSGetBoundingBox implements Callable<Void> {
 
     @Override

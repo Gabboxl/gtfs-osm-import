@@ -22,7 +22,7 @@ import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-@CommandLine.Command(name = "sqlite", description = "Generate a sqlite db containg osm relations")
+@CommandLine.Command(name = "sqlite", mixinStandardHelpOptions = true, description = "Generate a sqlite db containg osm relations")
 public class GTFSGenerateSQLLiteDB implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")

@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-@CommandLine.Command(name = "match", description = "Match gpx files to OSM ways data to generate precise relations (this command will be removed soon)")
+@CommandLine.Command(name = "match", mixinStandardHelpOptions = true, description = "Match gpx files to OSM ways data to generate precise relations (this command will be removed soon)")
 public class GTFSMatchGPXFile implements Callable<Void> {
     //TODO: make this command match both folders or individual files given the path in input
 

@@ -42,7 +42,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import static org.fusesource.jansi.Ansi.ansi;
 
 
-@CommandLine.Command(name = "gpx", description = "Generate .gpx files for all GTFS trips (mostly for debug purposes)")
+@CommandLine.Command(name = "gpx", mixinStandardHelpOptions = true, description = "Generate .gpx files for all GTFS trips (mostly for debug purposes)")
 public class GTFSGenerateRoutesGPXs implements Callable<Void> {
 
     @CommandLine.Option(names = {"-w", "--waypoints"}, description = "Export GPXs as waypoints instead of shape/track")

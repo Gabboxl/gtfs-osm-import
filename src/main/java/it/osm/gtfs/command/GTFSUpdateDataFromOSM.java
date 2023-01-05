@@ -40,7 +40,7 @@ import picocli.CommandLine;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-@CommandLine.Command(name = "update", description = "Generate/update data from OpenStreetMap")
+@CommandLine.Command(name = "update", mixinStandardHelpOptions = true, description = "Generate/update data from OpenStreetMap")
 public class GTFSUpdateDataFromOSM implements Callable<Void> {
 
     @CommandLine.Option(names = {"-r", "--relation"}, description = "Optional relation ID to generate/update single relation from api server")

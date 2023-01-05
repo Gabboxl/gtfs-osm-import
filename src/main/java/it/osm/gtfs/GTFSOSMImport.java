@@ -43,7 +43,7 @@ import java.util.function.Supplier;
 
 
 
-@CommandLine.Command(name = "GTFSOSMImport", /* capire a cosa serve bene sta variabile */mixinStandardHelpOptions = true, subcommands = {
+@CommandLine.Command(name = "GTFSOSMImport", /* questo aggiunge le opzioni standard -h, -help, -V ecc */ mixinStandardHelpOptions = true, subcommands = {
         GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
         GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesFullRelations.class,
         GTFSMatchGPXFile.class, GTFSCheckOsmRoutes.class,
