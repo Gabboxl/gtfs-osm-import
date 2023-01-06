@@ -13,13 +13,13 @@ public class Relation {
     private String from;
     private String to;
     private RelationType type;
-    private List<OSMRelationWayMember> wayMembers = new ArrayList<Relation.OSMRelationWayMember>();
+    private List<OSMRelationWayMember> wayMembers = new ArrayList<>();
 
     private Map<Long, OSMStop> osmstops;
 
     public Relation(String id) {
         this.id = id;
-        osmstops = new TreeMap<Long, OSMStop>();
+        osmstops = new TreeMap<>();
     }
 
     public int getStopsAffinity(StopsList o) {
@@ -177,7 +177,7 @@ public class Relation {
 
     public static class OSMWay {
         private final long id;
-        public List<OSMNode> nodes = new ArrayList<Relation.OSMNode>();
+        public List<OSMNode> nodes = new ArrayList<>();
         public boolean oneway = false;
 
         public OSMWay(long id){

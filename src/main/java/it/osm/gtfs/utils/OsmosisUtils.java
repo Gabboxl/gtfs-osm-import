@@ -20,12 +20,12 @@ public class OsmosisUtils {
 
     public static Pipeline runOsmosisSort(File input, File output) throws IOException{
         TaskRegistrar taskRegistrar = new TaskRegistrar();
-        taskRegistrar.initialize(new ArrayList<String>());
+        taskRegistrar.initialize(new ArrayList<>());
 
-        List<TaskConfiguration> taskInfoList = new ArrayList<TaskConfiguration>();
-        taskInfoList.add(new TaskConfiguration("1", "read-xml", new HashMap<String, String>(),  new HashMap<String, String>(), input.getAbsolutePath()));
-        taskInfoList.add(new TaskConfiguration("2", "sort",  new HashMap<String, String>(),  new HashMap<String, String>(), null));
-        taskInfoList.add(new TaskConfiguration("3", "write-xml",  new HashMap<String, String>(),  new HashMap<String, String>(), output.getAbsolutePath()));
+        List<TaskConfiguration> taskInfoList = new ArrayList<>();
+        taskInfoList.add(new TaskConfiguration("1", "read-xml", new HashMap<>(), new HashMap<>(), input.getAbsolutePath()));
+        taskInfoList.add(new TaskConfiguration("2", "sort", new HashMap<>(), new HashMap<>(), null));
+        taskInfoList.add(new TaskConfiguration("3", "write-xml", new HashMap<>(), new HashMap<>(), output.getAbsolutePath()));
 
         Pipeline pipeline = new Pipeline(taskRegistrar.getFactoryRegister());
         pipeline.prepare(taskInfoList);
@@ -39,13 +39,13 @@ public class OsmosisUtils {
 
         List<TaskConfiguration> taskInfoList = new ArrayList<TaskConfiguration>();
         for (File f:input){
-            taskInfoList.add(new TaskConfiguration("r" + f.getName(), "read-xml", new HashMap<String, String>(),  new HashMap<String, String>(), f.getAbsolutePath()));
+            taskInfoList.add(new TaskConfiguration("r" + f.getName(), "read-xml", new HashMap<>(), new HashMap<>(), f.getAbsolutePath()));
         }
         for (int i = 1; i<input.size(); i++){
-            taskInfoList.add(new TaskConfiguration("m" + i, "merge",  new HashMap<String, String>(),  new HashMap<String, String>(), null));
+            taskInfoList.add(new TaskConfiguration("m" + i, "merge", new HashMap<>(), new HashMap<>(), null));
         }
 
-        taskInfoList.add(new TaskConfiguration("w", "write-xml",  new HashMap<String, String>(),  new HashMap<String, String>(), output.getAbsolutePath()));
+        taskInfoList.add(new TaskConfiguration("w", "write-xml", new HashMap<>(), new HashMap<>(), output.getAbsolutePath()));
 
         Pipeline pipeline = new Pipeline(taskRegistrar.getFactoryRegister());
         pipeline.prepare(taskInfoList);

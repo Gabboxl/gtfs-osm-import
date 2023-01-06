@@ -14,39 +14,28 @@
  **/
 package it.osm.gtfs.input;
 
-import com.graphhopper.routing.FlexiblePathCalculator;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.model.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import org.fusesource.jansi.Ansi;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import org.fusesource.jansi.Ansi;
-import org.jxmapviewer.viewer.GeoPosition;
+import java.util.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
 
     public static List<GTFSStop> readStops(String fName) throws IOException{
-        List<GTFSStop> result = new ArrayList<GTFSStop>();
+        List<GTFSStop> result = new ArrayList<>();
 
         String thisLine;
         String [] elements;
@@ -54,7 +43,7 @@ public class GTFSParser {
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
-        Hashtable<String, Integer> keysIndex = new Hashtable<String, Integer>();
+        Hashtable<String, Integer> keysIndex = new Hashtable<>();
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
                 isFirstLine = false;
@@ -116,7 +105,7 @@ public class GTFSParser {
     }
 
     public static List<Trip> readTrips(String fName, Map<String, Route> routes, Map<String, StopsList> stopTimes) throws IOException{
-        List<Trip> result = new ArrayList<Trip>();
+        List<Trip> result = new ArrayList<>();
 
         String thisLine;
         String [] elements;
@@ -152,7 +141,7 @@ public class GTFSParser {
     }
 
     public static Map<String, Shape> readShapes(String fName) throws IOException{
-        Map<String, Shape> result = new TreeMap<String, Shape>();
+        Map<String, Shape> result = new TreeMap<>();
 
         String thisLine;
         String [] elements;
@@ -192,7 +181,7 @@ public class GTFSParser {
     }
 
     public static Map<String, Route> readRoutes(String fName) throws IOException{
-        Map<String, Route> result = new HashMap<String, Route>();
+        Map<String, Route> result = new HashMap<>();
 
         String thisLine;
         String [] elements;
@@ -227,8 +216,8 @@ public class GTFSParser {
     }
 
     public static Map<String, StopsList> readStopTimes(String filePathName, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
-        Map<String, StopsList> result = new TreeMap<String, StopsList>();
-        Set<String> missingStops = new HashSet<String>();
+        Map<String, StopsList> result = new TreeMap<>();
+        Set<String> missingStops = new HashSet<>();
         int count = 0;
 
         String thisLine;

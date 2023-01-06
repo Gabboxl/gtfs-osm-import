@@ -57,7 +57,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class OSMParser {
 
     public static List<OSMStop> readOSMStops(String fileName, boolean readStopsOfAnyOperator) throws ParserConfigurationException, SAXException, IOException {
-        List<OSMStop> osmStopsListOutput = new ArrayList<OSMStop>();
+        List<OSMStop> osmStopsListOutput = new ArrayList<>();
         Multimap<String, OSMStop> refBuses = HashMultimap.create(); //?
         Multimap<String, OSMStop> refRails = HashMultimap.create(); //??
 
@@ -198,7 +198,7 @@ public class OSMParser {
     }
 
     private static class NodeParser extends DefaultHandler{
-        private final Map<Long, OSMNode> result = new HashMap<Long, OSMNode>();
+        private final Map<Long, OSMNode> result = new HashMap<>();
 
         @Override
         public void startElement(String uri, String localName, String qName,
@@ -263,9 +263,9 @@ public class OSMParser {
         private final Map<String, OSMStop> stopsWithOSMIndex;
         private final Map<Long, OSMWay> ways;
 
-        private final List<Relation> result = new ArrayList<Relation>();
-        private final List<String> failedRelationIds = new ArrayList<String>();
-        private final List<String> missingNodes = new ArrayList<String>();
+        private final List<Relation> result = new ArrayList<>();
+        private final List<String> failedRelationIds = new ArrayList<>();
+        private final List<String> missingNodes = new ArrayList<>();
 
         private Relation currentRelation;
         private long seq = 1;
