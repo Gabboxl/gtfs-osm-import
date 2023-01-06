@@ -27,7 +27,7 @@ public class DownloadUtils {
         final int MAX_RETRIES = 3;
 
         while (++currentretry <= MAX_RETRIES) {
-            System.out.println("Downloading (retry count: " + currentretry + "/" + MAX_RETRIES + "):" + url);
+            System.out.println("Downloading (retry count: " + currentretry + "/" + MAX_RETRIES + "): " + url);
             try {
                 //System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 
