@@ -19,10 +19,7 @@ import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.*;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
-import it.osm.gtfs.utils.DownloadUtils;
-import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.GTFSOSMWaysMatch;
-import it.osm.gtfs.utils.StopsUtils;
+import it.osm.gtfs.utils.*;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
@@ -40,19 +37,20 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "fullrels", mixinStandardHelpOptions = true, description = "Generate full relations including ways and stops (very long!)")
 public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
+
     @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips OSM ways matching)")
     Boolean noOsmWayMatching = false;
 
     @CommandLine.Option(names = {"-s", "--skipdownload"}, description = "Skip download of updated OSM ways")
     Boolean skipOsmWaysUpdate = false;
 
-    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsOfAnyOperatorTagValue = false;
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
 
-        Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue));
+        Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue));
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);

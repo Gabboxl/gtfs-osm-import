@@ -4,6 +4,7 @@ import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
@@ -21,17 +22,17 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "check", description = "Check and validate OSM relations")
 public class CmdCheckOsmRoutes implements Callable<Void> {
 
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
+
     @CommandLine.Option(names = "--osmid", interactive = true)
     String osmId;
-
-    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsOfAnyOperatorTagValue = false;
 
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
         System.out.println("Step 1/4 Reading OSM Stops");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
         System.out.println("Step 2/4 Indexing OSM Stops");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");

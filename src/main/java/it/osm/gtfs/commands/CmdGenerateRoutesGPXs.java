@@ -32,6 +32,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 import com.google.common.collect.Multimap;
+import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
@@ -45,15 +46,16 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "gpx", mixinStandardHelpOptions = true, description = "Generate .gpx files for all GTFS trips (mostly for debug purposes)")
 public class CmdGenerateRoutesGPXs implements Callable<Void> {
 
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
+
     @CommandLine.Option(names = {"-w", "--waypoints"}, description = "Export GPXs as waypoints instead of shape/track")
     boolean asWaypoints;
 
-    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsOfAnyOperatorTagValue = false;
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
-        Map<String, OSMStop> osmstops = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue));
+        Map<String, OSMStop> osmstops = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
         Map<String, StopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstops);

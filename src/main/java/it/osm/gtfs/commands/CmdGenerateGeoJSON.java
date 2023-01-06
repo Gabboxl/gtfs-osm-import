@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.json.JSONException;
 import org.json.JSONStringer;
@@ -36,13 +37,13 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
 public class CmdGenerateGeoJSON implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsOfAnyOperatorTagValue = false;
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
 
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM Stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);

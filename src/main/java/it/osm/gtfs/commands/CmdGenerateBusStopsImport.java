@@ -22,10 +22,7 @@ import it.osm.gtfs.models.BoundingBox;
 import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.output.OSMBusImportGenerator;
-import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.OSMDistanceUtils;
-import it.osm.gtfs.utils.OSMXMLUtils;
-import it.osm.gtfs.utils.StopsUtils;
+import it.osm.gtfs.utils.*;
 import org.fusesource.jansi.Ansi;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.w3c.dom.Element;
@@ -48,8 +45,8 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "stops", mixinStandardHelpOptions = true, description = "Generate files to import bus stops into osm merging with existing stops")
 public class CmdGenerateBusStopsImport implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsOfAnyOperatorTagValue = false;
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
 
     @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review, for every node that is too distant from the GTFS coords generates a new stop, and then it just generates the new change files.")
     Boolean noGuiReview = false;
@@ -65,7 +62,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
 
-        List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
 
         //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!

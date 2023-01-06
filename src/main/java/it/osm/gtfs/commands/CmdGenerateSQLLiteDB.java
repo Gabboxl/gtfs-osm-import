@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
@@ -25,13 +26,13 @@ import javax.xml.parsers.ParserConfigurationException;
 @CommandLine.Command(name = "sqlite", mixinStandardHelpOptions = true, description = "Generate a sqlite db containg osm relations")
 public class CmdGenerateSQLLiteDB implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
-    Boolean checkStopsOfAnyOperatorTagValue = false;
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
 
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
