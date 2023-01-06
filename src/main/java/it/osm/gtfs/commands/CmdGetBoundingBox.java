@@ -28,9 +28,6 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(name = "bbox", mixinStandardHelpOptions = true, description = "Get the Bounding Box of the GTFS File and api links")
 public class CmdGetBoundingBox implements Callable<Void> {
 
-    @CommandLine.Mixin
-    private SharedCliOptions myMixin;
-
     @Override
     public Void call() throws IOException {
         List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
@@ -43,8 +40,6 @@ public class CmdGetBoundingBox implements Callable<Void> {
         System.out.println("API link trams: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
         //Metro
         System.out.println("API link metro: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
-
-        System.out.println(SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
         return null;
     }
