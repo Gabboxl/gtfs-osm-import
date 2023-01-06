@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
 import static org.fusesource.jansi.Ansi.ansi;
 
 @CommandLine.Command(name = "check", description = "Check and validate OSM relations")
-public class GTFSCheckOsmRoutes implements Callable<Void> {
+public class CmdCheckOsmRoutes implements Callable<Void> {
 
     @CommandLine.Option(names = "--osmid", interactive = true)
     String osmId;

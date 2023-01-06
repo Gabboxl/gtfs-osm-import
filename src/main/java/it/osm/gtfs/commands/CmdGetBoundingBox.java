@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "bbox", mixinStandardHelpOptions = true, description = "Get the Bounding Box of the GTFS File and api links")
-public class GTFSGetBoundingBox implements Callable<Void> {
+public class CmdGetBoundingBox implements Callable<Void> {
 
     @CommandLine.Mixin
     private SharedCliOptions myMixin;

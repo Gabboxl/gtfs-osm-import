@@ -44,10 +44,10 @@ import java.util.function.Supplier;
 
 
 @CommandLine.Command(name = "GTFSOSMImport", /* questo aggiunge le opzioni standard -h, -help, -V ecc */ mixinStandardHelpOptions = true, subcommands = {
-        GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
-        GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesFullRelations.class,
-        GTFSMatchGPXFile.class, GTFSCheckOsmRoutes.class,
-        GTFSGenerateRoutesDiff.class
+        CmdUpdateGTFSOSMData.class, CmdGenerateBusStopsImport.class,
+        CmdGetBoundingBox.class, CmdGenerateRoutesGPXs.class, CmdGenerateRoutesFullRelations.class,
+        CmdMatchGPXFile.class, CmdCheckOsmRoutes.class,
+        CmdGenerateRoutesDiff.class
 })
 public class GTFSOSMImport {
     @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
@@ -99,10 +99,10 @@ public class GTFSOSMImport {
             ""},
             footer = {"", "Press Ctrl-D to exit."},
             subcommands = {
-                    GTFSUpdateDataFromOSM.class, GTFSGenerateBusStopsImport.class,
-                    GTFSGetBoundingBox.class, GTFSGenerateRoutesGPXs.class, GTFSGenerateRoutesFullRelations.class,
-                    GTFSMatchGPXFile.class, GTFSCheckOsmRoutes.class,
-                    GTFSGenerateRoutesDiff.class, PicocliCommands.ClearScreen.class, CommandLine.HelpCommand.class})
+                    CmdUpdateGTFSOSMData.class, CmdGenerateBusStopsImport.class,
+                    CmdGetBoundingBox.class, CmdGenerateRoutesGPXs.class, CmdGenerateRoutesFullRelations.class,
+                    CmdMatchGPXFile.class, CmdCheckOsmRoutes.class,
+                    CmdGenerateRoutesDiff.class, PicocliCommands.ClearScreen.class, CommandLine.HelpCommand.class})
     static class CliCommands implements Runnable {
         PrintWriter out;
 
@@ -192,8 +192,8 @@ public class GTFSOSMImport {
     void start() throws IOException, ParserConfigurationException, InterruptedException, SAXException, TransformerException {
 
         //TODO: support command options of these two classes in the start command also / or use shared options i think
-        new GTFSUpdateDataFromOSM().call();
-        new GTFSGenerateBusStopsImport().call();
+        new CmdUpdateGTFSOSMData().call();
+        new CmdGenerateBusStopsImport().call();
 
     }
 

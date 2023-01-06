@@ -38,7 +38,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 
 @CommandLine.Command(name = "fullrels", mixinStandardHelpOptions = true, description = "Generate full relations including ways and stops (very long!)")
-public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
+public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
     @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips OSM ways matching)")
     Boolean noOsmWayMatching = false;
@@ -66,7 +66,9 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
         //sorting set
         Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
         Set<String> keys = new TreeSet<>(groupedTrips.keySet());
-        
+
+
+
 
 
         //download of updated OSM ways in the GTFS bounding box

@@ -40,7 +40,7 @@ import com.google.common.collect.Multimap;
 import picocli.CommandLine;
 
 @CommandLine.Command(name = "reldiff", description = "Analyze the diff between osm relations and gtfs trips")
-public class GTFSGenerateRoutesDiff implements Callable<Void> {
+public class CmdGenerateRoutesDiff implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsOfAnyOperatorTagValue = false;

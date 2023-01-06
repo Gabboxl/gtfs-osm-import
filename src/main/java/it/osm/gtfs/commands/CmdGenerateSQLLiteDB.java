@@ -23,7 +23,7 @@ import picocli.CommandLine;
 import javax.xml.parsers.ParserConfigurationException;
 
 @CommandLine.Command(name = "sqlite", mixinStandardHelpOptions = true, description = "Generate a sqlite db containg osm relations")
-public class GTFSGenerateSQLLiteDB implements Callable<Void> {
+public class CmdGenerateSQLLiteDB implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsOfAnyOperatorTagValue = false;
@@ -40,10 +40,10 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID);
 
 
-        GTFSGenerateSQLLiteDB generator = null;
+        CmdGenerateSQLLiteDB generator = null;
         try {
             System.out.println("Creating SQLite DB...");
-            generator = new GTFSGenerateSQLLiteDB("gtt.db");
+            generator = new CmdGenerateSQLLiteDB("gtt.db");
             generator.createDB();
             System.out.println("Adding stops to SQLite DB...");
             generator.insertStops(osmStops);
@@ -62,7 +62,7 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
 
     private Connection connection = null;
 
-    private GTFSGenerateSQLLiteDB(String file) throws SQLException,
+    private CmdGenerateSQLLiteDB(String file) throws SQLException,
             ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:" + file);

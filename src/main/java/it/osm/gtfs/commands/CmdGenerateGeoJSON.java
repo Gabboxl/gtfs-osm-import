@@ -34,7 +34,7 @@ import picocli.CommandLine;
 
 //TODO: is this class still useful in some way?
 @CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
-public class GTFSGenerateGeoJSON implements Callable<Void> {
+public class CmdGenerateGeoJSON implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsOfAnyOperatorTagValue = false;
@@ -52,10 +52,10 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
                 osmstopsOsmID);
 
 
-        GTFSGenerateGeoJSON generator = null;
+        CmdGenerateGeoJSON generator = null;
         try {
             System.out.println("Creating GeoJSON...");
-            generator = new GTFSGenerateGeoJSON();
+            generator = new CmdGenerateGeoJSON();
             System.out.println("Adding Stops to GeoJSON...");
             generator.insertStops(osmStops);
             //System.err.println("Adding Relations to GeoJSON");
@@ -75,7 +75,7 @@ public class GTFSGenerateGeoJSON implements Callable<Void> {
     private Collection<MfFeature> stops;
     private final GeometryFactory factory;
 
-    private GTFSGenerateGeoJSON(){
+    private CmdGenerateGeoJSON(){
         buffer = new StringBuffer();
         factory = new GeometryFactory();
     }

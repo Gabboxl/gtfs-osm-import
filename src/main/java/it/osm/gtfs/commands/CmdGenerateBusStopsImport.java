@@ -46,7 +46,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 
 @CommandLine.Command(name = "stops", mixinStandardHelpOptions = true, description = "Generate files to import bus stops into osm merging with existing stops")
-public class GTFSGenerateBusStopsImport implements Callable<Void> {
+public class CmdGenerateBusStopsImport implements Callable<Void> {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     Boolean checkStopsOfAnyOperatorTagValue = false;
