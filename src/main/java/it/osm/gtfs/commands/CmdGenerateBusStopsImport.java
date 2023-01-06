@@ -48,7 +48,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
     @CommandLine.Mixin
     private SharedCliOptions sharedCliOptions;
 
-    @CommandLine.Option(names = {"-n", "--noreview"}, description = "disables GUI review, for every node that is too distant from the GTFS coords generates a new stop, and then it just generates the new change files.")
+    @CommandLine.Option(names = {"-n", "--noreview"}, description = "Disables GUI review. For every node that is too distant from the GTFS coords a new stop will be generated.")
     Boolean noGuiReview = false;
 
     final ArrayList<OSMStop> osmStopsToReview = new ArrayList<>(); //TODO: maybe find a better place for these two variables?
