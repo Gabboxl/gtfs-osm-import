@@ -229,7 +229,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("Total Matched OSM stops with GTFS data: ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
 
                 if (noGuiReview) {
-                    System.out.println(ansi().fg(Ansi.Color.CYAN).a("You chose to NOT review the stops that need manual position review. Therefore these stops will be considered to be removed and a new stop node will be created for each of those removed stops with the updated coordinates.").reset());
+                    System.out.println(ansi().fg(Ansi.Color.CYAN).a("You chose to NOT review the stops that need manual position review. Therefore these stops have been considered to be removed and a new stop node has been created for each of those removed stops with the updated coordinates.").reset());
                 } else {
                     System.out.println("(" + ansi().fg(Ansi.Color.CYAN).a("Matched stops that need manual position review: ").reset().a(stopsToReview) + ")");
                 }
