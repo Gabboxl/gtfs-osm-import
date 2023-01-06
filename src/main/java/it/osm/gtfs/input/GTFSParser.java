@@ -283,7 +283,7 @@ public class GTFSParser {
 
                         if (!missingStops.contains(thisLineGtfsID)) {
                             missingStops.add(thisLineGtfsID);
-                            System.err.println("Warning: No OSM stop found with gtfs_id=" + thisLineGtfsID + ". The trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
+                            System.err.println("Warning: GTFS stop with gtfs_id=" + thisLineGtfsID + " not found from OpenStreetMap data! The trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
                         }
                     }
                 }
@@ -294,7 +294,7 @@ public class GTFSParser {
 
         if (missingStops.size() > 0) {
             System.err.println("\nError: Some stops weren't found, not all trips have been generated.");
-            System.err.println("Make sure you imported the new GTFS stops data into OSM before running this command!");
+            System.err.println("Make sure you uploaded the new GTFS stops data to OpenStreetMap before running this command!");
             System.err.println("Run the GTFSOSMImport \"start\" command to create the new stops, upload the new stops to OSM and then run this command again!");
         }
 
