@@ -74,7 +74,7 @@ public class GTFSGenerateSQLLiteDB implements Callable<Void> {
                 connection.close();
         } catch (SQLException e) {
             // connection close failed.
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
