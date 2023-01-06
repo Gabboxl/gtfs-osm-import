@@ -58,17 +58,17 @@ public class GTFSGenerateRoutesDiff implements Callable<Void> {
                 routes, stopTimes);
 
         //looking from mapping gtfs trip into existing osm relations
-        Set<Relation> osmRelationNotFoundInGTFS = new HashSet<Relation>(osmRels);
-        Set<Relation> osmRelationFoundInGTFS = new HashSet<Relation>();
-        List<Trip> tripsNotFoundInOSM = new LinkedList<Trip>();
+        Set<Relation> osmRelationNotFoundInGTFS = new HashSet<>(osmRels);
+        Set<Relation> osmRelationFoundInGTFS = new HashSet<>();
+        List<Trip> tripsNotFoundInOSM = new LinkedList<>();
 
         Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
-        Set<String> keys = new TreeSet<String>(groupedTrips.keySet());
-        Map<Relation, Affinity> affinities = new HashMap<Relation, GTFSGenerateRoutesDiff.Affinity>();
+        Set<String> keys = new TreeSet<>(groupedTrips.keySet());
+        Map<Relation, Affinity> affinities = new HashMap<>();
 
         for (String k : keys){
             Collection<Trip> allTrips = groupedTrips.get(k);
-            Set<Trip> uniqueTrips = new HashSet<Trip>(allTrips);
+            Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
             for (Trip trip : uniqueTrips){
                 Route route = routes.get(trip.getRoute().getId());
