@@ -49,7 +49,7 @@ public class StopsUtils {
 
 
     public static Map<String, OSMStop> getGTFSIdOSMStopMap(List<OSMStop> stops) {
-        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
+        final Map<String, OSMStop> result = new TreeMap<>();
 
         for (OSMStop stop : stops){
             if (stop.getGtfsId() != null && !stop.getGtfsId().equals("")){
@@ -61,7 +61,7 @@ public class StopsUtils {
     }
 
     public static Map<String, OSMStop> getOSMIdOSMStopMap(List<OSMStop> stops) {
-        final Map<String, OSMStop> result = new TreeMap<String, OSMStop>();
+        final Map<String, OSMStop> result = new TreeMap<>();
 
         for (OSMStop stop : stops){
             if (stop.getOSMId() != null){

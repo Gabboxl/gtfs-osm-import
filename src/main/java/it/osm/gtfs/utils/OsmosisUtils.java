@@ -35,9 +35,9 @@ public class OsmosisUtils {
 
     public static Pipeline runOsmosisMerge(Collection<File> input, File output) throws IOException{
         TaskRegistrar taskRegistrar = new TaskRegistrar();
-        taskRegistrar.initialize(new ArrayList<String>());
+        taskRegistrar.initialize(new ArrayList<>());
 
-        List<TaskConfiguration> taskInfoList = new ArrayList<TaskConfiguration>();
+        List<TaskConfiguration> taskInfoList = new ArrayList<>();
         for (File f:input){
             taskInfoList.add(new TaskConfiguration("r" + f.getName(), "read-xml", new HashMap<>(), new HashMap<>(), f.getAbsolutePath()));
         }
