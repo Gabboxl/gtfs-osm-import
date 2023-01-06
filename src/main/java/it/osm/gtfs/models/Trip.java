@@ -12,7 +12,7 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.model;
+package it.osm.gtfs.models;
 
 
 public class Trip implements Comparable<Trip> {

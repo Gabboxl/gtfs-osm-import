@@ -15,8 +15,8 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.GTFSParser;
-import it.osm.gtfs.model.BoundingBox;
-import it.osm.gtfs.model.GTFSStop;
+import it.osm.gtfs.models.BoundingBox;
+import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import picocli.CommandLine;
 

@@ -14,10 +14,9 @@
  **/
 package it.osm.gtfs.output;
 
-import it.osm.gtfs.model.*;
+import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
-import java.util.Collection;
 import java.util.List;
 
 public class OSMRelationImportGenerator {

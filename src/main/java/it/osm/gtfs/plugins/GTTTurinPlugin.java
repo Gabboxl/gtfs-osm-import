@@ -14,11 +14,11 @@
  **/
 package it.osm.gtfs.plugins;
 
-import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Route;
-import it.osm.gtfs.model.Stop;
-import it.osm.gtfs.model.StopsList;
-import it.osm.gtfs.model.Trip;
+import it.osm.gtfs.models.Relation;
+import it.osm.gtfs.models.Route;
+import it.osm.gtfs.models.Stop;
+import it.osm.gtfs.models.StopsList;
+import it.osm.gtfs.models.Trip;
 
 import java.util.Collection;
 import java.util.Collections;

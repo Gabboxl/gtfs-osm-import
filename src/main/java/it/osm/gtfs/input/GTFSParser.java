@@ -17,7 +17,7 @@ package it.osm.gtfs.input;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import it.osm.gtfs.enums.WheelchairAccess;
-import it.osm.gtfs.model.*;
+import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.fusesource.jansi.Ansi;
 import org.jxmapviewer.viewer.GeoPosition;

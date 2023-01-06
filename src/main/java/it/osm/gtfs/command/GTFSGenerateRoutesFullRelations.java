@@ -17,7 +17,7 @@ package it.osm.gtfs.command;
 import com.google.common.collect.Multimap;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.model.*;
+import it.osm.gtfs.models.*;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
 import it.osm.gtfs.utils.DownloadUtils;
 import it.osm.gtfs.utils.GTFSImportSettings;

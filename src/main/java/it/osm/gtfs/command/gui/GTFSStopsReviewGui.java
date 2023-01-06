@@ -1,6 +1,6 @@
 package it.osm.gtfs.command.gui;
 
-import it.osm.gtfs.model.OSMStop;
+import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jxmapviewer.JXMapKit;
 import org.jxmapviewer.OSMTileFactoryInfo;

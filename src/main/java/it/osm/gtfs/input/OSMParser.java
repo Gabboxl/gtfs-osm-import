@@ -15,14 +15,14 @@
 package it.osm.gtfs.input;
 
 import it.osm.gtfs.enums.WheelchairAccess;
-import it.osm.gtfs.model.OSMStop;
+import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OSMDistanceUtils;
-import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Relation.OSMNode;
-import it.osm.gtfs.model.Relation.OSMRelationWayMember;
-import it.osm.gtfs.model.Relation.OSMWay;
-import it.osm.gtfs.model.Relation.RelationType;
+import it.osm.gtfs.models.Relation;
+import it.osm.gtfs.models.Relation.OSMNode;
+import it.osm.gtfs.models.Relation.OSMRelationWayMember;
+import it.osm.gtfs.models.Relation.OSMWay;
+import it.osm.gtfs.models.Relation.RelationType;
 
 import java.io.File;
 import java.io.FileReader;

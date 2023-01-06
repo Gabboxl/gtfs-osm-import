@@ -1,9 +1,9 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.model.OSMStop;
-import it.osm.gtfs.model.Relation;
-import it.osm.gtfs.model.Stop;
+import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.Relation;
+import it.osm.gtfs.models.Stop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.io.File;

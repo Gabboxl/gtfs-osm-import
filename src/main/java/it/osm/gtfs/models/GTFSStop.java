@@ -1,4 +1,4 @@
-package it.osm.gtfs.model;
+package it.osm.gtfs.models;
 
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.output.IElementCreator;

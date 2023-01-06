@@ -14,7 +14,7 @@
  **/
 package it.osm.gtfs.output;
 
-import it.osm.gtfs.model.BoundingBox;
+import it.osm.gtfs.models.BoundingBox;
 
 import java.io.IOException;
 import java.io.OutputStream;

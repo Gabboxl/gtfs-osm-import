@@ -1,4 +1,4 @@
-package it.osm.gtfs.model;
+package it.osm.gtfs.models;
 
 import java.util.ArrayList;
 import java.util.List;

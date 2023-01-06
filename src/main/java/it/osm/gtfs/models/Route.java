@@ -12,7 +12,7 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.model;
+package it.osm.gtfs.models;
 
 //TODO: consider converting classes like this one to java records
 public class Route implements Comparable<Route> {

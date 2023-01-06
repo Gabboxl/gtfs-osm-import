@@ -1,8 +1,8 @@
 package it.osm.gtfs.utils;
 
 import it.osm.gtfs.enums.WheelchairAccess;
-import it.osm.gtfs.model.GTFSStop;
-import it.osm.gtfs.model.OSMStop;
+import it.osm.gtfs.models.GTFSStop;
+import it.osm.gtfs.models.OSMStop;
 import org.w3c.dom.Element;
 
 import java.util.List;

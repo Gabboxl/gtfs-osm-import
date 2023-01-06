@@ -12,7 +12,7 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.model;
+package it.osm.gtfs.models;
 
 import java.util.Map;
 import java.util.Map.Entry;

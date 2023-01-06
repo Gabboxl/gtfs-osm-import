@@ -15,7 +15,7 @@
 package it.osm.gtfs.command;
 
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.model.*;
+import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.DownloadUtils;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OsmosisUtils;
