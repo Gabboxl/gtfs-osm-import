@@ -12,15 +12,13 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.command;
+package it.osm.gtfs.commands;
 
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.GTFSOSMWaysMatch;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;

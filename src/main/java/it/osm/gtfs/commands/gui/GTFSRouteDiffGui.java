@@ -1,4 +1,4 @@
-package it.osm.gtfs.command.gui;
+package it.osm.gtfs.commands.gui;
 
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;

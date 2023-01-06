@@ -12,12 +12,13 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.command;
+package it.osm.gtfs.commands;
 
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.models.BoundingBox;
 import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.SharedCliOptions;
 import picocli.CommandLine;
 
 import java.io.IOException;
@@ -26,6 +27,9 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "bbox", mixinStandardHelpOptions = true, description = "Get the Bounding Box of the GTFS File and api links")
 public class GTFSGetBoundingBox implements Callable<Void> {
+
+    @CommandLine.Mixin
+    private SharedCliOptions myMixin;
 
     @Override
     public Void call() throws IOException {
@@ -39,6 +43,9 @@ public class GTFSGetBoundingBox implements Callable<Void> {
         System.out.println("API link trams: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
         //Metro
         System.out.println("API link metro: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
+
+        System.out.println(SharedCliOptions.checkStopsOfAnyOperatorTagValue);
+
         return null;
     }
 

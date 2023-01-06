@@ -1,4 +1,4 @@
-package it.osm.gtfs.command.gui;
+package it.osm.gtfs.commands.gui;
 
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;

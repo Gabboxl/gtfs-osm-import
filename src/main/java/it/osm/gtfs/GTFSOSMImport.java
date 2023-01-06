@@ -15,8 +15,8 @@
 
 package it.osm.gtfs;
 
-import it.osm.gtfs.command.*;
-import it.osm.gtfs.command.gui.GTFSRouteDiffGui;
+import it.osm.gtfs.commands.*;
+import it.osm.gtfs.commands.gui.GTFSRouteDiffGui;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;

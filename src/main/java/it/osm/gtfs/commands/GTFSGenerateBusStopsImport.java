@@ -13,9 +13,9 @@
 
  **/
 
-package it.osm.gtfs.command;
+package it.osm.gtfs.commands;
 
-import it.osm.gtfs.command.gui.GTFSStopsReviewGui;
+import it.osm.gtfs.commands.gui.GTFSStopsReviewGui;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.BoundingBox;

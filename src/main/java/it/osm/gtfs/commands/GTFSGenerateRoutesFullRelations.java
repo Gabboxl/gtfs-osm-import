@@ -12,7 +12,7 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.command;
+package it.osm.gtfs.commands;
 
 import com.google.common.collect.Multimap;
 import it.osm.gtfs.input.GTFSParser;
@@ -66,7 +66,7 @@ public class GTFSGenerateRoutesFullRelations implements Callable<Void> {
         //sorting set
         Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
         Set<String> keys = new TreeSet<>(groupedTrips.keySet());
-
+        
 
 
         //download of updated OSM ways in the GTFS bounding box

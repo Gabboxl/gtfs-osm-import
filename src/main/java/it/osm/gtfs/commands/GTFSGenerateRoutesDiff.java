@@ -12,7 +12,7 @@
  limitations under the License.
 
  **/
-package it.osm.gtfs.command;
+package it.osm.gtfs.commands;
 
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
