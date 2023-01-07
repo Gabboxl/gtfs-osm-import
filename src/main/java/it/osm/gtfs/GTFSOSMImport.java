@@ -18,6 +18,7 @@ package it.osm.gtfs;
 import it.osm.gtfs.commands.*;
 import it.osm.gtfs.commands.gui.GTFSRouteDiffGui;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.SharedCliOptions;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
 import org.jline.console.impl.SystemRegistryImpl;
@@ -73,6 +74,29 @@ public class GTFSOSMImport {
     );
 
 
+    @CommandLine.Command(description = "Main command - it executes both the update & stops commands.")
+    void start(@CommandLine.Mixin SharedCliOptions sharedCliOptions) throws IOException, ParserConfigurationException, InterruptedException, SAXException, TransformerException {
+
+        //TODO: support command options of these two classes in the start command also / or use shared options i think
+        new CmdUpdateGTFSOSMData().call();
+        new CmdGenerateBusStopsImport().call();
+
+    }
+
+
+    @CommandLine.Command(description = "Display current configuration")
+    void conf(){
+        System.out.println("Current Configuration:\n" +
+                "GTFS path: " + GTFSImportSettings.getInstance().getGTFSDataPath() + "\n" +
+                "Output path: " + GTFSImportSettings.getInstance().getOutputPath() + "\n" +
+                "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
+                "Revised key: " + GTFSImportSettings.getInstance().getRevisedKey() + "\n" +
+                "Plugin class: " + GTFSImportSettings.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
+    }
+
+
+
+
     @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
     public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
         final Object lock = new Object();
@@ -101,17 +125,6 @@ public class GTFSOSMImport {
         }
         app.dispose();
         System.out.println("Done");
-    }
-
-
-    @CommandLine.Command(description = "Display current configuration")
-    void conf(){
-        System.out.println("Current Configuration:\n" +
-                "GTFS path: " + GTFSImportSettings.getInstance().getGTFSDataPath() + "\n" +
-                "Output path: " + GTFSImportSettings.getInstance().getOutputPath() + "\n" +
-                "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
-                "Revised key: " + GTFSImportSettings.getInstance().getRevisedKey() + "\n" +
-                "Plugin class: " + GTFSImportSettings.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
     }
 
 
@@ -217,16 +230,6 @@ public class GTFSOSMImport {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-    }
-
-
-    @CommandLine.Command(description = "Main command - it executes both the update & stops commands.")
-    void start() throws IOException, ParserConfigurationException, InterruptedException, SAXException, TransformerException {
-
-        //TODO: support command options of these two classes in the start command also / or use shared options i think
-        new CmdUpdateGTFSOSMData().call();
-        new CmdGenerateBusStopsImport().call();
-
     }
 
     public static void main(String[] args) {
