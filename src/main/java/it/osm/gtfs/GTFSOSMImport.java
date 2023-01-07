@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 
@@ -53,12 +55,24 @@ import java.util.function.Supplier;
 /* questo aggiunge le opzioni standard -h, -help, -V ecc */ mixinStandardHelpOptions = true,
         scope = CommandLine.ScopeType.INHERIT, //this makes all the command attributes specified here (except the subcommands list) to be copied to every subcommand (like the header, mixinhelp etc..)
         subcommands = {
-        CmdUpdateGTFSOSMData.class, CmdGenerateBusStopsImport.class,
-        CmdGetBoundingBox.class, CmdGenerateRoutesGPXs.class, CmdGenerateRoutesFullRelations.class,
-        CmdMatchGPXFile.class, CmdCheckOsmRoutes.class,
-        CmdGenerateRoutesDiff.class
+
 })
 public class GTFSOSMImport {
+    static List<Object> userCommands = Arrays.asList(
+            CmdGetBoundingBox.class,
+            CmdGenerateRoutesGPXs.class,
+            CmdGenerateRoutesFullRelations.class
+    );
+
+    static List<Object> debugCommands = Arrays.asList(
+            CmdUpdateGTFSOSMData.class,
+            CmdGenerateBusStopsImport.class,
+            CmdMatchGPXFile.class,
+            CmdCheckOsmRoutes.class,
+            CmdGenerateRoutesDiff.class
+    );
+
+
     @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
     public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
         final Object lock = new Object();
@@ -106,12 +120,7 @@ public class GTFSOSMImport {
                     "Hit @|magenta <TAB>|@ to see available commands.",
             "Hit @|magenta ALT-S|@ to toggle tailtips.",
             ""},
-            footer = {"", "Press Ctrl-D to exit."},
-            subcommands = {
-                    CmdUpdateGTFSOSMData.class, CmdGenerateBusStopsImport.class,
-                    CmdGetBoundingBox.class, CmdGenerateRoutesGPXs.class, CmdGenerateRoutesFullRelations.class,
-                    CmdMatchGPXFile.class, CmdCheckOsmRoutes.class,
-                    CmdGenerateRoutesDiff.class, PicocliCommands.ClearScreen.class, CommandLine.HelpCommand.class})
+            footer = {"", "Press Ctrl-D to exit."})
     static class CliCommands implements Runnable {
         PrintWriter out;
 
@@ -147,6 +156,16 @@ public class GTFSOSMImport {
 
             CommandLine cmd = new CommandLine(new GTFSOSMImport(), factory); //CommandLine cmd = new CommandLine(commands, factory); vecchia stringahel
             //aggiungo comandi custom di picocli programmaticamente
+
+            //for the debug interactive mode we add both the user and debug commands
+            for (Object cmdclass : userCommands) {
+                cmd.addSubcommand(cmdclass);
+            }
+
+            for (Object cmdclass : debugCommands) {
+                cmd.addSubcommand(cmdclass);
+            }
+
             cmd.addSubcommand(PicocliCommands.ClearScreen.class);
             cmd.addSubcommand(CommandLine.HelpCommand.class);
 
@@ -178,7 +197,7 @@ public class GTFSOSMImport {
                 // start the shell and process input until the user quits with Ctrl-D
                 String line;
 
-                //show the help menu at startup of the interactive mode
+                //show the help menu at startup of the interactive mode - maybe we can use also
                 systemRegistry.execute("help");
 
                 while (true) {
@@ -220,6 +239,10 @@ public class GTFSOSMImport {
         } else {
 
             CommandLine commandLine = new CommandLine(new GTFSOSMImport());
+
+            for (Object cmdclass : userCommands) {
+                commandLine.addSubcommand(cmdclass);
+            }
 
             int exitCode = commandLine.execute(args);
             System.exit(exitCode);
