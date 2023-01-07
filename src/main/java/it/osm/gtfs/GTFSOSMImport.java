@@ -43,7 +43,16 @@ import java.util.function.Supplier;
 
 
 
-@CommandLine.Command(name = "GTFSOSMImport", /* questo aggiunge le opzioni standard -h, -help, -V ecc */ mixinStandardHelpOptions = true, subcommands = {
+@CommandLine.Command(name = "GTFSOSMImport",
+        synopsisHeading      = "%nUsage: ",
+        descriptionHeading  = "",
+        parameterListHeading = "%nParameters:%n",
+        optionListHeading    = "%nOptions:%n",
+        commandListHeading   = "%nCommands:%n",
+
+/* questo aggiunge le opzioni standard -h, -help, -V ecc */ mixinStandardHelpOptions = true,
+        scope = CommandLine.ScopeType.INHERIT, //this makes all the command attributes specified here (except the subcommands list) to be copied to every subcommand (like the header, mixinhelp etc..)
+        subcommands = {
         CmdUpdateGTFSOSMData.class, CmdGenerateBusStopsImport.class,
         CmdGetBoundingBox.class, CmdGenerateRoutesGPXs.class, CmdGenerateRoutesFullRelations.class,
         CmdMatchGPXFile.class, CmdCheckOsmRoutes.class,
@@ -137,6 +146,10 @@ public class GTFSOSMImport {
             // PicocliCommandsFactory factory = new PicocliCommandsFactory(customFactory); // chain the factories
 
             CommandLine cmd = new CommandLine(new GTFSOSMImport(), factory); //CommandLine cmd = new CommandLine(commands, factory); vecchia stringahel
+            //aggiungo comandi custom di picocli programmaticamente
+            cmd.addSubcommand(PicocliCommands.ClearScreen.class);
+            cmd.addSubcommand(CommandLine.HelpCommand.class);
+
             PicocliCommands picocliCommands = new PicocliCommands(cmd);
 
             Parser parser = new DefaultParser();
