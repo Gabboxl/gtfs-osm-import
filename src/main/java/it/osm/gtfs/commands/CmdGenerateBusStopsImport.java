@@ -66,7 +66,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
 
         //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
-        osmStopsList = osmStopsList.subList(0, 500);
+       // osmStopsList = osmStopsList.subList(0, 500);
 
 
         //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
