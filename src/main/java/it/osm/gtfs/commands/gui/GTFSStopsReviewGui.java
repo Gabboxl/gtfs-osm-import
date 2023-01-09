@@ -23,7 +23,7 @@ public class GTFSStopsReviewGui
             // we specify the default look and feel for the swing components
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.err.println("Error setting LookAndFeel: " + e.getLocalizedMessage());
+            System.err.println("Error setting the look and feel: " + e.getLocalizedMessage());
        }
 
         //final GTFSStopsReviewGui app = new GTFSStopsReviewGui();
