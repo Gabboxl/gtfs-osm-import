@@ -53,7 +53,7 @@ shadowJar { /*il plugin shadowJar per Gradle fa al caso nostro per creare un fil
     La soluzione sarebbe fare un merge di questi file, infatti shadowJar permette di farlo in modo automatico.
     */
 
-    archiveBaseName.set(project.name + "-" + project.version) //TODO: maybe just leave the name? //name the jar with the settings.gradle project name and gradle version
+    archiveBaseName.set(project.name)
     archiveClassifier.set('')
     archiveVersion.set('')
 
