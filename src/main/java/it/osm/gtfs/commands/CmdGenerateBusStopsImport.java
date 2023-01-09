@@ -48,6 +48,10 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
     @CommandLine.Mixin
     private SharedCliOptions sharedCliOptions;
 
+    @CommandLine.Option(names = {"-s", "--skipupdate"}, description = "Skip OSM data update (not recommended)")
+    Boolean noUpdate = false;
+
+
     @CommandLine.Option(names = {"-n", "--noreview"}, description = "Disables GUI review. For every node that is too distant from the GTFS coords a new stop will be generated.")
     Boolean noGuiReview = false;
 
@@ -57,13 +61,18 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
 
     @Override
-    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException {
+    public Void call() throws IOException, ParserConfigurationException, SAXException, TransformerException, InterruptedException {
+
+        //update/download OSM data
+        if (!noUpdate) {
+            new CmdUpdateGTFSOSMData().call();
+        }
+        
 
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
 
         List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
-
 
         //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
        // osmStopsList = osmStopsList.subList(0, 500);
