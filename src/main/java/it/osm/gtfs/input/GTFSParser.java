@@ -83,7 +83,7 @@ public class GTFSParser {
                 if (stopCode.length() > 0){
                     if (locationTypeKey >= 0 && parentStationKey >= 0 && "1".equals(elements[locationTypeKey])){
                         //this is a station (group of multiple stops)
-                        System.err.println("GTFSParser: skipped station (group of multiple stops): " + elements[stopIdKey]);
+                        System.err.println("GTFSParser: skipped station (group of multiple stops) with gtfs id: " + elements[stopIdKey]);
                     }else{
                         GTFSStop gs = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
