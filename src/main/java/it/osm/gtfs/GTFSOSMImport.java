@@ -76,16 +76,6 @@ public class GTFSOSMImport {
     );
 
 
-    @CommandLine.Command(description = "Main command - it executes both the update & stops commands.")
-    void start(@CommandLine.Mixin SharedCliOptions sharedCliOptions) throws IOException, ParserConfigurationException, InterruptedException, SAXException, TransformerException {
-
-        //TODO: support command options of these two classes in the start command also / or use shared options i think
-        new CmdUpdateGTFSOSMData().call();
-        new CmdGenerateBusStopsImport().call();
-
-    }
-
-
     @CommandLine.Command(description = "Display current configuration")
     void conf(){
         System.out.println("Current Configuration:\n" +
