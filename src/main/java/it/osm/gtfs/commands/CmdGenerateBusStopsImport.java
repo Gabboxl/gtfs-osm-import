@@ -67,7 +67,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
         if (!noUpdate) {
             new CmdUpdateGTFSOSMData().call();
         }
-        
+
 
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
