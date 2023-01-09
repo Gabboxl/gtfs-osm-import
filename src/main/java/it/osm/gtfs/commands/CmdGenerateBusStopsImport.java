@@ -191,7 +191,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
             //stops position review with GUI
                 //only execute if the noreview flag is set to false
                 if(!noGuiReview && !osmStopsToReview.isEmpty()) {
-                    System.out.println("Starting stop positions review...");
+                    System.out.println(ansi().render("@|cyan Starting stop positions review...|@"));
 
                     final Object lockObject = new Object();
 
@@ -206,8 +206,8 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                     }
 
                     if(osmStopsToReview.size() == finalReviewedGeopositions.size()) {
-                        System.out.println("Stop review done");
-                        System.out.println("Saving accepted coordinates...");
+                        System.out.println(ansi().render("@|cyan Stop review done |@"));
+                        System.out.println(ansi().render("@|yellow Saving accepted coordinates... |@"));
 
                         for (OSMStop reviewedOsmStop : osmStopsToReview) {
                             Element originalNode = (Element) reviewedOsmStop.originalXMLNode;
