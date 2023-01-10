@@ -84,7 +84,7 @@ public class Trip implements Comparable<Trip> {
                 if ((o.stopList != null && o.stopList.equalsStops(stopList))){
                     return 0;
                 }else{
-                    return stopList.getId().compareTo(o.getStopTime().getId());
+                    return stopList.getTripId().compareTo(o.getStopTime().getTripId());
                 }
             }else{
                 return a;

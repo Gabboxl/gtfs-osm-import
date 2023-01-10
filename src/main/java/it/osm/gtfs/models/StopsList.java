@@ -19,16 +19,16 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class StopsList {
-    private final String id;
-    private Map<Long, OSMStop> stops;
-    private Map<Long, String> stopsTimes;
+    private final String tripId;
+    private Map<Long, OSMStop> seqOSMStopMap;
+    private Map<Long, String> seqArrivalTimeMap;
     private Boolean valid = true;
 
-    public StopsList(String id) {
+    public StopsList(String tripId) {
         super();
-        this.id = id;
-        stops = new TreeMap<>();
-        stopsTimes = new TreeMap<>();
+        this.tripId = tripId;
+        seqOSMStopMap = new TreeMap<>();
+        seqArrivalTimeMap = new TreeMap<>();
     }
 
     public Boolean isValid() {
@@ -39,46 +39,46 @@ public class StopsList {
         valid = false;
     }
 
-    public String getId() {
-        return id;
+    public String getTripId() {
+        return tripId;
     }
 
-    public void pushPoint(Long seq, OSMStop stop, String arrival_time){
-        stops.put(seq, stop);
-        stopsTimes.put(seq, arrival_time);
+    public void pushPoint(Long seq, OSMStop osmStop, String arrivalTime){
+        seqOSMStopMap.put(seq, osmStop);
+        seqArrivalTimeMap.put(seq, arrivalTime);
     }
 
     public String getRelationAsStopList(Trip t, Route r){
         StringBuilder buffer = new StringBuilder();
-        for (Stop s:stops.values()){
+        for (Stop s: seqOSMStopMap.values()){
             buffer.append(s.getCode() + " " + s.getName()  + "\n");
         }
         return buffer.toString();
     }
 
 
-    public Map<Long, OSMStop> getStops() {
-        return stops;
+    public Map<Long, OSMStop> getSeqOSMStopMap() {
+        return seqOSMStopMap;
     }
 
-    public void setStops(Map<Long, OSMStop> s){
-        stops = s;
+    public void setSeqOSMStopMap(Map<Long, OSMStop> s){
+        seqOSMStopMap = s;
     }
 
-    public Map<Long, String> getStopsTimes() {
-        return stopsTimes;
+    public Map<Long, String> getSeqArrivalTimeMap() {
+        return seqArrivalTimeMap;
     }
 
-    public void setStopsTimes(Map<Long, String> s){
-        stopsTimes = s;
+    public void setSeqArrivalTimeMap(Map<Long, String> s){
+        seqArrivalTimeMap = s;
     }
 
     public boolean equalsStops(StopsList o) {
-        if (stops.size() != o.stops.size())
+        if (seqOSMStopMap.size() != o.seqOSMStopMap.size())
             return false;
-        for (Long key: o.stops.keySet()){
-            Stop a = stops.get(key);
-            Stop b = o.stops.get(key);
+        for (Long key: o.seqOSMStopMap.keySet()){
+            Stop a = seqOSMStopMap.get(key);
+            Stop b = o.seqOSMStopMap.get(key);
             if (a == null || !a.equals(b))
                 return false;
         }

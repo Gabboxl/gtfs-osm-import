@@ -90,9 +90,9 @@ public class GTTTurinPlugin implements GTFSPlugin {
     @Override
     public boolean isRelationSameAs(Relation relation, StopsList s) {
         //Allow missing last stop (bug in gtfs)
-        if (relation.getStops().size() == s.getStops().size() + 1){
-            for (Long key: s.getStops().keySet())
-                if (!relation.getStops().get(key).equals(s.getStops().get(key)))
+        if (relation.getStops().size() == s.getSeqOSMStopMap().size() + 1){
+            for (Long key: s.getSeqOSMStopMap().keySet())
+                if (!relation.getStops().get(key).equals(s.getSeqOSMStopMap().get(key)))
                     return false;
             System.err.println("GTTPlugin: Matched relation with gtfs bug " + relation.getId());
             return true;
@@ -105,12 +105,12 @@ public class GTTTurinPlugin implements GTFSPlugin {
     public boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, StopsList s) {
         int frequency = Collections.frequency(allTrips, trip);
 
-        if (s.getStopsTimes().get(1L) == null)
+        if (s.getSeqArrivalTimeMap().get(1L) == null)
             return false;
         else if (frequency <= 1){
             System.err.println("GTTPlugin: Ignoring trip " + trip.getTripId() + " found only one, may not be a valid route");
             return false;
-        }else if (frequency <= 4 && (s.getStopsTimes().get(1L).startsWith("04") || s.getStopsTimes().get(1L).startsWith("05") || s.getStopsTimes().get(1L).startsWith("06"))){
+        }else if (frequency <= 4 && (s.getSeqArrivalTimeMap().get(1L).startsWith("04") || s.getSeqArrivalTimeMap().get(1L).startsWith("05") || s.getSeqArrivalTimeMap().get(1L).startsWith("06"))){
             System.err.println("GTTPlugin: Ignoring trip " + trip.getTripId() + " found only four times in early morning, may be a warmup route");
             return false;
         }

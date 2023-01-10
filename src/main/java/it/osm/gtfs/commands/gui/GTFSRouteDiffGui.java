@@ -163,7 +163,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         if (event.getSource().equals(gtfsTripsList)){
             Trip selectedTrip = uniqueTrips.get(gtfsTripsList.getSelectedIndex());
             currentGTFSStops.clear();
-            currentGTFSStops.addAll(selectedTrip.getStopTime().getStops().values());
+            currentGTFSStops.addAll(selectedTrip.getStopTime().getSeqOSMStopMap().values());
             updateStopBinding(currentGTFSStops, gtfsStopsList);
             updateAffinity(selectedTrip);
         }else if (event.getSource().equals(osmTripsList)){

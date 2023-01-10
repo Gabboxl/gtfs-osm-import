@@ -26,13 +26,13 @@ public class Relation {
         boolean exactMatch = true;
         int affinity = 0;
         for (OSMStop s:osmstops.values())
-            if (o.getStops().containsValue(s)){
-                affinity+= osmstops.size() - Math.abs((getKeysByValue(osmstops, s) - getKeysByValue(o.getStops(), s)));
+            if (o.getSeqOSMStopMap().containsValue(s)){
+                affinity+= osmstops.size() - Math.abs((getKeysByValue(osmstops, s) - getKeysByValue(o.getSeqOSMStopMap(), s)));
             }else{
                 affinity -= osmstops.size();
                 exactMatch = false;
             }
-        int diff = Math.abs(o.getStops().size() - osmstops.size());
+        int diff = Math.abs(o.getSeqOSMStopMap().size() - osmstops.size());
 
         if (exactMatch && diff == 0)
             return Integer.MAX_VALUE;
@@ -62,11 +62,11 @@ public class Relation {
 
 
     public boolean equalsStops(StopsList o) {
-        if (osmstops.size() != o.getStops().size())
+        if (osmstops.size() != o.getSeqOSMStopMap().size())
             return false;
-        for (Long key: o.getStops().keySet()){
+        for (Long key: o.getSeqOSMStopMap().keySet()){
             Stop a = osmstops.get(key);
-            Stop b = o.getStops().get(key);
+            Stop b = o.getSeqOSMStopMap().get(key);
             if (a == null || !a.equals(b))
                 return false;
         }
