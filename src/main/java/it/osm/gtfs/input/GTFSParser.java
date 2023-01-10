@@ -284,7 +284,7 @@ public class GTFSParser {
         if (missingStops.size() > 0) {
             System.err.println("\nError: Some stops weren't found, not all trips have been generated.");
             System.err.println("Make sure you uploaded the new GTFS stops data to OpenStreetMap before running this command!");
-            System.err.println("Run the GTFSOSMImport \"start\" command to create the new stops, upload the new stops to OSM and then run this command again!");
+            System.err.println("Run the GTFSOSMImport \"stops\" command to create the new stops. Then upload the new stops to OSM, and then run this command again!");
         }
 
         return result;
@@ -293,14 +293,17 @@ public class GTFSParser {
     public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes, Map<String, StopsList> stopTimes){
         Collections.sort(trips);
         Multimap<String, Trip> result = ArrayListMultimap.create();
-        for (Trip t:trips){
-            Route r = routes.get(t.getRoute().getId());
-            StopsList s = stopTimes.get(t.getTripId());
+
+        for (Trip trip : trips){
+            Route route = routes.get(trip.getRoute().getId());
+
+            StopsList s = stopTimes.get(trip.getTripId());
 
             if (s.isValid()){
-                result.put(r.getShortName(), t);
+                result.put(route.getShortName(), trip);
             }
         }
+
         return result;
     }
 
