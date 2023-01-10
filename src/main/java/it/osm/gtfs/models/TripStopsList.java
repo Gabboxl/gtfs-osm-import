@@ -25,10 +25,11 @@ public class TripStopsList {
     private Boolean valid = true;
 
     public TripStopsList(String tripId) {
-        super();
+        super(); //TODO: why is there a super() method call here?
+
         this.tripId = tripId;
-        seqOSMStopMap = new TreeMap<>();
-        seqArrivalTimeMap = new TreeMap<>();
+        this.seqOSMStopMap = new TreeMap<>();
+        this.seqArrivalTimeMap = new TreeMap<>();
     }
 
     public Boolean isValid() {
