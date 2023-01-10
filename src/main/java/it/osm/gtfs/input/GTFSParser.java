@@ -104,14 +104,14 @@ public class GTFSParser {
         return result;
     }
 
-    public static List<Trip> readTrips(String fName, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{
+    public static List<Trip> readTrips(String gtfsTripsFilePath, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{
         List<Trip> result = new ArrayList<>();
 
         String thisLine;
         String [] elements;
         int shape_id=-1, route_id=-1, trip_id=-1, trip_headsign=-1;
 
-        BufferedReader br = new BufferedReader(new FileReader(fName));
+        BufferedReader br = new BufferedReader(new FileReader(gtfsTripsFilePath));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
