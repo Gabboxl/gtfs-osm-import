@@ -4,6 +4,7 @@ import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jxmapviewer.JXMapKit;
 import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
@@ -80,8 +81,12 @@ public class GTFSStopsReviewGui
         osmCoordsStopMap = new JXMapKit();
         gtfsCoordsStopMap = new JXMapKit();
 
-        TileFactoryInfo info = new OSMTileFactoryInfo();
-        DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+        //TileFactoryInfo info = new OSMTileFactoryInfo();
+        //DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+
+        TileFactoryInfo veHybridInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
+        DefaultTileFactory tileFactory = new DefaultTileFactory(veHybridInfo);
+
         osmCoordsStopMap.setTileFactory(tileFactory);
         gtfsCoordsStopMap.setTileFactory(tileFactory);
         gtfsCoordsStopMap.setDataProviderCreditShown(true);
