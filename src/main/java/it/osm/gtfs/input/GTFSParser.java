@@ -215,7 +215,7 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, StopsList> readStopTimes(String stopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
+    public static Map<String, StopsList> readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
         Map<String, StopsList> result = new TreeMap<>();
         Set<String> missingStops = new HashSet<>();
         int count = 0;
@@ -224,7 +224,7 @@ public class GTFSParser {
         String [] thisLineElements;
         int trip_id=-1, stop_id=-1, stop_sequence=-1, arrival_time = -1;
 
-        Path filePath = Paths.get(stopTimesFilePath);
+        Path filePath = Paths.get(gtfsStopTimesFilePath);
 
         long numberOfLines = Files.lines(filePath).count();
 
