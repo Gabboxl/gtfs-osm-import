@@ -17,7 +17,7 @@ package it.osm.gtfs.plugins;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Route;
 import it.osm.gtfs.models.Stop;
-import it.osm.gtfs.models.StopsList;
+import it.osm.gtfs.models.TripStopsList;
 import it.osm.gtfs.models.Trip;
 
 import java.util.Collection;
@@ -88,7 +88,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
     }
 
     @Override
-    public boolean isRelationSameAs(Relation relation, StopsList s) {
+    public boolean isRelationSameAs(Relation relation, TripStopsList s) {
         //Allow missing last stop (bug in gtfs)
         if (relation.getStops().size() == s.getSeqOSMStopMap().size() + 1){
             for (Long key: s.getSeqOSMStopMap().keySet())
@@ -102,7 +102,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
     }
 
     @Override
-    public boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, StopsList s) {
+    public boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, TripStopsList s) {
         int frequency = Collections.frequency(allTrips, trip);
 
         if (s.getSeqArrivalTimeMap().get(1L) == null)

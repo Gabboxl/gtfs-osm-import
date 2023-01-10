@@ -101,7 +101,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         Map<String, OSMStop> osmstopsGTFSId; //change weird map variable name
         Map<String, OSMStop> osmstopsOsmID; //change weird map variable name
         Map<String, Route> routes;
-        Map<String, StopsList> stopTimes;
+        Map<String, TripStopsList> stopTimes;
         List<Trip> trips;
 
         osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, true);

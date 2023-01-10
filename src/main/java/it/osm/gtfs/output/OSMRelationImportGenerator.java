@@ -22,7 +22,7 @@ import java.util.List;
 public class OSMRelationImportGenerator {
 
     //FIXME: refactor
-    public static String getRelation(BoundingBox bb, StopsList stopTimes, List<Integer> osmWaysIds, Trip t, Route r){
+    public static String getRelation(BoundingBox bb, TripStopsList stopTimes, List<Integer> osmWaysIds, Trip t, Route r){
         StringBuilder buffer = new StringBuilder();
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
         buffer.append(bb.getXMLTag());

@@ -20,7 +20,7 @@ import java.util.Set;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Route;
 import it.osm.gtfs.models.Stop;
-import it.osm.gtfs.models.StopsList;
+import it.osm.gtfs.models.TripStopsList;
 import it.osm.gtfs.models.Trip;
 
 public interface GTFSPlugin {
@@ -42,7 +42,7 @@ public interface GTFSPlugin {
     /**
      * allow plugins to define custom rules to decide if a route is the same
      */
-    boolean isRelationSameAs(Relation relation, StopsList s);
+    boolean isRelationSameAs(Relation relation, TripStopsList s);
 
-    boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, StopsList s);
+    boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, TripStopsList s);
 }

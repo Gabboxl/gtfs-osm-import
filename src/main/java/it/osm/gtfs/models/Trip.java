@@ -20,9 +20,9 @@ public class Trip implements Comparable<Trip> {
     private final String shapeId;
     private final String tripId;
     private final String name;
-    private final StopsList stopList;
+    private final TripStopsList stopList;
 
-    public Trip(String tripId, Route route, String shapeId, String name, StopsList stopList) {
+    public Trip(String tripId, Route route, String shapeId, String name, TripStopsList stopList) {
         super();
         this.route = route;
         this.shapeId = shapeId;
@@ -94,7 +94,7 @@ public class Trip implements Comparable<Trip> {
         }
     }
 
-    public StopsList getStopTime() {
+    public TripStopsList getStopTime() {
         return stopList;
     }
 }

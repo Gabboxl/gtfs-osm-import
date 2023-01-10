@@ -18,13 +18,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-public class StopsList {
+public class TripStopsList {
     private final String tripId;
     private Map<Long, OSMStop> seqOSMStopMap;
     private Map<Long, String> seqArrivalTimeMap;
     private Boolean valid = true;
 
-    public StopsList(String tripId) {
+    public TripStopsList(String tripId) {
         super();
         this.tripId = tripId;
         seqOSMStopMap = new TreeMap<>();
@@ -73,7 +73,7 @@ public class StopsList {
         seqArrivalTimeMap = s;
     }
 
-    public boolean equalsStops(StopsList o) {
+    public boolean equalsStops(TripStopsList o) {
         if (seqOSMStopMap.size() != o.seqOSMStopMap.size())
             return false;
         for (Long key: o.seqOSMStopMap.keySet()){

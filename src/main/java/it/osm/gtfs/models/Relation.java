@@ -22,7 +22,7 @@ public class Relation {
         osmstops = new TreeMap<>();
     }
 
-    public int getStopsAffinity(StopsList o) {
+    public int getStopsAffinity(TripStopsList o) {
         boolean exactMatch = true;
         int affinity = 0;
         for (OSMStop s:osmstops.values())
@@ -61,7 +61,7 @@ public class Relation {
     }
 
 
-    public boolean equalsStops(StopsList o) {
+    public boolean equalsStops(TripStopsList o) {
         if (osmstops.size() != o.getSeqOSMStopMap().size())
             return false;
         for (Long key: o.getSeqOSMStopMap().keySet()){

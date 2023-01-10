@@ -20,7 +20,7 @@ import java.util.Set;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Route;
 import it.osm.gtfs.models.Stop;
-import it.osm.gtfs.models.StopsList;
+import it.osm.gtfs.models.TripStopsList;
 import it.osm.gtfs.models.Trip;
 
 public class DefaultPlugin implements GTFSPlugin {
@@ -51,12 +51,12 @@ public class DefaultPlugin implements GTFSPlugin {
     }
 
     @Override
-    public boolean isRelationSameAs(Relation relation, StopsList s) {
+    public boolean isRelationSameAs(Relation relation, TripStopsList s) {
         return false;
     }
 
     @Override
-    public boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, StopsList stopList) {
+    public boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, TripStopsList stopList) {
         return true;
     }
 }

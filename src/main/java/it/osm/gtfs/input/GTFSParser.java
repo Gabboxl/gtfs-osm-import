@@ -104,7 +104,7 @@ public class GTFSParser {
         return result;
     }
 
-    public static List<Trip> readTrips(String fName, Map<String, Route> routes, Map<String, StopsList> stopTimes) throws IOException{
+    public static List<Trip> readTrips(String fName, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{
         List<Trip> result = new ArrayList<>();
 
         String thisLine;
@@ -215,8 +215,8 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, StopsList> readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
-        Map<String, StopsList> result = new TreeMap<>();
+    public static Map<String, TripStopsList> readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
+        Map<String, TripStopsList> result = new TreeMap<>();
         Set<String> missingStops = new HashSet<>();
         int count = 0;
 
@@ -255,20 +255,20 @@ public class GTFSParser {
                 thisLineElements = getElementsFromLine(thisLine);
 
                 if (thisLineElements[trip_id].length() > 0){
-                    StopsList stopsList = result.get(thisLineElements[trip_id]);
+                    TripStopsList tripStopsList = result.get(thisLineElements[trip_id]);
 
-                    if (stopsList == null){
-                        stopsList = new StopsList(thisLineElements[trip_id]);
-                        result.put(thisLineElements[trip_id], stopsList);
+                    if (tripStopsList == null){
+                        tripStopsList = new TripStopsList(thisLineElements[trip_id]);
+                        result.put(thisLineElements[trip_id], tripStopsList);
                     }
 
                     String thisLineGtfsID = thisLineElements[stop_id];
 
                     if (gtfsIdOsmStopMap.get(thisLineGtfsID) != null) {
 
-                        stopsList.pushPoint(Long.parseLong(thisLineElements[stop_sequence]), gtfsIdOsmStopMap.get(thisLineGtfsID), thisLineElements[arrival_time]);
+                        tripStopsList.pushPoint(Long.parseLong(thisLineElements[stop_sequence]), gtfsIdOsmStopMap.get(thisLineGtfsID), thisLineElements[arrival_time]);
                     } else {
-                        stopsList.invalidate();
+                        tripStopsList.invalidate();
 
                         if (!missingStops.contains(thisLineGtfsID)) {
                             missingStops.add(thisLineGtfsID);
@@ -290,14 +290,14 @@ public class GTFSParser {
         return result;
     }
 
-    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes, Map<String, StopsList> stopTimes){
+    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes, Map<String, TripStopsList> stopTimes){
         Collections.sort(trips);
         Multimap<String, Trip> result = ArrayListMultimap.create();
 
         for (Trip trip : trips){
             Route route = routes.get(trip.getRoute().getId());
 
-            StopsList s = stopTimes.get(trip.getTripId());
+            TripStopsList s = stopTimes.get(trip.getTripId());
 
             if (s.isValid()){
                 result.put(route.getShortName(), trip);
