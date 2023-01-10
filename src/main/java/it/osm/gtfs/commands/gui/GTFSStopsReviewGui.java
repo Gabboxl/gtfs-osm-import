@@ -95,8 +95,8 @@ public class GTFSStopsReviewGui
         iteratorStopsToReview = osmStopsToReview.listIterator();
 
         //set starting zoom level
-        osmCoordsStopMap.setZoom(3);
-        gtfsCoordsStopMap.setZoom(3);
+        osmCoordsStopMap.setZoom(2);
+        gtfsCoordsStopMap.setZoom(2);
 
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -595,6 +595,10 @@ public class GTFSStopsReviewGui
         //we update the maps
         osmCoordsStopMap.setAddressLocation(osmStopCoords);
         gtfsCoordsStopMap.setAddressLocation(gtfsStopCoords);
+
+        //re-set zoom levels
+        osmCoordsStopMap.setZoom(2);
+        gtfsCoordsStopMap.setZoom(2);
 
 
         //we update the variout interface texts
