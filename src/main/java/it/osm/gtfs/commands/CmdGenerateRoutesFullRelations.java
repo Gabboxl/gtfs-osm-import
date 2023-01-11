@@ -48,7 +48,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
     @Override
-    public Void call() throws IOException, ParserConfigurationException, SAXException {
+    public Void call() throws IOException, ParserConfigurationException, SAXException, InterruptedException {
 
         Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         BoundingBox bb = new BoundingBox(gtfsIdOsmStopMap.values());
@@ -75,6 +75,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         //download of updated OSM ways in the GTFS bounding box
         if(!skipDataUpdate) {
+            //update osm and gtfs data
+            new CmdUpdateGTFSOSMData().call();
 
             String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
             File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
