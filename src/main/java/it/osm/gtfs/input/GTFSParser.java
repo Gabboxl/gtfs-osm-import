@@ -105,7 +105,11 @@ public class GTFSParser {
     }
 
     public static List<Trip> readTrips(String gtfsTripsFilePath, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{
-        List<Trip> result = new ArrayList<>();
+        List<Trip> finalTripsList = new ArrayList<>();
+
+        if(stopTimes == null) {
+            System.out.println(ansi().render("@|red No stop times provided! The trips list will be generated without a stop list! |"));
+        }
 
         String thisLine;
         String [] elements;
@@ -131,13 +135,14 @@ public class GTFSParser {
                 elements = getElementsFromLine(thisLine);
 
                 if (elements[shape_id].length() > 0){
-                    result.add(new Trip(elements[trip_id], routes.get(elements[route_id]), elements[shape_id],
+                    finalTripsList.add(new Trip(elements[trip_id], routes.get(elements[route_id]), elements[shape_id],
                             (trip_headsign > -1) ? elements[trip_headsign] : "", stopTimes.get(elements[trip_id])));
                 }
             }
         }
         br.close();
-        return result;
+
+        return finalTripsList;
     }
 
     public static Map<String, Shape> readShapes(String fName) throws IOException{
@@ -218,6 +223,7 @@ public class GTFSParser {
     public static Map<String, TripStopsList> readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
         Map<String, TripStopsList> result = new TreeMap<>();
         Set<String> missingStops = new HashSet<>();
+
         int count = 0;
 
         String thisLine;
