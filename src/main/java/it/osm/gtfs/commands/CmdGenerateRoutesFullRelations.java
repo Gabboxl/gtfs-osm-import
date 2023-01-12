@@ -86,7 +86,9 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         GTFSOSMWaysMatch osmmatchinstance = new GTFSOSMWaysMatch().initMatch(!skipDataUpdate);
 
 
+        //create file path
         new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
+
 
         int id = 10000;
         for (String k:keys){
@@ -95,7 +97,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
             for (Trip trip : uniqueTrips){
 
-                int count = Collections.frequency(allTrips, trip);
+                int count = Collections.frequency(allTrips, trip); //number of trips with the same headsign present in the gtfs trips file
 
                 Route route = routes.get(trip.getRoute().getId());
 
@@ -120,9 +122,13 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
                 f.write(OSMRelationImportGenerator.getRelation(boundingBox, stops, osmWayIds, trip, route).getBytes());
                 f.close();
-                f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".txt");
+
+                //printa il file txt delle fermate con i nomi di esse
+                f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".txt");
                 f.write(stops.getRelationAsStopList(trip, route).getBytes());
                 f.close();
+
+                id++;
             }
 
         }
