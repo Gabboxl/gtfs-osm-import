@@ -279,7 +279,7 @@ public class GTFSParser {
 
                         if (!missingStops.contains(thisLineGtfsID)) {
                             missingStops.add(thisLineGtfsID);
-                            System.err.println("Warning: GTFS stop with gtfs_id=" + thisLineGtfsID + " not found from OpenStreetMap data! The trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
+                            System.err.println("Warning: GTFS stop with gtfsId=" + thisLineGtfsID + " not found in OpenStreetMap data! The trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
                         }
                     }
                 }
