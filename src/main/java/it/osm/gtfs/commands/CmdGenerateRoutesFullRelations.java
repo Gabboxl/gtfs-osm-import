@@ -71,7 +71,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
 
-        //download of updated OSM ways in the GTFS bounding box
+    //todo: da spostare allinizio di tutto
         if(!skipDataUpdate) {
             //update osm and gtfs data
             new CmdUpdateGTFSOSMData().call();
