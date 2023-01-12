@@ -97,7 +97,10 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 int count = Collections.frequency(allTrips, trip);
 
                 Route route = routes.get(trip.getRoute().getId());
-                TripStopsList stops = stopTimes.get(trip.getTripId());
+
+
+                TripStopsList stops = trip.getStopsList();
+
                 List<Integer> osmWayIds = null;
 
                 if(!noOsmWayMatching) {
