@@ -186,7 +186,7 @@ public class GTFSParser {
     }
 
     public static Map<String, Route> readRoutes(String fName) throws IOException{
-        Map<String, Route> result = new HashMap<>();
+        Map<String, Route> finalRouteIdRouteMap = new HashMap<>();
 
         String thisLine;
         String [] elements;
@@ -212,12 +212,13 @@ public class GTFSParser {
                  elements = getElementsFromLine(thisLine);
 
                 if (elements[route_id].length() > 0){
-                    result.put(elements[route_id], new Route(elements[route_id], elements[agency_id], elements[route_long_name], elements[route_short_name], elements[route_type]));
+                    finalRouteIdRouteMap.put(elements[route_id], new Route(elements[route_id], elements[agency_id], elements[route_long_name], elements[route_short_name], elements[route_type]));
                 }
             }
         }
         br.close();
-        return result;
+        
+        return finalRouteIdRouteMap;
     }
 
     public static Map<String, TripStopsList> readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
