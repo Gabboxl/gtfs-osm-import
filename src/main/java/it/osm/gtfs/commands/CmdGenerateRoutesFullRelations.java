@@ -64,7 +64,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 routes, stopTimes);
 
         //sorting set
-        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
+        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes);
         Set<String> keys = new TreeSet<>(groupedTrips.keySet());
 
 
