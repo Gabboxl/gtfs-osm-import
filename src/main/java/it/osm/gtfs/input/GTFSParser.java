@@ -217,7 +217,7 @@ public class GTFSParser {
             }
         }
         br.close();
-        
+
         return finalRouteIdRouteMap;
     }
 

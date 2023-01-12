@@ -29,7 +29,6 @@ public class OSMRelationImportGenerator {
         buffer.append("<relation id='-" + Math.round(Math.random()*100000) +  "'>\n");
 
         for (OSMStop s : stopTimes.getStopSequenceOSMStopMap().values()){
-            //OSMStop s1 = (OSMStop) s;
             buffer.append("<member type='node' ref='" + s.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
         }
 
