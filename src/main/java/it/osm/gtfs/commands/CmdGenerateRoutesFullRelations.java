@@ -51,7 +51,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
     public Void call() throws IOException, ParserConfigurationException, SAXException, InterruptedException {
 
         Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue));
-        BoundingBox bb = new BoundingBox(gtfsIdOsmStopMap.values());
+        BoundingBox boundingBox = new BoundingBox(gtfsIdOsmStopMap.values());
 
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
@@ -76,7 +76,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
             //update osm and gtfs data
             new CmdUpdateGTFSOSMData().call();
 
-            String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + bb.getAPIQuery();
+            //download of updated OSM ways in the GTFS bounding box
+            String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
             File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
             urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
             DownloadUtils.download(urlhighways, fileOverpassHighways, true);
@@ -117,7 +118,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
-                f.write(OSMRelationImportGenerator.getRelation(bb, stops, osmWayIds, trip, route).getBytes());
+                f.write(OSMRelationImportGenerator.getRelation(boundingBox, stops, osmWayIds, trip, route).getBytes());
                 f.close();
                 f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".txt");
                 f.write(stops.getRelationAsStopList(trip, route).getBytes());
