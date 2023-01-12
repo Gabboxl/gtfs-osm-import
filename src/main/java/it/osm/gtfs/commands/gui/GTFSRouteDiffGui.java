@@ -110,7 +110,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         osmRels = convertoToWigthed(OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID));
 
         routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
-        stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstopsGTFSId);
+        stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIMES_FILE_NAME, osmstopsGTFSId);
         trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, stopTimes);
         Set<Trip> uniqueTripSet = new TreeSet<Trip>(trips);

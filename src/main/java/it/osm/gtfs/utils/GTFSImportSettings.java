@@ -22,7 +22,7 @@ import java.util.Properties;
 
 public class GTFSImportSettings {
     public static final String GTFS_STOP_FILE_NAME = "stops.txt";
-    public static final String GTFS_STOP_TIME_FILE_NAME = "stop_times.txt";
+    public static final String GTFS_STOP_TIMES_FILE_NAME = "stop_times.txt";
     public static final String GTFS_ROUTES_FILE_NAME = "routes.txt";
     public static final String GTFS_SHAPES_FILE_NAME = "shapes.txt";
     public static final String GTFS_TRIPS_FILE_NAME = "trips.txt";

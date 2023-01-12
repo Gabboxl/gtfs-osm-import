@@ -58,7 +58,7 @@ public class CmdGenerateRoutesGPXs implements Callable<Void> {
         Map<String, OSMStop> osmstops = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
-        Map<String, TripStopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIME_FILE_NAME, osmstops);
+        Map<String, TripStopsList> stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIMES_FILE_NAME, osmstops);
         List<Trip> trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, new HashMap<>());
 
