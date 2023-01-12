@@ -20,15 +20,15 @@ public class Trip implements Comparable<Trip> {
     private final String shapeId;
     private final String tripId;
     private final String name;
-    private final TripStopsList stopList;
+    private final TripStopsList tripStopsList;
 
-    public Trip(String tripId, Route route, String shapeId, String name, TripStopsList stopList) {
+    public Trip(String tripId, Route route, String shapeId, String name, TripStopsList tripStopsList) {
         super();
         this.route = route;
         this.shapeId = shapeId;
         this.tripId = tripId;
         this.name = name;
-        this.stopList = stopList;
+        this.tripStopsList = tripStopsList;
     }
 
     public String getTripId() {
@@ -66,8 +66,8 @@ public class Trip implements Comparable<Trip> {
 
         Trip other = (Trip) obj;
         return (other.route.equals(route) && other.shapeId.equals(shapeId) &&
-                ((other.stopList == null && stopList == null) ||
-                        (other.stopList != null && other.stopList.equalsStops(stopList))));
+                ((other.tripStopsList == null && tripStopsList == null) ||
+                        (other.tripStopsList != null && other.tripStopsList.equalsStops(tripStopsList))));
     }
 
     @Override
@@ -80,11 +80,11 @@ public class Trip implements Comparable<Trip> {
         int a = route.compareTo(o.route);
         if (a == 0){
             a = shapeId.compareTo(o.shapeId);
-            if (a == 0 && stopList != null && o.getStopTime() != null){
-                if ((o.stopList != null && o.stopList.equalsStops(stopList))){
+            if (a == 0 && tripStopsList != null && o.getStopTime() != null){
+                if ((o.tripStopsList != null && o.tripStopsList.equalsStops(tripStopsList))){
                     return 0;
                 }else{
-                    return stopList.getTripId().compareTo(o.getStopTime().getTripId());
+                    return tripStopsList.getTripId().compareTo(o.getStopTime().getTripId());
                 }
             }else{
                 return a;
@@ -95,6 +95,6 @@ public class Trip implements Comparable<Trip> {
     }
 
     public TripStopsList getStopTime() {
-        return stopList;
+        return tripStopsList;
     }
 }
