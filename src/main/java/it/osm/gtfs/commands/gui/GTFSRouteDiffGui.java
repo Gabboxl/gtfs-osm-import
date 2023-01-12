@@ -142,7 +142,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
                 uniqueTripsMarkerIgnore.add(t);
             }
             for (WeightedRelation r:osmRels){
-                if(r.getStopsAffinity(t.getStopTime()) == Integer.MAX_VALUE){
+                if(r.getStopsAffinity(t.getStopsList()) == Integer.MAX_VALUE){
                     uniqueTripsMarkerOk.add(t);
                     break;
                 }
@@ -163,7 +163,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         if (event.getSource().equals(gtfsTripsList)){
             Trip selectedTrip = uniqueTrips.get(gtfsTripsList.getSelectedIndex());
             currentGTFSStops.clear();
-            currentGTFSStops.addAll(selectedTrip.getStopTime().getSeqOSMStopMap().values());
+            currentGTFSStops.addAll(selectedTrip.getStopsList().getSeqOSMStopMap().values());
             updateStopBinding(currentGTFSStops, gtfsStopsList);
             updateAffinity(selectedTrip);
         }else if (event.getSource().equals(osmTripsList)){
@@ -212,7 +212,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
 
     private void updateAffinity(Trip selectedTrip) {
         for (WeightedRelation r:osmRels){
-            r.setWeight(r.getStopsAffinity(selectedTrip.getStopTime()));
+            r.setWeight(r.getStopsAffinity(selectedTrip.getStopsList()));
         }
         Collections.sort(osmRels);
         updateOSMBind();

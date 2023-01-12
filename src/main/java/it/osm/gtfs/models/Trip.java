@@ -80,11 +80,11 @@ public class Trip implements Comparable<Trip> {
         int a = route.compareTo(o.route);
         if (a == 0){
             a = shapeId.compareTo(o.shapeId);
-            if (a == 0 && tripStopsList != null && o.getStopTime() != null){
+            if (a == 0 && tripStopsList != null && o.getStopsList() != null){
                 if ((o.tripStopsList != null && o.tripStopsList.equalsStops(tripStopsList))){
                     return 0;
                 }else{
-                    return tripStopsList.getTripId().compareTo(o.getStopTime().getTripId());
+                    return tripStopsList.getTripId().compareTo(o.getStopsList().getTripId());
                 }
             }else{
                 return a;
@@ -94,7 +94,7 @@ public class Trip implements Comparable<Trip> {
         }
     }
 
-    public TripStopsList getStopTime() {
+    public TripStopsList getStopsList() {
         return tripStopsList;
     }
 }
