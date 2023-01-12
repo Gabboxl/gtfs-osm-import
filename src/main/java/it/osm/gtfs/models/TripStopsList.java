@@ -44,7 +44,7 @@ public class TripStopsList {
         return tripId;
     }
 
-    public void pushPoint(Long seq, OSMStop osmStop, String arrivalTime){
+    public void addStop(Long seq, OSMStop osmStop, String arrivalTime){
         seqOSMStopMap.put(seq, osmStop);
         seqArrivalTimeMap.put(seq, arrivalTime);
     }

@@ -272,7 +272,7 @@ public class GTFSParser {
 
                     if (gtfsIdOsmStopMap.get(thisLineGtfsID) != null) {
 
-                        tripStopsList.pushPoint(Long.parseLong(thisLineElements[stop_sequence]), gtfsIdOsmStopMap.get(thisLineGtfsID), thisLineElements[arrival_time]);
+                        tripStopsList.addStop(Long.parseLong(thisLineElements[stop_sequence]), gtfsIdOsmStopMap.get(thisLineGtfsID), thisLineElements[arrival_time]);
                     } else {
                         tripStopsList.invalidate();
 
