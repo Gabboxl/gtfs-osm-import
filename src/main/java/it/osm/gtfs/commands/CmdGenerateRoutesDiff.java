@@ -127,8 +127,8 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
             TripStopsList stopGTFS = stopTimes.get(trip.getTripId());
             System.out.println("Progressivo \tGTFS\tOSM");
 
-            for (long f = 1; f <= stopGTFS.getSeqOSMStopMap().size() ; f++){
-                Stop gtfs= stopGTFS.getSeqOSMStopMap().get(f);
+            for (long f = 1; f <= stopGTFS.getStopSequenceOSMStopMap().size() ; f++){
+                Stop gtfs= stopGTFS.getStopSequenceOSMStopMap().get(f);
                 System.out.println("Stop # " + f + "\t" + ((gtfs != null) ? gtfs.getCode() : "-") + "\t" + "-" + "*");
             }
         }
@@ -143,12 +143,12 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
             System.out.println("Best match (" + affinityGTFS.affinity + "): id: " + affinityGTFS.trip.getTripId() + " " + routes.get(affinityGTFS.trip.getRoute().getId()).getShortName() + " " + affinityGTFS.trip.getName());
             TripStopsList stopGTFS = stopTimes.get(affinityGTFS.trip.getTripId());
 
-            long max = Math.max(stopGTFS.getSeqOSMStopMap().size(), relation.getStops().size());
+            long max = Math.max(stopGTFS.getStopSequenceOSMStopMap().size(), relation.getStops().size());
 
             System.out.println("Progressivo \tGTFS\tOSM");
 
             for (long f = 1; f <= max ; f++){
-                Stop gtfs= stopGTFS.getSeqOSMStopMap().get(f);
+                Stop gtfs= stopGTFS.getStopSequenceOSMStopMap().get(f);
                 Stop osm = relation.getStops().get(f);
                 try{
                     System.out.println("Stop # " + f + "\t" + ((gtfs != null) ? gtfs.getCode() : "-") + "\t" + ((osm != null) ? osm.getCode() : "-") + ((gtfs != null) && (osm != null) &&  gtfs.getCode().equals(osm.getCode()) ? "" : "*") + "\t" + ((osm != null) ? osm.getName() : "-"));

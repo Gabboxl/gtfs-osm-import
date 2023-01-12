@@ -20,16 +20,16 @@ import java.util.TreeMap;
 
 public class TripStopsList {
     private final String tripId;
-    private Map<Long, OSMStop> seqOSMStopMap;
-    private Map<Long, String> seqArrivalTimeMap;
+    private Map<Long, OSMStop> stopSequenceOSMStopMap;
+    private Map<Long, String> stopSequenceArrivalTimeMap;
     private Boolean valid = true;
 
     public TripStopsList(String tripId) {
         super(); //TODO: why is there a super() method call here?
 
         this.tripId = tripId;
-        this.seqOSMStopMap = new TreeMap<>();
-        this.seqArrivalTimeMap = new TreeMap<>();
+        this.stopSequenceOSMStopMap = new TreeMap<>();
+        this.stopSequenceArrivalTimeMap = new TreeMap<>();
     }
 
     public Boolean isValid() {
@@ -44,42 +44,42 @@ public class TripStopsList {
         return tripId;
     }
 
-    public void addStop(Long seq, OSMStop osmStop, String arrivalTime){
-        seqOSMStopMap.put(seq, osmStop);
-        seqArrivalTimeMap.put(seq, arrivalTime);
+    public void addStop(Long stopSequence, OSMStop osmStop, String arrivalTime){
+        stopSequenceOSMStopMap.put(stopSequence, osmStop);
+        stopSequenceArrivalTimeMap.put(stopSequence, arrivalTime);
     }
 
     public String getRelationAsStopList(Trip t, Route r){
         StringBuilder buffer = new StringBuilder();
-        for (Stop s: seqOSMStopMap.values()){
+        for (Stop s: stopSequenceOSMStopMap.values()){
             buffer.append(s.getCode() + " " + s.getName()  + "\n");
         }
         return buffer.toString();
     }
 
 
-    public Map<Long, OSMStop> getSeqOSMStopMap() {
-        return seqOSMStopMap;
+    public Map<Long, OSMStop> getStopSequenceOSMStopMap() {
+        return stopSequenceOSMStopMap;
     }
 
-    public void setSeqOSMStopMap(Map<Long, OSMStop> s){
-        seqOSMStopMap = s;
+    public void setStopSequenceOSMStopMap(Map<Long, OSMStop> s){
+        stopSequenceOSMStopMap = s;
     }
 
-    public Map<Long, String> getSeqArrivalTimeMap() {
-        return seqArrivalTimeMap;
+    public Map<Long, String> getStopSequenceArrivalTimeMap() {
+        return stopSequenceArrivalTimeMap;
     }
 
-    public void setSeqArrivalTimeMap(Map<Long, String> s){
-        seqArrivalTimeMap = s;
+    public void setStopSequenceArrivalTimeMap(Map<Long, String> s){
+        stopSequenceArrivalTimeMap = s;
     }
 
     public boolean equalsStops(TripStopsList o) {
-        if (seqOSMStopMap.size() != o.seqOSMStopMap.size())
+        if (stopSequenceOSMStopMap.size() != o.stopSequenceOSMStopMap.size())
             return false;
-        for (Long key: o.seqOSMStopMap.keySet()){
-            Stop a = seqOSMStopMap.get(key);
-            Stop b = o.seqOSMStopMap.get(key);
+        for (Long key: o.stopSequenceOSMStopMap.keySet()){
+            Stop a = stopSequenceOSMStopMap.get(key);
+            Stop b = o.stopSequenceOSMStopMap.get(key);
             if (a == null || !a.equals(b))
                 return false;
         }
