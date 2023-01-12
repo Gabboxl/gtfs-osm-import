@@ -63,7 +63,7 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
         Set<Relation> osmRelationFoundInGTFS = new HashSet<>();
         List<Trip> tripsNotFoundInOSM = new LinkedList<>();
 
-        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes, stopTimes);
+        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes);
         Set<String> keys = new TreeSet<>(groupedTrips.keySet());
         Map<Relation, Affinity> affinities = new HashMap<>();
 

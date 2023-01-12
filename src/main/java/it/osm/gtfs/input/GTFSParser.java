@@ -107,7 +107,7 @@ public class GTFSParser {
     public static List<Trip> readTrips(String gtfsTripsFilePath, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{
         List<Trip> finalTripsList = new ArrayList<>();
 
-        if(stopTimes == null) {
+        if(stopTimes.isEmpty()) {
             System.out.println(ansi().render("@|red No stop times provided! The trips list will be generated without a stop list! |"));
         }
 
@@ -296,16 +296,16 @@ public class GTFSParser {
         return result;
     }
 
-    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes, Map<String, TripStopsList> stopTimes){
+    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes){
         Collections.sort(trips);
         Multimap<String, Trip> result = ArrayListMultimap.create();
 
         for (Trip trip : trips){
             Route route = routes.get(trip.getRoute().getId());
 
-            TripStopsList s = stopTimes.get(trip.getTripId());
+            TripStopsList tripStopsList = trip.getStopsList();
 
-            if (s.isValid()){
+            if (tripStopsList.isValid()){
                 result.put(route.getShortName(), trip);
             }
         }
