@@ -59,8 +59,7 @@ public class OSMParser {
 
     public static List<OSMStop> readOSMStops(String fileName, boolean readStopsOfAnyOperator) throws ParserConfigurationException, SAXException, IOException {
         List<OSMStop> osmStopsListOutput = new ArrayList<>();
-        Multimap<String, OSMStop> refBuses = HashMultimap.create(); //?
-        Multimap<String, OSMStop> refRails = HashMultimap.create(); //??
+
 
         File file = new File(fileName);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
