@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.input;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -91,18 +92,19 @@ public class OSMParser {
                     if (key.equalsIgnoreCase("gtfs_id"))
                         osmStop.setGtfsId(value);
                     if (key.equalsIgnoreCase("highway") && value.equalsIgnoreCase("bus_stop"))
-                        osmStop.setIsWayStopPosition(false);
-                    if (key.equalsIgnoreCase("railway") &&
-                            (value.equalsIgnoreCase("tram_stop") || value.equalsIgnoreCase("station")) )
-                        osmStop.setIsWayStopPosition(true);
-                    if (key.equalsIgnoreCase("public_transport") && value.equalsIgnoreCase("stop_position"))
-                        osmStop.setIsWayStopPosition(true);
+                        osmStop.setStopType(OSMStopType.BUS_STOP);
+                    if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("tram_stop"))
+                        osmStop.setStopType(OSMStopType.TRAM_STOP);
+                    if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("station"))
+                        osmStop.setStopType(OSMStopType.TRAM_STOP);
+                    if (key.equalsIgnoreCase("public_transport") && value.equalsIgnoreCase("stop_position") && osmStop.getStopType() == null)
+                        osmStop.setStopType(OSMStopType.STOP_POSITION);
                     if (key.equalsIgnoreCase("train") && value.equalsIgnoreCase("yes"))
-                        osmStop.setIsWayStopPosition(true);
+                        osmStop.setStopType(OSMStopType.TRAM_STOP);
                     if (key.equalsIgnoreCase("tram") && value.equalsIgnoreCase("yes"))
-                        osmStop.setIsWayStopPosition(true);
+                        osmStop.setStopType(OSMStopType.TRAM_STOP);
                     if (key.equalsIgnoreCase("bus") && value.equalsIgnoreCase("yes"))
-                        osmStop.setIsWayStopPosition(false);
+                        osmStop.setStopType(OSMStopType.BUS_STOP);
                     if (key.equalsIgnoreCase("wheelchair") && value.equalsIgnoreCase("no"))
                         osmStop.setWheelchairAccessibility(WheelchairAccess.NO);
                     if (key.equalsIgnoreCase("wheelchair") && value.equalsIgnoreCase("limited"))
@@ -121,8 +123,8 @@ public class OSMParser {
                 continue;
             }
 
-            //if (osmStop.isTramStop() == null)
-                if (osmStop.isWayStopPosition())
+            if (osmStop.getStopType() == null)
+                if (osmStop.getStopType().equals(OSMStopType.STOP_POSITION))
                     continue; //ignore unsupported stop positions (like ferries)
                 else
                     throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
