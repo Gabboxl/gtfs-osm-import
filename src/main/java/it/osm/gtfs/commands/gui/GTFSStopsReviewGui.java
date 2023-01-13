@@ -617,7 +617,8 @@ public class GTFSStopsReviewGui
 
             OSMStop thisCellStop = (OSMStop) value;
 
-            setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith.getName()) + " (ref: " + thisCellStop.getCode() + ")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
+            setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith.getName())
+                    + " (ref: " + thisCellStop.getCode() + " - " + (thisCellStop.isWayStopPosition() ? "waystop" : "busstop") +")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
 
             if (finalReviewedGeopositions.get(thisCellStop) != null && finalReviewedGeopositions.get(thisCellStop).equals(thisCellStop.getGeoPosition())){ //the user accepted the OSM coordinates
                 setBackground(new Color(120, 255, 120));
