@@ -129,32 +129,7 @@ public class OSMParser {
                 else
                     throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
-                //TODO: maybe this code could be a duplicate of the multiple-matching stops code in GTFSGenerateBusStopsImport?
-            //Check duplicate ref in osm
-            if (osmStop.getCode() != null){
-                if (osmStop.isBusOrTramStopPosition() == null || !osmStop.isBusOrTramStopPosition()){
-                    if (osmStop.isTramStop()){
-                        if (refRails.containsKey(osmStop.getCode())){
-                            for (OSMStop existingStop : refRails.get(osmStop.getCode())){
-                                if (OSMDistanceUtils.distVincenty(osmStop.getGeoPosition(), existingStop.getGeoPosition()) < 500)
-                                    System.err.println("Warning: The ref " + osmStop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-                                            " (node IDs :" + osmStop.getOSMId() + "," + existingStop.getOSMId() + ")");
-                            }
-                        }
 
-                        refRails.put(osmStop.getCode(), osmStop);
-                    }else{
-                        if (refBuses.containsKey(osmStop.getCode())){
-                            for (OSMStop existingStop : refBuses.get(osmStop.getCode())){
-                                if (OSMDistanceUtils.distVincenty(osmStop.getGeoPosition(), existingStop.getGeoPosition()) < 500)
-                                    System.err.println("Warning: The ref " + osmStop.getCode() + " is used in more than one node within 500m this may lead to bad import." +
-                                            " (node IDs :" + osmStop.getOSMId() + "," + existingStop.getOSMId() + ")");
-                            }
-                        }
-                        refBuses.put(osmStop.getCode(), osmStop);
-                    }
-                }
-            }
             osmStopsListOutput.add(osmStop);
         }
 
