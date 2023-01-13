@@ -126,7 +126,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + "_" + count + ".osm");
-                f.write(OSMRelationImportGenerator.getRelation(boundingBox, stops, osmWayIds, trip, route).getBytes());
+                f.write(OSMRelationImportGenerator.getRelation(boundingBox, osmWayIds, trip, route).getBytes());
                 f.close();
 
                 //printa il file txt delle fermate con i nomi di esse
