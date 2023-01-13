@@ -221,8 +221,8 @@ public class GTFSParser {
         return finalRouteIdRouteMap;
     }
 
-    public static Map<String, TripStopsList> readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
-        Map<String, TripStopsList> result = new TreeMap<>();
+    public static ReadStopTimesResult readStopTimes(String gtfsStopTimesFilePath, Map<String, OSMStop> gtfsIdOsmStopMap) throws IOException {
+        Map<String, TripStopsList> tripIdStopListMap = new TreeMap<>();
         Set<String> missingStops = new HashSet<>();
 
         int count = 0;
@@ -262,11 +262,11 @@ public class GTFSParser {
                 thisLineElements = getElementsFromLine(thisLine);
 
                 if (thisLineElements[trip_id].length() > 0){
-                    TripStopsList tripStopsList = result.get(thisLineElements[trip_id]);
+                    TripStopsList tripStopsList = tripIdStopListMap.get(thisLineElements[trip_id]);
 
                     if (tripStopsList == null){
                         tripStopsList = new TripStopsList(thisLineElements[trip_id]);
-                        result.put(thisLineElements[trip_id], tripStopsList);
+                        tripIdStopListMap.put(thisLineElements[trip_id], tripStopsList);
                     }
 
                     String thisLineGtfsID = thisLineElements[stop_id];
@@ -294,7 +294,9 @@ public class GTFSParser {
             System.err.println("Run the GTFSOSMImport \"stops\" command to create the new stops. Then upload the new stops to OSM, and then run this command again!");
         }
 
-        return result;
+        ReadStopTimesResult readStopTimesResult = new ReadStopTimesResult(tripIdStopListMap, missingStops);
+
+        return readStopTimesResult;
     }
 
     public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes){
