@@ -78,7 +78,12 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
 
-        
+        if(!readStopTimesResult.getMissingStops().isEmpty()) {
+
+            System.out.println(ansi().render("@|red The relations generation will not continue as there are some gtfs stops that are missing from OSM. |"));
+
+            return null;
+        }
 
 
 
