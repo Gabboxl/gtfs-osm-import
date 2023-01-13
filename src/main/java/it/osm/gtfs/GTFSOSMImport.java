@@ -231,7 +231,7 @@ public class GTFSOSMImport {
         System.out.println("Welcome to GTFS-OSM-Import!\n");
 
         //the interactive mode is for internal use only (like testing multiple commands from a single IDE run without restarting the tool)
-        if(args.length != 0 && args[0].equals("interactive")){ //todo: magari rinominare in interactivedebug
+        if(args.length != 0 && args[0].equals("interactivedebug")){ //todo: magari rinominare in interactivedebug
             interactive();
         } else {
 
