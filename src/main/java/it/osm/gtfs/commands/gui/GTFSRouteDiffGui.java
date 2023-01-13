@@ -51,13 +51,13 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
     private final JList<String> osmTripsList;
 
     List<Trip> uniqueTrips;
-    Set<Trip> uniqueTripsMarkerOk = new HashSet<Trip>();
-    Set<Trip> uniqueTripsMarkerIgnore = new HashSet<Trip>();
+    Set<Trip> uniqueTripsMarkerOk = new HashSet<>();
+    Set<Trip> uniqueTripsMarkerIgnore = new HashSet<>();
     List<WeightedRelation> osmRels;
-    List<Stop> currentGTFSStops = new ArrayList<Stop>();
-    Set<Stop> currentGTFSStopsMarker = new HashSet<Stop>();
-    List<Stop> currentOSMStops = new ArrayList<Stop>();
-    Set<Stop> currentOSMStopsMarker = new HashSet<Stop>();
+    List<Stop> currentGTFSStops = new ArrayList<>();
+    Set<Stop> currentGTFSStopsMarker = new HashSet<>();
+    List<Stop> currentOSMStops = new ArrayList<>();
+    Set<Stop> currentOSMStopsMarker = new HashSet<>();
 
     public GTFSRouteDiffGui() throws ParserConfigurationException, SAXException, IOException{
         super();
@@ -113,8 +113,8 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIMES_FILE_NAME, osmstopsGTFSId);
         trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
                 routes, stopTimes);
-        Set<Trip> uniqueTripSet = new TreeSet<Trip>(trips);
-        uniqueTrips = new ArrayList<Trip>();
+        Set<Trip> uniqueTripSet = new TreeSet<>(trips);
+        uniqueTrips = new ArrayList<>();
         for (Trip trip:uniqueTripSet){
             if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(routes.get(trip.getRoute().getId())) &&
                     GTFSImportSettings.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, stopTimes.get(trip.getTripId()))){
@@ -124,7 +124,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
     }
 
     private void populateMatchedGTFSTrips(){
-        Set<String> tripIdMarkers = new HashSet<String>();
+        Set<String> tripIdMarkers = new HashSet<>();
         try{
             BufferedReader br = new BufferedReader(new FileReader("tripmarker.txt"));
             String line = br.readLine();
@@ -151,7 +151,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
     }
 
     private JList<String> createEmptyJList(){
-        JList<String> j = new JList<String>();
+        JList<String> j = new JList<>();
         j.setLayoutOrientation(JList.VERTICAL);
         j.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         j.setSize(200, 500);
@@ -267,7 +267,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
     }
 
     private static List<WeightedRelation> convertoToWigthed(List<Relation> rels){
-        List<WeightedRelation> out = new ArrayList<GTFSRouteDiffGui.WeightedRelation>();
+        List<WeightedRelation> out = new ArrayList<>();
         for (Relation r:rels){
             out.add(new WeightedRelation(r));
         }

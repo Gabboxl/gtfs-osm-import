@@ -20,7 +20,7 @@ import it.osm.gtfs.utils.GTFSImportSettings;
 import java.util.List;
 
 public class OSMRelationImportGenerator {
-    
+
     public static String getRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route){
         StringBuilder buffer = new StringBuilder();
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
