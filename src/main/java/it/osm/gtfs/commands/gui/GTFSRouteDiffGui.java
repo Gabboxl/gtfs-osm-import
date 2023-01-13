@@ -101,7 +101,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         Map<String, OSMStop> osmstopsGTFSId; //change weird map variable name
         Map<String, OSMStop> osmstopsOsmID; //change weird map variable name
         Map<String, Route> routes;
-        Map<String, TripStopsList> stopTimes;
+        ReadStopTimesResult readStopTimesResult;
         List<Trip> trips;
 
         osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, true);
@@ -110,14 +110,14 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
         osmRels = convertoToWigthed(OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH), osmstopsOsmID));
 
         routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
-        stopTimes = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIMES_FILE_NAME, osmstopsGTFSId);
+        readStopTimesResult = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIMES_FILE_NAME, osmstopsGTFSId);
         trips = GTFSParser.readTrips(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_TRIPS_FILE_NAME,
-                routes, stopTimes);
+                routes, readStopTimesResult.getTripIdStopListMap());
         Set<Trip> uniqueTripSet = new TreeSet<>(trips);
         uniqueTrips = new ArrayList<>();
         for (Trip trip:uniqueTripSet){
             if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(routes.get(trip.getRoute().getId())) &&
-                    GTFSImportSettings.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, stopTimes.get(trip.getTripId()))){
+                    GTFSImportSettings.getInstance().getPlugin().isValidTrip(trips, uniqueTripSet, trip, readStopTimesResult.getTripIdStopListMap().get(trip.getTripId()))){
                 uniqueTrips.add(trip);
             }
         }
