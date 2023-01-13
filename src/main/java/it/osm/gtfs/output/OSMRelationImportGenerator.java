@@ -22,13 +22,14 @@ import java.util.List;
 public class OSMRelationImportGenerator {
 
     //FIXME: refactor
-    public static String getRelation(BoundingBox bb, TripStopsList stopTimes, List<Integer> osmWaysIds, Trip t, Route r){
+    public static String getRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route){
         StringBuilder buffer = new StringBuilder();
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
         buffer.append(bb.getXMLTag());
         buffer.append("<relation id='-" + Math.round(Math.random()*100000) +  "'>\n");
 
-        for (OSMStop s : stopTimes.getStopSequenceOSMStopMap().values()){
+
+        for (OSMStop s : trip.getStopsList().getStopSequenceOSMStopMap().values()){
             buffer.append("<member type='node' ref='" + s.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
         }
 
@@ -39,11 +40,12 @@ public class OSMRelationImportGenerator {
             }
         }
 
-        buffer.append("<tag k='direction' v='" + GTFSImportSettings.getInstance().getPlugin().fixTripName(t.getName()) + "' />\n");
-        buffer.append("<tag k='name' v='" + r.getShortName() + ": " + r.getLongName().replaceAll("'", "\'") + "' />\n");
+        //todo: aggiungere gtfs_route_id, gtfs_agency_id
+        buffer.append("<tag k='direction' v='" + GTFSImportSettings.getInstance().getPlugin().fixTripName(trip.getName()) + "' />\n");
+        buffer.append("<tag k='name' v='" + route.getShortName() + ": " + route.getLongName().replaceAll("'", "\'") + "' />\n");
         buffer.append("<tag k='network' v='" + GTFSImportSettings.getInstance().getNetwork() + "' />\n");
         buffer.append("<tag k='operator' v='" + GTFSImportSettings.getInstance().getOperator() + "' />\n");
-        buffer.append("<tag k='ref' v='" + r.getShortName() + "' />\n");
+        buffer.append("<tag k='ref' v='" + route.getShortName() + "' />\n");
         buffer.append("<tag k='route' v='bus' />\n");
         buffer.append("<tag k='type' v='route' />\n");
         buffer.append("</relation>");
