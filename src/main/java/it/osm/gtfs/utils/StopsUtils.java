@@ -17,8 +17,8 @@ public class StopsUtils {
 
     /***
      *
-     * @param gtfsStop The GTFS stop
-     * @param osmStop The OSM stop
+     * @param gtfsStop A GTFS stop
+     * @param osmStop An OSM stop
      * @return Returns whether the two stops are the same stop or not
      */
     public static boolean match(GTFSStop gtfsStop, OSMStop osmStop) {
@@ -34,7 +34,11 @@ public class StopsUtils {
             } else if (distanceBetween < 1000) {
                 System.err.println("Warning: Too distant osm-gtfs stop (with dist > 15 m and less than 1km) / " + debugData);
 
-                osmStop.setNeedsPositionReview(true); //the position of the osm stop needs to be reviewed as it most probably may have changed
+
+                //FIXME: we should remove this check and instead decide what to do with the stop positions that are associated to the physical stops (like move them or what during the stop gui review??)
+                if(osmStop.getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
+                    osmStop.setNeedsPositionReview(true); //the position of the osm stop needs to be reviewed as it most probably may have changed
+                }
 
                 return true;
             }

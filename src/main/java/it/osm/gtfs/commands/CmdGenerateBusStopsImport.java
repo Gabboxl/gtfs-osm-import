@@ -84,7 +84,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
             for (OSMStop osmStop : osmStopsList){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
-                    if (osmStop.getStopType().equals(OSMStopType.TRAM_STOP_POSITION)) {
+                    if (osmStop.getStopType().equals(OSMStopType.TRAM_STOP_POSITION)) { //todo: maybe add also a check for OSMStopType.PHYSICAL_TRAM_STOP ?
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
