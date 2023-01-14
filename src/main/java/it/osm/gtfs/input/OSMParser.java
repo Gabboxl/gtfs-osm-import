@@ -18,7 +18,6 @@ import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.OSMDistanceUtils;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Relation.OSMNode;
 import it.osm.gtfs.models.Relation.OSMRelationWayMember;
@@ -50,9 +49,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class OSMParser {
@@ -73,6 +69,15 @@ public class OSMParser {
             Node fstNode = nodeList.item(s);
             OSMStop osmStop = new OSMStop(null, null, new GeoPosition(Double.parseDouble(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.parseDouble(fstNode.getAttributes().getNamedItem("lon").getNodeValue())), null, null, null);
             osmStop.originalXMLNode = fstNode;
+
+            //temp variables for tags
+            String highwaytag = "",
+                    railwaytag = "",
+                    public_transporttag = "",
+                    traintag = "",
+                    tramtag = "",
+                    bustag = "";
+
             NodeList att = fstNode.getChildNodes();
 
             for (int t = 0; t < att.getLength(); t++) {
@@ -84,35 +89,79 @@ public class OSMParser {
 
                     if (key.equalsIgnoreCase("ref"))
                         osmStop.setCode(value);
+
                     if (key.equalsIgnoreCase("name"))
                         osmStop.setName(value);
+
                     if (key.equalsIgnoreCase("operator"))
                         osmStop.setOperator(value);
+
                     if (key.equalsIgnoreCase("gtfs_id"))
                         osmStop.setGtfsId(value);
-                    if (key.equalsIgnoreCase("highway") && value.equalsIgnoreCase("bus_stop"))
-                        osmStop.setStopType(OSMStopType.BUS_STOP);
-                    if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("tram_stop"))
-                        osmStop.setStopType(OSMStopType.TRAM_STOP);
-                    if (key.equalsIgnoreCase("railway") && value.equalsIgnoreCase("station"))
-                        osmStop.setStopType(OSMStopType.TRAM_STOP);
-                    if (key.equalsIgnoreCase("public_transport") && value.equalsIgnoreCase("stop_position") && osmStop.getStopType() == null)
-                        osmStop.setStopType(OSMStopType.STOP_POSITION);
-                    if (key.equalsIgnoreCase("train") && value.equalsIgnoreCase("yes"))
-                        osmStop.setStopType(OSMStopType.TRAM_STOP);
-                    if (key.equalsIgnoreCase("tram") && value.equalsIgnoreCase("yes"))
-                        osmStop.setStopType(OSMStopType.TRAM_STOP);
-                    if (key.equalsIgnoreCase("bus") && value.equalsIgnoreCase("yes"))
-                        osmStop.setStopType(OSMStopType.BUS_STOP);
-                    if (key.equalsIgnoreCase("wheelchair") && value.equalsIgnoreCase("no"))
-                        osmStop.setWheelchairAccessibility(WheelchairAccess.NO);
-                    if (key.equalsIgnoreCase("wheelchair") && value.equalsIgnoreCase("limited"))
-                        osmStop.setWheelchairAccessibility(WheelchairAccess.LIMITED);
+
+                    if (key.equalsIgnoreCase("highway"))
+                        highwaytag = value;
+
+                    if (key.equalsIgnoreCase("railway"))
+                        railwaytag = value;
+
+                    if (key.equalsIgnoreCase("public_transport") )
+                        public_transporttag = value;
+
+                    if (key.equalsIgnoreCase("train") )
+                        traintag = value;
+
+                    if (key.equalsIgnoreCase("tram"))
+                        tramtag = value;
+
+                    if (key.equalsIgnoreCase("bus"))
+                        bustag = value;
+
+                    if (key.equalsIgnoreCase("wheelchair"))
+                        osmStop.setWheelchairAccessibility(WheelchairAccess.getEnumByOsmValue(value));
+
                     if (key.equalsIgnoreCase(GTFSImportSettings.getInstance().getRevisedKey()) && value.equalsIgnoreCase("yes"))
                         osmStop.setIsRevised(true);
 
                 }
             }
+
+            //osmstop type value setting
+
+            if (railwaytag.equalsIgnoreCase("tram_stop"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
+
+            if (railwaytag.equalsIgnoreCase("station"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
+
+            if (traintag.equalsIgnoreCase("yes"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
+
+            if (tramtag.equalsIgnoreCase("yes"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
+
+            if(highwaytag.equalsIgnoreCase("bus_stop"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
+
+            if (bustag.equalsIgnoreCase("yes"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
+
+
+            if (public_transporttag.equalsIgnoreCase("stop_position")) {
+                OSMStopType currType = osmStop.getStopType();
+
+                if(currType == null){
+                    osmStop.setStopType(OSMStopType.GENERAL_STOP_POSITION);
+
+                } else if (currType.equals(OSMStopType.PHYSICAL_BUS_STOP)) {
+                    osmStop.setStopType(OSMStopType.BUS_STOP_POSITION);
+
+                } else if(currType.equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
+                    osmStop.setStopType(OSMStopType.TRAM_STOP_POSITION);
+
+                }
+            }
+
 
             //if the current osm stop has a different operator tag value than the one specified in the properties we skip it
             if(!readStopsOfAnyOperator && (osmStop.getOperator() == null || !osmStop.getOperator().equalsIgnoreCase(GTFSImportSettings.getInstance().getOperator()))) {
@@ -122,11 +171,12 @@ public class OSMParser {
                 continue;
             }
 
-            if (osmStop.getStopType() == null)
-                if (osmStop.getStopType().equals(OSMStopType.STOP_POSITION))
-                    continue; //ignore unsupported stop positions (like ferries)
-                else
-                    throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
+
+            if (osmStop.getStopType().equals(OSMStopType.GENERAL_STOP_POSITION))
+                continue; //ignore unsupported stop positions (like ferries)
+
+            if(osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
+                throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
 
 
             osmStopsListOutput.add(osmStop);

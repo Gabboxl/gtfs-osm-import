@@ -58,6 +58,17 @@ public class OSMXMLUtils {
         return null;
     }
 
+
+    public static String getTagValue(Element node, String key){
+        Element attNode = getTagElement(node, key);
+
+        if (attNode != null){
+            return attNode.getNodeValue();
+        }
+
+        return null;
+    }
+
     public static Element createTagElement(IElementCreator document, String key, String value){
         Element tag = document.createElement("tag");
         tag.setAttribute("k", key);

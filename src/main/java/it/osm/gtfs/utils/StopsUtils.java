@@ -1,5 +1,6 @@
 package it.osm.gtfs.utils;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.models.OSMStop;
@@ -88,10 +89,11 @@ public class StopsUtils {
             OSMXMLUtils.addOrReplaceTagValue(originalNode, "wheelchair", gtfsWheelchairAccess.getOsmValue());
         }
 
-        if (osmStop.isTramStop()) {
+        //todo hey qua aggiunge un tag stop_position [ e'' giusto?
+        if (osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
             //OSMXMLUtils.addTagIfNotExisting(originalNode, "tram", "yes");
             OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "stop_position");
-        } else {
+        } else if(osmStop.getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP)) {
             OSMXMLUtils.addTagIfNotExisting(originalNode, "bus", "yes");
             OSMXMLUtils.addTagIfNotExisting(originalNode, "highway", "bus_stop");
             OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "platform");

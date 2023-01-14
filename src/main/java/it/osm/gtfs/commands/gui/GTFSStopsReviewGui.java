@@ -1,5 +1,6 @@
 package it.osm.gtfs.commands.gui;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jxmapviewer.JXMapKit;
@@ -618,7 +619,7 @@ public class GTFSStopsReviewGui
             OSMStop thisCellStop = (OSMStop) value;
 
             setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith.getName())
-                    + " (ref: " + thisCellStop.getCode() + " - " + (thisCellStop.isWayStopPosition() ? "waystop" : "busstop") +")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
+                    + " (ref: " + thisCellStop.getCode() + " - " + thisCellStop.getStopType() +")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
 
             if (finalReviewedGeopositions.get(thisCellStop) != null && finalReviewedGeopositions.get(thisCellStop).equals(thisCellStop.getGeoPosition())){ //the user accepted the OSM coordinates
                 setBackground(new Color(120, 255, 120));

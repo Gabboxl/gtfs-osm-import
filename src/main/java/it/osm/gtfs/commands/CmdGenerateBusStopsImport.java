@@ -16,6 +16,7 @@
 package it.osm.gtfs.commands;
 
 import it.osm.gtfs.commands.gui.GTFSStopsReviewGui;
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.BoundingBox;
@@ -83,7 +84,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
             for (OSMStop osmStop : osmStopsList){
                 if (StopsUtils.match(gtfsStop, osmStop)) {
-                    if (osmStop.isTramStop()) {
+                    if (osmStop.getStopType().equals(OSMStopType.TRAM_STOP_POSITION)) {
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
