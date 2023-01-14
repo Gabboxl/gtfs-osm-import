@@ -371,7 +371,7 @@ public class GTFSStopsReviewGui
         frame.add(gtfsCoordsStopMap, constraints);
 
 
-        btChooseOSM = new JButton("Accept current OSM coordinates");
+        btChooseOSM = new JButton("Accept current OSM coordinates (if unsure)");
         btChooseOSM.addActionListener(actionEvent -> {
 
             OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
