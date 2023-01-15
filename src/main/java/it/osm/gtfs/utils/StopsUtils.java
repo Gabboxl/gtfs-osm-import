@@ -78,7 +78,7 @@ public class StopsUtils {
     }
 
 
-    public static void updateOSMNodeMetadata(OSMStop osmStop){
+    public static void updateOSMNodeMetadata(OSMStop osmStop){ //TODO: check if other tags of the node are in line with GTFS data
         Element originalNode = (Element) osmStop.originalXMLNode;
 
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());

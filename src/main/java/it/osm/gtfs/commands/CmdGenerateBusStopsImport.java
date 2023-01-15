@@ -143,7 +143,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
         //second matching phase by checking all osm stops again (also checking stops that didn't get matched && those that we don't consider matched)
         {
-            //TODO: check if other tags of the node are in line with GTFS data
 
             int matched_stops = 0;
             int not_matched_osm_stops = 0;
