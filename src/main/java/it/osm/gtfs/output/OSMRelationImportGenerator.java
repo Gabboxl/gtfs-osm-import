@@ -14,7 +14,10 @@
  **/
 package it.osm.gtfs.output;
 
-import it.osm.gtfs.models.*;
+import it.osm.gtfs.models.BoundingBox;
+import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.Route;
+import it.osm.gtfs.models.Trip;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.util.List;

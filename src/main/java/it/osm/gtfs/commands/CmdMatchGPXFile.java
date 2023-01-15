@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-import static org.fusesource.jansi.Ansi.ansi;
-
 @CommandLine.Command(name = "match", mixinStandardHelpOptions = true, description = "Match gpx files to OSM ways data to generate precise relations (this command will be removed soon)")
 public class CmdMatchGPXFile implements Callable<Void> {
     //TODO: make this command match both folders or individual files given the path in input

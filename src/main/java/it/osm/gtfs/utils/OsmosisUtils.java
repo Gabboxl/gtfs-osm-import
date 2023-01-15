@@ -1,15 +1,15 @@
 package it.osm.gtfs.utils;
 
+import org.openstreetmap.osmosis.core.TaskRegistrar;
+import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
+import org.openstreetmap.osmosis.core.pipeline.common.TaskConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import org.openstreetmap.osmosis.core.TaskRegistrar;
-import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
-import org.openstreetmap.osmosis.core.pipeline.common.TaskConfiguration;
 
 public class OsmosisUtils {
     public static void checkProcessOutput(Pipeline process) throws InterruptedException{

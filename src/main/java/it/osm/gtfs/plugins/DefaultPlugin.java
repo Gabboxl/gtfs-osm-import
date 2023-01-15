@@ -14,14 +14,10 @@
  **/
 package it.osm.gtfs.plugins;
 
+import it.osm.gtfs.models.*;
+
 import java.util.Collection;
 import java.util.Set;
-
-import it.osm.gtfs.models.Relation;
-import it.osm.gtfs.models.Route;
-import it.osm.gtfs.models.Stop;
-import it.osm.gtfs.models.TripStopsList;
-import it.osm.gtfs.models.Trip;
 
 public class DefaultPlugin implements GTFSPlugin {
 

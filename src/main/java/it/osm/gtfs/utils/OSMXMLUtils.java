@@ -15,7 +15,6 @@
 package it.osm.gtfs.utils;
 
 import it.osm.gtfs.output.IElementCreator;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

@@ -1,22 +1,12 @@
 package it.osm.gtfs.commands;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Stop;
 import it.osm.gtfs.utils.GTFSImportSettings;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.json.JSONException;
@@ -27,10 +17,17 @@ import org.mapfish.geo.MfFeatureCollection;
 import org.mapfish.geo.MfGeoJSONWriter;
 import org.mapfish.geo.MfGeometry;
 import org.xml.sax.SAXException;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import picocli.CommandLine;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 
 //TODO: is this class still useful in some way?

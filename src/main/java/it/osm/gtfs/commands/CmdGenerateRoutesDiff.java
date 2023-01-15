@@ -14,31 +14,21 @@
  **/
 package it.osm.gtfs.commands;
 
+import com.google.common.collect.Multimap;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.Callable;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.xml.sax.SAXException;
-
-import com.google.common.collect.Multimap;
 import picocli.CommandLine;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "reldiff", description = "Analyze the diff between osm relations and gtfs trips")
 public class CmdGenerateRoutesDiff implements Callable<Void> {

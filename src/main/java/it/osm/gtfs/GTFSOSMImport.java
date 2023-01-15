@@ -18,8 +18,6 @@ package it.osm.gtfs;
 import it.osm.gtfs.commands.*;
 import it.osm.gtfs.commands.gui.GTFSRouteDiffGui;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.SharedCliOptions;
-import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
@@ -35,7 +33,6 @@ import picocli.CommandLine;
 import picocli.shell.jline3.PicocliCommands;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;

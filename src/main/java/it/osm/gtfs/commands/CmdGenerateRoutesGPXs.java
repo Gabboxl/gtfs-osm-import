@@ -14,31 +14,23 @@
  **/
 package it.osm.gtfs.commands;
 
-import it.osm.gtfs.input.GTFSParser;
-import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.models.*;
-import it.osm.gtfs.utils.GTFSImportSettings;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.Callable;
-
 import com.google.common.collect.Multimap;
+import it.osm.gtfs.input.GTFSParser;
+import it.osm.gtfs.models.Route;
+import it.osm.gtfs.models.Shape;
+import it.osm.gtfs.models.Trip;
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.SharedCliOptions;
-import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 

@@ -18,7 +18,6 @@ import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.models.BoundingBox;
 import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.SharedCliOptions;
 import picocli.CommandLine;
 
 import java.io.IOException;

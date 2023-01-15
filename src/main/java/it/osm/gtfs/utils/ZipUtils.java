@@ -1,7 +1,5 @@
 package it.osm.gtfs.utils;
 
-import org.springframework.util.StreamUtils;
-
 import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;

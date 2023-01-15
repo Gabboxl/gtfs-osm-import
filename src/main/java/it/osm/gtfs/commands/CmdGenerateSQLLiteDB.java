@@ -2,26 +2,20 @@ package it.osm.gtfs.commands;
 
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
-import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.models.Relation;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
+import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.sql.*;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "sqlite", mixinStandardHelpOptions = true, description = "Generate a sqlite db containg osm relations")
 public class CmdGenerateSQLLiteDB implements Callable<Void> {

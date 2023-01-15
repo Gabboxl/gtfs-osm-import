@@ -14,29 +14,26 @@
  **/
 package it.osm.gtfs.commands;
 
+import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
-import it.osm.gtfs.models.*;
+import it.osm.gtfs.models.BoundingBox;
+import it.osm.gtfs.models.GTFSStop;
+import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.utils.DownloadUtils;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.OsmosisUtils;
-import it.osm.gtfs.input.GTFSParser;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.concurrent.Callable;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import it.osm.gtfs.utils.StopsUtils;
 import org.fusesource.jansi.Ansi;
 import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
 

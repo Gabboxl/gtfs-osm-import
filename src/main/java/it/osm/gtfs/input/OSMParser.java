@@ -17,25 +17,12 @@ package it.osm.gtfs.input;
 import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.OSMStop;
-import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Relation.OSMNode;
 import it.osm.gtfs.models.Relation.OSMRelationWayMember;
 import it.osm.gtfs.models.Relation.OSMWay;
 import it.osm.gtfs.models.Relation.RelationType;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import it.osm.gtfs.utils.GTFSImportSettings;
 import org.apache.commons.lang.StringUtils;
 import org.fusesource.jansi.Ansi;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -48,6 +35,17 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.fusesource.jansi.Ansi.ansi;
 

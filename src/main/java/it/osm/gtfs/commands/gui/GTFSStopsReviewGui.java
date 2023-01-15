@@ -1,10 +1,8 @@
 package it.osm.gtfs.commands.gui;
 
-import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jxmapviewer.JXMapKit;
-import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -443,8 +441,6 @@ public class GTFSStopsReviewGui
         constraints.anchor = GridBagConstraints.CENTER;
 
         frame.add(new JLabel(" ", SwingConstants.CENTER), constraints);  // blank JLabel
-
-
 
 
 

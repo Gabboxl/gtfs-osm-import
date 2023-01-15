@@ -15,10 +15,9 @@
 package it.osm.gtfs.models;
 
 import it.osm.gtfs.output.IElementCreator;
+import org.w3c.dom.Element;
 
 import java.util.Collection;
-
-import org.w3c.dom.Element;
 
 public class BoundingBox {
     private Double minLat;
