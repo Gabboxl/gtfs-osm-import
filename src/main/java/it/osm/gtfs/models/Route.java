@@ -14,9 +14,6 @@
  **/
 package it.osm.gtfs.models;
 
-import java.util.List;
-
-//TODO: consider converting classes like this one to java records
 public class Route implements Comparable<Route> {
     private final String id;
     private final String agencyId;

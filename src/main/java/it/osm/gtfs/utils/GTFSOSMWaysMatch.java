@@ -57,7 +57,7 @@ public class GTFSOSMWaysMatch {
         mapMatching.setMeasurementErrorSigma(40);
 
 
-        String instructions_locale = ""; //TODO: maybe remove this as it is already specified in the yml file? or not
+        String instructions_locale = "";
         tr = new TranslationMap().doImport().getWithFallBack(Helper.getLocale(instructions_locale));
         withRoute = !instructions_locale.isEmpty();
         xmlMapper = new XmlMapper();

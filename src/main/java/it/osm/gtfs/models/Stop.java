@@ -24,8 +24,6 @@ import java.util.List;
 public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private String gtfsId;
     private String code;
-
-    //TODO: maybe we should borrow the GeoPosition class from jxmapviewer and create a copy for ourselves
     private GeoPosition geoPosition;
     private String name;
     private String operator;
