@@ -535,7 +535,7 @@ public class GTFSStopsReviewGui
         OSMStop newstop;
 
         while (reorderiterator.hasNext() && finalReviewedGeopositions.containsKey(reorderedArray.get(reorderiterator.nextIndex()))){
-            newstop = reorderiterator.next();
+            reorderiterator.next();
         }
 
         if (!reorderiterator.hasNext()){
@@ -545,7 +545,7 @@ public class GTFSStopsReviewGui
             int newindex = reorderiterator.nextIndex();
             newstop = reorderiterator.next();
 
-            int indextoselect =osmStopsToReview.indexOf(newstop);
+            int indextoselect = osmStopsToReview.indexOf(newstop);
 
 
             //we re set the original iterator accordingly
