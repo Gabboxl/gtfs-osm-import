@@ -22,17 +22,18 @@ public class StopsUtils {
      * @return Returns whether the two stops are the same stop or not
      */
     public static boolean match(GTFSStop gtfsStop, OSMStop osmStop) {
+        int maxDist = 100;
 
         double distanceBetween = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
         String debugData = "GTFS Stop data: [" + gtfsStop + "] -> OSM Stop data: [" + osmStop +  "], exact distance between: " + distanceBetween + " m";
 
         if (osmStop.getCode() != null && osmStop.getCode().equals(gtfsStop.getCode())) {
 
-            if (distanceBetween < 15 || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) && osmStop.isRevised())){
+            if (distanceBetween < maxDist || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) && osmStop.isRevised())){
                 //if the stops are less than 15m far away (with only the ref code in common) OR are already linked with gtfsid AND the OSM stop is already revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
                 return true;
-            } else if (distanceBetween < 1000) {
-                System.err.println("Warning: Too distant osm-gtfs stop (with dist > 15 m and less than 1km) / " + debugData);
+            } else if (distanceBetween < 2000) {
+                System.err.println("Warning: Too distant osm and gtfs stops / " + debugData);
 
 
                 //FIXME: we should remove this check and instead decide what to do with the stop positions that are associated to the physical stops (like move them or what during the stop gui review??)
