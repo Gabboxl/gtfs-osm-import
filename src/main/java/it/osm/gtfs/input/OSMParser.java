@@ -34,11 +34,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -183,10 +180,13 @@ public class OSMParser {
         return osmStopsListOutput;
     }
 
-    public static List<Relation> readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException{
+    public static List<Relation> readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException, ParserConfigurationException {
         NodeParser nodeParser;
         {
-            XMLReader xr = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader xr = saxParser.getXMLReader();
+
             nodeParser = new NodeParser();
             xr.setContentHandler(nodeParser);
             xr.setErrorHandler(nodeParser);
@@ -195,7 +195,10 @@ public class OSMParser {
 
         WayParser wayParser;
         {
-            XMLReader xr = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader xr = saxParser.getXMLReader();
+
             wayParser = new WayParser(nodeParser.result);
             xr.setContentHandler(wayParser);
             xr.setErrorHandler(wayParser);
@@ -204,7 +207,10 @@ public class OSMParser {
 
         RelationParser relationParser;
         {
-            XMLReader xr = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader xr = saxParser.getXMLReader();
+
             relationParser = new RelationParser(stopsWithOSMIndex, wayParser.result);
             xr.setContentHandler(relationParser);
             xr.setErrorHandler(relationParser);
