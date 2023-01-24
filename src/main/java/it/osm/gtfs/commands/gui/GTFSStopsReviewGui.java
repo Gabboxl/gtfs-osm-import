@@ -594,8 +594,8 @@ public class GTFSStopsReviewGui
         gtfsCoordsStopMap.setAddressLocation(gtfsStopCoords);
 
         //re-set zoom levels
-        osmCoordsStopMap.setZoom(2);
-        gtfsCoordsStopMap.setZoom(2);
+        //osmCoordsStopMap.setZoom(2);
+        //gtfsCoordsStopMap.setZoom(2);
 
 
         //we update the variout interface texts
