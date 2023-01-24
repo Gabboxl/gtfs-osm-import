@@ -237,7 +237,7 @@ public class OSMParser {
     private static class WayParser extends DefaultHandler{
         Map<Long, OSMNode> nodes;
 
-        Map<Long, OSMWay> result = new HashMap<Long, Relation.OSMWay>();
+        Map<Long, OSMWay> result = new HashMap<>();
         OSMWay currentWay;
 
         private WayParser(Map<Long, OSMNode> nodes) {

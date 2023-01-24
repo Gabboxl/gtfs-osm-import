@@ -1,6 +1,6 @@
 package it.osm.gtfs.enums;
 
-public enum OSMStopType { //data according to the GTFS reference guide - the OSM yes value is not present in GTFS reference
+public enum OSMStopType {
     PHYSICAL_BUS_STOP("physical_bus_stop"),
     PHYSICAL_TRAM_STOP("physical_tram_stop"),
     BUS_STOP_POSITION("bus_stop_position"),

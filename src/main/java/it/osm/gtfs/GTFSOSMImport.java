@@ -69,7 +69,8 @@ public class GTFSOSMImport {
             CmdUpdateGTFSOSMData.class,
             CmdMatchGPXFile.class,
             CmdCheckOsmRoutes.class,
-            CmdGenerateRoutesDiff.class
+            CmdGenerateRoutesDiff.class,
+            CmdRelDiffGui.class
     );
 
 
@@ -81,39 +82,6 @@ public class GTFSOSMImport {
                 "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
                 "Revised key: " + GTFSImportSettings.getInstance().getRevisedKey() + "\n" +
                 "Plugin class: " + GTFSImportSettings.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
-    }
-
-
-
-
-    @CommandLine.Command(description = "Analyze the diff between osm relations and gtfs trips (GUI)")
-    public void reldiffx() throws IOException, ParserConfigurationException, SAXException {
-        final Object lock = new Object();
-        final GTFSRouteDiffGui app = new GTFSRouteDiffGui();
-
-        app.setVisible(true);
-        app.addWindowListener(new WindowAdapter() {
-
-            @Override
-            public void windowClosing(WindowEvent arg0) {
-                synchronized (lock) {
-                    app.setVisible(false);
-                    lock.notify();
-                }
-            }
-
-        });
-
-        synchronized(lock) {
-            while (app.isVisible())
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-        }
-        app.dispose();
-        System.out.println("Done");
     }
 
 
