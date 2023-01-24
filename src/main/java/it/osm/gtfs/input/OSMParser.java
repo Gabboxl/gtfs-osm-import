@@ -23,7 +23,7 @@ import it.osm.gtfs.models.Relation.OSMRelationWayMember;
 import it.osm.gtfs.models.Relation.OSMWay;
 import it.osm.gtfs.models.Relation.RelationType;
 import it.osm.gtfs.utils.GTFSImportSettings;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.fusesource.jansi.Ansi;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.w3c.dom.Document;
