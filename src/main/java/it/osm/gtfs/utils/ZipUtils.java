@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+
+/***
+ * This class contains methods to work with zip files
+ */
 public class ZipUtils {
 
     public static void unzipToDirectory(File file, String extractDirectory) {

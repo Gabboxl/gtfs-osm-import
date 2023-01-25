@@ -19,6 +19,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/***
+ * This class contains methods to work with XML OSM data
+ */
 public class OSMXMLUtils {
 
     public static void addTagAndValue(Element node, String key, String value) {

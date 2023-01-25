@@ -19,6 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
+/***
+ * This class contains methods to download files
+ */
 public class DownloadUtils {
     private static final int TIMEOUT = 30 * 60000;
 

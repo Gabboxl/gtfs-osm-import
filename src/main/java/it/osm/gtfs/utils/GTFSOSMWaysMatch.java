@@ -20,6 +20,10 @@ import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
+
+/***
+ * This class contains the logic to match gpx xml data to OSM ways using GraphHopper
+ */
 public class GTFSOSMWaysMatch {
     private StopWatch importSW;
     private StopWatch matchSW;

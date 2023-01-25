@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * this class contains methods to automate things related to Stops
+ * This class contains methods to automate things related to Stops
  */
 public class StopsUtils {
 
@@ -30,7 +30,7 @@ public class StopsUtils {
         if (osmStop.getCode() != null && osmStop.getCode().equals(gtfsStop.getCode())) {
 
             if (distanceBetween < maxDist || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) && osmStop.isRevised())){
-                //if the stops are less than 15m far away (with only the ref code in common) OR are already linked with gtfsid AND the OSM stop is already revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
+                //if the stops are less than maxDist far away (with only the ref code in common) OR are already linked with gtfsid AND the OSM stop is already revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
                 return true;
             } else if (distanceBetween < 2000) {
                 System.err.println("Warning: Too distant osm and gtfs stops / " + debugData);
