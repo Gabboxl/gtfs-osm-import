@@ -40,22 +40,19 @@ public class GTFSImportSettings {
 
     public static final String OSM_API_SERVER =  "https://www.openstreetmap.org/api/0.6/";
     public static final String OSM_RELATIONS_FILE_NAME = "relations.osm";
-    public static final String OSM_RELATIONS_FILE_PATH = getInstance().getOsmDataPath() + OSM_RELATIONS_FILE_NAME;
     public static final String OSM_STOPS_FILE_NAME = "stops.osm";
-    public static final String OSM_STOPS_FILE_PATH = getInstance().getOsmDataPath() + OSM_STOPS_FILE_NAME;
     public static final String OUTPUT_MATCHED_WITH_UPDATED_METADATA = "gtfs_import_matched_with_updated_metadata.osm";
     public static final String OUTPUT_NOT_MATCHED_STOPS = "gtfs_import_not_matched_stops.osm";
     public static final String OUTPUT_NEW_STOPS_FROM_GTFS = "gtfs_import_new_stops_from_gtfs.osm";
 
     public static final String OSM_OVERPASS_WAYS_FILE_NAME = "overpassways.osm";
-    public static final String OSM_OVERPASS_WAYS_FILE_PATH = getInstance().getOsmDataPath() + OSM_OVERPASS_WAYS_FILE_NAME;
     public static final String PROPERTIES_FILE_NAME = "gtfs-import.properties";
 
     private final Properties properties;
 
     private GTFSImportSettings() {
 
-        System.out.println("\nLoading config properties...\n");
+        System.out.println("\nLoading config properties...");
 
         properties = new Properties();
 
@@ -66,14 +63,14 @@ public class GTFSImportSettings {
                 File propfile = new File(PROPERTIES_FILE_NAME);
 
                 if (!propfile.exists()) {
-                    System.out.println(ansi().render("@|yellow No properties file found, looks like this is a fresh start! \n Creating new gtfs-import.properties file into current directory...|"));
+                    System.out.println(ansi().render("\n @|yellow No properties file found, looks like this is a fresh start! \n Creating new gtfs-import.properties file into current directory...|@"));
 
                     InputStream dummyprops = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
 
                     assert dummyprops != null;
                     Files.copy(dummyprops, propfile.toPath());
 
-                    System.out.println(ansi().render("@|yellow The new properties file has been copied to the current directory! \n Check it before restarting the tool && before making any operation!|"));
+                    System.out.println(ansi().render("\n @|yellow The new properties file has been copied to the current directory! \n Check it before restarting the tool && before making any operation!|@"));
 
                     System.exit(0);
                 }
@@ -84,14 +81,19 @@ public class GTFSImportSettings {
                 properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME));
             }
 
+            System.out.println(ansi().render("@|green Config properties loaded successfully.|@"));
 
         } catch (Exception e) {
             throw new IllegalArgumentException("An error occurred while reading setting: " + e.getMessage());
         }
     }
 
+    public static void init() {
+        SettingsHolder.INSTANCE = new GTFSImportSettings();
+    }
+
     private static class SettingsHolder {
-        private final static GTFSImportSettings INSTANCE = new GTFSImportSettings();
+        private static GTFSImportSettings INSTANCE;
     }
 
     public static GTFSImportSettings getInstance() {
@@ -136,6 +138,18 @@ public class GTFSImportSettings {
 
     public String getGTFSDataPath() {
         return getCachePath() + "gtfsdata" + File.separator;
+    }
+
+    public String getOsmRelationsFilePath() {
+        return getOsmDataPath() + OSM_RELATIONS_FILE_NAME;
+    }
+
+    public String getOsmStopsFilePath() {
+        return getOsmDataPath() + OSM_STOPS_FILE_NAME;
+    }
+
+    public String getOsmOverpassWaysFilePath() {
+        return getOsmDataPath() + OSM_OVERPASS_WAYS_FILE_NAME;
     }
 
     private GTFSPlugin plugin = null;

@@ -40,13 +40,13 @@ public class CmdGenerateGeoJSON implements Callable<Void> {
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
         System.out.println("Parsing OSM Stops...");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Indexing OSM Stops...");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         System.out.println("Parsing OSM Relations...");
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.OSM_RELATIONS_FILE_PATH),
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()),
                 osmstopsOsmID);
 
 

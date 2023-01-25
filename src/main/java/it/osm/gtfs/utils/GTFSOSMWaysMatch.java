@@ -46,7 +46,7 @@ public class GTFSOSMWaysMatch {
         }
 
         //we programmatically set the OSM ways data file as using the yml doesn't work for custom paths on different machines
-        hopper.setOSMFile(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
+        hopper.setOSMFile(GTFSImportSettings.getInstance().getOsmOverpassWaysFilePath());
 
         //programmatically set additional values to be assigned to every graphhopper's edge for a later use (in our case we need the osm way ids ofr every graphhopper's edge)
         hopper.setEncodedValuesString("osm_way_id"); //ricorda, se vuoi cambiare/aggiungere questi encoded values, devi rigenerare tutti i graph cancellando da cache dei graph in modo che vengano aggiunti i nuovi valori scelti a ogni edge

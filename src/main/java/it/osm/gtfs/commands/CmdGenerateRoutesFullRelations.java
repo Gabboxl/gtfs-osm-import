@@ -57,7 +57,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         }
 
 
-        Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.OSM_STOPS_FILE_PATH, SharedCliOptions.checkStopsOfAnyOperatorTagValue));
+        Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         BoundingBox boundingBox = new BoundingBox(gtfsIdOsmStopMap.values());
 
 
@@ -91,7 +91,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
             //download of updated OSM ways in the GTFS bounding box
             String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
-            File fileOverpassHighways = new File(GTFSImportSettings.OSM_OVERPASS_WAYS_FILE_PATH);
+            File fileOverpassHighways = new File(GTFSImportSettings.getInstance().getOsmOverpassWaysFilePath());
             urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
             DownloadUtils.download(urlhighways, fileOverpassHighways, true);
         }
