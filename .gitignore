@@ -1,5 +1,5 @@
 # things
-src\main\resources\gtfs-import.properties
+/src/main/resources/gtfs-import.properties
 graph-cache/
 
 #include some custom files
