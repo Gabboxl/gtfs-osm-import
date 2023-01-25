@@ -18,7 +18,13 @@ import it.osm.gtfs.plugins.DefaultPlugin;
 import it.osm.gtfs.plugins.GTFSPlugin;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.Objects;
 import java.util.Properties;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSImportSettings {
     public static final String GTFS_STOP_FILE_NAME = "stops.txt";
@@ -43,13 +49,42 @@ public class GTFSImportSettings {
 
     public static final String OSM_OVERPASS_WAYS_FILE_NAME = "overpassways.osm";
     public static final String OSM_OVERPASS_WAYS_FILE_PATH = getInstance().getOsmDataPath() + OSM_OVERPASS_WAYS_FILE_NAME;
+    public static final String PROPERTIES_FILE_NAME = "gtfs-import.properties";
 
     private final Properties properties;
 
     private GTFSImportSettings() {
+
+        System.out.println("\nLoading config properties...\n");
+
         properties = new Properties();
+
         try {
-            properties.load(getClass().getClassLoader().getResourceAsStream("gtfs-import.properties"));
+
+            if(Objects.requireNonNull(getClass().getResource("")).toString().startsWith("jar:")){
+
+                File propfile = new File("gtfs-import.properties");
+
+                if (!propfile.exists()) {
+                    System.out.println(ansi().render("@|yellow No properties found, looks like this is a fresh start! \n Creating new gtfs-import.properties file to current directory...|"));
+
+                    InputStream dummyprops = getClass().getClassLoader().getResourceAsStream("gtfs-import.properties");
+
+                    assert dummyprops != null;
+                    Files.copy(dummyprops, propfile.toPath());
+
+                    System.out.println(ansi().render("@|yellow The new properties file has been copied to the current directory! \n Check it before restarting the tool && before making any operation!|"));
+
+                    System.exit(0);
+                }
+
+                properties.load(new FileInputStream(propfile));
+
+            } else {
+                properties.load(getClass().getClassLoader().getResourceAsStream("gtfs-import.properties"));
+            }
+
+
         } catch (Exception e) {
             throw new IllegalArgumentException("An error occurred while reading setting: " + e.getMessage());
         }
