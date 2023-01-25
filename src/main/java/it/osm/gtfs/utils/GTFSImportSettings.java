@@ -63,12 +63,12 @@ public class GTFSImportSettings {
 
             if(Objects.requireNonNull(getClass().getResource("")).toString().startsWith("jar:")){
 
-                File propfile = new File("gtfs-import.properties");
+                File propfile = new File(PROPERTIES_FILE_NAME);
 
                 if (!propfile.exists()) {
-                    System.out.println(ansi().render("@|yellow No properties found, looks like this is a fresh start! \n Creating new gtfs-import.properties file to current directory...|"));
+                    System.out.println(ansi().render("@|yellow No properties file found, looks like this is a fresh start! \n Creating new gtfs-import.properties file into current directory...|"));
 
-                    InputStream dummyprops = getClass().getClassLoader().getResourceAsStream("gtfs-import.properties");
+                    InputStream dummyprops = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
 
                     assert dummyprops != null;
                     Files.copy(dummyprops, propfile.toPath());
@@ -81,7 +81,7 @@ public class GTFSImportSettings {
                 properties.load(new FileInputStream(propfile));
 
             } else {
-                properties.load(getClass().getClassLoader().getResourceAsStream("gtfs-import.properties"));
+                properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME));
             }
 
 
