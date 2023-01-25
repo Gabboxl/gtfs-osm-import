@@ -16,7 +16,6 @@
 package it.osm.gtfs;
 
 import it.osm.gtfs.commands.*;
-import it.osm.gtfs.commands.gui.GTFSRouteDiffGui;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.console.SystemRegistry;
@@ -28,14 +27,9 @@ import org.jline.reader.impl.DefaultParser;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.widget.TailTipWidgets;
-import org.xml.sax.SAXException;
 import picocli.CommandLine;
 import picocli.shell.jline3.PicocliCommands;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
