@@ -23,6 +23,14 @@ public enum WheelchairAccess { //data according to the GTFS reference guide - th
         return null;
     }
 
+    public static WheelchairAccess getEnumByGtfsValue(int gtfsValue){
+        for(WheelchairAccess e : WheelchairAccess.values()){
+            if(e.gtfsValue == gtfsValue) return e;
+        }
+
+        return null;
+    }
+
 
     public int getGtfsValue() {
         return gtfsValue;

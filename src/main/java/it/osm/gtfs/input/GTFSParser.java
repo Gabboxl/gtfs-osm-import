@@ -90,7 +90,8 @@ public class GTFSParser {
                                 Double.parseDouble(elements[stopLonKey])),
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops - no because the operator is set by us
-                                WheelchairAccess.values()[Integer.parseInt(elements[wheelchairBoardingKey])]); //this is not ideal as we are using the value as index of the enums but it works (we should create a lookup method with a for cycle)
+                                WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey]))
+                        );
                         if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gs)){
                             result.add(gs);
                         }
