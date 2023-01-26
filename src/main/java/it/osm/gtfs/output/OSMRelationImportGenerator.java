@@ -18,13 +18,16 @@ import it.osm.gtfs.models.BoundingBox;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.models.Route;
 import it.osm.gtfs.models.Trip;
+import it.osm.gtfs.plugins.GTFSPlugin;
 import it.osm.gtfs.utils.GTFSImportSettings;
 
 import java.util.List;
 
 public class OSMRelationImportGenerator {
 
-    public static String getRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route){
+    public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route){
+        GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
+
         StringBuilder buffer = new StringBuilder();
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
         buffer.append(bb.getXMLTag());
@@ -42,17 +45,40 @@ public class OSMRelationImportGenerator {
             }
         }
 
-        //todo: aggiungere gtfs_route_id, gtfs_agency_id
-        buffer.append("<tag k='direction' v='" + GTFSImportSettings.getInstance().getPlugin().fixTripName(trip.getName()) + "' />\n");
+        //todo: trip ip
+        buffer.append("<tag k='type' v='route' />\n");
+        buffer.append("<tag k='route' v='" + route.getRouteType().getOsmValue() + "' />\n");
+
+        buffer.append("<tag k='public_transport:version' v='2' />\n");
+
+
+        //todo: da mettere a posto i nomi, from e to
         buffer.append("<tag k='name' v='" + route.getShortName() + ": " + route.getLongName().replaceAll("'", "\'") + "' />\n");
+
+        buffer.append("<tag k='from' v='"+ plugin.fixTripName(trip.getTripHeadsign()) + "' />\n");
+        buffer.append("<tag k='to' v='" + route.getLongName().replaceAll("'", "\'") + "' />\n");
+
+        buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
+
         buffer.append("<tag k='network' v='" + GTFSImportSettings.getInstance().getNetwork() + "' />\n");
         buffer.append("<tag k='operator' v='" + GTFSImportSettings.getInstance().getOperator() + "' />\n");
+
         buffer.append("<tag k='ref' v='" + route.getShortName() + "' />\n");
-        buffer.append("<tag k='route' v='bus' />\n");
-        buffer.append("<tag k='type' v='route' />\n");
+
+        //todo: aggiungere gtfs shape id?
+        buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
+        buffer.append("<tag k='gtfs:trip_id' v='" + trip.getTripId() + "' />\n");
+        buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
+
+        buffer.append("<tag k='wheelchair' v='" + trip.getWheelchairAccess().getOsmValue() + "' />\n");
+
         buffer.append("</relation>");
         buffer.append("</osm>");
 
         return buffer.toString();
+    }
+
+    public static String createMasterRouteTripsRelation() {
+        return "side";
     }
 }

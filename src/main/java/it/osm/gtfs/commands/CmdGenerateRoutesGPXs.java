@@ -67,7 +67,7 @@ public class CmdGenerateRoutesGPXs implements Callable<Void> {
                 Route route = routes.get(trip.getRoute().getId());
                 Shape shape = shapes.get(trip.getShapeId());
 
-                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getName().replace("/", "_") + ".gpx");
+                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + ".gpx");
 
                 if(asWaypoints){
                     f.write(shape.getGPXwithWaypoints(route.getShortName()).getBytes());

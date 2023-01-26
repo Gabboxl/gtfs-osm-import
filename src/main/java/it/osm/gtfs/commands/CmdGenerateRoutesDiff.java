@@ -92,7 +92,7 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
                             osmRelationFoundInGTFS.add(found);
                         }else{
                             tripsNotFoundInOSM.add(trip);
-                            System.err.println("Warning: tripid: " + trip.getTripId() + " (" + trip.getName() + ") not found in OSM, details below." );
+                            System.err.println("Warning: tripid: " + trip.getTripId() + " (" + trip.getTripHeadsign() + ") not found in OSM, details below." );
                             System.err.println("Details: shapeid: " + trip.getShapeId() + " shortname: " + route.getShortName() + " longname:" + route.getLongName());
                         }
                     }else{
@@ -113,7 +113,7 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
         System.out.println("---");
 
         for (Trip trip : tripsNotFoundInOSM){
-            System.out.println("Trip " + trip.getTripId() + " (" + routes.get(trip.getRoute().getId()).getShortName() + " - " + trip.getName() + ") not found in OSM ");
+            System.out.println("Trip " + trip.getTripId() + " (" + routes.get(trip.getRoute().getId()).getShortName() + " - " + trip.getTripHeadsign() + ") not found in OSM ");
             TripStopsList stopGTFS = readStopTimesResult.getTripIdStopListMap().get(trip.getTripId());
             System.out.println("Progressivo \tGTFS\tOSM");
 
@@ -130,7 +130,7 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
 
             Affinity affinityGTFS = affinities.get(relation);
             System.out.println("Relation " + relation.getId() + " (" + relation.getName() + ") NOT matched in GTFS ");
-            System.out.println("Best match (" + affinityGTFS.affinity + "): id: " + affinityGTFS.trip.getTripId() + " " + routes.get(affinityGTFS.trip.getRoute().getId()).getShortName() + " " + affinityGTFS.trip.getName());
+            System.out.println("Best match (" + affinityGTFS.affinity + "): id: " + affinityGTFS.trip.getTripId() + " " + routes.get(affinityGTFS.trip.getRoute().getId()).getShortName() + " " + affinityGTFS.trip.getTripHeadsign());
             TripStopsList stopGTFS = readStopTimesResult.getTripIdStopListMap().get(affinityGTFS.trip.getTripId());
 
             long max = Math.max(stopGTFS.getStopSequenceOSMStopMap().size(), relation.getStops().size());

@@ -14,22 +14,26 @@
  **/
 package it.osm.gtfs.models;
 
+import it.osm.gtfs.enums.RouteType;
+
 public class Route implements Comparable<Route> {
     private final String id;
     private final String agencyId;
     private final String shortName;
     private final String longName;
-    private final String routeType;
+    private final RouteType routeType;
+    private final String routeColor;
 
     //private final List<Trip> trips;
 
-    public Route(String id, String agencyId, String longName, String shortName, String routeType) {
+    public Route(String id, String agencyId, String longName, String shortName, RouteType routeType, String routeColor) {
         super();
         this.id = id;
         this.agencyId = agencyId;
         this.shortName = shortName;
         this.longName = longName;
         this.routeType = routeType;
+        this.routeColor = routeColor;
     }
 
     public String getId() {
@@ -48,7 +52,11 @@ public class Route implements Comparable<Route> {
         return agencyId;
     }
 
-    public String getRouteType() {
+    public String getRouteColor() {
+        return routeColor;
+    }
+
+    public RouteType getRouteType() {
         return routeType;
     }
 

@@ -16,6 +16,7 @@ package it.osm.gtfs.input;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import it.osm.gtfs.enums.RouteType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -114,7 +115,7 @@ public class GTFSParser {
 
         String thisLine;
         String [] elements;
-        int shape_id=-1, route_id=-1, trip_id=-1, trip_headsign=-1;
+        int shape_id=-1, route_id=-1, trip_id=-1, trip_headsign=-1, wheelchair_accessible=-1;
 
         BufferedReader br = new BufferedReader(new FileReader(gtfsTripsFilePath));
         boolean isFirstLine = true;
@@ -126,9 +127,11 @@ public class GTFSParser {
                 for (int i=0; i<keys.length; i++) {
                     switch (keys[i]) {
                         case "route_id" -> route_id = i;
+                        case "trip_id" -> trip_id = i;
                         case "trip_headsign" -> trip_headsign = i;
                         case "shape_id" -> shape_id = i;
-                        case "trip_id" -> trip_id = i;
+                        case "wheelchair_accessible" -> wheelchair_accessible = i;
+
                     }
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
@@ -136,8 +139,13 @@ public class GTFSParser {
                 elements = getElementsFromLine(thisLine);
 
                 if (elements[shape_id].length() > 0){
-                    finalTripsList.add(new Trip(elements[trip_id], routes.get(elements[route_id]), elements[shape_id],
-                            (trip_headsign > -1) ? elements[trip_headsign] : "", stopTimes.get(elements[trip_id])));
+                    finalTripsList.add(new Trip(elements[trip_id],
+                            routes.get(elements[route_id]),
+                            elements[shape_id],
+                            (trip_headsign > -1) ? elements[trip_headsign] : "",
+                            stopTimes.get(elements[trip_id]),
+                            WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchair_accessible]))
+                    ));
                 }
             }
         }
@@ -191,7 +199,7 @@ public class GTFSParser {
 
         String thisLine;
         String [] elements;
-        int route_id=-1, agency_id = -1, route_short_name=-1, route_long_name=-1, route_type=-1;
+        int route_id=-1, agency_id = -1, route_short_name=-1, route_long_name=-1, route_type=-1, route_color=-1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
@@ -207,13 +215,21 @@ public class GTFSParser {
                         case "route_short_name" -> route_short_name = i;
                         case "route_long_name" -> route_long_name = i;
                         case "route_type" -> route_type = i;
+                        case "route_color" -> route_color = i;
                     }
                 }
             } else {
                  elements = getElementsFromLine(thisLine);
 
                 if (elements[route_id].length() > 0){
-                    finalRouteIdRouteMap.put(elements[route_id], new Route(elements[route_id], elements[agency_id], elements[route_long_name], elements[route_short_name], elements[route_type]));
+                    finalRouteIdRouteMap.put(elements[route_id],
+                            new Route(elements[route_id],
+                                    elements[agency_id],
+                                    elements[route_long_name],
+                                    elements[route_short_name],
+                                    RouteType.getEnumByGtfsValue(Integer.parseInt(elements[route_type])),
+                                    elements[route_color])
+                    );
                 }
             }
         }

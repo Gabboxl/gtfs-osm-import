@@ -94,7 +94,7 @@ public class StopsUtils {
             OSMXMLUtils.addOrReplaceTagValue(originalNode, "wheelchair", gtfsWheelchairAccess.getOsmValue());
         }
 
-        //todo hey qua aggiunge un tag stop_position [ e'' giusto?
+        //todo: hey qua aggiunge un tag stop_position [ e'' giusto?
         if (osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
             //OSMXMLUtils.addTagIfNotExisting(originalNode, "tram", "yes");
             OSMXMLUtils.addTagIfNotExisting(originalNode, "public_transport", "stop_position");

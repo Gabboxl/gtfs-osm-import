@@ -15,20 +15,24 @@
 package it.osm.gtfs.models;
 
 
+import it.osm.gtfs.enums.WheelchairAccess;
+
 public class Trip implements Comparable<Trip> {
     private final Route route;
     private final String shapeId;
     private final String tripId;
-    private final String name;
+    private final String tripHeadsign;
     private final TripStopsList tripStopsList;
+    private final WheelchairAccess wheelchairAccess;
 
-    public Trip(String tripId, Route route, String shapeId, String name, TripStopsList tripStopsList) {
+    public Trip(String tripId, Route route, String shapeId, String tripHeadsign, TripStopsList tripStopsList, WheelchairAccess wheelchairAccess) {
         super();
         this.route = route;
         this.shapeId = shapeId;
         this.tripId = tripId;
-        this.name = name;
+        this.tripHeadsign = tripHeadsign;
         this.tripStopsList = tripStopsList;
+        this.wheelchairAccess = wheelchairAccess;
     }
 
     public String getTripId() {
@@ -48,8 +52,11 @@ public class Trip implements Comparable<Trip> {
         return shapeId;
     }
 
-    public String getName() {
-        return name;
+    public String getTripHeadsign() {
+        return tripHeadsign;
+    }
+    public WheelchairAccess getWheelchairAccess() {
+        return wheelchairAccess;
     }
 
     @Override
