@@ -48,7 +48,7 @@ public class TripStopsList {
         stopSequenceArrivalTimeMap.put(stopSequence, arrivalTime);
     }
 
-    public String getRelationAsStopList(Trip t, Route r){
+    public String getStopsTextFile() {
         StringBuilder buffer = new StringBuilder();
         for (Stop s: stopSequenceOSMStopMap.values()){
             buffer.append(s.getCode() + " " + s.getName()  + "\n");

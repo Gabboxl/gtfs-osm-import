@@ -115,7 +115,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 Route route = routes.get(trip.getRoute().getId());
 
 
-                TripStopsList stops = trip.getStopsList();
+                TripStopsList tripStopsList = trip.getStopsList();
 
                 List<Integer> osmWayIds = null;
 
@@ -138,7 +138,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
                 //printa il file txt delle fermate con i nomi di esse
                 f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + "_" + count + ".txt");
-                f.write(stops.getRelationAsStopList(trip, route).getBytes());
+                f.write(tripStopsList.getStopsTextFile().getBytes());
                 f.close();
 
                 id++;
