@@ -20,8 +20,8 @@ import java.util.TreeMap;
 
 public class TripStopsList {
     private final String tripId;
-    private Map<Long, OSMStop> stopSequenceOSMStopMap;
-    private Map<Long, String> stopSequenceArrivalTimeMap;
+    private final TreeMap<Long, OSMStop> stopSequenceOSMStopMap;
+    private final TreeMap<Long, String> stopSequenceArrivalTimeMap;
     private Boolean valid = true;
 
     public TripStopsList(String tripId) {
@@ -57,21 +57,15 @@ public class TripStopsList {
     }
 
 
-    public Map<Long, OSMStop> getStopSequenceOSMStopMap() {
+    public TreeMap<Long, OSMStop> getStopSequenceOSMStopMap() {
         return stopSequenceOSMStopMap;
     }
 
-    public void setStopSequenceOSMStopMap(Map<Long, OSMStop> s){
-        stopSequenceOSMStopMap = s;
-    }
 
     public Map<Long, String> getStopSequenceArrivalTimeMap() {
         return stopSequenceArrivalTimeMap;
     }
 
-    public void setStopSequenceArrivalTimeMap(Map<Long, String> s){
-        stopSequenceArrivalTimeMap = s;
-    }
 
     public boolean equalsStops(TripStopsList o) {
         if (stopSequenceOSMStopMap.size() != o.stopSequenceOSMStopMap.size())
