@@ -1,6 +1,6 @@
 package it.osm.gtfs.enums;
 
-public enum RouteType { //data according to the GTFS reference guide - the OSM yes value is not present in GTFS reference
+public enum RouteType { //data according to the GTFS reference guide
     TRAM_LIGHT_RAIL(0, "tram"),
     SUBWAY_METRO(1, "subway"),
     RAIL(2, "train"),
