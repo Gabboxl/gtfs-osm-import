@@ -57,7 +57,7 @@ public class BoundingBox {
     }
 
     public String getXMLTag() {
-        return "<bounds minlat='" + minLat + "' minlon='" + minLon + "' maxlat='" + maxLat + "' maxlon='" + maxLon + "' origin='OpenStreetMap server' />";
+        return "<bounds minlat='" + minLat + "' minlon='" + minLon + "' maxlat='" + maxLat + "' maxlon='" + maxLon + "' origin='GTFSOSMImport' />";
     }
 
     public Element getXMLTag(IElementCreator document) {
