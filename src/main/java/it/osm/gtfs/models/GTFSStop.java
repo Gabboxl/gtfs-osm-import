@@ -45,6 +45,7 @@ public class GTFSStop extends Stop {
         node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "wheelchair", getWheelchairAccessibility().getOsmValue()));
+
         return node;
     }
 

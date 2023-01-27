@@ -476,7 +476,7 @@ public class GTFSStopsReviewGui
         double lonSecond = gtfsCoordsStopMap.getMainMap().getCenterPosition().getLongitude();
         int zoomSecond = gtfsCoordsStopMap.getMainMap().getZoom();
 
-        frame.setTitle(String.format("GTFSOSMImport stops changes review - origmap coords: (%.2f / %.2f) - Zoom: %d // updmap coords: (%.2f / %.2f) - Zoom: %d // %dx%d", latFirst, lonFirst, zoomFirst, latSecond, lonSecond, zoomSecond, frame.getSize().width, frame.getSize().height));
+        frame.setTitle(String.format("GTFSOSMImport stops changes review - osmmap coords: (%.2f / %.2f) - Zoom: %d // gtfsmap coords: (%.2f / %.2f) - Zoom: %d // window size: %dx%d", latFirst, lonFirst, zoomFirst, latSecond, lonSecond, zoomSecond, frame.getSize().width, frame.getSize().height));
 
     }
 
@@ -538,7 +538,7 @@ public class GTFSStopsReviewGui
             hideEverythingStopRelated();
         } else {
 
-            int newindex = reorderiterator.nextIndex();
+            //int newindex = reorderiterator.nextIndex();
             newstop = reorderiterator.next();
 
             int indextoselect = osmStopsToReview.indexOf(newstop);
@@ -617,6 +617,8 @@ public class GTFSStopsReviewGui
             setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith.getName())
                     + " (ref: " + thisCellStop.getCode() + " - " + thisCellStop.getStopType() +")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
 
+
+            //check whether the osm or gtfs stop position got accepted
             if (finalReviewedGeopositions.get(thisCellStop) != null && finalReviewedGeopositions.get(thisCellStop).equals(thisCellStop.getGeoPosition())){ //the user accepted the OSM coordinates
                 setBackground(new Color(120, 255, 120));
 
@@ -625,18 +627,7 @@ public class GTFSStopsReviewGui
                 setBackground(new Color(138, 234, 255));
 
                 setText(getText() + " / GTFS Accepted");
-            } else {
-                //nothing got accepted i think
             }
-
-            /*
-            if (cellHasFocus){
-                setBackground(new Color(255, 120, 241));
-            }else {
-                setBackground(new Color(120, 255, 120));
-            }
-
-             */
 
 
             return component;
