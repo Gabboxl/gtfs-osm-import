@@ -66,7 +66,6 @@ public class OSMRelationImportGenerator {
         //todo: aggiungere gtfs shape id?
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
         buffer.append("<tag k='gtfs:shape_id' v='" + trip.getShapeId() + "' />\n");
-        buffer.append("<tag k='gtfs:trip_id' v='" + trip.getTripId() + "' />\n"); //maybe al posto del trip id che identifica un singolo giro in una giornata metterre service_id?
         buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
         buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
 
