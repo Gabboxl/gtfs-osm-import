@@ -26,7 +26,9 @@ public interface GTFSPlugin {
     String fixBusStopName(String stopName);
     String fixBusStopRef(String stopRef);
 
-    String fixTripName(String name);
+    String fixTripHeadsignName(String name);
+
+    String fixGtfsVersionDate(String gtfsVersionDate);
 
     /**
      * Allow to exclude some stops from importing

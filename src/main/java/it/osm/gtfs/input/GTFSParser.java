@@ -316,6 +316,50 @@ public class GTFSParser {
         return readStopTimesResult;
     }
 
+
+
+    public static GTFSFeedInfo readFeedInfo(String gtfsFeedInfoPath) throws IOException{
+
+        GTFSFeedInfo gtfsFeedInfo;
+
+        String thisLine;
+        String [] elements;
+        int feed_publisher_name=-1, feed_publisher_url=-1, feed_start_date=-1, feed_end_date=-1, feed_version=-1;
+
+        BufferedReader br = new BufferedReader(new FileReader(gtfsFeedInfoPath));
+        boolean isFirstLine = true;
+        while ((thisLine = br.readLine()) != null) {
+            if (isFirstLine) {
+                isFirstLine = false;
+                thisLine = thisLine.replace("\"", "");
+                String[] keys = thisLine.split(",");
+                for (int i=0; i<keys.length; i++) {
+                    switch (keys[i]) {
+                        case "feed_publisher_name" -> feed_publisher_name = i;
+                        case "feed_publisher_url" -> feed_publisher_url = i;
+                        case "feed_start_date" -> feed_start_date = i;
+                        case "feed_end_date" -> feed_end_date = i;
+                        case "feed_version" -> feed_version = i;
+
+                    }
+                }
+            } else {
+                elements = getElementsFromLine(thisLine);
+
+                gtfsFeedInfo = new GTFSFeedInfo(elements[feed_publisher_name],
+                        elements[feed_publisher_url],
+                        elements[feed_start_date],
+                        elements[feed_end_date],
+                        elements[feed_version]);
+
+                return gtfsFeedInfo;
+            }
+        }
+        br.close();
+
+        return null;
+    }
+
     public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes){
         Collections.sort(trips);
         Multimap<String, Trip> result = ArrayListMultimap.create();

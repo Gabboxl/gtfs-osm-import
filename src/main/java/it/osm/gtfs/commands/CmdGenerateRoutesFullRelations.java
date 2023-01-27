@@ -53,9 +53,10 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         if(!skipDataUpdate) {
             //update osm and gtfs data
-            new CmdUpdateGTFSOSMData().call();
+            //new CmdUpdateGTFSOSMData().call();  //todo: da uncommentare
         }
 
+    GTFSFeedInfo gtfsFeedInfo = GTFSParser.readFeedInfo(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_FEED_INFO_FILE_NAME);
 
         Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         BoundingBox boundingBox = new BoundingBox(gtfsIdOsmStopMap.values());
@@ -133,7 +134,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 }
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + id + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + "_" + count + ".osm");
-                f.write(OSMRelationImportGenerator.createSingleTripRelation(boundingBox, osmWayIds, trip, route).getBytes());
+                f.write(OSMRelationImportGenerator.createSingleTripRelation(boundingBox, osmWayIds, trip, route, gtfsFeedInfo).getBytes());
                 f.close();
 
                 //printa il file txt delle fermate con i nomi di esse

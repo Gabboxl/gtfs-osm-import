@@ -16,6 +16,8 @@ package it.osm.gtfs.plugins;
 
 import it.osm.gtfs.models.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -44,7 +46,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
     }
 
     @Override
-    public String fixTripName(String name) {
+    public String fixTripHeadsignName(String name) {
         return camelCase(name).trim();
     }
 
@@ -60,6 +62,17 @@ public class GTTTurinPlugin implements GTFSPlugin {
     private static String capitalize(String string) {
         if (string.length() == 0) return string;
         return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+    }
+
+    @Override
+    public String fixGtfsVersionDate(String gtfsVersionDate) {
+
+        final DateTimeFormatter OLD_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+        final DateTimeFormatter NEW_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate date = LocalDate.parse(gtfsVersionDate, OLD_FORMATTER);
+
+        return date.format(NEW_FORMATTER);
     }
 
     @Override

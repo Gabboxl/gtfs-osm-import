@@ -32,7 +32,7 @@ public class DefaultPlugin implements GTFSPlugin {
     }
 
     @Override
-    public String fixTripName(String name) {
+    public String fixTripHeadsignName(String name) {
         return name;
     }
 

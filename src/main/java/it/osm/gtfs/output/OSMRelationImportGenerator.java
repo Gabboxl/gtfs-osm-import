@@ -14,18 +14,16 @@
  **/
 package it.osm.gtfs.output;
 
-import it.osm.gtfs.models.BoundingBox;
-import it.osm.gtfs.models.OSMStop;
-import it.osm.gtfs.models.Route;
-import it.osm.gtfs.models.Trip;
+import it.osm.gtfs.models.*;
 import it.osm.gtfs.plugins.GTFSPlugin;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 public class OSMRelationImportGenerator {
 
-    public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route){
+    public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo){
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
         StringBuilder buffer = new StringBuilder();
@@ -51,24 +49,26 @@ public class OSMRelationImportGenerator {
 
         buffer.append("<tag k='public_transport:version' v='2' />\n");
 
-
         //todo: da mettere a posto i nomi, from e to
-        buffer.append("<tag k='name' v='" + route.getShortName() + ": " + route.getLongName().replaceAll("'", "\'") + "' />\n");
+        buffer.append("<tag k='name' v='" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + ": " + plugin.fixTripHeadsignName(trip.getTripHeadsign()) + "' />\n");
 
-        buffer.append("<tag k='from' v='"+ plugin.fixTripName(trip.getTripHeadsign()) + "' />\n");
-        buffer.append("<tag k='to' v='" + route.getLongName().replaceAll("'", "\'") + "' />\n");
+        buffer.append("<tag k='ref' v='" + route.getShortName() + "' />\n");
+
+        buffer.append("<tag k='from' v='"+ trip.getStopsList().getStopSequenceOSMStopMap().firstEntry().getValue().getName() + "' />\n");
+        buffer.append("<tag k='to' v='" + trip.getStopsList().getStopSequenceOSMStopMap().lastEntry().getValue().getName() + "' />\n");
 
         buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
 
         buffer.append("<tag k='network' v='" + GTFSImportSettings.getInstance().getNetwork() + "' />\n");
         buffer.append("<tag k='operator' v='" + GTFSImportSettings.getInstance().getOperator() + "' />\n");
 
-        buffer.append("<tag k='ref' v='" + route.getShortName() + "' />\n");
 
         //todo: aggiungere gtfs shape id?
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
-        buffer.append("<tag k='gtfs:trip_id' v='" + trip.getTripId() + "' />\n");
+        buffer.append("<tag k='gtfs:shape_id' v='" + trip.getShapeId() + "' />\n");
+        buffer.append("<tag k='gtfs:trip_id' v='" + trip.getTripId() + "' />\n"); //maybe al posto del trip id che identifica un singolo giro in una giornata metterre service_id?
         buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
+        buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
 
         buffer.append("<tag k='wheelchair' v='" + trip.getWheelchairAccess().getOsmValue() + "' />\n");
 

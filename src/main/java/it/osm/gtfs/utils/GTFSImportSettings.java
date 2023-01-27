@@ -32,6 +32,7 @@ public class GTFSImportSettings {
     public static final String GTFS_ROUTES_FILE_NAME = "routes.txt";
     public static final String GTFS_SHAPES_FILE_NAME = "shapes.txt";
     public static final String GTFS_TRIPS_FILE_NAME = "trips.txt";
+    public static final String GTFS_FEED_INFO_FILE_NAME = "feed_info.txt";
 
     /* instanze disponibili di Overpass: https://wiki.openstreetmap.org/wiki/Overpass_API
     meglio usare l'instanza di Overpass russa perchè non ha forme di rate limiting */
