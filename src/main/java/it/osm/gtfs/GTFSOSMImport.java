@@ -210,7 +210,7 @@ public class GTFSOSMImport {
 
     private static void initChecks(){
         if (Runtime.getRuntime().maxMemory() < 1000000000){
-            throw new IllegalArgumentException("You need to configure JVM to allow al least 1GB ram usage.");
+            throw new IllegalStateException("You need to configure JVM to allow al least 1GB ram usage.");
         }
     }
 }

@@ -49,13 +49,13 @@ public class OSMBusImportGenerator implements IElementCreator{
 
     public void end() {
         if (completed)
-            throw new IllegalArgumentException("This buffer is already closed.");
+            throw new IllegalStateException("This buffer is already closed.");
         completed = true;
     }
 
     public void saveTo(OutputStream outputStream) throws IOException, TransformerException {
         if (!completed)
-            throw new IllegalArgumentException("This buffer isn't complete, can't save.");
+            throw new IllegalStateException("This buffer isn't complete, can't save.");
 
         Source source = new DOMSource(document);
         Result result = new StreamResult(outputStream);
@@ -68,14 +68,14 @@ public class OSMBusImportGenerator implements IElementCreator{
 
     public void appendNode(Element n) {
         if (completed)
-            throw new IllegalArgumentException("This buffer is already closed.");
+            throw new IllegalStateException("This buffer is already closed.");
         root.appendChild(document.importNode(n, true));
     }
 
     @Override
     public Element createElement(String tagName) {
         if (completed)
-            throw new IllegalArgumentException("This buffer is already closed.");
+            throw new IllegalStateException("This buffer is already closed.");
         return document.createElement(tagName);
     }
 }
