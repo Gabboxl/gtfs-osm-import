@@ -39,10 +39,6 @@ public class Trip implements Comparable<Trip> {
         return tripId;
     }
 
-    @Deprecated
-    public String getRouteID() {
-        return route.getId();
-    }
 
     public Route getRoute() {
         return route;
@@ -57,6 +53,10 @@ public class Trip implements Comparable<Trip> {
     }
     public WheelchairAccess getWheelchairAccess() {
         return wheelchairAccess;
+    }
+
+    public TripStopsList getStopsList() {
+        return tripStopsList;
     }
 
     @Override
@@ -99,9 +99,5 @@ public class Trip implements Comparable<Trip> {
         }else{
             return a;
         }
-    }
-
-    public TripStopsList getStopsList() {
-        return tripStopsList;
     }
 }
