@@ -37,6 +37,11 @@ public class DefaultPlugin implements GTFSPlugin {
     }
 
     @Override
+    public String fixGtfsVersionDate(String gtfsVersionDate) {
+        return gtfsVersionDate;
+    }
+
+    @Override
     public Boolean isValidStop(Stop s) {
         return true;
     }
