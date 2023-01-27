@@ -62,7 +62,7 @@ public class TripStopsList {
     }
 
 
-    public Map<Long, String> getStopSequenceArrivalTimeMap() {
+    public TreeMap<Long, String> getStopSequenceArrivalTimeMap() {
         return stopSequenceArrivalTimeMap;
     }
 
