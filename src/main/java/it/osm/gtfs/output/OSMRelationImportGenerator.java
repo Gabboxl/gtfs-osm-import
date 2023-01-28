@@ -49,7 +49,7 @@ public class OSMRelationImportGenerator {
 
         buffer.append("<tag k='public_transport:version' v='2' />\n");
 
-        //todo: da mettere a posto i nomi, from e to
+
         buffer.append("<tag k='name' v='" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + ": " + plugin.fixTripHeadsignName(trip.getTripHeadsign()) + "' />\n");
 
         buffer.append("<tag k='ref' v='" + route.getShortName() + "' />\n");
@@ -63,7 +63,6 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='operator' v='" + GTFSImportSettings.getInstance().getOperator() + "' />\n");
 
 
-        //todo: aggiungere gtfs shape id?
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
         buffer.append("<tag k='gtfs:shape_id' v='" + trip.getShapeId() + "' />\n");
         buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
