@@ -75,7 +75,7 @@ public class GTFSParser {
                 if (stopCodeKey == -1)
                     stopCodeKey = stopIdKey;
             } else {
-                elements = getElementsFromLine(thisLine);
+                elements = getElementsFromLine(thisLine, true);
 
                 //GTFS Milano: code column present but empty (using id as code)
                 String stopCode = elements[stopCodeKey];
@@ -136,7 +136,7 @@ public class GTFSParser {
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
             } else {
-                elements = getElementsFromLine(thisLine);
+                elements = getElementsFromLine(thisLine, false);
 
                 if (elements[shape_id].length() > 0){
                     finalTripsList.add(new Trip(elements[trip_id],
@@ -178,7 +178,7 @@ public class GTFSParser {
                 }
                 //                    System.out.println(stopIdKey+","+stopNameKey+","+stopLatKey+","+stopLonKey);
             } else {
-                elements = getElementsFromLine(thisLine);
+                elements = getElementsFromLine(thisLine, true);
 
                 if (elements[shape_id].length() > 0){
                     Shape s = result.get(elements[shape_id]);
@@ -219,7 +219,7 @@ public class GTFSParser {
                     }
                 }
             } else {
-                 elements = getElementsFromLine(thisLine);
+                 elements = getElementsFromLine(thisLine, true);
 
                 if (elements[route_id].length() > 0){
                     finalRouteIdRouteMap.put(elements[route_id],
@@ -276,7 +276,7 @@ public class GTFSParser {
                 }
 
             } else {
-                thisLineElements = getElementsFromLine(thisLine);
+                thisLineElements = getElementsFromLine(thisLine, true);
 
                 if (thisLineElements[trip_id].length() > 0){
                     TripStopsList tripStopsList = tripIdStopListMap.get(thisLineElements[trip_id]);
@@ -344,7 +344,7 @@ public class GTFSParser {
                     }
                 }
             } else {
-                elements = getElementsFromLine(thisLine);
+                elements = getElementsFromLine(thisLine, true);
 
                 gtfsFeedInfo = new GTFSFeedInfo(elements[feed_publisher_name],
                         elements[feed_publisher_url],
@@ -378,22 +378,28 @@ public class GTFSParser {
     }
 
 
-    private static String[] getElementsFromLine(String thisLine) {
-        String[] elements;
+    private static String[] getElementsFromLine(String thisLine, boolean removeCommasFromValues) {
+        List<String> elements = new ArrayList<>();
+
         thisLine = thisLine.trim();
 
         if(thisLine.contains("\"")) {
             String[] temp = thisLine.split("\"");
+
             for(int x=0; x<temp.length; x++){
-                if(x%2==1) temp[x] = temp[x].replace(",", "");
-            }
-            thisLine = "";
-            for(int x=0; x<temp.length; x++){
-                thisLine = thisLine + temp[x];
+
+                if(x%2==1) { //aggiungo all'array un elemento si e uno no
+                    if (removeCommasFromValues)
+                    {
+                        temp[x] = temp[x].replace(",", "");
+                    }
+
+                    elements.add(temp[x]);
+                }
             }
         }
-        elements = thisLine.split(",");
-        return elements;
+
+        return elements.toArray(new String[0]);
     }
 
 }
