@@ -122,7 +122,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 List<Integer> osmWayIds = null;
 
                 if(!noOsmWayMatching) {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getTripHeadsign() + " tripID=" + trip.getTripId() +  " ...").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nCreating full way-matched relation for trip " + trip.getTripHeadsign() + " tripId = " + trip.getTripId() +  " ...").reset());
 
                     Shape shape = shapes.get(trip.getShapeId());
 
@@ -131,15 +131,19 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = osmmatchinstance.matchGPX(xmlGPXShape);
                 }else {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getTripHeadsign() + " tripID=" + trip.getTripId() +  " ...").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getTripHeadsign() + " tripId=" + trip.getTripId() +  " ...").reset());
                 }
 
-                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + "_" + count + ".osm");
+                    String fixedTripHeadsignFileName = trip.getTripHeadsign().replace("/", "_").replace(",", "");
+                    String fixedRouteShortNameFileName = route.getShortName().replace("/", "B");
+
+
+                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".osm");
                 f.write(OSMRelationImportGenerator.createSingleTripRelation(boundingBox, osmWayIds, trip, route, gtfsFeedInfo).getBytes());
                 f.close();
 
                 //printa il file txt delle fermate con i nomi di esse
-                f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + "_" + count + ".txt");
+                f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".txt");
                 f.write(tripStopsList.getStopsTextFile().getBytes());
                 f.close();
 
