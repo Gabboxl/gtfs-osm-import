@@ -110,7 +110,7 @@ public class GTFSParser {
         List<Trip> finalTripsList = new ArrayList<>();
 
         if(stopTimes.isEmpty()) {
-            System.out.println(ansi().render("@|red No stop times provided! The trips list will be generated without a stop list! |"));
+            System.out.println(ansi().render("@|red No stop times provided! The trips list will be generated without a stop list! |@"));
         }
 
         String thisLine;
