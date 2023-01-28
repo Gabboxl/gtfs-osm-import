@@ -27,7 +27,7 @@ public class OSMRelationImportGenerator {
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>");
+        buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>\n");
         buffer.append(bb.getXMLTag());
         buffer.append("<relation id='-" + Math.round(Math.random() * 100000) +  "'>\n");
 
