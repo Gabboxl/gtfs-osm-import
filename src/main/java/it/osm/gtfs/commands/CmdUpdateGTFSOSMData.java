@@ -63,7 +63,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
         } else {
             StringTokenizer st = new StringTokenizer(relation, " ,\n\t");
-            Map<String, Integer> idWithVersion = new HashMap<String, Integer>();
+            Map<String, Integer> idWithVersion = new HashMap<>();
             while (st.hasMoreTokens()){
                 idWithVersion.put(st.nextToken(), Integer.MAX_VALUE);
             }
@@ -108,7 +108,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         urlmtr = urlmtr.replace(" ", "%20");
         DownloadUtils.download(urlmtr, filemtr, false);
 
-        List<File> input = new ArrayList<File>();
+        List<File> input = new ArrayList<>();
         input.add(filebus);
         input.add(filestop);
         input.add(filetrm);
@@ -132,7 +132,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
 
-        Map<String, Integer> idWithVersion = new HashMap<String, Integer>();
+        Map<String, Integer> idWithVersion = new HashMap<>();
         for (Relation r:osmRels){
             idWithVersion.put(r.getId(), r.getVersion());
         }
@@ -144,7 +144,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), true);
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
-        List<File> sorted = new ArrayList<File>();
+        List<File> sorted = new ArrayList<>();
 
         // Default to all available rel, then override forced updates
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
