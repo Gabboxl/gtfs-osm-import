@@ -19,7 +19,6 @@ import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Relation.OSMNode;
-import it.osm.gtfs.models.Relation.OSMRelationWayMember;
 import it.osm.gtfs.models.Relation.OSMWay;
 import it.osm.gtfs.models.Relation.RelationType;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -327,9 +326,8 @@ public class OSMParser {
                         System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref + "|@"));
                     }
                 }else if (type.equals("way")){
-                        OSMRelationWayMember member = new OSMRelationWayMember();
-                        member.way = ways.get(Long.parseLong(attributes.getValue("ref")));
-                        currentRelation.getWayMembers().add(member);
+                    OSMWay member = ways.get(Long.parseLong(attributes.getValue("ref")));
+                    currentRelation.getWayMembers().add(member);
                 }else{
                     System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type: \"" + type +"\"" + "|@"));
                 }

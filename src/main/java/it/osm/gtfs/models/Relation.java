@@ -13,7 +13,7 @@ public class Relation {
     private String from;
     private String to;
     private RelationType type;
-    private List<OSMRelationWayMember> wayMembers = new ArrayList<>();
+    private List<OSMWay> wayMembers = new ArrayList<>();
 
     private Map<Long, OSMStop> osmstops;
 
@@ -74,8 +74,6 @@ public class Relation {
     }
 
 
-
-
     public void pushPoint(Long seq, OSMStop stop){
         osmstops.put(seq, stop);
     }
@@ -133,11 +131,11 @@ public class Relation {
         this.version = version;
     }
 
-    public List<OSMRelationWayMember> getWayMembers() {
+    public List<OSMWay> getWayMembers() {
         return wayMembers;
     }
 
-    public void setWayMembers(List<OSMRelationWayMember> wayMembers) {
+    public void setWayMembers(List<OSMWay> wayMembers) {
         this.wayMembers = wayMembers;
     }
 
@@ -169,10 +167,6 @@ public class Relation {
             return dbId;
         }
 
-    }
-
-    public static class OSMRelationWayMember{
-        public OSMWay way;
     }
 
     public static class OSMWay {
