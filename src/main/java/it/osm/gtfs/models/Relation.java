@@ -22,17 +22,19 @@ public class Relation {
         osmstops = new TreeMap<>();
     }
 
-    public int getStopsAffinity(TripStopsList o) {
+    public int getStopsAffinity(TripStopsList tripStopsList) {
         boolean exactMatch = true;
         int affinity = 0;
-        for (OSMStop s:osmstops.values())
-            if (o.getStopSequenceOSMStopMap().containsValue(s)){
-                affinity+= osmstops.size() - Math.abs((getKeysByValue(osmstops, s) - getKeysByValue(o.getStopSequenceOSMStopMap(), s)));
-            }else{
+
+        for (OSMStop stop : osmstops.values())
+            if (tripStopsList.getStopSequenceOSMStopMap().containsValue(stop)){
+                affinity += osmstops.size() - Math.abs((getKeysByValue(osmstops, stop) - getKeysByValue(tripStopsList.getStopSequenceOSMStopMap(), stop)));
+            } else {
                 affinity -= osmstops.size();
                 exactMatch = false;
             }
-        int diff = Math.abs(o.getStopSequenceOSMStopMap().size() - osmstops.size());
+
+        int diff = Math.abs(tripStopsList.getStopSequenceOSMStopMap().size() - osmstops.size());
 
         if (exactMatch && diff == 0)
             return Integer.MAX_VALUE;
@@ -81,7 +83,6 @@ public class Relation {
     public String getId() {
         return id;
     }
-
 
     public String getRef() {
         return ref;
@@ -139,7 +140,7 @@ public class Relation {
         this.wayMembers = wayMembers;
     }
 
-    public enum RelationType{
+    public enum RelationType {
         SUBWAY(0), TRAM(1), BUS(2), TRAIN(3), LIGHT_RAIL(4);
 
         private final int dbId;

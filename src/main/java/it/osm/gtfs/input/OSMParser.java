@@ -251,7 +251,7 @@ public class OSMParser {
             if (localName.equals("way")){
                 currentWay = new OSMWay(Long.parseLong(attributes.getValue("id")));
 
-            }else if(currentWay != null && localName.equals("nd")){
+            }else if(currentWay != null && localName.equals("nd")){ //aggiungiamo all'oggetto way tutti i nodi che la compongono
                 currentWay.nodes.add(nodes.get(Long.parseLong(attributes.getValue("ref"))));
 
             }else if(currentWay != null && localName.equals("tag")){
