@@ -15,26 +15,26 @@ public class Relation {
     private RelationType type;
     private List<OSMWay> wayMembers = new ArrayList<>();
 
-    private Map<Long, OSMStop> osmstops;
+    private Map<Long, OSMStop> sequenceOSMstopMap;
 
     public Relation(String id) {
         this.id = id;
-        osmstops = new TreeMap<>();
+        sequenceOSMstopMap = new TreeMap<>();
     }
 
     public int getStopsAffinity(TripStopsList tripStopsList) {
         boolean exactMatch = true;
         int affinity = 0;
 
-        for (OSMStop stop : osmstops.values())
+        for (OSMStop stop : sequenceOSMstopMap.values())
             if (tripStopsList.getStopSequenceOSMStopMap().containsValue(stop)){
-                affinity += osmstops.size() - Math.abs((getKeysByValue(osmstops, stop) - getKeysByValue(tripStopsList.getStopSequenceOSMStopMap(), stop)));
+                affinity += sequenceOSMstopMap.size() - Math.abs((getKeysByValue(sequenceOSMstopMap, stop) - getKeysByValue(tripStopsList.getStopSequenceOSMStopMap(), stop)));
             } else {
-                affinity -= osmstops.size();
+                affinity -= sequenceOSMstopMap.size();
                 exactMatch = false;
             }
 
-        int diff = Math.abs(tripStopsList.getStopSequenceOSMStopMap().size() - osmstops.size());
+        int diff = Math.abs(tripStopsList.getStopSequenceOSMStopMap().size() - sequenceOSMstopMap.size());
 
         if (exactMatch && diff == 0)
             return Integer.MAX_VALUE;
@@ -55,19 +55,19 @@ public class Relation {
     }
 
     public Map<Long, OSMStop> getStops() {
-        return osmstops;
+        return sequenceOSMstopMap;
     }
 
     public void setStops(Map<Long, OSMStop> s){
-        osmstops = s;
+        sequenceOSMstopMap = s;
     }
 
 
     public boolean equalsStops(TripStopsList o) {
-        if (osmstops.size() != o.getStopSequenceOSMStopMap().size())
+        if (sequenceOSMstopMap.size() != o.getStopSequenceOSMStopMap().size())
             return false;
         for (Long key: o.getStopSequenceOSMStopMap().keySet()){
-            Stop a = osmstops.get(key);
+            Stop a = sequenceOSMstopMap.get(key);
             Stop b = o.getStopSequenceOSMStopMap().get(key);
             if (a == null || !a.equals(b))
                 return false;
@@ -76,8 +76,8 @@ public class Relation {
     }
 
 
-    public void pushPoint(Long seq, OSMStop stop){
-        osmstops.put(seq, stop);
+    public void pushPoint(Long sequence, OSMStop stop){
+        sequenceOSMstopMap.put(sequence, stop);
     }
 
     public String getId() {
