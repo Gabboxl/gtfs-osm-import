@@ -133,8 +133,8 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmstopsOsmID);
 
         Map<String, Integer> idWithVersion = new HashMap<>();
-        for (Relation r:osmRels){
-            idWithVersion.put(r.getId(), r.getVersion());
+        for (Relation relation : osmRels){
+            idWithVersion.put(relation.getId(), relation.getVersion());
         }
 
         updateFullRels(idWithVersion);
@@ -155,7 +155,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         }
 
         Pipeline previousTask = null;
-        for (String relationId:idWithVersion.keySet()){
+        for (String relationId : idWithVersion.keySet()){
             System.out.println("Processing relation " + relationId);
             File filesorted = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_s" + relationId + ".osm");
             sorted.add(filesorted);
