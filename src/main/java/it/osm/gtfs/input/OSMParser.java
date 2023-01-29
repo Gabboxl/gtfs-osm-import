@@ -353,7 +353,7 @@ public class OSMParser {
                     try{
                         currentRelation.setType(RelationType.parse(attributes.getValue("v")));
                     }catch (IllegalArgumentException e){
-                        System.err.println(e.getMessage());
+                        e.printStackTrace();
                         failed = true;
                     }
             }
