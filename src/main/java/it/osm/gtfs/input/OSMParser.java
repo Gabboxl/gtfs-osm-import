@@ -219,8 +219,8 @@ public class OSMParser {
 
 
         if (relationParser.missingNodes.size() > 0 || relationParser.failedRelationIds.size() > 0){
-            System.err.println("Failed to parse some relations. Relations IDs: " + StringUtils.join(relationParser.failedRelationIds, ", "));
-            System.err.println("Failed to parse some relations. Missing nodes: " + StringUtils.join(relationParser.missingNodes, ", "));
+            System.out.println(ansi().render("@|red Failed to parse some relations. Relations IDs: |@" + StringUtils.join(relationParser.failedRelationIds, ", ")));
+            System.out.println(ansi().render("@|red Failed to parse some relations. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
         }
 
         return relationParser.result;
@@ -324,20 +324,20 @@ public class OSMParser {
                     if (role.equals("stop") || role.equals("platform")){
                         OSMStop stop = stopsWithOSMIndex.get(ref);
                         if (stop == null){
-                            System.err.println("Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"?");
+                            System.out.println(ansi().render("@|red Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"? |@"));
                             missingNodes.add(ref);
                             failed = true;
                         }
                         currentRelation.pushPoint(seq++, stop);
                     }else{
-                        System.err.println("Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref);
+                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref + "|@"));
                     }
                 }else if (type.equals("way")){
                         OSMRelationWayMember member = new OSMRelationWayMember();
                         member.way = ways.get(Long.parseLong(attributes.getValue("ref")));
                         currentRelation.getWayMembers().add(member);
                 }else{
-                    System.err.println("Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type: \"" + type +"\"");
+                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type: \"" + type +"\"" + "|@"));
                 }
             }else if (currentRelation != null && localName.equals("tag")){
                 String key = attributes.getValue("k");

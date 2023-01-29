@@ -88,10 +88,10 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
-                            System.err.println("Multiple match found between this GTFS stop and other OSM stops:");
-                            System.err.println("current GTFS stop: " + gtfsStop);
-                            System.err.println("Current-matching OSM stop: " + osmStop);
-                            System.err.println("Already-matched OSM stop: " + gtfsStop.osmStopMatchedWith);
+                            System.out.println(ansi().render("@|red Multiple match found between this GTFS stop and other OSM stops: |@"));
+                            System.out.println(ansi().render("@|red current GTFS stop: |@" + gtfsStop));
+                            System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
+                            System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
                             double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
                             double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLongitude());
@@ -108,10 +108,10 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                     } else {
                         if(osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null){
-                            System.err.println("Multiple match found between this GTFS stop and other OSM stops:");
-                            System.err.println("current GTFS stop: " + gtfsStop);
-                            System.err.println("Current-matching OSM stop: " + osmStop);
-                            System.err.println("Already-matched OSM stop: " + gtfsStop.osmStopMatchedWith);
+                            System.out.println(ansi().render("@|red Multiple match found between this GTFS stop and other OSM stops: |@"));
+                            System.out.println(ansi().render("@|red current GTFS stop: |@" + gtfsStop));
+                            System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
+                            System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
                             double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
                             double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLongitude());
@@ -222,8 +222,8 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                             bufferMatchedStops.appendNode(originalNode);
                         }
                     } else {
-                        System.err.println("Stop locations review not completed. \n If you don't want to review the stops manually you can use the --noreview command option.");
-                        System.err.println("No stop data will be saved. You may run the tool again to restart the review.");
+                        System.out.println(ansi().render("@|red Stop locations review not completed. \n If you don't want to review the stops manually you can use the --noreview command option. |@"));
+                        System.out.println(ansi().render("@|red No stop data will be saved. You may run the tool again to restart the review. |@"));
 
                         return null; //we end this command
                     }
