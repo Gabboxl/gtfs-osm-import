@@ -5,20 +5,19 @@ import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.openstreetmap.osmosis.core.pipeline.common.TaskConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 public class OsmosisUtils {
-    public static void checkProcessOutput(Pipeline process) throws InterruptedException{
+    public static void checkProcessOutput(Pipeline process) {
         if (process != null){
             process.waitForCompletion();
         }
     }
 
-    public static Pipeline runOsmosisSort(File input, File output) throws IOException{
+    public static Pipeline runOsmosisSort(File input, File output) {
         TaskRegistrar taskRegistrar = new TaskRegistrar();
         taskRegistrar.initialize(new ArrayList<>());
 
@@ -33,7 +32,7 @@ public class OsmosisUtils {
         return pipeline;
     }
 
-    public static Pipeline runOsmosisMerge(Collection<File> input, File output) throws IOException{
+    public static Pipeline runOsmosisMerge(Collection<File> input, File output) {
         TaskRegistrar taskRegistrar = new TaskRegistrar();
         taskRegistrar.initialize(new ArrayList<>());
 
