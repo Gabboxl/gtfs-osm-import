@@ -306,21 +306,21 @@ public class OSMParser {
 
                 if (type.equals("node")){
                     if (role.equals("stop") || role.equals("platform")){
-                        OSMStop stop = stopsWithOSMIndex.get(ref);
-                        if (stop == null){
+                        OSMStop osmStop = stopsWithOSMIndex.get(ref);
+                        if (osmStop == null){
                             System.out.println(ansi().render("@|red Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"? |@"));
                             missingNodes.add(ref);
                             failed = true;
                         }
-                        currentRelation.pushPoint(seq++, stop);
+                        currentRelation.pushPoint(seq++, osmStop);
                     }else{
-                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with unsupported role: \"" + role +"\", node ref/ID=" + ref + "|@"));
+                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + role +"\", node ref/Id = " + ref + "|@"));
                     }
                 }else if (type.equals("way")){
                     OSMWay member = ways.get(Long.parseLong(attributes.getValue("ref")));
                     currentRelation.getWayMembers().add(member);
                 }else{
-                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type: \"" + type +"\"" + "|@"));
+                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type \"" + type +"\"" + "|@"));
                 }
             }else if (currentRelation != null && localName.equals("tag")){
                 String key = attributes.getValue("k");
