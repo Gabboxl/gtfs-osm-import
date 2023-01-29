@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 /**
  * This class contains methods to automate things related to Stops
  */
@@ -33,7 +35,7 @@ public class StopsUtils {
                 //if the stops are less than maxDist far away (with only the ref code in common) OR are already linked with gtfsid AND the OSM stop is already revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
                 return true;
             } else if (distanceBetween < 2000) {
-                System.err.println("Warning: Too distant osm and gtfs stops / " + debugData);
+                System.out.println(ansi().render("@|yellow Stop match: found too distant osm and gtfs stops / " + debugData + "|@"));
 
 
                 //FIXME: we should remove this check and instead decide what to do with the stop positions that are associated to the physical stops (like move them or what during the stop gui review??)
@@ -46,7 +48,7 @@ public class StopsUtils {
 
         } else if (distanceBetween < 15 && osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId())){
             //if the stops have different ref tag code, same gtfs_id and are less than 15m far away
-            System.err.println("Warning: Two stops with different ref-code tag but equal gtfs_id matched / " + debugData);
+            System.out.println(ansi().render("@|yellow Warning: Two stops with different ref-code tag but equal gtfs_id matched / " + debugData + "|@"));
             return true;
         }
 

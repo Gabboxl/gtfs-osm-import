@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 
 /***
  * This class contains methods to work with zip files
@@ -23,7 +25,7 @@ public class ZipUtils {
         File extractDir = new File(extractPath);
 
         if (extractDir.isFile()) {
-            System.err.println("The supplied directory path is a file and not a directory.");
+            System.out.println(ansi().render("@|red The supplied directory path is a file and not a directory. |@"));
             return;
         }
         extractDir.mkdirs();

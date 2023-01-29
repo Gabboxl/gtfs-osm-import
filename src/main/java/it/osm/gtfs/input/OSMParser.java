@@ -366,7 +366,7 @@ public class OSMParser {
                     result.add(currentRelation);
                 }else{
                     failedRelationIds.add(currentRelation.getId());
-                    System.err.println("Warning: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]");
+                    System.out.println(ansi().render("@|red Warning: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]" + "|@"));
                 }
                 currentRelation = null;
             }

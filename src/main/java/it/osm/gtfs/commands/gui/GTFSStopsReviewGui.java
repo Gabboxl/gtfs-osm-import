@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Map;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 
 public class GTFSStopsReviewGui
 {
@@ -69,7 +71,7 @@ public class GTFSStopsReviewGui
             // we specify the default look and feel for the swing components
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.err.println("Error setting the look and feel: " + e.getLocalizedMessage());
+            System.out.println(ansi().render("@|red Error setting the look and feel: " + e.getLocalizedMessage() + "|@"));
         }
 
 
