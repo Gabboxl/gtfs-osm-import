@@ -23,13 +23,13 @@ import java.util.List;
 
 public class OSMRelationImportGenerator {
 
-    public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo){
+    public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo, int id){
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
         StringBuilder buffer = new StringBuilder();
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>\n");
         buffer.append(bb.getXMLTag());
-        buffer.append("<relation id='-" + Math.round(Math.random() * 100000) +  "'>\n");
+        buffer.append("<relation id='-" + id +  "'>\n");
 
 
         for (OSMStop s : trip.getStopsList().getStopSequenceOSMStopMap().values()){
