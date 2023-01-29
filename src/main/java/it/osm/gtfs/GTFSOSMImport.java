@@ -54,9 +54,9 @@ import java.util.function.Supplier;
 public class GTFSOSMImport {
     static List<Object> userCommands = Arrays.asList(
             CmdGenerateBusStopsImport.class,
+            CmdGenerateRoutesFullRelations.class,
             CmdGetBoundingBox.class,
-            CmdGenerateRoutesGPXs.class,
-            CmdGenerateRoutesFullRelations.class
+            CmdGenerateRoutesGPXs.class
     );
 
     static List<Object> debugCommands = Arrays.asList(
