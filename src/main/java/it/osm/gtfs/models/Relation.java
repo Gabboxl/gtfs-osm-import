@@ -1,5 +1,7 @@
 package it.osm.gtfs.models;
 
+import it.osm.gtfs.enums.RouteType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ public class Relation {
     private String ref;
     private String from;
     private String to;
-    private RelationType type;
+    private RouteType type;
     private List<OSMWay> wayMembers = new ArrayList<>();
 
     private Map<Long, OSMStop> sequenceOSMstopMap;
@@ -116,11 +118,11 @@ public class Relation {
         this.to = to;
     }
 
-    public RelationType getType() {
+    public RouteType getType() {
         return type;
     }
 
-    public void setType(RelationType type) {
+    public void setType(RouteType type) {
         this.type = type;
     }
 
@@ -138,36 +140,6 @@ public class Relation {
 
     public void setWayMembers(List<OSMWay> wayMembers) {
         this.wayMembers = wayMembers;
-    }
-
-    public enum RelationType {
-        SUBWAY(0), TRAM(1), BUS(2), TRAIN(3), LIGHT_RAIL(4);
-
-        private final int dbId;
-        RelationType(int dbId){
-            this.dbId = dbId;
-        }
-
-        public static RelationType parse(String nodeValue) {
-            if (nodeValue != null){
-                if (nodeValue.equalsIgnoreCase("bus"))
-                    return BUS;
-                if (nodeValue.equalsIgnoreCase("tram"))
-                    return TRAM;
-                if (nodeValue.equalsIgnoreCase("subway"))
-                    return SUBWAY;
-                if (nodeValue.equalsIgnoreCase("train"))
-                    return TRAIN;
-                if (nodeValue.equalsIgnoreCase("light_rail"))
-                    return LIGHT_RAIL;
-            }
-            throw new IllegalArgumentException("unsupported relation type: " + nodeValue);
-        }
-
-        public int dbId() {
-            return dbId;
-        }
-
     }
 
     public static class OSMWay {

@@ -15,12 +15,12 @@
 package it.osm.gtfs.input;
 
 import it.osm.gtfs.enums.OSMStopType;
+import it.osm.gtfs.enums.RouteType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Relation.OSMNode;
 import it.osm.gtfs.models.Relation.OSMWay;
-import it.osm.gtfs.models.Relation.RelationType;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.apache.commons.lang3.StringUtils;
 import org.fusesource.jansi.Ansi;
@@ -334,7 +334,7 @@ public class OSMParser {
                     currentRelation.setTo(attributes.getValue("v"));
                 else if (key.equalsIgnoreCase("route"))
                     try{
-                        currentRelation.setType(RelationType.parse(attributes.getValue("v")));
+                        currentRelation.setType(RouteType.getEnumByOsmValue(attributes.getValue("v")));
                     }catch (IllegalArgumentException e){
                         e.printStackTrace();
                         failed = true;
