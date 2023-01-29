@@ -18,17 +18,6 @@ import java.util.Map;
 
 public class GTFSStopsReviewGui
 {
-    public static void main(String[] args) {
-        try {
-            // we specify the default look and feel for the swing components
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.err.println("Error setting the look and feel: " + e.getLocalizedMessage());
-       }
-
-        //final GTFSStopsReviewGui app = new GTFSStopsReviewGui();
-    }
-
     ListIterator<OSMStop> iteratorStopsToReview;
 
     final JXMapKit osmCoordsStopMap;
@@ -75,6 +64,13 @@ public class GTFSStopsReviewGui
     public GTFSStopsReviewGui(ArrayList<OSMStop> osmStopsToReview, Map<OSMStop, GeoPosition> finalReviewedGeopositions, Object lockObject) {
         this.osmStopsToReview = osmStopsToReview;
         this.finalReviewedGeopositions = finalReviewedGeopositions;
+
+        try {
+            // we specify the default look and feel for the swing components
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.err.println("Error setting the look and feel: " + e.getLocalizedMessage());
+        }
 
 
         osmCoordsStopMap = new JXMapKit();
