@@ -242,6 +242,8 @@ public class GTFSParser {
         Map<String, TripStopsList> tripIdStopListMap = new TreeMap<>();
         Set<String> missingStops = new HashSet<>();
 
+        final ReadStopTimesResult readStopTimesResult;
+
         int count = 0;
 
         String thisLine;
@@ -311,7 +313,7 @@ public class GTFSParser {
             System.out.println(ansi().render("@|red Run the GTFSOSMImport \"stops\" command to create the new stops. Then upload the new stops to OSM, and then run this command again! |@"));
         }
 
-        ReadStopTimesResult readStopTimesResult = new ReadStopTimesResult(tripIdStopListMap, missingStops);
+        readStopTimesResult = new ReadStopTimesResult(tripIdStopListMap, missingStops);
 
         return readStopTimesResult;
     }
