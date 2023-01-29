@@ -143,9 +143,9 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 f.close();
 
                 //printa il file txt delle fermate con i nomi di esse
-                f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".txt");
-                f.write(tripStopsList.getStopsListTextFile().getBytes());
-                f.close();
+                //f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".txt");
+                //f.write(tripStopsList.getStopsListTextFile().getBytes());
+                //f.close();
 
                 tempid++;
             }
