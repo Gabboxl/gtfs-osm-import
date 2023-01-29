@@ -269,7 +269,7 @@ public class OSMParser {
                     }else if (value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false")){
                         currentWay.oneway = false;
                     }else{
-                        System.err.println("Unhandled oneway attribute: " + value + " way id: " + currentWay.getId());
+                        System.out.println(ansi().render("@|red Unhandled oneway attribute: " + value + " way id: " + currentWay.getId() + "|@"));
                     }
                 }else if (key.equalsIgnoreCase("junction")){
                     if (value.equalsIgnoreCase("roundabout")){

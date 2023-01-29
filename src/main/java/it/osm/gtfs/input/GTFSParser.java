@@ -84,7 +84,7 @@ public class GTFSParser {
                 if (stopCode.length() > 0){
                     if (locationTypeKey >= 0 && parentStationKey >= 0 && "1".equals(elements[locationTypeKey])){
                         //this is a station (group of multiple stops)
-                        System.err.println("GTFSParser: skipped station (group of multiple stops) with gtfs id: " + elements[stopIdKey]);
+                        System.out.println(ansi().render("@|red GTFSParser: skipped station (group of multiple stops) with gtfs id: |@" + elements[stopIdKey]));
                     }else{
                         GTFSStop gs = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
@@ -98,7 +98,7 @@ public class GTFSParser {
                         }
                     }
                 }else{
-                    System.err.println("GTFSParser: Failed to parse stops.txt line: " + thisLine);
+                    System.out.println(ansi().render("@|red GTFSParser: Failed to parse stops.txt line: |@" + thisLine));
                 }
             }
         }
@@ -296,7 +296,7 @@ public class GTFSParser {
 
                         if (!missingStops.contains(thisLineGtfsID)) {
                             missingStops.add(thisLineGtfsID);
-                            System.err.println("Warning: GTFS stop with gtfsId=" + thisLineGtfsID + " not found in OpenStreetMap data! The trip " + thisLineElements[trip_id] + " and maybe others won't be generated!");
+                            System.out.println(ansi().render("@|red Warning: GTFS stop with gtfsId=" + thisLineGtfsID + " not found in OpenStreetMap data! The trip " + thisLineElements[trip_id] + " and maybe others won't be generated! |@"));
                         }
                     }
                 }

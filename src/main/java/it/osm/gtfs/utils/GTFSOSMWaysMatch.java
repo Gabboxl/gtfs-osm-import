@@ -149,7 +149,7 @@ public class GTFSOSMWaysMatch {
         } catch (Exception e) {
             importSW.stop();
             matchSW.stop();
-            System.err.println("Problem with data " + xmlGpxData);
+            System.out.println(ansi().render("@|red Problem with the following XML data: |@" + xmlGpxData));
 
             e.printStackTrace(System.err);
         }

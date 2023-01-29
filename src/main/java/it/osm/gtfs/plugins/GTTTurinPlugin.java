@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class GTTTurinPlugin implements GTFSPlugin {
 
     public String fixBusStopRef(String busStopRef){
@@ -103,7 +105,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
             for (Long key: s.getStopSequenceOSMStopMap().keySet())
                 if (!relation.getStops().get(key).equals(s.getStopSequenceOSMStopMap().get(key)))
                     return false;
-            System.err.println("GTTPlugin: Matched relation with gtfs bug " + relation.getId());
+            System.out.println(ansi().render("@|red GTTPlugin: Matched relation " + relation.getId() + " with gtfs bug |@" ));
             return true;
         }else{
             return false;
@@ -117,10 +119,10 @@ public class GTTTurinPlugin implements GTFSPlugin {
         if (s.getStopSequenceArrivalTimeMap().get(1L) == null)
             return false;
         else if (frequency <= 1){
-            System.err.println("GTTPlugin: Ignoring trip " + trip.getTripId() + " found only one, may not be a valid route");
+            System.out.println(ansi().render("@|red GTTPlugin: Ignoring trip " + trip.getTripId() + " found only one, may not be a valid route |@"));
             return false;
         }else if (frequency <= 4 && (s.getStopSequenceArrivalTimeMap().get(1L).startsWith("04") || s.getStopSequenceArrivalTimeMap().get(1L).startsWith("05") || s.getStopSequenceArrivalTimeMap().get(1L).startsWith("06"))){
-            System.err.println("GTTPlugin: Ignoring trip " + trip.getTripId() + " found only four times in early morning, may be a warmup route");
+            System.out.println(ansi().render("@|red GTTPlugin: Ignoring trip " + trip.getTripId() + " found only four times in early morning, may be a warmup route |@"));
             return false;
         }
         return true;
