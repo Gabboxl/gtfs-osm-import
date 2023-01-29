@@ -172,7 +172,6 @@ public class Relation {
     public static class OSMWay {
         private final long id;
         public List<OSMNode> nodes = new ArrayList<>();
-        public boolean oneway = false;
 
         public OSMWay(long id){
             this.id = id;

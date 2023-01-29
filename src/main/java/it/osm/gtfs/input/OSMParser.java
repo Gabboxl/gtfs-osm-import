@@ -250,25 +250,16 @@ public class OSMParser {
 
             if (localName.equals("way")){
                 currentWay = new OSMWay(Long.parseLong(attributes.getValue("id")));
+
             }else if(currentWay != null && localName.equals("nd")){
                 currentWay.nodes.add(nodes.get(Long.parseLong(attributes.getValue("ref"))));
+
             }else if(currentWay != null && localName.equals("tag")){
+
                 String key = attributes.getValue("k");
                 String value = attributes.getValue("v");
 
-                if (key.equalsIgnoreCase("oneway")){
-                    if (value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("true")){
-                        currentWay.oneway = true;
-                    }else if (value.equalsIgnoreCase("no") || value.equalsIgnoreCase("false")){
-                        currentWay.oneway = false;
-                    }else{
-                        System.out.println(ansi().render("@|red Unhandled oneway attribute: " + value + " way id: " + currentWay.getId() + "|@"));
-                    }
-                }else if (key.equalsIgnoreCase("junction")){
-                    if (value.equalsIgnoreCase("roundabout")){
-                        currentWay.oneway = true;
-                    }
-                }
+                //we don't need to parse any way tag values/attributes at the moment
             }
         }
 
@@ -281,7 +272,7 @@ public class OSMParser {
         }
     }
 
-    private static class RelationParser extends DefaultHandler{
+    private static class RelationParser extends DefaultHandler {
         private final Map<String, OSMStop> stopsWithOSMIndex;
         private final Map<Long, OSMWay> ways;
 
