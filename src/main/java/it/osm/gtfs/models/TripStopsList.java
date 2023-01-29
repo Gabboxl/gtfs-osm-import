@@ -48,10 +48,10 @@ public class TripStopsList {
         stopSequenceArrivalTimeMap.put(stopSequence, arrivalTime);
     }
 
-    public String getStopsTextFile() {
+    public String getStopsListTextFile() {
         StringBuilder buffer = new StringBuilder();
-        for (Stop s: stopSequenceOSMStopMap.values()){
-            buffer.append(s.getCode() + " " + s.getName()  + "\n");
+        for (Stop stop: stopSequenceOSMStopMap.values()){
+            buffer.append(stop.getCode() + " " + stop.getName()  + "\n");
         }
         return buffer.toString();
     }
