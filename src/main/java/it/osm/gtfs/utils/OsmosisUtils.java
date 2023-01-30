@@ -37,10 +37,11 @@ public class OsmosisUtils {
         taskRegistrar.initialize(new ArrayList<>());
 
         List<TaskConfiguration> taskInfoList = new ArrayList<>();
-        for (File f:input){
-            taskInfoList.add(new TaskConfiguration("r" + f.getName(), "read-xml", new HashMap<>(), new HashMap<>(), f.getAbsolutePath()));
+        for (File file : input){
+            taskInfoList.add(new TaskConfiguration("r" + file.getName(), "read-xml", new HashMap<>(), new HashMap<>(), file.getAbsolutePath()));
         }
-        for (int i = 1; i<input.size(); i++){
+
+        for (int i = 1; i < input.size(); i++){
             taskInfoList.add(new TaskConfiguration("m" + i, "merge", new HashMap<>(), new HashMap<>(), null));
         }
 

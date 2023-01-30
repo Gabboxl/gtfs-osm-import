@@ -83,39 +83,40 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         BoundingBox bb = new BoundingBox(gtfs);
 
         String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
-        File filebus = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nbus.osm");
+        File busFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_busstops.osm");
         urlbus = urlbus.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
-        DownloadUtils.download(urlbus, filebus, false);
+        DownloadUtils.download(urlbus, busFileTemp, false);
 
         Thread.sleep(1000L);
 
         String urlstop = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
-        File filestop = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nstop.osm");
+        File stopPositionsFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_stoppositions.osm");
         urlstop = urlstop.replace(" ", "%20");
-        DownloadUtils.download(urlstop, filestop, false);
+        DownloadUtils.download(urlstop, stopPositionsFileTemp, false);
 
         Thread.sleep(1000L);
 
         String urltrm = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
-        File filetrm = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_ntram.osm");
+        File tramFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_tramstops.osm");
         urltrm = urltrm.replace(" ", "%20");
-        DownloadUtils.download(urltrm, filetrm, false);
+        DownloadUtils.download(urltrm, tramFileTemp, false);
 
         Thread.sleep(2000L);
 
         String urlmtr = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
-        File filemtr = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_nmetro.osm");
+        File metroFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_metrostops.osm");
         urlmtr = urlmtr.replace(" ", "%20");
-        DownloadUtils.download(urlmtr, filemtr, false);
+        DownloadUtils.download(urlmtr, metroFileTemp, false);
 
-        List<File> input = new ArrayList<>();
-        input.add(filebus);
-        input.add(filestop);
-        input.add(filetrm);
-        input.add(filemtr);
+        List<File> tempFileList = new ArrayList<>();
+        tempFileList.add(busFileTemp);
+        tempFileList.add(stopPositionsFileTemp);
+        tempFileList.add(tramFileTemp);
+        tempFileList.add(metroFileTemp);
 
-        File fileout = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
-        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(input, fileout));
+        File finalMergedFileOut = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
+
+        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(tempFileList, finalMergedFileOut));
     }
 
     private static void updateBaseRels() throws IOException{

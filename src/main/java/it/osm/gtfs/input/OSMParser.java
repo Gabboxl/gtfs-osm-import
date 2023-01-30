@@ -219,7 +219,7 @@ public class OSMParser {
         return relationParser.result;
     }
 
-    private static class NodeParser extends DefaultHandler{
+    private static class NodeParser extends DefaultHandler {
         private final Map<Long, OSMNode> result = new HashMap<>();
 
         @Override
@@ -233,7 +233,7 @@ public class OSMParser {
         }
     }
 
-    private static class WayParser extends DefaultHandler{
+    private static class WayParser extends DefaultHandler {
         Map<Long, OSMNode> nodes;
 
         Map<Long, OSMWay> result = new HashMap<>();
