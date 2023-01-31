@@ -86,15 +86,16 @@ public class GTFSParser {
                         //this is a station (group of multiple stops)
                         System.out.println(ansi().render("@|red GTFSParser: skipped station (group of multiple stops) with gtfs id: |@" + elements[stopIdKey]));
                     }else{
-                        GTFSStop gs = new GTFSStop(elements[stopIdKey],
+                        GTFSStop gtfsStop = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
                                 Double.parseDouble(elements[stopLonKey])),
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops - no because the operator is set by us
                                 WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey]))
                         );
-                        if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gs)){
-                            result.add(gs);
+
+                        if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gtfsStop)){
+                            result.add(gtfsStop);
                         }
                     }
                 }else{

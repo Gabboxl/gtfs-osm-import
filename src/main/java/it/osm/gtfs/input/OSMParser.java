@@ -68,12 +68,14 @@ public class OSMParser {
             osmStop.originalXMLNode = fstNode;
 
             //temp variables for tags
-            String highwaytag = "",
-                    railwaytag = "",
-                    public_transporttag = "",
-                    traintag = "",
-                    tramtag = "",
-                    bustag = "";
+            String highway_tag = "",
+                    railway_tag = "",
+                    public_transport_tag = "",
+                    train_tag = "",
+                    tram_tag = "",
+                    bus_tag = "",
+                    station_tag = "",
+                    subway_tag = "";
 
             NodeList att = fstNode.getChildNodes();
 
@@ -97,22 +99,28 @@ public class OSMParser {
                         osmStop.setGtfsId(value);
 
                     if (key.equalsIgnoreCase("highway"))
-                        highwaytag = value;
+                        highway_tag = value;
 
                     if (key.equalsIgnoreCase("railway"))
-                        railwaytag = value;
+                        railway_tag = value;
 
                     if (key.equalsIgnoreCase("public_transport") )
-                        public_transporttag = value;
+                        public_transport_tag = value;
 
                     if (key.equalsIgnoreCase("train") )
-                        traintag = value;
+                        train_tag = value;
 
                     if (key.equalsIgnoreCase("tram"))
-                        tramtag = value;
+                        tram_tag = value;
 
                     if (key.equalsIgnoreCase("bus"))
-                        bustag = value;
+                        bus_tag = value;
+
+                    if (key.equalsIgnoreCase("station"))
+                        station_tag = value;
+
+                    if (key.equalsIgnoreCase("subway"))
+                        subway_tag = value;
 
                     if (key.equalsIgnoreCase("wheelchair"))
                         osmStop.setWheelchairAccessibility(WheelchairAccess.getEnumByOsmValue(value));
@@ -125,26 +133,26 @@ public class OSMParser {
 
             //osmstop type value setting
 
-            if (railwaytag.equalsIgnoreCase("tram_stop"))
+            if (railway_tag.equalsIgnoreCase("tram_stop"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
-            if (railwaytag.equalsIgnoreCase("station"))
+            if (railway_tag.equalsIgnoreCase("station"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
-            if (traintag.equalsIgnoreCase("yes"))
+            if (train_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
-            if (tramtag.equalsIgnoreCase("yes"))
+            if (tram_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
-            if(highwaytag.equalsIgnoreCase("bus_stop"))
+            if(highway_tag.equalsIgnoreCase("bus_stop"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
 
-            if (bustag.equalsIgnoreCase("yes"))
+            if (bus_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
 
 
-            if (public_transporttag.equalsIgnoreCase("stop_position")) {
+            if (public_transport_tag.equalsIgnoreCase("stop_position")) {
                 OSMStopType currType = osmStop.getStopType();
 
                 if(currType == null){
@@ -159,6 +167,14 @@ public class OSMParser {
                 }
             }
 
+            if (station_tag.equalsIgnoreCase("subway"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
+
+            if (subway_tag.equalsIgnoreCase("yes"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
+
+
+
 
             //if the current osm stop has a different operator tag value than the one specified in the properties we skip it
             if(!readStopsOfAnyOperator && (osmStop.getOperator() == null || !osmStop.getOperator().equalsIgnoreCase(GTFSImportSettings.getInstance().getOperator()))) {
@@ -169,11 +185,13 @@ public class OSMParser {
             }
 
 
-            if (osmStop.getStopType().equals(OSMStopType.GENERAL_STOP_POSITION))
+            if (osmStop.getStopType().equals(OSMStopType.GENERAL_STOP_POSITION)) {
+                System.out.println(ansi().render("@|yellow Ignoring general_stop_position... (node ID: " + osmStop.getOSMId() + ") |@"));
                 continue; //ignore unsupported stop positions (like ferries)
+            }
 
             if(osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
-                throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop and railway=station");
+                throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop, railway=station and station=subway");
 
 
             osmStopsListOutput.add(osmStop);

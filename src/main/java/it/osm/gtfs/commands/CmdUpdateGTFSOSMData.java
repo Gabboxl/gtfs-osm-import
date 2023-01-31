@@ -177,7 +177,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
                 if (filesorted.exists()){
                     List<Relation> relationInFile = OSMParser.readOSMRelations(filesorted, osmIdOSMStopMap);
 
-                    if (relationInFile.size() > 0 && relationInFile.get(0).equals(currRelationToUpdate)) //si usa equals per le instanze Integer diverse come in questo caso per questo motivo: https://stackoverflow.com/a/4428779/9008381
+                    if (relationInFile.size() > 0 && relationInFile.get(0).equals(currRelationToUpdate)) //todo: equals will always return false here because they are always different instances, try to find a way to compare the relations in a better way
                         uptodate = true;
                 }
             } catch (Exception e) {
