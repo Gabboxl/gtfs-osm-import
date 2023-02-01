@@ -187,8 +187,8 @@ public class OSMParser {
             }
 
 
-            //if the current osm stop has a different operator tag value than the one specified in the properties we skip it
-            if(!readStopsOfAnyOperator && (osmStop.getOperator() == null || !StringUtils.containsIgnoreCase(osmStop.getOperator(), GTFSImportSettings.getInstance().getOperator()))) {
+            //if the current osm stop has a different operator tag value than the one specified in the properties we skip it - but we keep the stops with a null operator as they could be of our operator
+            if(!readStopsOfAnyOperator && osmStop.getOperator() != null && !StringUtils.containsIgnoreCase(osmStop.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
                 //System.out.println(osmStop.getOperator());
 
                 System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM Stop node ID " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " as its operator tag value (" + osmStop.getOperator() +") is different than the one specified in the properties file.").reset());
