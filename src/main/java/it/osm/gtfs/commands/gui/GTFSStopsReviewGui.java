@@ -411,7 +411,7 @@ public class GTFSStopsReviewGui
         frame.add(btChooseGTFS, constraints);
 
 
-        btSkipStop = new JButton("Skip stop");
+        btSkipStop = new JButton("Skip stop for now");
         btSkipStop.addActionListener(actionEvent -> {
             nextStopToReview();
         });
