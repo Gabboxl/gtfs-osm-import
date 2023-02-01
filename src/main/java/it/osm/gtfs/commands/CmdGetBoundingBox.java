@@ -32,13 +32,7 @@ public class CmdGetBoundingBox implements Callable<Void> {
         List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfs);
 
-        System.out.println("GTFS " + bb);
-        //Bus
-        System.out.println("API link buses: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery());
-        //Tram
-        System.out.println("API link trams: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery());
-        //Metro
-        System.out.println("API link metro: " + GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery());
+        System.out.println("GTFS bounding box: " + bb);
 
         return null;
     }
