@@ -169,6 +169,9 @@ public class OSMParser {
                 }
             }
 
+            if (public_transport_tag.equalsIgnoreCase("station"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAIN_STATION);
+
             if (station_tag.equalsIgnoreCase("subway"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
 
