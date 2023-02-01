@@ -9,6 +9,6 @@ public class SharedCliOptions {
     @CommandLine.Option(names = {"-a", "--anyoperator"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     public static boolean checkStopsOfAnyOperatorTagValue = false;
 
-    @CommandLine.Option(names = {"-o", "--onlybus"}, description = "Do not consider subway/metro stops, but only bus stops")
+    @CommandLine.Option(names = {"-o", "--onlybus"}, description = "Do not consider subway/metro/train stops, but only bus/tram stops")
     public static boolean onlyBusStops = false;
 }

@@ -180,7 +180,7 @@ public class OSMParser {
 
 
             //skip subway stops if requested
-            if(SharedCliOptions.onlyBusStops && osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP)) {
+            if(SharedCliOptions.onlyBusStops && (osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION))) {
 
                 System.out.println(ansi().render("@|yellow Skipping OSM subway stop (nodeID= " + osmStop.getOSMId() + ", ref= "  + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") |@"));
                 continue;
