@@ -101,7 +101,7 @@ public class GTFSParser {
 
                         OSMStopType stopType = GTFSImportSettings.getInstance().getPlugin().getStopType(gtfsStop);
 
-                        if(stopType.equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && SharedCliOptions.onlyBusStops) {
+                        if(!stopType.equals(OSMStopType.PHYSICAL_BUS_STOP) && SharedCliOptions.onlyBusStops) {
                             continue;
                         }
 
