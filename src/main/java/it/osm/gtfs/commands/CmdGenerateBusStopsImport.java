@@ -178,8 +178,9 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                     System.out.println(notMatchedStringOutput);
 
-                    //for the not matched stops we add the action=delete keyvalue so that JOSM knows that these stops need to be deleted on upload i think
+                    //for the not matched stops we add the action=delete keyvalue so that JOSM knows that these stops need to be deleted on upload
                     OSMXMLUtils.addOSMDeleteActionAttribute(originalNode);
+
                     bufferNotMatchedStops.appendNode(originalNode);
 
                     not_matched_osm_stops++;
