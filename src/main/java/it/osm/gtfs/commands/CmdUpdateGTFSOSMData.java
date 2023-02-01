@@ -76,7 +76,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
     }
 
     private static void updateGTFSData() {
-        System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Downloading and extracting GTFS data from " + GTFSImportSettings.getInstance().getGTFSZipUrl() + "...").reset());
+        System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Downloading and extracting GTFS data from " + GTFSImportSettings.getInstance().getGTFSZipUrl() + " ...").reset());
         DownloadUtils.downloadZip(GTFSImportSettings.getInstance().getGTFSZipUrl(), GTFSImportSettings.getInstance().getGTFSDataPath());
     }
 
@@ -110,11 +110,17 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         urlmtr = urlmtr.replace(" ", "%20");
         DownloadUtils.download(urlmtr, metroFileTemp, false);
 
+        String urlstat = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=station];out meta;&bbox=" + bb.getAPIQuery();
+        File stationsFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_stationstops.osm");
+        urlstat = urlstat.replace(" ", "%20");
+        DownloadUtils.download(urlstat, stationsFileTemp, false);
+
         List<File> tempFileList = new ArrayList<>();
         tempFileList.add(busFileTemp);
         tempFileList.add(stopPositionsFileTemp);
         tempFileList.add(tramFileTemp);
         tempFileList.add(metroFileTemp);
+        tempFileList.add(stationsFileTemp);
 
         File finalMergedFileOut = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
 

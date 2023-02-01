@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.plugins;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.models.*;
 
 import java.util.Collection;
@@ -42,13 +43,18 @@ public class DefaultPlugin implements GTFSPlugin {
     }
 
     @Override
-    public Boolean isValidStop(Stop s) {
+    public Boolean isValidStop(GTFSStop gtfsStop) {
         return true;
     }
 
     @Override
     public boolean isValidRoute(Route route) {
         return true;
+    }
+
+    @Override
+    public OSMStopType getStopType(GTFSStop gtfsStop) throws IllegalStateException {
+        return null;
     }
 
     @Override

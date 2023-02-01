@@ -8,4 +8,7 @@ public class SharedCliOptions {
 
     @CommandLine.Option(names = {"-c", "--checkeverything"}, description = "Check stops with the operator tag value different than what is specified in the properties file")
     public static boolean checkStopsOfAnyOperatorTagValue = false;
+
+    @CommandLine.Option(names = {"--nometro"}, description = "Do not consider subway/metro stops")
+    public static boolean skipMetroStops = false;
 }

@@ -1,5 +1,6 @@
 package it.osm.gtfs.models;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.output.IElementCreator;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -13,17 +14,19 @@ public class GTFSStop extends Stop {
 
     public OSMStop railwayStopMatchedWith; //this variable is useful to handle cases where the city OSM mappers use to map the bus stop near the highway, and then the tram stop position on the railway for the same stop (like in Turin)
 
-    public GTFSStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, WheelchairAccess wheelchairAccessibility) {
-        super(gtfsId, code, geoPosition, name, operator, wheelchairAccessibility);
+    public GTFSStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
+        super(gtfsId, code, geoPosition, name, operator, stopType, wheelchairAccessibility);
     }
 
     @Override
     public String toString() {
         return "Stop [gtfsId=" + getGtfsId() + ", code=" + getCode() + ", lat=" + getGeoPosition().getLatitude()
-                + ", lon=" + getGeoPosition().getLongitude() + ", name=" + getName() + ", accessibility=" + getWheelchairAccessibility() + "]";
+                + ", lon=" + getGeoPosition().getLongitude() + ", name=" + getName() + ", stopType=" + getStopType() + ", accessibility=" + getWheelchairAccessibility() + "]";
     }
 
-    public Element getNewXMLNode(IElementCreator document){ //TODO: I think we need to support different combinations of tags for tram stops/metro stops/bus stops
+    //todo: we need to support different combinations of tags for tram/metro/bus/train stops
+    //maybe based on the stopType
+    public Element getNewXMLNode(IElementCreator document){
         Element node = document.createElement("node");
         long id;
         try{

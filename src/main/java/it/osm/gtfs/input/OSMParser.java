@@ -22,6 +22,7 @@ import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Relation.OSMNode;
 import it.osm.gtfs.models.Relation.OSMWay;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.SharedCliOptions;
 import org.apache.commons.lang3.StringUtils;
 import org.fusesource.jansi.Ansi;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -64,7 +65,7 @@ public class OSMParser {
 
         for (int s = 0; s < nodeList.getLength(); s++) {
             Node fstNode = nodeList.item(s);
-            OSMStop osmStop = new OSMStop(null, null, new GeoPosition(Double.parseDouble(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.parseDouble(fstNode.getAttributes().getNamedItem("lon").getNodeValue())), null, null, null);
+            OSMStop osmStop = new OSMStop(null, null, new GeoPosition(Double.parseDouble(fstNode.getAttributes().getNamedItem("lat").getNodeValue()), Double.parseDouble(fstNode.getAttributes().getNamedItem("lon").getNodeValue())), null, null, null, null);
             osmStop.originalXMLNode = fstNode;
 
             //temp variables for tags
@@ -132,6 +133,7 @@ public class OSMParser {
             }
 
             //osmstop type value setting
+            //todo: support public_transport=station
 
             if (railway_tag.equalsIgnoreCase("tram_stop"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
@@ -174,6 +176,12 @@ public class OSMParser {
                 osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
 
 
+            //skip subway stops if requested
+            if(SharedCliOptions.skipMetroStops && osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP)) {
+
+                System.out.println(ansi().render("@|yellow Skipping OSM subway stop (nodeID= " + osmStop.getOSMId() + ", ref= "  + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") |@"));
+                continue;
+            }
 
 
             //if the current osm stop has a different operator tag value than the one specified in the properties we skip it

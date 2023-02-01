@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.plugins;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.models.*;
 
 import java.util.Collection;
@@ -21,7 +22,7 @@ import java.util.Set;
 
 public interface GTFSPlugin {
     /**
-     * Apply changes to the bus stop name before generating OSM Import file
+     * Apply changes to the bus stop name / other GTFS data before generating OSM Import file
      */
     String fixBusStopName(String stopName);
     String fixBusStopRef(String stopRef);
@@ -33,9 +34,11 @@ public interface GTFSPlugin {
     /**
      * Allow to exclude some stops from importing
      */
-    Boolean isValidStop(Stop s);
+    Boolean isValidStop(GTFSStop gtfsStop);
 
     boolean isValidRoute(Route route);
+
+    OSMStopType getStopType(GTFSStop gtfsStop) throws IllegalStateException;
 
     /**
      * allow plugins to define custom rules to decide if a route is the same

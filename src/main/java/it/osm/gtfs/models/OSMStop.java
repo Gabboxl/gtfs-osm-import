@@ -9,15 +9,12 @@ public class OSMStop extends Stop {
 
     private boolean needsPositionReview = false;
     private boolean isRevised = false;
-
-    private OSMStopType stopType;
-
     public GTFSStop gtfsStopMatchedWith;
     public Node originalXMLNode;
 
 
-    public OSMStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, WheelchairAccess wheelchairAccessibility) {
-        super(gtfsId, code, geoPosition, name, operator, wheelchairAccessibility);
+    public OSMStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
+        super(gtfsId, code, geoPosition, name, operator, stopType, wheelchairAccessibility);
     }
 
     public String getOSMId() {
@@ -52,11 +49,4 @@ public class OSMStop extends Stop {
                 ", isRevised=" + isRevised() + "]";
     }
 
-    public OSMStopType getStopType() {
-        return stopType;
-    }
-
-    public void setStopType(OSMStopType stopType) {
-        this.stopType = stopType;
-    }
 }

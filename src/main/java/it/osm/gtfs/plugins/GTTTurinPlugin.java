@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.plugins;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.models.*;
 
 import java.time.LocalDate;
@@ -78,12 +79,13 @@ public class GTTTurinPlugin implements GTFSPlugin {
     }
 
     @Override
-    public Boolean isValidStop(Stop gs) {
-        if (gs.getCode().trim().length() == 0){
-            gs.setCode(gs.getGtfsId());
+    public Boolean isValidStop(GTFSStop gtfsStop) {
+        if (gtfsStop.getCode().trim().length() == 0){
+            gtfsStop.setCode(gtfsStop.getGtfsId());
         }else{
-            gs.setCode(fixBusStopRef(gs.getCode()));
+            gtfsStop.setCode(fixBusStopRef(gtfsStop.getCode()));
         }
+
         //TODO: codice da revisionare per ref non numerici
 		/*try{
 			Integer.parseInt(gs.getCode());
@@ -126,5 +128,21 @@ public class GTTTurinPlugin implements GTFSPlugin {
             return false;
         }
         return true;
+    }
+
+    //todo: is there any way to determine whether a gtfs stop is a tram or bus stop?
+    @Override
+    public OSMStopType getStopType(GTFSStop gtfsStop) {
+        String stopName = gtfsStop.getName().toLowerCase();
+
+        if (stopName.startsWith("fermata")) {
+            return OSMStopType.PHYSICAL_BUS_STOP;
+        } else if (stopName.startsWith("metro")) {
+            return OSMStopType.PHYSICAL_SUBWAY_STOP;
+        } else if (stopName.startsWith("stazione")) {
+            return OSMStopType.PHYSICAL_TRAIN_STATION;
+        }
+
+        throw new IllegalStateException("GTTPlugin: Couldn't determine the GTFS stop type: " + gtfsStop.getName());
     }
 }

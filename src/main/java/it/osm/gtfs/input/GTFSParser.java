@@ -16,10 +16,12 @@ package it.osm.gtfs.input;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.RouteType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.SharedCliOptions;
 import org.fusesource.jansi.Ansi;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -36,7 +38,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 public class GTFSParser {
 
     public static List<GTFSStop> readStops(String fName) throws IOException{
-        List<GTFSStop> result = new ArrayList<>();
+        List<GTFSStop> resultGtfsStopsList = new ArrayList<>();
 
         String thisLine;
         String [] elements;
@@ -86,16 +88,30 @@ public class GTFSParser {
                         //this is a station (group of multiple stops)
                         System.out.println(ansi().render("@|red GTFSParser: skipped station (group of multiple stops) with gtfs id: |@" + elements[stopIdKey]));
                     }else{
+
+
                         GTFSStop gtfsStop = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
                                 Double.parseDouble(elements[stopLonKey])),
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops - no because the operator is set by us
+                                null,
                                 WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey]))
                         );
 
+                        OSMStopType stopType = GTFSImportSettings.getInstance().getPlugin().getStopType(gtfsStop);
+
+                        if(stopType.equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && SharedCliOptions.skipMetroStops) {
+                            continue;
+                        }
+
+                        //todo: probably we should remove this plugin call and instead find a way to include the stop type directly in the constructor up there
+                        gtfsStop.setStopType(stopType);
+
+
+
                         if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gtfsStop)){
-                            result.add(gtfsStop);
+                            resultGtfsStopsList.add(gtfsStop);
                         }
                     }
                 }else{
@@ -104,7 +120,8 @@ public class GTFSParser {
             }
         }
         br.close();
-        return result;
+
+        return resultGtfsStopsList;
     }
 
     public static List<Trip> readTrips(String gtfsTripsFilePath, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{

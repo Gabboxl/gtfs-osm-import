@@ -14,6 +14,7 @@
  **/
 package it.osm.gtfs.models;
 
+import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -27,6 +28,7 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     private GeoPosition geoPosition;
     private String name;
     private String operator;
+    private OSMStopType stopType;
     private WheelchairAccess wheelchairAccessibility;
 
     //private Boolean isMetroStop; //TODO: should we add this check only for GTFS stops or also for osm stops, or not at all?
@@ -35,7 +37,7 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public List<Stop> stopsMatchedWith = new ArrayList<>(); //TODO: this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently semi-supported but not handled in a GUI in the tool
 
 
-    protected Stop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, WheelchairAccess wheelchairAccessibility) {
+    protected Stop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;
         this.code = code;
@@ -83,6 +85,14 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public OSMStopType getStopType() {
+        return stopType;
+    }
+
+    public void setStopType(OSMStopType stopType) {
+        this.stopType = stopType;
     }
 
     public void setWheelchairAccessibility(WheelchairAccess wheelchairAccessibility){
