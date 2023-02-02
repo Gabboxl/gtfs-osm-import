@@ -135,8 +135,6 @@ public class OSMParser {
             //osmstop type value setting
             //todo: support public_transport=station
 
-            if (railway_tag.equalsIgnoreCase("tram_stop"))
-                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
             if (railway_tag.equalsIgnoreCase("station"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
@@ -153,6 +151,9 @@ public class OSMParser {
             if (bus_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
 
+
+            if (railway_tag.equalsIgnoreCase("tram_stop"))
+                osmStop.setStopType(OSMStopType.TRAM_STOP_POSITION);
 
             if (public_transport_tag.equalsIgnoreCase("stop_position")) {
                 OSMStopType currType = osmStop.getStopType();
