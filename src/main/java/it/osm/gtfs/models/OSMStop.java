@@ -43,8 +43,8 @@ public class OSMStop extends Stop {
     @Override
     public String toString() {
         return "Stop [" +
-                ((originalXMLNode != null) ? ", osmid=" + getOSMId() : "" ) +
-                "gtfsId=" +
+                ((originalXMLNode != null) ? "osmid=" + getOSMId() : "osmid=?" ) +
+                ", gtfsId=" +
                 getGtfsId() + ", code=" + getCode() + ", lat=" + getGeoPosition().getLatitude() +
                 ", lon=" +
                 getGeoPosition().getLongitude() +
