@@ -24,14 +24,14 @@ public class GTFSStop extends Stop {
                 + ", lon=" + getGeoPosition().getLongitude() + ", name=" + getName() + ", stopType=" + getStopType() + ", accessibility=" + getWheelchairAccessibility() + "]";
     }
 
-    //todo: we need to support different combinations of tags for tram/metro/bus/train stops
-    //maybe based on the stopType
+
     public Element getNewXMLNode(IElementCreator document){
         Element node = document.createElement("node");
         long id;
-        try{
+        try {
             id = Long.parseLong(getGtfsId());
-        }catch(Exception e){
+        } catch(Exception e) {
+            System.err.println("The gtfs_id=" + getGtfsId() + " isn't numerical, using an hashcode for the new OSM node instead...");
             id = Math.abs(getGtfsId().hashCode());
         }
 
@@ -39,15 +39,34 @@ public class GTFSStop extends Stop {
         node.setAttribute("visible", "true");
         node.setAttribute("lat", String.valueOf(getGeoPosition().getLatitude()));
         node.setAttribute("lon", String.valueOf(getGeoPosition().getLongitude()));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "bus", "yes"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "highway", "bus_stop"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "public_transport", "platform"));
-        node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));
-        node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSettings.getInstance().getRevisedKey(), "no"));
+
         node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(getName())));
         node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
+        node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "wheelchair", getWheelchairAccessibility().getOsmValue()));
+
+        node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSettings.getInstance().getRevisedKey(), "no"));
+
+        //different node values based on the stop type
+
+        if(getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP)) {
+            node.appendChild(OSMXMLUtils.createTagElement(document, "bus", "yes"));
+            node.appendChild(OSMXMLUtils.createTagElement(document, "highway", "bus_stop"));
+            node.appendChild(OSMXMLUtils.createTagElement(document, "public_transport", "platform"));
+
+        } else if (getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP)) { //todo: check the appropriate tags
+            node.appendChild(OSMXMLUtils.createTagElement(document, "railway", "station"));
+            node.appendChild(OSMXMLUtils.createTagElement(document, "station", "subway"));
+            node.appendChild(OSMXMLUtils.createTagElement(document, "subway", "yes"));
+            //node.appendChild(OSMXMLUtils.createTagElement(document, "train", "yes"));
+
+        } else if (getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION)) {
+            node.appendChild(OSMXMLUtils.createTagElement(document, "public_transport", "station"));
+            node.appendChild(OSMXMLUtils.createTagElement(document, "railway", "station"));
+            node.appendChild(OSMXMLUtils.createTagElement(document, "train", "yes"));
+        }
+
 
         return node;
     }
