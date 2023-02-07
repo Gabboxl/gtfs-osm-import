@@ -89,10 +89,13 @@ public class GTFSParser {
                         System.out.println(ansi().render("@|red GTFSParser: skipped station (group of multiple stops) with gtfs id: |@" + elements[stopIdKey]));
                     }else{
 
+                        double sidebaby = Double.parseDouble(elements[stopLonKey]);
+
+                        System.out.println( sidebaby + " lool");
 
                         GTFSStop gtfsStop = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
-                                Double.parseDouble(elements[stopLonKey])),
+                                sidebaby),
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops - no because the operator is set by us
                                 null,
@@ -403,8 +406,8 @@ public class GTFSParser {
 
         thisLine = thisLine.trim();
 
-        if(thisLine.contains("\"")) {
-            String[] temp = thisLine.split("\"");
+        if(thisLine.contains("\"") || thisLine.contains(",")) {
+            String[] temp = thisLine.split(",");
 
             for(int x=0; x<temp.length; x++){
 
@@ -414,8 +417,9 @@ public class GTFSParser {
                         temp[x] = temp[x].replace(",", "");
                     }
 
-                    elements.add(temp[x]);
+                    //elements.add(temp[x]);
                 }
+                elements.add(temp[x]);
             }
         }
 

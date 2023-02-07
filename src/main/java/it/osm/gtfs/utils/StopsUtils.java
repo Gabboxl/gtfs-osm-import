@@ -48,7 +48,7 @@ public class StopsUtils {
 
         } else if (distanceBetween < 15 && osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId())){
             //if the stops have different ref tag code, same gtfs_id and are less than 15m far away
-            System.out.println(ansi().render("@|yellow Warning: Two stops with different ref-code tag but equal gtfs_id matched / " + debugData + "|@"));
+            System.out.println(ansi().render("@|yellow Warning: Stops with different ref-code tag but equal gtfs_id matched / " + debugData + "|@"));
             return true;
         }
 
