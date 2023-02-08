@@ -415,15 +415,18 @@ public class GTFSParser {
 
             for(int x=0; x<temp.length; x++){
 
-                if(x%2==1 && thisLine.contains("\"")) { //aggiungo all'array un elemento si e uno no
-                    if (removeCommasFromValues)
-                    {
-                        temp[x] = temp[x].replace(",", "");
+                if (thisLine.contains("\"")) {
+                    if (x % 2 == 1) { //aggiungo all'array un elemento si e uno no
+                        if (removeCommasFromValues) {
+                            temp[x] = temp[x].replace(",", "");
+                        }
+
+                        elements.add(temp[x]);
                     }
 
-                    //elements.add(temp[x]);
+                } else {
+                    elements.add(temp[x]);
                 }
-                elements.add(temp[x]);
             }
         }
 
