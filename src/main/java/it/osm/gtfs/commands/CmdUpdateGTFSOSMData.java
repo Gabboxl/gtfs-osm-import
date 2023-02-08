@@ -59,7 +59,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
             updateBaseRels();
             updateFullRels();
 
-            System.out.println(ansi().fg(Ansi.Color.GREEN).a("Data update complete. The bus stops import can now be generated.").reset());
+            System.out.println(ansi().fg(Ansi.Color.GREEN).a("GTFS and OSM data update completed.").reset());
 
         } else {
             StringTokenizer st = new StringTokenizer(relation, " ,\n\t");

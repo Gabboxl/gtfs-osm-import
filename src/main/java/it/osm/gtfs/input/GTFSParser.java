@@ -50,8 +50,10 @@ public class GTFSParser {
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
                 isFirstLine = false;
+
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
+
                 for(int i=0; i<keys.length; i++){
                     switch (keys[i]) {
                         case "stop_id" -> stopIdKey = i;
@@ -91,12 +93,12 @@ public class GTFSParser {
 
 
                         GTFSStop gtfsStop = new GTFSStop(elements[stopIdKey],
-                                elements[stopCodeKey], new GeoPosition(Double.parseDouble(elements[stopLatKey]),
-                                Double.parseDouble(elements[stopLonKey])),
+                                elements[stopCodeKey],
+                                new GeoPosition(Double.parseDouble(elements[stopLatKey]), Double.parseDouble(elements[stopLonKey])),
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops - no because the operator is set by us
                                 null,
-                                WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey]))
+                                (wheelchairBoardingKey > -1) ? WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey])) : null
                         );
 
                         OSMStopType stopType = GTFSImportSettings.getInstance().getPlugin().getStopType(gtfsStop);
@@ -403,17 +405,26 @@ public class GTFSParser {
 
         thisLine = thisLine.trim();
 
-        if(thisLine.contains("\"")) {
-            String[] temp = thisLine.split("\"");
+        if(thisLine.contains("\"") || thisLine.contains(",")) {
+            String[] temp = new String[0];
+
+            if(thisLine.contains("\""))
+                temp = thisLine.split("\"");
+            else if (thisLine.contains(","))
+                temp = thisLine.split(",");
 
             for(int x=0; x<temp.length; x++){
 
-                if(x%2==1) { //aggiungo all'array un elemento si e uno no
-                    if (removeCommasFromValues)
-                    {
-                        temp[x] = temp[x].replace(",", "");
+                if (thisLine.contains("\"")) {
+                    if (x % 2 == 1) { //aggiungo all'array un elemento si e uno no
+                        if (removeCommasFromValues) {
+                            temp[x] = temp[x].replace(",", "");
+                        }
+
+                        elements.add(temp[x]);
                     }
 
+                } else {
                     elements.add(temp[x]);
                 }
             }
