@@ -128,7 +128,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
     }
 
     private static void updateBaseRels() throws IOException{
-        String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];out meta;";
+        String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];out%20meta;";
         File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_rels.osm");
         DownloadUtils.download(urlrel, filerel, false);
     }
