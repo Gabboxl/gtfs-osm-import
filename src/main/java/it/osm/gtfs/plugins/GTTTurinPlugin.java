@@ -47,6 +47,10 @@ public class GTTTurinPlugin implements GTFSPlugin {
         } else if (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP)) {
             fixedStopName = fixedStopName.replaceAll("Metro ", "")
                     .replaceAll("METRO ", "");
+
+        } else if (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION)) {
+            fixedStopName = fixedStopName.replaceAll("Stazione ", "")
+                    .replaceAll("STAZIONE ", "");
         }
 
 
