@@ -113,8 +113,8 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                             System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
                             System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), osmStop.getGeoPosition().getLatitude(), osmStop.getGeoPosition().getLongitude());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.osmStopMatchedWith.getGeoPosition().getLongitude());
+                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
+                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.osmStopMatchedWith.getGeoPosition());
 
                             //in case of multiple matching we check what stop is the closest one to the gtfs coordinates between the current loop stop and the already-matched stop
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop){
