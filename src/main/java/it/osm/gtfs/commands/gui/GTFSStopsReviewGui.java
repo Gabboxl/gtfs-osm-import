@@ -150,6 +150,30 @@ public class GTFSStopsReviewGui
             }
         });
 
+        //key bindings
+
+        InputMap inputMap = frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = frame.getRootPane().getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("A"), "pressA");
+        inputMap.put(KeyStroke.getKeyStroke("D"), "pressD");
+
+        actionMap.put("pressA", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //accept osm position
+                acceptOsmPosition();
+            }
+        });
+
+        actionMap.put("pressD", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //accept gtfs position
+                acceptGtfsPosition();
+            }
+        });
+
         frame.setVisible(true);
 
 
@@ -370,11 +394,7 @@ public class GTFSStopsReviewGui
         btChooseOSM = new JButton("Accept current OSM coordinates (if unsure)");
         btChooseOSM.addActionListener(actionEvent -> {
 
-            OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
-
-            finalReviewedGeopositions.put(currentStop, currentStop.getGeoPosition()); //we put the OSM coords in the map
-
-            nextStopToReview();
+            acceptOsmPosition();
         });
 
         constraints.fill = GridBagConstraints.NONE;
@@ -392,11 +412,7 @@ public class GTFSStopsReviewGui
 
         btChooseGTFS = new JButton("Accept new GTFS coordinates");
         btChooseGTFS.addActionListener(actionEvent -> {
-            OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
-
-            finalReviewedGeopositions.put(currentStop, currentStop.gtfsStopMatchedWith.getGeoPosition()); //we put the GTFS coords in the map
-
-            nextStopToReview();
+            acceptGtfsPosition();
         });
 
         constraints.fill = GridBagConstraints.NONE;
@@ -478,6 +494,21 @@ public class GTFSStopsReviewGui
 
     }
 
+    private void acceptOsmPosition() {
+        OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
+
+        finalReviewedGeopositions.put(currentStop, currentStop.getGeoPosition()); //we put the OSM coords in the map
+
+        nextStopToReview();
+    }
+
+    private void acceptGtfsPosition() {
+        OSMStop currentStop = osmStopsToReview.get(iteratorStopsToReview.nextIndex() - 1);
+
+        finalReviewedGeopositions.put(currentStop, currentStop.gtfsStopMatchedWith.getGeoPosition()); //we put the GTFS coords in the map
+
+        nextStopToReview();
+    }
 
     private void nextStop() {
         if (iteratorStopsToReview.hasNext()){
