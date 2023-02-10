@@ -33,10 +33,10 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
         return busStopRef;
     }
 
-    public String fixBusStopName(String busStopName){
-        busStopName = busStopName.replace('"', '\'')
-                .replaceAll("Fermata [\\d]* - ", "").replaceAll("FERMATA [\\d]* - ", "")
-                .replaceAll("Fermata ST[\\d]* - ", "").replaceAll("Fermata S00[\\d]* - ", "");
+    public String fixBusStopName(GTFSStop gtfsStop){
+        String busStopName = gtfsStop.getName();
+
+        busStopName = busStopName.replace('"', '\'');
 
         try {
             if (Character.isUpperCase(busStopName.charAt(1))) {

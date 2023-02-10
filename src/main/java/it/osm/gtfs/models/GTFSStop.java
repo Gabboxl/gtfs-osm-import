@@ -40,7 +40,7 @@ public class GTFSStop extends Stop {
         node.setAttribute("lat", String.valueOf(getGeoPosition().getLatitude()));
         node.setAttribute("lon", String.valueOf(getGeoPosition().getLongitude()));
 
-        node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(getName())));
+        node.appendChild(OSMXMLUtils.createTagElement(document, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(this)));
         node.appendChild(OSMXMLUtils.createTagElement(document, "ref", getCode()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "gtfs_id", getGtfsId()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));

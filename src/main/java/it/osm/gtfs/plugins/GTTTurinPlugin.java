@@ -33,19 +33,32 @@ public class GTTTurinPlugin implements GTFSPlugin {
         return busStopRef;
     }
 
-    public String fixBusStopName(String busStopName){
-        busStopName = busStopName.replace('"', '\'')
-                .replaceAll("Fermata [\\d]* - ", "").replaceAll("FERMATA [\\d]* - ", "")
-                .replaceAll("Fermata ST[\\d]* - ", "").replaceAll("Fermata S00[\\d]* - ", "");
+    public String fixBusStopName(GTFSStop gtfsStop){
+        String stopName = gtfsStop.getName();
+
+        String fixedStopName = stopName.replace('"', '\'');
+
+        if(gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP)) {
+            fixedStopName = fixedStopName.replaceAll("Fermata [\\d]* - ", "")
+                    .replaceAll("FERMATA [\\d]* - ", "")
+                    .replaceAll("Fermata ST[\\d]* - ", "")
+                    .replaceAll("Fermata S00[\\d]* - ", "");
+
+        } else if (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP)) {
+            fixedStopName = fixedStopName.replaceAll("Metro ", "")
+                    .replaceAll("METRO ", "");
+        }
+
+
 
         try {
-            if (Character.isUpperCase(busStopName.charAt(1))) {
-                return camelCase(busStopName).trim();
+            if (Character.isUpperCase(fixedStopName.charAt(1))) {
+                return camelCase(fixedStopName).trim();
             }
         }catch (Exception e){
-            System.err.println("stopname: " + busStopName + " " + e); //sarebbe meglio e.printStacktrace(); al posto di un println
+            System.err.println("stopname: " + fixedStopName + " " + e); //sarebbe meglio e.printStacktrace(); al posto di un println
         }
-        return busStopName;
+        return fixedStopName;
     }
 
     @Override

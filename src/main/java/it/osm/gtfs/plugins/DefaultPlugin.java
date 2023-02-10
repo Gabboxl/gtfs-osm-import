@@ -23,8 +23,8 @@ import java.util.Set;
 public class DefaultPlugin implements GTFSPlugin {
 
     @Override
-    public String fixBusStopName(String busStopName) {
-        return busStopName;
+    public String fixBusStopName(GTFSStop gtfsStop) {
+        return gtfsStop.getName();
     }
 
     @Override

@@ -4,6 +4,7 @@ import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.models.OSMStop;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
 
 import java.util.List;
@@ -50,6 +51,11 @@ public class StopsUtils {
             //if the stops have different ref tag code, same gtfs_id and are less than 15m far away
             System.out.println(ansi().render("@|yellow Warning: Stops with different ref-code tag but equal gtfs_id matched / " + debugData + "|@"));
             return true;
+
+        } else if(gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && distanceBetween < 100 && StringUtils.containsIgnoreCase(osmStop.getName(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))){
+            System.out.println(ansi().render("@|yellow Warning: Metro stop matched with name tag / " + debugData + "|@"));
+
+            return true;
         }
 
         return false;
@@ -86,7 +92,7 @@ public class StopsUtils {
 
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "gtfs_id", osmStop.gtfsStopMatchedWith.getGtfsId());
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
-        OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith.getName()));
+        OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith));
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
         OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
 

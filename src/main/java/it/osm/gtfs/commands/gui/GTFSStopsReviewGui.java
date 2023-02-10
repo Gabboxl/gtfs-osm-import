@@ -597,7 +597,7 @@ public class GTFSStopsReviewGui
 
 
         //we update the variout interface texts
-        labInfoStop1.setText(String.format(infoStopText1, currentStop.getCode(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(currentStop.gtfsStopMatchedWith.getName())));
+        labInfoStop1.setText(String.format(infoStopText1, currentStop.getCode(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(currentStop.gtfsStopMatchedWith)));
         labInfoStop2.setText(String.format(infoStopText2, finalReviewedGeopositions.size(), osmStopsToReview.size()));
         labOsmCoords.setText(String.format(textLabOsmCoords, osmStopCoords.getLatitude(), osmStopCoords.getLongitude()));
         labGtfsCoords.setText(String.format(textLabGtfsCoords, gtfsStopCoords.getLatitude(), gtfsStopCoords.getLongitude()));
@@ -612,7 +612,7 @@ public class GTFSStopsReviewGui
 
             OSMStop thisCellStop = (OSMStop) value;
 
-            setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith.getName())
+            setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith)
                     + " (ref: " + thisCellStop.getCode() + " - " + thisCellStop.getStopType() +")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
 
 
