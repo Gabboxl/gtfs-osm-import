@@ -60,6 +60,8 @@ java -jar gtfs-osm-import.jar stops
 
 8) Puoi anche visualizzare le opzioni disponibili per un qualsiasi comando: `java -jar gtfs-osm-import.jar stops -h`
 
+## I comandi
+
 ### Comando *stops*
 
 Il comando stops è il comando principale per il controllo delle differenze tra le fermate presenti in OSM e quelle nei dati GTFS.
