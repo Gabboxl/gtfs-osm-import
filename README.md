@@ -25,6 +25,10 @@ Java tool to import/sync GTFS data into OSM
 
 You can download the [.jar file here](https://github.com/Gabboxl/gtfs-osm-import/releases/latest)! (check the *Assets* section)
 
+## Roadmap
+
+You can find a link of upcoming features [here](https://github.com/users/Gabboxl/projects/3)!
+
 
 
 # [IT] Come si usa
