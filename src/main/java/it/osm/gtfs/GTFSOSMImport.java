@@ -17,6 +17,7 @@ package it.osm.gtfs;
 
 import it.osm.gtfs.commands.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
+import it.osm.gtfs.utils.VersionProvider;
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
@@ -45,6 +46,8 @@ import java.util.function.Supplier;
         parameterListHeading = "%nParameters:%n",
         optionListHeading    = "%nOptions:%n",
         commandListHeading   = "%nCommands:%n",
+
+versionProvider = VersionProvider.class,
 
 /* questo aggiunge le opzioni standard -h, -help, -V ecc */ mixinStandardHelpOptions = true,
         scope = CommandLine.ScopeType.INHERIT, //this makes all the command attributes specified here (except the subcommands list) to be copied to every subcommand (like the header, mixinhelp etc..)

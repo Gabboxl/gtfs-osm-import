@@ -62,6 +62,7 @@ shadowJar { /*il plugin shadowJar per Gradle fa al caso nostro per creare un fil
 
     manifest {
         attributes 'Main-Class': 'it.osm.gtfs.GTFSOSMImport'
+        attributes 'Implementation-Version': project.version
     }
     configurations = [project.configurations.compileClasspath]
     append 'osmosis-plugins.conf' //questo comando serve per effettuare il merge dei file osmosis-plugins.conf duplicati
