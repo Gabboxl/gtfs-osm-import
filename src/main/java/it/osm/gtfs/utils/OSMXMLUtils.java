@@ -25,7 +25,8 @@ import org.w3c.dom.NodeList;
 public class OSMXMLUtils {
 
     public static void addTagAndValue(Element node, String key, String value) {
-        node.setAttribute("action", "modify");
+        addOSMModifyActionAttribute(node);
+
         Element e = node.getOwnerDocument().createElement("tag");
         e.setAttribute("k", key);
         e.setAttribute("v", value);
@@ -36,15 +37,19 @@ public class OSMXMLUtils {
         Element tag = getTagElement(node, key);
         if (tag == null){
             addTagAndValue(node, key, value);
-        }else{
-            node.setAttribute("action", "modify");
+        } else {
+            addOSMModifyActionAttribute(node);
+
             tag.setAttribute("v", value);
         }
     }
 
     public static void addTagIfNotExisting(Element node, String key, String value) {
-        if (getTagElement(node, key) == null)
+        if (getTagElement(node, key) == null) {
             addTagAndValue(node, key, value);
+
+            addOSMModifyActionAttribute(node);
+        }
     }
 
     private static Element getTagElement(Element node, String key){
@@ -78,7 +83,39 @@ public class OSMXMLUtils {
         return tag;
     }
 
+    public static void addOSMModifyActionAttribute(Element node) {
+        node.setAttribute("action", "modify");
+    }
+
     public static void addOSMDeleteActionAttribute(Element node) {
         //node.setAttribute("action", "delete");
+    }
+
+    //TODO: probably we should move this method to the StopUtils class
+    public static void markDisused(Element node) {
+        var tagElementHighway = getTagElement(node, "highway");
+        var tagElementRailway = getTagElement(node, "railway");
+        var tagElementPublicTransport = getTagElement(node, "public_transport");
+
+        if (tagElementHighway != null || tagElementRailway != null || tagElementPublicTransport != null) {
+            addOSMModifyActionAttribute(node);
+
+            addOrReplaceTagValue(node, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+        }
+
+        if (tagElementHighway != null) {
+            //node.removeChild(tagElementHighway);
+            tagElementHighway.setAttribute("k", "disused:railway");
+        }
+
+        if (tagElementRailway != null) {
+            //node.removeChild(tagElementRailway);
+            tagElementRailway.setAttribute("k", "disused:highway");
+        }
+
+        if (tagElementPublicTransport != null) {
+            //node.removeChild(tagElementPublicTransport);
+            tagElementPublicTransport.setAttribute("k", "disused:public_transport");
+        }
     }
 }

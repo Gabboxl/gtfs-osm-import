@@ -177,11 +177,12 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                     String notMatchedStringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " didn't get matched to a GTFS stop as either they are too distant or the ref code is no more available in gtfs.";
 
 
-                    if(osmStop.getOperator() != null) {//if there is a stop that has no operator and it has NOT been matched, then it couuld be managed by another bus company/operator. so we don't consider it anymore
+                    if(osmStop.getOperator() != null) {//if there is a stop that has no operator, and it has NOT been matched, then it couuld be managed by another bus company/operator. so we don't consider it anymore
                         System.out.println(notMatchedStringOutput);
 
                         //for the not matched stops we add the action=delete keyvalue so that JOSM knows that these stops need to be deleted on upload
-                        OSMXMLUtils.addOSMDeleteActionAttribute(originalNode);
+                        //OSMXMLUtils.addOSMDeleteActionAttribute(originalNode);
+                        OSMXMLUtils.markDisused(originalNode);
 
                         bufferNotMatchedStops.appendNode(originalNode);
 
