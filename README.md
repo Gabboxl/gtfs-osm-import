@@ -60,6 +60,29 @@ java -jar gtfs-osm-import.jar stops
 
 8) Puoi anche visualizzare le opzioni disponibili per un qualsiasi comando: `java -jar gtfs-osm-import.jar stops -h`
 
+## Comando *stops*
+
+Il comando stops è il comando principale per il controllo delle differenze tra le fermate presenti in OSM e quelle nei dati GTFS.
+
+Una volta che il tool ha effettuato il matching con tutte le fermate di OSM e GTFS, è possibile che alcune fermate siano state spostate fisicamente.
+In caso una o più fermate GTFS sono distanti più di 100 metri dalle rispettive fermate su OSM, verrà avviata una interfaccia grafica che permette di scegliere quali coordinate (OSM o GTFS) mantenere per la generazione dei file di import.
+
+Una volta che il tool avrà eseguito correttamente il comando, verranno generati i seguenti file:
+
+1) `gtfs_import_matched_with_updated_metadata.osm`: Questo file conterrà tutte le fermate già presenti su OSM, con i vari tag aggiornati secondo lo schema PTv2 e le coordinate scelte dall'interfaccia grafica (se utilizzata).
+
+2) `gtfs_import_new_stops_from_gtfs.osm`: Questo file conterrà tutte le nuove fermate non ancora presenti su OSM.
+
+
+3) `gtfs_import_not_matched_stops.osm`: Questo file conterrà tutte le fermate su OSM non presenti più nei dati GTFS.
+Il tool marcherà ogni suddetta fermata come "*disused*", ma se non più presente fisicamente nella realtà è possibile eliminare il nodo.
+
+
+
+
+## Comando *fullrels*
+WIP
+
 ## Disclaimer
 
 ### Way-matching per OSM
