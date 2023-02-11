@@ -27,7 +27,7 @@ You can download the [.jar file here](https://github.com/Gabboxl/gtfs-osm-import
 
 ## Roadmap
 
-You can find a link of upcoming features [here](https://github.com/users/Gabboxl/projects/3)!
+You can find a list of upcoming features [here](https://github.com/users/Gabboxl/projects/3)!
 
 
 
