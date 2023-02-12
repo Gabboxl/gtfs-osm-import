@@ -338,7 +338,7 @@ public class OSMParser {
                     if (role.equals("stop") || role.equals("platform")){
                         OSMStop osmStop = stopsWithOSMIndex.get(ref);
                         if (osmStop == null){
-                            System.out.println(ansi().render("@|red Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"? |@"));
+                            System.out.println(ansi().render("@|yellow Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"? |@"));
                             missingNodes.add(ref);
                             failed = true;
                         }
