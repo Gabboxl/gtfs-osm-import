@@ -16,5 +16,5 @@ network=Formula
 revised_key=GTT:revised
 
 #Plugin class path to use to preprocess the stops' data (if not specified, no preprocessing will be done)
-#plugin=it.osm.gtfs.plugins.DefaultPlugin #Use the DefaultPlugin class plugin for a standard preprocess of stops' data
+#You can use the DefaultPlugin class plugin for a standard preprocess of stops' data even though is NOT recommended. Create a custom plugin instead.
 plugin=it.osm.gtfs.plugins.GTTTurinPlugin
