@@ -240,7 +240,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
 
 
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Total Matched OSM stops with GTFS data: ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("Total Matched OSM stops with GTFS data: ").reset().a(matched_stops).fg(Ansi.Color.YELLOW).a(" (created osm change file to review: " + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA + ")").reset());
 
                 if (noGuiReview) {
                     System.out.println(ansi().fg(Ansi.Color.CYAN).a("You chose to NOT review the stops that need manual position review. Therefore these stops have been considered to be removed and a new stop node has been created for each of those removed stops with the updated coordinates.").reset());
@@ -254,7 +254,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
             if (not_matched_osm_stops > 0){
                 bufferNotMatchedStops.end();
                 bufferNotMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("NOT MATCHED OSM stops that should be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to review data: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")").reset());
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("NOT MATCHED OSM stops that should be *removed* from OSM: ").reset().a(not_matched_osm_stops).fg(Ansi.Color.YELLOW).a(" (created osm change file to review: " + GTFSImportSettings.OUTPUT_NOT_MATCHED_STOPS + ")").reset());
             }
 
         }
@@ -279,7 +279,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
             if (new_stops_from_gtfs > 0){
                 buffer.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS));
-                System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created josm osm change file to import data: " + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ")").reset());
+                System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs).fg(Ansi.Color.YELLOW).a(" (created osm change file to import data: " + GTFSImportSettings.OUTPUT_NEW_STOPS_FROM_GTFS + ")").reset());
             } else {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs));
             }
