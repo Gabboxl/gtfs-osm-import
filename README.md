@@ -57,9 +57,11 @@ java -jar gtfs-osm-import.jar stops
 ```
 
 7) Per visualizzare tutti i comandi disponibili del tool puoi usare l'opzione `-h`:
+
 `java -jar gtfs-osm-import.jar -h`
 
 8) Puoi anche visualizzare le opzioni disponibili per un qualsiasi comando: 
+
 `java -jar gtfs-osm-import.jar stops -h`
 
 ## I comandi
