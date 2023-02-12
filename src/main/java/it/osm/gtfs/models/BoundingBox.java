@@ -47,7 +47,7 @@ public class BoundingBox {
 
     @Override
     public String toString() {
-        return "BoundingBox [minLat=" + minLat + ", minLon=" + minLon
+        return "[minLat=" + minLat + ", minLon=" + minLon
                 + ", maxLat=" + maxLat + ", maxLon=" + maxLon + "]";
     }
 
