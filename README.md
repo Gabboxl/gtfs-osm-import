@@ -66,9 +66,16 @@ java -jar gtfs-osm-import.jar stops
 
 ## I comandi
 
+I comandi disponibili sono i seguenti: `stops`, `fullrels`, `conf`, `bbox`
+
+----
+Esiste anche una modalità interattiva avviabile con il comando `interactivedebug`. Essa contiene dei comandi sperimentali e di debug aggiuntivi (non documentati siccome possono cambiare da un giorno all'altro), inoltre può essere molto utile per inviare i comandi uno dopo l'altro da un IDE.
+
+----
+
 ### Comando *stops*
 
-Il comando stops è il comando principale per il controllo delle differenze tra le fermate presenti in OSM e quelle nei dati GTFS.
+Il comando *stops* è il comando principale per il controllo delle differenze tra le fermate presenti in OSM e quelle nei dati GTFS.
 
 Una volta che il tool ha effettuato il matching con tutte le fermate di OSM e GTFS, è possibile che alcune fermate siano state spostate fisicamente.
 In caso una o più fermate GTFS sono distanti più di 100 metri dalle rispettive fermate su OSM, verrà avviata una interfaccia grafica che permette di scegliere quali coordinate (OSM o GTFS) mantenere per la generazione dei file di import.
@@ -88,6 +95,16 @@ Il tool marcherà ogni suddetta fermata come "*disused*", ma se non più present
 
 ### Comando *fullrels*
 WIP
+
+
+### Comando *conf*
+
+Stampa la configurazione del tool attuale.
+
+
+### Comando *bboz*
+
+Stampa le coordinate del bounding box date dall'analisi delle fermate presenti nei dati GTFS.
 
 ## Disclaimer
 
