@@ -102,7 +102,7 @@ WIP
 Stampa la configurazione del tool attuale.
 
 
-### Comando *bboz*
+### Comando *bbox*
 
 Stampa le coordinate del bounding box date dall'analisi delle fermate presenti nei dati GTFS.
 
