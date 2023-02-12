@@ -77,7 +77,7 @@ public class GTFSOSMImport {
                 "GTFS path: " + GTFSImportSettings.getInstance().getGTFSDataPath() + "\n" +
                 "Output path: " + GTFSImportSettings.getInstance().getOutputPath() + "\n" +
                 "Operator: " + GTFSImportSettings.getInstance().getOperator() + "\n" +
-                "Revised key: " + GTFSImportSettings.getInstance().getRevisedKey() + "\n" +
+                "Revised key: " + GTFSImportSettings.getInstance().useRevisedKey() + "\n" +
                 "Plugin class: " + GTFSImportSettings.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
     }
 

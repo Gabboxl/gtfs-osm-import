@@ -12,8 +12,8 @@ operator=Gruppo Torinese Trasporti
 #Value of the OSM network tag - used to get relations' data from OSM
 network=Formula
 
-#Tag used to identify the stops imported and still not manually checked
-revised_key=GTT:revised
+#Whether to add a tag to every stop/route to identify imports that still weren't manually checked (default is true)
+revised_key=true
 
 #Plugin class path to use to preprocess the stops' data (if not specified, no preprocessing will be done)
 #You can use the DefaultPlugin class plugin for a standard preprocess of stops' data even though is NOT recommended. Create a custom plugin instead.

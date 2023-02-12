@@ -99,7 +99,14 @@ public class StopsUtils {
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "ref", osmStop.gtfsStopMatchedWith.getCode());
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "name", GTFSImportSettings.getInstance().getPlugin().fixBusStopName(osmStop.gtfsStopMatchedWith));
         OSMXMLUtils.addOrReplaceTagValue(originalNode, "operator", GTFSImportSettings.getInstance().getOperator());
-        OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+        
+
+        if(GTFSImportSettings.getInstance().useRevisedKey()) {
+            //we remove old only Turin-specific revised tags
+            OSMXMLUtils.removeOldRevisedTag(originalNode);
+            OSMXMLUtils.addOrReplaceTagValue(originalNode, GTFSImportSettings.REVISED_KEY, "no");
+        }
+
 
         //TODO: to add the wheelchair:description tag also per wiki https://wiki.openstreetmap.org/wiki/Key:wheelchair#Public_transport_stops/platforms
         WheelchairAccess gtfsWheelchairAccess = osmStop.gtfsStopMatchedWith.getWheelchairAccessibility();

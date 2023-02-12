@@ -100,7 +100,10 @@ public class OSMXMLUtils {
         if (tagElementHighway != null || tagElementRailway != null || tagElementPublicTransport != null) {
             addOSMModifyActionAttribute(node);
 
-            addOrReplaceTagValue(node, GTFSImportSettings.getInstance().getRevisedKey(), "no");
+            if(GTFSImportSettings.getInstance().useRevisedKey()) {
+                removeOldRevisedTag(node); //we remove old Turin-specific revised tags
+                addOrReplaceTagValue(node, GTFSImportSettings.REVISED_KEY, "no");
+            }
         }
 
         if (tagElementHighway != null) {
@@ -117,5 +120,16 @@ public class OSMXMLUtils {
             //node.removeChild(tagElementPublicTransport);
             tagElementPublicTransport.setAttribute("k", "disused:public_transport");
         }
+    }
+
+    public static void removeOldRevisedTag(Element node) {
+        var oldtag1 = getTagElement(node, "GTT:Revised");
+        var oldtag2 = getTagElement(node, "GTT:revised");
+
+        if (oldtag1 != null)
+            node.removeChild(oldtag1);
+
+        if (oldtag2 != null)
+            node.removeChild(oldtag2);
     }
 }

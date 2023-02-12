@@ -126,7 +126,7 @@ public class OSMParser {
                     if (key.equalsIgnoreCase("wheelchair"))
                         osmStop.setWheelchairAccessibility(WheelchairAccess.getEnumByOsmValue(value));
 
-                    if (key.equalsIgnoreCase(GTFSImportSettings.getInstance().getRevisedKey()) && value.equalsIgnoreCase("yes"))
+                    if (key.equalsIgnoreCase(GTFSImportSettings.REVISED_KEY) && value.equalsIgnoreCase("yes"))
                         osmStop.setIsRevised(true);
 
                 }
