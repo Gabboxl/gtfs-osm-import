@@ -35,13 +35,15 @@ public class OSMXMLUtils {
 
     public static void addOrReplaceTagValue(Element node, String key, String value) {
         Element tag = getTagElement(node, key);
+
         if (tag == null){
             addTagAndValue(node, key, value);
         } else {
-            addOSMModifyActionAttribute(node);
 
             tag.setAttribute("v", value);
         }
+
+        addOSMModifyActionAttribute(node);
     }
 
     public static void addTagIfNotExisting(Element node, String key, String value) {
