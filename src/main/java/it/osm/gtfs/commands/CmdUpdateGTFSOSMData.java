@@ -81,8 +81,8 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
     }
 
     private static void updateBusStops() throws IOException, InterruptedException{
-        List<GTFSStop> gtfs = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
-        BoundingBox bb = new BoundingBox(gtfs);
+        List<GTFSStop> gtfsStops = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
+        BoundingBox bb = new BoundingBox(gtfsStops);
 
         String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
         File busFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_busstops.osm");

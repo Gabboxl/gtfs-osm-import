@@ -80,6 +80,7 @@ public class OSMRelationImportGenerator {
         return buffer.toString();
     }
 
+    //TODO: to implement
     public static String createMasterRouteTripsRelation() {
         return "side";
     }
