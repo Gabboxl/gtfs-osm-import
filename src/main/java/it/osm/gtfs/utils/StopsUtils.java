@@ -58,7 +58,7 @@ public class StopsUtils {
                 && distanceBetween < 100 && StringUtils.containsIgnoreCase(osmStop.getName(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
             //lol that condition is so complicated
 
-            System.out.println(ansi().render("@|yellow Warning: Metro/train stop matched with name / " + debugData + "|@"));
+            System.out.println(ansi().render("@|yellow Warning: Metro/train stop matched only with name / " + debugData + "|@"));
 
             return true;
         }

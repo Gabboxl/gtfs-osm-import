@@ -129,6 +129,6 @@ public class OSMXMLUtils {
 
         if (oldtag1 != null)
             node.removeChild(oldtag1);
-        
+
     }
 }
