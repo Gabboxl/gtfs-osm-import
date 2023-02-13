@@ -32,7 +32,10 @@ import picocli.CommandLine;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
@@ -80,39 +83,40 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         DownloadUtils.downloadZip(GTFSImportSettings.getInstance().getGTFSZipUrl(), GTFSImportSettings.getInstance().getGTFSDataPath());
     }
 
-    private static void updateBusStops() throws IOException, InterruptedException{
+    private static void updateBusStops() throws IOException, InterruptedException {
+
         List<GTFSStop> gtfsStops = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStops);
 
-        String urlbus = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
+        String queryBusStopsUrl = "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
         File busFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_busstops.osm");
-        urlbus = urlbus.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
-        DownloadUtils.download(urlbus, busFileTemp, false);
+        String busStopsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + queryBusStopsUrl;
+        DownloadUtils.download(busStopsUrl, busFileTemp, false);
 
         Thread.sleep(1000L);
 
-        String urlstop = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
+        String queryStopPositionsUrl = "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
         File stopPositionsFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_stoppositions.osm");
-        urlstop = urlstop.replace(" ", "%20");
-        DownloadUtils.download(urlstop, stopPositionsFileTemp, false);
+        String stopPositionsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + queryStopPositionsUrl;
+        DownloadUtils.download(stopPositionsUrl, stopPositionsFileTemp, false);
 
         Thread.sleep(1000L);
 
-        String urltrm = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
+        String queryTramStopsUrl = "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
         File tramFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_tramstops.osm");
-        urltrm = urltrm.replace(" ", "%20");
-        DownloadUtils.download(urltrm, tramFileTemp, false);
+        String tramStopsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + queryTramStopsUrl;
+        DownloadUtils.download(tramStopsUrl, tramFileTemp, false);
 
         Thread.sleep(2000L);
 
-        String urlmtr = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
+        String queryMetroTrainStationsUrl = "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
         File metroFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_metrostops.osm");
-        urlmtr = urlmtr.replace(" ", "%20");
-        DownloadUtils.download(urlmtr, metroFileTemp, false);
+        String metroTrainStationsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + queryMetroTrainStationsUrl;
+        DownloadUtils.download(metroTrainStationsUrl, metroFileTemp, false);
 
-        String urlstat = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];node[public_transport=station];out meta;&bbox=" + bb.getAPIQuery();
+        String queryUrlstat = "data=[bbox];node[public_transport=station];out meta;&bbox=" + bb.getAPIQuery();
         File stationsFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_stationstops.osm");
-        urlstat = urlstat.replace(" ", "%20");
+        String urlstat = GTFSImportSettings.OSM_OVERPASS_API_SERVER + queryUrlstat;
         DownloadUtils.download(urlstat, stationsFileTemp, false);
 
         List<File> tempFileList = new ArrayList<>();
@@ -127,8 +131,10 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(tempFileList, finalMergedFileOut));
     }
 
-    private static void updateBaseRels() throws IOException{
-        String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];out%20meta;";
+    private static void updateBaseRels() throws IOException {
+        String queryRel = "data=(relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];>;);out%20meta;";
+        String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + queryRel;
+
         File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_rels.osm");
         DownloadUtils.download(urlrel, filerel, false);
     }
@@ -183,7 +189,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
                 if (filesorted.exists()){
                     List<Relation> relationInFile = OSMParser.readOSMRelations(filesorted, osmIdOSMStopMap);
 
-                    if (relationInFile.size() > 0 && relationInFile.get(0).equals(currRelationToUpdate)) //todo: equals will always return false here because they are always different instances, try to find a way to compare the relations in a better way
+                    if (relationInFile.size() > 0 && relationInFile.get(0).getVersion().equals(currRelationToUpdate.getVersion())) //todo: equals will always return false here because they are always different instances, try to find a way to compare the relations in a better way
                         uptodate = true;
                 }
             } catch (Exception e) {
