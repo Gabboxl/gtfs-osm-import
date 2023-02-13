@@ -23,11 +23,12 @@ import java.util.List;
 
 public class OSMRelationImportGenerator {
 
+    //TODO: instead of using a StringBuilder to create the XML file, see the OSMBusImportGenerator class instead
     public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo, int id){
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='JOSM'>\n");
+        buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='GTFSOSMImport'>\n");
         buffer.append(bb.getXMLTag());
         buffer.append("<relation id='-" + id +  "'>\n");
 
