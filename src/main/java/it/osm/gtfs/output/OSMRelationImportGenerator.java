@@ -32,8 +32,8 @@ public class OSMRelationImportGenerator {
         buffer.append("<relation id='-" + id +  "'>\n");
 
 
-        for (OSMStop s : trip.getStopsList().getStopSequenceOSMStopMap().values()){
-            buffer.append("<member type='node' ref='" + s.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
+        for (OSMStop osmStop : trip.getStopsList().getStopSequenceOSMStopMap().values()){
+            buffer.append("<member type='node' ref='" + osmStop.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
         }
 
 
@@ -43,11 +43,14 @@ public class OSMRelationImportGenerator {
             }
         }
 
-        //todo: trip ip
         buffer.append("<tag k='type' v='route' />\n");
         buffer.append("<tag k='route' v='" + route.getRouteType().getOsmValue() + "' />\n");
 
         buffer.append("<tag k='public_transport:version' v='2' />\n");
+
+        if(GTFSImportSettings.getInstance().useRevisedKey()) {
+            buffer.append("<tag k='" + GTFSImportSettings.REVISED_KEY + "' v='no' />\n");
+        }
 
 
         buffer.append("<tag k='name' v='" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + ": " + plugin.fixTripHeadsignName(trip.getTripHeadsign()) + "' />\n");
