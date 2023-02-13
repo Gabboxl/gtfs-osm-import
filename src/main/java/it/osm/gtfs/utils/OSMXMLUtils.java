@@ -126,12 +126,9 @@ public class OSMXMLUtils {
 
     public static void removeOldRevisedTag(Element node) {
         var oldtag1 = getTagElement(node, "GTT:Revised");
-        var oldtag2 = getTagElement(node, "GTT:revised");
 
         if (oldtag1 != null)
             node.removeChild(oldtag1);
-
-        if (oldtag2 != null)
-            node.removeChild(oldtag2);
+        
     }
 }
