@@ -212,8 +212,12 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         File osmStopsFile = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
         File osmRelationsFileOut = new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath());
 
+        File tonyout = new File(GTFSImportSettings.getInstance().getOsmDataPath() + "tony.osm");
+        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sortedfiles, tonyout));
+
         sortedfiles.add(osmStopsFile);
 
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sortedfiles, osmRelationsFileOut));
+
     }
 }
