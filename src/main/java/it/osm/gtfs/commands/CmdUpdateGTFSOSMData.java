@@ -51,13 +51,8 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "update", mixinStandardHelpOptions = true, description = "Generate/update data from OpenStreetMap")
 public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
-    @CommandLine.Option(names = {"-r", "--relation"}, description = "Optional relation ID to generate/update single relation from api server")
-    String relation;
-
     @Override
     public Void call() throws IOException, InterruptedException, ParserConfigurationException, SAXException, TransformerException {
-
-        if (relation == null || relation.isBlank()) {
 
             File cachedirectory = new File(GTFSImportSettings.getInstance().getCachePath());
             File osmdatadirectory = new File(GTFSImportSettings.getInstance().getOsmDataPath());
@@ -72,17 +67,6 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
             System.out.println(ansi().fg(Ansi.Color.GREEN).a("GTFS and OSM data update completed.").reset());
 
-        } else {
-            StringTokenizer st = new StringTokenizer(relation, " ,\n\t");
-
-            List<String> relationsIDsToUpdate = new ArrayList<>();
-
-            while (st.hasMoreTokens()){
-                relationsIDsToUpdate.add(st.nextToken());
-            }
-
-            updateFullRels(relationsIDsToUpdate);
-        }
         return null;
     }
 
@@ -150,24 +134,15 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         DownloadUtils.download(urlrel, filerel, false);
     }
 
-    private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, TransformerException {
-
-        updateFullRels(null);
-    }
-
     //todo: we should cleanup the cache relations files before every update i think
-    private static void updateFullRels(List<String> osmRelationsIDsToUpdate) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+    private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, TransformerException {
 
         //TODO: should we really read stops of ANY operator?
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), true);
         Map<String, OSMStop> osmIdOSMStopMap = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
-        List<File> sortedfiles = new ArrayList<>();
-
         // Default to all available rel, then override forced updates
         ReadOSMRelationsResult validOsmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap);
-
-        //////////////////
 
 
         File file = new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm");
@@ -215,77 +190,9 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         sortedfilestest.add(testout2);
         sortedfilestest.add(filezstops);
 
-        File testout = new File(GTFSImportSettings.getInstance().getOsmDataPath() + "okay2.osm");
+        //final relations file
+        File testout = new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath());
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sortedfilestest, testout));
-
-
-
-
-
-
-
-        ////////////
-
-        List<Relation> relationsToUpdate = new ArrayList<>();
-
-
-        for (Relation relation : validOsmRels.getFinalValidRelations()) {
-            File filesorted = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_s" + relation.getId() + ".osm");
-
-
-            //if no relations ids are specified, add every relation to the relations to update. otherwise, if the current-loop relation ID is present in the relations to be updated, add it
-            if(osmRelationsIDsToUpdate == null || osmRelationsIDsToUpdate.contains(relation.getId())) {
-
-                relationsToUpdate.add(relation);
-            }
-
-
-            if (filesorted.exists()) {
-                sortedfiles.add(filesorted);
-            }
-        }
-
-        Pipeline previousTask = null;
-
-        for (Relation currRelationToUpdate : relationsToUpdate) {
-            System.out.println("Processing relation " + currRelationToUpdate.getId());
-
-            File filesorted = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_s" + currRelationToUpdate.getId() + ".osm");
-            sortedfiles.add(filesorted);
-
-            boolean uptodate = false;
-            try {
-                if (filesorted.exists()){
-                    ReadOSMRelationsResult relationInFile = OSMParser.readOSMRelations(filesorted, osmIdOSMStopMap);
-
-                    List<Relation> relation = relationInFile.getFinalValidRelations();
-
-                    if (relation.size() > 0 && relation.get(0).getVersion().equals(currRelationToUpdate.getVersion())) //todo: equals will always return false here because they are always different instances, try to find a way to compare the relations in a better way
-                        uptodate = true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (!uptodate) {
-                File filerelation = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_r" + currRelationToUpdate.getId() + ".osm");
-                String url = GTFSImportSettings.OSM_API_SERVER + "relation/" + currRelationToUpdate.getId() + "/full";
-                DownloadUtils.download(url, filerelation, false);
-
-                Pipeline current = OsmosisUtils.runOsmosisSort(filerelation, filesorted);
-                OsmosisUtils.checkProcessOutput(previousTask);
-                previousTask = current;
-            }
-        }
-
-        OsmosisUtils.checkProcessOutput(previousTask);
-
-        File osmStopsFile = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
-        File osmRelationsFileOut = new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath());
-
-        sortedfiles.add(osmStopsFile);
-
-        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sortedfiles, osmRelationsFileOut));
 
     }
 }
