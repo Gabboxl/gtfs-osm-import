@@ -249,8 +249,8 @@ public class OSMParser {
                 failedRelsIds.add(failedRel.getId());
             }
 
-            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelations.size() + " relations could't be parsed. Relations IDs: |@" + StringUtils.join(failedRelsIds, ", ")));
-            System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() + " nodes are missing. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelations.size() + " relations could't be parsed because of not valid member nodes. Relations IDs: |@" + StringUtils.join(failedRelsIds, ", ")));
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() + " member nodes are not valid stops. Invalid nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
         }
 
         return new ReadOSMRelationsResult(relationParser.finalValidRelations, relationParser.failedRelations, relationParser.missingNodes);
@@ -391,7 +391,7 @@ public class OSMParser {
                     finalValidRelations.add(currentRelation);
                 } else {
                     failedRelations.add(currentRelation);
-                    System.out.println(ansi().render("@|red OSMParser: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]" + "|@"));
+                    System.out.println(ansi().render("@|red OSMParser: Relation " + currentRelation.getId() + " couldn't be parsed because of invalid member nodes. [" + currentRelation.getName() + "]" + "|@"));
                 }
                 currentRelation = null;
             }
