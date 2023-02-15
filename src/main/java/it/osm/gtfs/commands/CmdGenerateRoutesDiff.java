@@ -41,7 +41,7 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue);
         Map<String, OSMStop> osmstopsGTFSId = StopsUtils.getGTFSIdOSMStopMap(osmStops);
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         ReadStopTimesResult readStopTimesResult = GTFSParser.readStopTimes(GTFSImportSettings.getInstance().getGTFSDataPath() +  GTFSImportSettings.GTFS_STOP_TIMES_FILE_NAME, osmstopsGTFSId);
@@ -49,7 +49,7 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
                 routes, readStopTimesResult.getTripIdStopListMap());
 
         //looking from mapping gtfs trip into existing osm relations
-        Set<Relation> osmRelationNotFoundInGTFS = new HashSet<>(osmRels);
+        Set<Relation> osmRelationNotFoundInGTFS = new HashSet<>(osmRels.getFinalValidRelations());
         Set<Relation> osmRelationFoundInGTFS = new HashSet<>();
         List<Trip> tripsNotFoundInOSM = new LinkedList<>();
 
@@ -67,21 +67,21 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
                 if (GTFSImportSettings.getInstance().getPlugin().isValidTrip(allTrips, uniqueTrips, trip, s)){
                     if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(route)){
                         Relation found = null;
-                        for (Relation relation: osmRels){
-                            if (relation.equalsStops(s) || GTFSImportSettings.getInstance().getPlugin().isRelationSameAs(relation, s)){
+                        for (Relation validRelation : osmRels.getFinalValidRelations()){
+                            if (validRelation.equalsStops(s) || GTFSImportSettings.getInstance().getPlugin().isRelationSameAs(validRelation, s)){
                                 if (found != null){
                                     osmRelationNotFoundInGTFS.remove(found);
                                     osmRelationFoundInGTFS.add(found);
                                 }
-                                found = relation;
+                                found = validRelation;
                             }
-                            int affinity = relation.getStopsAffinity(s);
-                            Affinity oldAff = affinities.get(relation);
+                            int affinity = validRelation.getStopsAffinity(s);
+                            Affinity oldAff = affinities.get(validRelation);
                             if (oldAff == null){
                                 oldAff = new Affinity();
                                 oldAff.trip = trip;
                                 oldAff.affinity = affinity;
-                                affinities.put(relation, oldAff);
+                                affinities.put(validRelation, oldAff);
                             }else if (oldAff.affinity < affinity){
                                 oldAff.trip = trip;
                                 oldAff.affinity = affinity;

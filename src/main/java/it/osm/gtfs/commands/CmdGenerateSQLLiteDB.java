@@ -2,6 +2,7 @@ package it.osm.gtfs.commands;
 
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.ReadOSMRelationsResult;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.SharedCliOptions;
@@ -32,7 +33,7 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         System.out.println("Parsing OSM relations...");
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
 
 
         CmdGenerateSQLLiteDB generator = null;
@@ -43,7 +44,7 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
             System.out.println("Adding stops to SQLite DB...");
             generator.insertStops(osmStops);
             System.out.println("Adding relations to SQLite DB...");
-            generator.insertRelations(osmRels);
+            generator.insertRelations(osmRels.getFinalValidRelations());
             System.out.println("Done.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
