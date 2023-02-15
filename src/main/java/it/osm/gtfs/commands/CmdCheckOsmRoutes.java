@@ -2,6 +2,7 @@ package it.osm.gtfs.commands;
 
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.ReadOSMRelationsResult;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.SharedCliOptions;
@@ -36,15 +37,15 @@ public class CmdCheckOsmRoutes implements Callable<Void> {
         System.out.println("Step 2/4 Indexing OSM Stops");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
 
         System.out.println("Step 4/4 Checking relations");
-        for (Relation r:osmRels){
+        for (Relation validRelation : osmRels.getFinalValidRelations()){
             try{
                 if (osmId == null || osmId.length() == 0)
-                    check(r, false);
-                else if (osmId.equals(r.getId()))
-                    check(r, true);
+                    check(validRelation, false);
+                else if (osmId.equals(validRelation.getId()))
+                    check(validRelation, true);
             }catch (Exception e) {
                 System.out.println(e.getMessage());
             }

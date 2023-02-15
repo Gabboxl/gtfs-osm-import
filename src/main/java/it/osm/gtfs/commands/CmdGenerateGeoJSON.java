@@ -4,6 +4,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.ReadOSMRelationsResult;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Stop;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -46,7 +47,7 @@ public class CmdGenerateGeoJSON implements Callable<Void> {
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         System.out.println("Parsing OSM Relations...");
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()),
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()),
                 osmstopsOsmID);
 
 

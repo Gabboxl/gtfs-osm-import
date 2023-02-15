@@ -18,6 +18,7 @@ import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.RouteType;
 import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.OSMStop;
+import it.osm.gtfs.models.ReadOSMRelationsResult;
 import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Relation.OSMNode;
 import it.osm.gtfs.models.Relation.OSMWay;
@@ -212,7 +213,7 @@ public class OSMParser {
         return osmStopsListOutput;
     }
 
-    public static List<Relation> readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException{
+    public static ReadOSMRelationsResult readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException{
         NodeParser nodeParser;
         {
             XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -241,12 +242,18 @@ public class OSMParser {
         }
 
 
-        if (relationParser.missingNodes.size() > 0 || relationParser.failedRelationIds.size() > 0){
-            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelationIds.size() + " relations could't be parsed. Relations IDs: |@" + StringUtils.join(relationParser.failedRelationIds, ", ")));
+        if (relationParser.missingNodes.size() > 0 || relationParser.failedRelations.size() > 0){
+            List<String> failedRelsIds = new ArrayList<>();
+
+            for(Relation failedRel : relationParser.failedRelations){
+                failedRelsIds.add(failedRel.getId());
+            }
+
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelations.size() + " relations could't be parsed. Relations IDs: |@" + StringUtils.join(failedRelsIds, ", ")));
             System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() + " nodes are missing. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
         }
 
-        return relationParser.finalValidRelations;
+        return new ReadOSMRelationsResult(relationParser.finalValidRelations, relationParser.failedRelations, relationParser.missingNodes);
     }
 
     private static class NodeParser extends DefaultHandler {
@@ -307,7 +314,7 @@ public class OSMParser {
         private final Map<Long, OSMWay> ways;
 
         private final List<Relation> finalValidRelations = new ArrayList<>();
-        private final List<String> failedRelationIds = new ArrayList<>();
+        private final List<Relation> failedRelations = new ArrayList<>();
         private final List<String> missingNodes = new ArrayList<>();
 
         private Relation currentRelation;
@@ -383,7 +390,7 @@ public class OSMParser {
                 if (!failed) {
                     finalValidRelations.add(currentRelation);
                 } else {
-                    failedRelationIds.add(currentRelation.getId());
+                    failedRelations.add(currentRelation);
                     System.out.println(ansi().render("@|red OSMParser: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]" + "|@"));
                 }
                 currentRelation = null;
