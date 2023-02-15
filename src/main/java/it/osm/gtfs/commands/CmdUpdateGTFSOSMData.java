@@ -23,7 +23,6 @@ import it.osm.gtfs.utils.OsmosisUtils;
 import it.osm.gtfs.utils.StopsUtils;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.fusesource.jansi.Ansi;
-import org.openstreetmap.osmosis.core.pipeline.common.Pipeline;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -43,7 +42,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 
 import static org.fusesource.jansi.Ansi.ansi;
