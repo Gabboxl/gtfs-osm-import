@@ -62,7 +62,6 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
             updateGTFSData();
             updateBusStops();
-            updateBaseRels();
             updateFullRels();
 
             System.out.println(ansi().fg(Ansi.Color.GREEN).a("GTFS and OSM data update completed.").reset());
@@ -126,16 +125,17 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(tempFileList, finalMergedFileOut));
     }
 
-    private static void updateBaseRels() throws IOException {
+    //todo: we should cleanup the cache relations files before every update i think
+    private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, TransformerException {
+
+        //we download the relations data
         String queryRel = "data=(relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];>;);out meta;";
         String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryRel);;
 
         File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_unchecked_rels.osm");
         DownloadUtils.download(urlrel, filerel, false);
-    }
 
-    //todo: we should cleanup the cache relations files before every update i think
-    private static void updateFullRels() throws ParserConfigurationException, SAXException, IOException, TransformerException {
+
 
         //TODO: should we really read stops of ANY operator?
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), true);
