@@ -60,7 +60,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
                 return camelCase(fixedStopName).trim();
             }
         }catch (Exception e){
-            System.err.println("stopname: " + fixedStopName + " " + e); //sarebbe meglio e.printStacktrace(); al posto di un println
+            System.err.println("Invalid GTFS stop name: \"" + fixedStopName + "\" - " + gtfsStop + " " + e); //sarebbe meglio e.printStacktrace(); al posto di un println
         }
         return fixedStopName;
     }

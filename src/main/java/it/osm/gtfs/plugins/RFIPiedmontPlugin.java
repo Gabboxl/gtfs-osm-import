@@ -43,7 +43,7 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
                 return camelCase(busStopName).trim();
             }
         }catch (Exception e){
-            System.err.println("stopname: " + busStopName + " " + e); //sarebbe meglio e.printStacktrace(); al posto di un println
+            System.err.println("Invalid GTFS stop name: \"" + busStopName + "\" - " + gtfsStop + " " + e);
         }
         return busStopName;
     }
