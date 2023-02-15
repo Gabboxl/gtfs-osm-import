@@ -165,11 +165,9 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
         }
 
+        String tmpCheckedRelsPath = GTFSImportSettings.getInstance().getCachePath() + "tmp_relations_checked.osm";
 
-        File filerelationschecked = new File(GTFSImportSettings.getInstance().getOsmDataPath() + "relationschecked1.osm");
-
-
-        OutputStream stream = new FileOutputStream(GTFSImportSettings.getInstance().getOsmDataPath() + "relationschecked1.osm");
+        OutputStream stream = new FileOutputStream(tmpCheckedRelsPath);
         Source source = new DOMSource(doc);
         Result result = new StreamResult(stream);
         Transformer xformer = TransformerFactory.newInstance().newTransformer();
@@ -179,18 +177,18 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         stream.close();
 
 
+        File checkedRelsFile = new File(tmpCheckedRelsPath);
+        File filteredRelsFile = new File(GTFSImportSettings.getInstance().getOsmDataPath() + "tmp_relationschecked_filtered.osm");
+        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisUnusedWaysNodes(checkedRelsFile, filteredRelsFile));
 
-        File testout2 = new File(GTFSImportSettings.getInstance().getOsmDataPath() + "relationscheckedNoWay.osm");
-        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisUnusedWaysNodes(filerelationschecked, testout2));
 
+        File stopsFile = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
 
         List<File> sortedfilestest = new ArrayList<>();
+        sortedfilestest.add(filteredRelsFile);
+        sortedfilestest.add(stopsFile);
 
-        File filezstops = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
-        sortedfilestest.add(testout2);
-        sortedfilestest.add(filezstops);
-
-        //final relations file
+        //final relations file merge
         File testout = new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath());
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(sortedfilestest, testout));
 
