@@ -242,8 +242,8 @@ public class OSMParser {
 
 
         if (relationParser.missingNodes.size() > 0 || relationParser.failedRelationIds.size() > 0){
-            System.out.println(ansi().render("@|red Failed to parse some relations. Relations IDs: |@" + StringUtils.join(relationParser.failedRelationIds, ", ")));
-            System.out.println(ansi().render("@|red Failed to parse some relations. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelationIds.size() +" relations could't be parsed. Relations IDs: |@" + StringUtils.join(relationParser.failedRelationIds, ", ")));
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() +" nodes are missing. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
         }
 
         return relationParser.result;
