@@ -139,7 +139,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         String queryRel = "data=(relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];>;);out meta;";
         String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryRel);;
 
-        File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_rels.osm");
+        File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_unchecked_rels.osm");
         DownloadUtils.download(urlrel, filerel, false);
     }
 
@@ -158,13 +158,13 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         List<File> sortedfiles = new ArrayList<>();
 
         // Default to all available rel, then override forced updates
-        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_rels.osm"), osmIdOSMStopMap);
+        List<Relation> osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap);
 
 
         List<Relation> relationsToUpdate = new ArrayList<>();
 
 
-        for (Relation relation : osmRels){
+        for (Relation relation : osmRels) {
             File filesorted = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_s" + relation.getId() + ".osm");
 
 
