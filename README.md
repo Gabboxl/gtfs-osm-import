@@ -16,6 +16,8 @@ Java tool to import/sync GTFS data into OSM
 
 - This tool can also generate *complete* OSM way-matched relations for any GTFS route. This is possible thanks to GraphHopper's [map-matching](https://github.com/graphhopper/graphhopper/tree/master/map-matching) module.
 
+- The "*sync*" functionality is only implemented for bus stops, right now the relations generation is useful only in case of a clean relations import.
+
 
 
 ## Requirements
