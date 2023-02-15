@@ -242,11 +242,11 @@ public class OSMParser {
 
 
         if (relationParser.missingNodes.size() > 0 || relationParser.failedRelationIds.size() > 0){
-            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelationIds.size() +" relations could't be parsed. Relations IDs: |@" + StringUtils.join(relationParser.failedRelationIds, ", ")));
-            System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() +" nodes are missing. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.failedRelationIds.size() + " relations could't be parsed. Relations IDs: |@" + StringUtils.join(relationParser.failedRelationIds, ", ")));
+            System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() + " nodes are missing. Missing nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
         }
 
-        return relationParser.result;
+        return relationParser.finalValidRelations;
     }
 
     private static class NodeParser extends DefaultHandler {
@@ -306,7 +306,7 @@ public class OSMParser {
         private final Map<String, OSMStop> stopsWithOSMIndex;
         private final Map<Long, OSMWay> ways;
 
-        private final List<Relation> result = new ArrayList<>();
+        private final List<Relation> finalValidRelations = new ArrayList<>();
         private final List<String> failedRelationIds = new ArrayList<>();
         private final List<String> missingNodes = new ArrayList<>();
 
@@ -329,29 +329,34 @@ public class OSMParser {
                 currentRelation.setVersion(Integer.parseInt(attributes.getValue("version")));
                 seq = 1;
                 failed = false;
-            }else if(currentRelation != null && localName.equals("member")){
-                String type = attributes.getValue("type");
-                String role = attributes.getValue("role");
-                String ref = attributes.getValue("ref");
 
-                if (type.equals("node")){
-                    if (role.equals("stop") || role.equals("platform")){
-                        OSMStop osmStop = stopsWithOSMIndex.get(ref);
-                        if (osmStop == null){
-                            System.out.println(ansi().render("@|yellow Warning: Node " +  ref + " not found in internal stops array/map. Probably this stop got marked as disused/abandoned or it's NOT a stop but is still attached to the relation " + currentRelation.getId() +"? |@"));
-                            missingNodes.add(ref);
+            }else if(currentRelation != null && localName.equals("member")) {
+                String memberType = attributes.getValue("type");
+                String memberRole = attributes.getValue("role");
+                String memberRef = attributes.getValue("ref");
+
+                if (memberType.equals("node")){
+                    if (memberRole.equals("stop") || memberRole.equals("platform")){
+                        OSMStop osmStop = stopsWithOSMIndex.get(memberRef);
+
+                        if (osmStop == null) {
+                            System.out.println(ansi().render("@|yellow Warning: Node " + memberRef + " not found in internal stops array/map. Probably this isn't a valid stop anymore but is still attached to the relation " + currentRelation.getId() +". Better checking it out. |@"));
+                            missingNodes.add(memberRef);
                             failed = true;
                         }
                         currentRelation.pushPoint(seq++, osmStop);
+
                     }else{
-                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + role +"\", node ref/Id = " + ref + "|@"));
+                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + memberRole +"\", node ref/Id = " + memberRef + "|@"));
                     }
-                }else if (type.equals("way")){
+
+                }else if (memberType.equals("way")){
                     OSMWay member = ways.get(Long.parseLong(attributes.getValue("ref")));
                     currentRelation.getWayMembers().add(member);
-                }else{
-                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member of unknown type \"" + type +"\"" + "|@"));
+                } else {
+                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member (id: " + memberRef + ") of unknown type \"" + memberType +"\"" + "|@"));
                 }
+
             }else if (currentRelation != null && localName.equals("tag")){
                 String key = attributes.getValue("k");
                 if (key.equalsIgnoreCase("name"))
@@ -363,9 +368,9 @@ public class OSMParser {
                 else if (key.equalsIgnoreCase("to"))
                     currentRelation.setTo(attributes.getValue("v"));
                 else if (key.equalsIgnoreCase("route"))
-                    try{
+                    try {
                         currentRelation.setType(RouteType.getEnumByOsmValue(attributes.getValue("v")));
-                    }catch (IllegalArgumentException e){
+                    }catch (IllegalArgumentException e) {
                         e.printStackTrace();
                         failed = true;
                     }
@@ -374,12 +379,12 @@ public class OSMParser {
 
         @Override
         public void endElement(String uri, String localName, String qName) {
-            if (localName.equals("relation")){
-                if (!failed){
-                    result.add(currentRelation);
-                }else{
+            if (localName.equals("relation")) {
+                if (!failed) {
+                    finalValidRelations.add(currentRelation);
+                } else {
                     failedRelationIds.add(currentRelation.getId());
-                    System.out.println(ansi().render("@|red Warning: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]" + "|@"));
+                    System.out.println(ansi().render("@|red OSMParser: Failed to parse relation " + currentRelation.getId() + " [" + currentRelation.getName() + "]" + "|@"));
                 }
                 currentRelation = null;
             }
