@@ -48,6 +48,7 @@ public class GTFSImportSettings {
 
     public static final String OSM_OVERPASS_WAYS_FILE_NAME = "overpassways.osm";
     public static final String PROPERTIES_FILE_NAME = "gtfs-import.properties";
+    public static final String DUMMY_PROPERTIES_FILE_NAME = PROPERTIES_FILE_NAME + ".dummy";
 
     public static final String REVISED_KEY = "import:revised";
 
@@ -77,7 +78,7 @@ public class GTFSImportSettings {
                 if (!propfile.exists()) {
                     System.out.println(ansi().render("\n @|yellow No properties file found, looks like this is a fresh start! \n Creating new gtfs-import.properties file into current directory...|@"));
 
-                    InputStream dummyprops = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
+                    InputStream dummyprops = getClass().getClassLoader().getResourceAsStream(DUMMY_PROPERTIES_FILE_NAME);
 
                     assert dummyprops != null;
                     Files.copy(dummyprops, propfile.toPath());
