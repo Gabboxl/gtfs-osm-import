@@ -391,7 +391,7 @@ public class GTFSStopsReviewGui
         frame.add(gtfsCoordsStopMap, constraints);
 
 
-        btChooseOSM = new JButton("Accept current OSM coordinates (if unsure)");
+        btChooseOSM = new JButton("Accept current OSM coordinates (if unsure) [A key]");
         btChooseOSM.addActionListener(actionEvent -> {
 
             acceptOsmPosition();
@@ -410,7 +410,7 @@ public class GTFSStopsReviewGui
 
 
 
-        btChooseGTFS = new JButton("Accept new GTFS coordinates");
+        btChooseGTFS = new JButton("Accept new GTFS coordinates  [D key]");
         btChooseGTFS.addActionListener(actionEvent -> {
             acceptGtfsPosition();
         });
