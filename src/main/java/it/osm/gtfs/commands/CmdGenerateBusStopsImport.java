@@ -200,7 +200,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                     final Object lockObject = new Object();
 
-                    final GTFSStopsReviewGui reviewGui = new GTFSStopsReviewGui(osmStopsToReview, finalReviewedGeopositions, lockObject);
+                    new GTFSStopsReviewGui(osmStopsToReview, finalReviewedGeopositions, lockObject);
 
                     synchronized (lockObject) { //i don't really know if this lock-sync thing is really needed to make the tool stay up when the gui is started
                         try {
