@@ -20,7 +20,7 @@ public class GTFSStop extends Stop {
 
     @Override
     public String toString() {
-        return "Stop [gtfsId=" + getGtfsId() + ", code=" + getCode() + ", lat=" + getGeoPosition().getLatitude()
+        return "GTFSStop [gtfsId=" + getGtfsId() + ", code=" + getCode() + ", lat=" + getGeoPosition().getLatitude()
                 + ", lon=" + getGeoPosition().getLongitude() + ", name=" + getName() + ", stopType=" + getStopType() + ", accessibility=" + getWheelchairAccessibility() + "]";
     }
 
