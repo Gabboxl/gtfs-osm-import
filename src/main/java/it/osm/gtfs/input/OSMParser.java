@@ -134,14 +134,15 @@ public class OSMParser {
             }
 
             //osmstop type value setting
-            //todo: support public_transport=station
-
 
             if (railway_tag.equalsIgnoreCase("station"))
-                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAIN_STATION);
+
+            if (public_transport_tag.equalsIgnoreCase("station"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAIN_STATION);
 
             if (train_tag.equalsIgnoreCase("yes"))
-                osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
+                osmStop.setStopType(OSMStopType.PHYSICAL_TRAIN_STATION);
 
             if (tram_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
@@ -170,9 +171,6 @@ public class OSMParser {
 
                 }
             }
-
-            if (public_transport_tag.equalsIgnoreCase("station"))
-                osmStop.setStopType(OSMStopType.PHYSICAL_TRAIN_STATION);
 
             if (station_tag.equalsIgnoreCase("subway"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);

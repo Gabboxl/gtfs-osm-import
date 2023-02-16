@@ -53,7 +53,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
     Boolean noUpdate = false;
 
 
-    @CommandLine.Option(names = {"-n", "--noreview"}, description = "Disables GUI review. For every node that is too distant from the GTFS coords a new stop will be generated.")
+    @CommandLine.Option(names = {"-n", "--noreview"}, description = "Disable GUI review. For every node that is too distant from the GTFS coords a new stop will be generated.")
     Boolean noGuiReview = false;
 
     final ArrayList<OSMStop> osmStopsToReview = new ArrayList<>(); //TODO: maybe find a better place for these two variables?
