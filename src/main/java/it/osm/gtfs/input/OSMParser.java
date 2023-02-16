@@ -372,13 +372,16 @@ public class OSMParser {
                     currentRelation.setFrom(attributes.getValue("v"));
                 else if (key.equalsIgnoreCase("to"))
                     currentRelation.setTo(attributes.getValue("v"));
-                else if (key.equalsIgnoreCase("route"))
+                else if (key.equalsIgnoreCase("operator")) {
+                    currentRelation.setOperator(attributes.getValue("v"));
+                } else if (key.equalsIgnoreCase("route")) {
                     try {
                         currentRelation.setType(RouteType.getEnumByOsmValue(attributes.getValue("v")));
-                    }catch (IllegalArgumentException e) {
+                    } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                         failed = true;
                     }
+                }
             }
         }
 

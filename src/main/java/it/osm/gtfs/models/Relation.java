@@ -14,6 +14,7 @@ public class Relation {
     private String ref;
     private String from;
     private String to;
+    private String operator;
     private RouteType type;
     private List<OSMWay> wayMembers = new ArrayList<>();
 
@@ -140,6 +141,14 @@ public class Relation {
 
     public void setWayMembers(List<OSMWay> wayMembers) {
         this.wayMembers = wayMembers;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public static class OSMWay {
