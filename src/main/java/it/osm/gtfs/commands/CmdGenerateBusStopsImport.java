@@ -88,8 +88,8 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                         //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
                         if(gtfsStop.railwayStopMatchedWith != null) {
-                            System.out.println(ansi().render("@|red Multiple match found between this GTFS stop and other OSM stops: |@"));
-                            System.out.println(ansi().render("@|red current GTFS stop: |@" + gtfsStop));
+                            System.out.println(ansi().render("@|red Multiple match found between current GTFS stop and two other OSM stops: |@"));
+                            System.out.println(ansi().render("@|red Current GTFS stop: |@" + gtfsStop));
                             System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
                             System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
@@ -97,8 +97,13 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                             double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition().getLatitude(), gtfsStop.getGeoPosition().getLongitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLatitude(), gtfsStop.railwayStopMatchedWith.getGeoPosition().getLongitude());
 
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop){
+
+                                System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + gtfsStop.osmStopMatchedWith + "|@"));
+
                                 continue;
                             }
+
+                            System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + osmStop + "|@"));
 
                             gtfsStop.railwayStopMatchedWith.gtfsStopMatchedWith = null;
 
@@ -108,8 +113,8 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                     } else {
                         if(osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null){
-                            System.out.println(ansi().render("@|red Multiple match found between this GTFS stop and other OSM stops: |@"));
-                            System.out.println(ansi().render("@|red current GTFS stop: |@" + gtfsStop));
+                            System.out.println(ansi().render("@|red Multiple match found between current GTFS stop and two other OSM stops: |@"));
+                            System.out.println(ansi().render("@|red Current GTFS stop: |@" + gtfsStop));
                             System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
                             System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
@@ -119,9 +124,12 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                             //in case of multiple matching we check what stop is the closest one to the gtfs coordinates between the current loop stop and the already-matched stop
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop){
 
+                                System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + gtfsStop.osmStopMatchedWith + "|@"));
                                 //in case the already-matched stop is the closest one to the gtfs coordinates then we skip setting the stop match variables, and we go ahead with the loop
                                 continue;
                             }
+
+                            System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + osmStop + "|@"));
 
                             //in case the current loop stop is the closest one to the gtfs coordinates, we remove the matched gtfs stop from the  already matched osm stop
                             gtfsStop.osmStopMatchedWith.gtfsStopMatchedWith = null;
