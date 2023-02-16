@@ -28,6 +28,7 @@ public class ZipUtils {
             System.out.println(ansi().render("@|red The supplied directory path is a file and not a directory. |@"));
             return;
         }
+        
         extractDir.mkdirs();
 
         try {
