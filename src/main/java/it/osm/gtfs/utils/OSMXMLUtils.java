@@ -110,12 +110,12 @@ public class OSMXMLUtils {
 
         if (tagElementHighway != null) {
             //node.removeChild(tagElementHighway);
-            tagElementHighway.setAttribute("k", "disused:railway");
+            tagElementHighway.setAttribute("k", "disused:highway");
         }
 
         if (tagElementRailway != null) {
             //node.removeChild(tagElementRailway);
-            tagElementRailway.setAttribute("k", "disused:highway");
+            tagElementRailway.setAttribute("k", "disused:railway");
         }
 
         if (tagElementPublicTransport != null) {
