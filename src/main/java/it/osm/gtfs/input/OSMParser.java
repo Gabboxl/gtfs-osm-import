@@ -196,13 +196,15 @@ public class OSMParser {
             }
 
 
+            if(osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
+                throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop, railway=station and station=subway");
+
+
+
             if (osmStop.getStopType().equals(OSMStopType.GENERAL_STOP_POSITION)) {
                 System.out.println(ansi().render("@|yellow Ignoring general_stop_position... (node ID: " + osmStop.getOSMId() + ") |@"));
                 continue; //ignore unsupported stop positions (like ferries)
             }
-
-            if(osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
-                throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop, railway=station and station=subway");
 
 
             osmStopsListOutput.add(osmStop);
