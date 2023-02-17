@@ -30,7 +30,7 @@ public class OSMRelationImportGenerator {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='GTFSOSMImport'>\n");
         buffer.append(bb.getXMLTag());
-        buffer.append("<relation id='-" + id +  "'>\n");
+        buffer.append("<relation id='-" + id +  "' action='modify'>\n");
 
 
         for (OSMStop osmStop : trip.getStopsList().getStopSequenceOSMStopMap().values()){
