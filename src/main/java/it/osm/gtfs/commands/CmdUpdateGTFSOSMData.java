@@ -162,7 +162,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
         }
 
-        String tmpCheckedRelsPath = GTFSImportSettings.getInstance().getCachePath() + "tmp_relations_checked.osm";
+        String tmpCheckedRelsPath = GTFSImportSettings.getInstance().getCachePath() + "tmp_checked_rels.osm";
 
         OutputStream stream = new FileOutputStream(tmpCheckedRelsPath);
         Source source = new DOMSource(doc);
