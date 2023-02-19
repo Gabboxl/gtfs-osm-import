@@ -140,9 +140,9 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         Map<String, OSMStop> osmIdOSMStopMap = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         // Default to all available rel, then override forced updates
-        ReadOSMRelationsResult validOsmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap);
+        ReadOSMRelationsResult readRelsResult = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap);
 
-
+        
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(uncheckedRelsFile);
@@ -150,12 +150,12 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
         NodeList relationElementList = doc.getElementsByTagName("relation");
 
-        for(Relation failedrels : validOsmRels.getFailedRelations()) {
+        for(Relation failedRelation : readRelsResult.getFailedRelations()) {
 
             for (int s = 0; s < relationElementList.getLength(); s++) {
                 Node node = relationElementList.item(s);
 
-                if (node.getAttributes().getNamedItem("id").getNodeValue().equals(failedrels.getId())) {
+                if (node.getAttributes().getNamedItem("id").getNodeValue().equals(failedRelation.getId())) {
                     doc.getDocumentElement().removeChild(node);
                 }
             }
