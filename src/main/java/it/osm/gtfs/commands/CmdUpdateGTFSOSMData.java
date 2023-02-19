@@ -130,8 +130,8 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         String queryRel = "data=(relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];>;);out meta;";
         String urlrel = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryRel);;
 
-        File filerel = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_unchecked_rels.osm");
-        DownloadUtils.download(urlrel, filerel, false);
+        File uncheckedRelsFile = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_unchecked_rels.osm");
+        DownloadUtils.download(urlrel, uncheckedRelsFile, false);
 
 
 
@@ -143,10 +143,9 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         ReadOSMRelationsResult validOsmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap);
 
 
-        File file = new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
+        Document doc = db.parse(uncheckedRelsFile);
         doc.getDocumentElement().normalize();
 
         NodeList relationElementList = doc.getElementsByTagName("relation");
