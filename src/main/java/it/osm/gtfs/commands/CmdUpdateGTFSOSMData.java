@@ -175,7 +175,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
 
         File checkedRelsFile = new File(tmpCheckedRelsPath);
-        File filteredRelsFile = new File(GTFSImportSettings.getInstance().getOsmDataPath() + "tmp_relationschecked_filtered.osm");
+        File filteredRelsFile = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_filteredchecked_rels.osm");
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisUnusedWaysNodes(checkedRelsFile, filteredRelsFile));
 
 
