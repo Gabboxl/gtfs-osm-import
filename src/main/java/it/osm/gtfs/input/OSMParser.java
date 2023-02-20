@@ -317,6 +317,9 @@ public class OSMParser {
         private final List<Relation> failedRelations = new ArrayList<>();
         private final List<String> missingNodes = new ArrayList<>();
 
+
+        //temp variables for tags
+        String route_tag = "";
         private Relation currentRelation;
         private long seq = 1;
         private boolean failed = false;
@@ -343,7 +346,7 @@ public class OSMParser {
                 String memberRef = attributes.getValue("ref");
 
                 if (memberType.equals("node")){
-                    if (memberRole.equals("stop") || memberRole.equals("platform")){
+                    if (memberRole.equals("stop") || memberRole.equals("platform")) {
                         OSMStop osmStop = stopsWithOSMIndex.get(memberRef);
 
                         if (osmStop == null) {
@@ -360,8 +363,8 @@ public class OSMParser {
                 }else if (memberType.equals("way")){
                     OSMWay member = ways.get(Long.parseLong(attributes.getValue("ref")));
                     currentRelation.getWayMembers().add(member);
-                } else {
-                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has an unsupported member (id: " + memberRef + ") of unknown type \"" + memberType +"\"" + "|@"));
+                } else { //TODO: supportare i membri "relation", ovvero le master_relation solitamente
+                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member (id: " + memberRef + ") of an unsupported type \"" + memberType +"\"" + "|@"));
                 }
 
             }else if (currentRelation != null && localName.equals("tag")){
