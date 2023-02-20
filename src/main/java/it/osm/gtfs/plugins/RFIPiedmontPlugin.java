@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.plugins;
 
@@ -27,32 +26,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class RFIPiedmontPlugin implements GTFSPlugin {
 
-    public String fixBusStopRef(String busStopRef){
-        if (busStopRef.startsWith("0"))
-            return busStopRef.substring(1);
-        return busStopRef;
-    }
-
-    public String fixBusStopName(GTFSStop gtfsStop){
-        String busStopName = gtfsStop.getName();
-
-        busStopName = busStopName.replace('"', '\'');
-
-        try {
-            if (Character.isUpperCase(busStopName.charAt(1))) {
-                return camelCase(busStopName).trim();
-            }
-        }catch (Exception e){
-            System.err.println("Invalid GTFS stop name: \"" + busStopName + "\" - " + gtfsStop + " " + e);
-        }
-        return busStopName;
-    }
-
-    @Override
-    public String fixTripHeadsignName(String name) {
-        return camelCase(name).trim();
-    }
-
     private static String camelCase(String string) {
         String[] words = string.split("\\s");
         StringBuilder buffer = new StringBuilder();
@@ -65,6 +38,32 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
     private static String capitalize(String string) {
         if (string.length() == 0) return string;
         return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+    }
+
+    public String fixBusStopRef(String busStopRef) {
+        if (busStopRef.startsWith("0"))
+            return busStopRef.substring(1);
+        return busStopRef;
+    }
+
+    public String fixBusStopName(GTFSStop gtfsStop) {
+        String busStopName = gtfsStop.getName();
+
+        busStopName = busStopName.replace('"', '\'');
+
+        try {
+            if (Character.isUpperCase(busStopName.charAt(1))) {
+                return camelCase(busStopName).trim();
+            }
+        } catch (Exception e) {
+            System.err.println("Invalid GTFS stop name: \"" + busStopName + "\" - " + gtfsStop + " " + e);
+        }
+        return busStopName;
+    }
+
+    @Override
+    public String fixTripHeadsignName(String name) {
+        return camelCase(name).trim();
     }
 
     @Override
@@ -80,9 +79,9 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
 
     @Override
     public Boolean isValidStop(GTFSStop gtfsStop) {
-        if (gtfsStop.getCode().trim().length() == 0){
+        if (gtfsStop.getCode().trim().length() == 0) {
             gtfsStop.setCode(gtfsStop.getGtfsId());
-        }else{
+        } else {
             gtfsStop.setCode(fixBusStopRef(gtfsStop.getCode()));
         }
 
@@ -103,13 +102,13 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
     @Override
     public boolean isRelationSameAs(Relation relation, TripStopsList s) {
         //Allow missing last stop (bug in gtfs)
-        if (relation.getStops().size() == s.getStopSequenceOSMStopMap().size() + 1){
-            for (Long key: s.getStopSequenceOSMStopMap().keySet())
+        if (relation.getStops().size() == s.getStopSequenceOSMStopMap().size() + 1) {
+            for (Long key : s.getStopSequenceOSMStopMap().keySet())
                 if (!relation.getStops().get(key).equals(s.getStopSequenceOSMStopMap().get(key)))
                     return false;
-            System.out.println(ansi().render("@|red GTTPlugin: Matched relation " + relation.getId() + " with gtfs bug |@" ));
+            System.out.println(ansi().render("@|red GTTPlugin: Matched relation " + relation.getId() + " with gtfs bug |@"));
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -120,10 +119,10 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
 
         if (s.getStopSequenceArrivalTimeMap().get(1L) == null)
             return false;
-        else if (frequency <= 1){
+        else if (frequency <= 1) {
             System.out.println(ansi().render("@|red GTTPlugin: Ignoring trip " + trip.getTripId() + " found only one, may not be a valid route |@"));
             return false;
-        }else if (frequency <= 4 && (s.getStopSequenceArrivalTimeMap().get(1L).startsWith("04") || s.getStopSequenceArrivalTimeMap().get(1L).startsWith("05") || s.getStopSequenceArrivalTimeMap().get(1L).startsWith("06"))){
+        } else if (frequency <= 4 && (s.getStopSequenceArrivalTimeMap().get(1L).startsWith("04") || s.getStopSequenceArrivalTimeMap().get(1L).startsWith("05") || s.getStopSequenceArrivalTimeMap().get(1L).startsWith("06"))) {
             System.out.println(ansi().render("@|red GTTPlugin: Ignoring trip " + trip.getTripId() + " found only four times in early morning, may be a warmup route |@"));
             return false;
         }

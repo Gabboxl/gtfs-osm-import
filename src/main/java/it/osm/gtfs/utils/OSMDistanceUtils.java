@@ -27,9 +27,9 @@ public class OSMDistanceUtils {
      * Calculates geodetic distance between two points specified by latitude/longitude using
      * Vincenty inverse formula for ellipsoids
      *
-     * @param latitude1 first point's latitude in decimal degrees
+     * @param latitude1  first point's latitude in decimal degrees
      * @param longitude1 first point's longitude in decimal degrees
-     * @param latitude2 second point's latitude in decimal degrees
+     * @param latitude2  second point's latitude in decimal degrees
      * @param longitude2 second point's longitude in decimal degrees
      * @return distance in metres between points
      */

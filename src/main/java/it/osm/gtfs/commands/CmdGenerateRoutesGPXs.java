@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.commands;
 
@@ -38,12 +37,10 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "gpx", mixinStandardHelpOptions = true, description = "Generate .gpx files for all GTFS trips (mostly for debug purposes)")
 public class CmdGenerateRoutesGPXs implements Callable<Void> {
 
-    @CommandLine.Mixin
-    private SharedCliOptions sharedCliOptions;
-
     @CommandLine.Option(names = {"-w", "--waypoints"}, description = "Export GPXs as waypoints instead of shape/track")
     boolean asWaypoints;
-
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
 
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException {
@@ -59,19 +56,19 @@ public class CmdGenerateRoutesGPXs implements Callable<Void> {
         new File(GTFSImportSettings.getInstance().getOutputPath() + "gpx").mkdirs();
 
         int id = 10000;
-        for (String k:keys){
+        for (String k : keys) {
             Collection<Trip> allTrips = groupedTrips.get(k);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
-            for (Trip trip:uniqueTrips){
+            for (Trip trip : uniqueTrips) {
                 Route route = routes.get(trip.getRoute().getId());
                 Shape shape = shapes.get(trip.getShapeId());
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + ".gpx");
 
-                if(asWaypoints){
+                if (asWaypoints) {
                     f.write(shape.getGPXwithWaypoints(route.getShortName()).getBytes());
-                }else{
+                } else {
                     f.write(shape.getGPXasSegment(route.getShortName()).getBytes());
                 }
 

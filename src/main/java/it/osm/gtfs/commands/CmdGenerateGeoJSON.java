@@ -5,7 +5,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.OSMStop;
 import it.osm.gtfs.models.ReadOSMRelationsResult;
-import it.osm.gtfs.models.Relation;
 import it.osm.gtfs.models.Stop;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.SharedCliOptions;
@@ -35,8 +34,15 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(name = "geojson", description = "Generate a geojson file containg osm relations")
 public class CmdGenerateGeoJSON implements Callable<Void> {
 
+    private final GeometryFactory factory;
     @CommandLine.Mixin
     private SharedCliOptions sharedCliOptions;
+    private StringBuffer buffer;
+    private Collection<MfFeature> stops;
+    private CmdGenerateGeoJSON() {
+        buffer = new StringBuffer();
+        factory = new GeometryFactory();
+    }
 
     @Override
     public Void call() throws JSONException, ParserConfigurationException, IOException, SAXException {
@@ -70,15 +76,6 @@ public class CmdGenerateGeoJSON implements Callable<Void> {
         return null;
     }
 
-    private StringBuffer buffer;
-    private Collection<MfFeature> stops;
-    private final GeometryFactory factory;
-
-    private CmdGenerateGeoJSON(){
-        buffer = new StringBuffer();
-        factory = new GeometryFactory();
-    }
-
     private void close(String string) throws JSONException {
         MfFeatureCollection fc = new MfFeatureCollection(stops);
         JSONStringer stringer = new JSONStringer();
@@ -99,19 +96,22 @@ public class CmdGenerateGeoJSON implements Callable<Void> {
 	private void insertRelations(List<Relation> rels) throws SQLException {
 	}*/
 
-    public static class JSONStop extends MfFeature{
+    public static class JSONStop extends MfFeature {
         private Stop stop;
 
         private JSONStop(Stop stop) {
             super();
             this.stop = stop;
         }
+
         public String getFeatureId() {
             return "bus_stop";
         }
+
         public MfGeometry getMfGeometry() {
             return new MfGeometry(new GeometryFactory().createPoint(new Coordinate(stop.getGeoPosition().getLongitude(), stop.getGeoPosition().getLatitude())));
         }
+
         public void toJSON(JSONWriter builder) throws JSONException {
             builder.key("name").value(stop.getName());
             builder.key("ref").value(stop.getCode());

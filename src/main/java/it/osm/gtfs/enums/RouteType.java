@@ -23,14 +23,14 @@ public enum RouteType { //data according to the GTFS reference guide
         this.osmValue = osmValue;
     }
 
-    public static RouteType getEnumByOsmValue(String osmValue){
+    public static RouteType getEnumByOsmValue(String osmValue) {
 //        for(RouteType e : RouteType.values()){
 //            if(e.osmValue.equals(osmValue)) return e;
 //        }
 
         //unfortunately we have to hardcode the various key-value pairs because GTFS' and OSM's route types are different
 
-        if (osmValue != null){
+        if (osmValue != null) {
             if (osmValue.equalsIgnoreCase("bus"))
                 return BUS;
             if (osmValue.equalsIgnoreCase("tram"))
@@ -54,7 +54,7 @@ public enum RouteType { //data according to the GTFS reference guide
         throw new IllegalArgumentException("Unsupported relation route type: \"" + osmValue + "\"");
     }
 
-    public static RouteType getEnumByGtfsValue(int gtfsValue){
+    public static RouteType getEnumByGtfsValue(int gtfsValue) {
 //        for(RouteType e : RouteType.values()){
 //            if(e.gtfsValue == gtfsValue) return e;
 //        }

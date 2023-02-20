@@ -19,8 +19,9 @@ public class ZipUtils {
             e.printStackTrace();
         }
     }
+
     public static void unzipToDirectory(InputStream inputStream,
-                                          String extractPath) {
+                                        String extractPath) {
 
         File extractDir = new File(extractPath);
 

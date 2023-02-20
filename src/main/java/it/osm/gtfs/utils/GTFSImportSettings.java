@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.utils;
 
@@ -39,7 +38,7 @@ public class GTFSImportSettings {
     public static final String OSM_OVERPASS_API_SERVER = "https://maps.mail.ru/osm/tools/overpass/api/interpreter?";
     //public static final String OSM_OVERPASS_XAPI_SERVER = "http://overpass.osm.rambler.ru/cgi/xapi?"; //vecchia xapi
 
-    public static final String OSM_API_SERVER =  "https://www.openstreetmap.org/api/0.6/";
+    public static final String OSM_API_SERVER = "https://www.openstreetmap.org/api/0.6/";
     public static final String OSM_RELATIONS_FILE_NAME = "relations.osm";
     public static final String OSM_STOPS_FILE_NAME = "stops.osm";
     public static final String OUTPUT_MATCHED_WITH_UPDATED_METADATA = "gtfs_import_matched_with_updated_metadata.osm";
@@ -71,7 +70,7 @@ public class GTFSImportSettings {
 
         try {
 
-            if(Objects.requireNonNull(getClass().getResource("")).toString().startsWith("jar:")){
+            if (Objects.requireNonNull(getClass().getResource("")).toString().startsWith("jar:")) {
 
                 File propfile = new File(PROPERTIES_FILE_NAME);
 
@@ -117,7 +116,6 @@ public class GTFSImportSettings {
         return SettingsHolder.INSTANCE;
     }
 
-
     private void readProperties() {
 
         //gtfs_zip_url value
@@ -141,11 +139,11 @@ public class GTFSImportSettings {
         //plugin class value
         synchronized (this) {
             String pluginName = properties.getProperty("plugin");
-            if (pluginName == null){
+            if (pluginName == null) {
                 plugin = new DefaultPlugin();
-            }else{
-                try{
-                    Class<?> pluginClass  = Class.forName(pluginName);
+            } else {
+                try {
+                    Class<?> pluginClass = Class.forName(pluginName);
                     boolean validPlugin = false;
                     for (Class<?> c : pluginClass.getInterfaces()) {
                         if (c.equals(GTFSPlugin.class)) {
@@ -157,7 +155,7 @@ public class GTFSImportSettings {
                         plugin = (GTFSPlugin) pluginClass.getDeclaredConstructor().newInstance();
                     else
                         throw new IllegalArgumentException("The specified plugin was not found or is not valid");
-                }catch (Exception e) {
+                } catch (Exception e) {
                     throw new IllegalArgumentException("The specified plugin was not found or is not valid");
                 }
             }
@@ -186,9 +184,6 @@ public class GTFSImportSettings {
         } else useRevisedKey = !tempUseRevisedKey.equals("false");
     }
 
-
-
-
     public String getCachePath() {
         return getOutputPath() + File.separator + "cache" + File.separator;
     }
@@ -213,7 +208,6 @@ public class GTFSImportSettings {
         return getOsmDataPath() + OSM_OVERPASS_WAYS_FILE_NAME;
     }
 
-
     public String getGTFSZipUrl() {
         return gtfsZipUrl;
     }
@@ -222,7 +216,7 @@ public class GTFSImportSettings {
         return outputPath;
     }
 
-    public GTFSPlugin getPlugin(){
+    public GTFSPlugin getPlugin() {
         return plugin;
     }
 

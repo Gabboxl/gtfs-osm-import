@@ -23,35 +23,10 @@ import static org.fusesource.jansi.Ansi.ansi;
 @CommandLine.Command(name = "check", description = "Check and validate OSM relations")
 public class CmdCheckOsmRoutes implements Callable<Void> {
 
-    @CommandLine.Mixin
-    private SharedCliOptions sharedCliOptions;
-
     @CommandLine.Option(names = "--osmid", interactive = true)
     String osmId;
-
-    @Override
-    public Void call() throws ParserConfigurationException, IOException, SAXException {
-        System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
-        System.out.println("Step 1/4 Reading OSM Stops");
-        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue);
-        System.out.println("Step 2/4 Indexing OSM Stops");
-        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
-        System.out.println("Step 3/4 Reading OSM Relations");
-        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
-
-        System.out.println("Step 4/4 Checking relations");
-        for (Relation validRelation : osmRels.getFinalValidRelations()){
-            try{
-                if (osmId == null || osmId.length() == 0)
-                    check(validRelation, false);
-                else if (osmId.equals(validRelation.getId()))
-                    check(validRelation, true);
-            }catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return null;
-    }
+    @CommandLine.Mixin
+    private SharedCliOptions sharedCliOptions;
 
     private static void check(Relation relation, Boolean debug) {
         if (relation.getStops().size() <= 1)
@@ -80,11 +55,35 @@ public class CmdCheckOsmRoutes implements Callable<Void> {
         }
         */
 
-        if (debug){
-            for (long f = 1; f <= relation.getStops().size() ; f++){
+        if (debug) {
+            for (long f = 1; f <= relation.getStops().size(); f++) {
                 OSMStop osmStop = relation.getStops().get(f); //not ideal casting here, need to review the StopsList class types
                 System.out.println("Stop # " + f + "\t" + osmStop.getCode() + "\t" + osmStop.getOSMId() + "\t" + osmStop.getName());
             }
         }
+    }
+
+    @Override
+    public Void call() throws ParserConfigurationException, IOException, SAXException {
+        System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Warning: this command is still in alpha stage and check only some aspects of the relations.").reset());
+        System.out.println("Step 1/4 Reading OSM Stops");
+        List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue);
+        System.out.println("Step 2/4 Indexing OSM Stops");
+        Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
+        System.out.println("Step 3/4 Reading OSM Relations");
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
+
+        System.out.println("Step 4/4 Checking relations");
+        for (Relation validRelation : osmRels.getFinalValidRelations()) {
+            try {
+                if (osmId == null || osmId.length() == 0)
+                    check(validRelation, false);
+                else if (osmId.equals(validRelation.getId()))
+                    check(validRelation, true);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
     }
 }

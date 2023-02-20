@@ -7,10 +7,10 @@ import org.w3c.dom.Node;
 
 public class OSMStop extends Stop {
 
-    private boolean needsPositionReview = false;
-    private boolean isRevised = false;
     public GTFSStop gtfsStopMatchedWith;
     public Node originalXMLNode;
+    private boolean needsPositionReview = false;
+    private boolean isRevised = false;
 
 
     public OSMStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
@@ -30,7 +30,6 @@ public class OSMStop extends Stop {
     }
 
 
-
     public boolean isRevised() {
         return isRevised;
     }
@@ -43,7 +42,7 @@ public class OSMStop extends Stop {
     @Override
     public String toString() {
         return "OSMStop [" +
-                ((originalXMLNode != null) ? "osmid=" + getOSMId() : "osmid=?" ) +
+                ((originalXMLNode != null) ? "osmid=" + getOSMId() : "osmid=?") +
                 ", gtfsId=" +
                 getGtfsId() + ", code=" + getCode() + ", lat=" + getGeoPosition().getLatitude() +
                 ", lon=" +

@@ -69,10 +69,10 @@ public class GTFSOSMWaysMatch {
         return this;
     }
 
-    public ArrayList<Integer> matchGPX(String xmlGpxData){
-       if(!hopper.getFullyLoaded()) {
-           throw new IllegalStateException("You must call initMatch() first to initialize GraphHopper and use the returned instance before matching gpx data!");
-       }
+    public ArrayList<Integer> matchGPX(String xmlGpxData) {
+        if (!hopper.getFullyLoaded()) {
+            throw new IllegalStateException("You must call initMatch() first to initialize GraphHopper and use the returned instance before matching gpx data!");
+        }
 
         try {
             importSW = new StopWatch();

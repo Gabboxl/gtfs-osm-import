@@ -15,17 +15,17 @@ public enum WheelchairAccess { //data according to the GTFS reference guide - th
         this.osmValue = osmValue;
     }
 
-    public static WheelchairAccess getEnumByOsmValue(String osmValue){
-        for(WheelchairAccess e : WheelchairAccess.values()){
-            if(e.osmValue.equals(osmValue)) return e;
+    public static WheelchairAccess getEnumByOsmValue(String osmValue) {
+        for (WheelchairAccess e : WheelchairAccess.values()) {
+            if (e.osmValue.equals(osmValue)) return e;
         }
 
         return null;
     }
 
-    public static WheelchairAccess getEnumByGtfsValue(int gtfsValue){
-        for(WheelchairAccess e : WheelchairAccess.values()){
-            if(e.gtfsValue == gtfsValue) return e;
+    public static WheelchairAccess getEnumByGtfsValue(int gtfsValue) {
+        for (WheelchairAccess e : WheelchairAccess.values()) {
+            if (e.gtfsValue == gtfsValue) return e;
         }
 
         return null;

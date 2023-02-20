@@ -23,6 +23,13 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
 
     @CommandLine.Mixin
     private SharedCliOptions sharedCliOptions;
+    private Connection connection = null;
+
+    private CmdGenerateSQLLiteDB(String file) throws SQLException,
+            ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        connection = DriverManager.getConnection("jdbc:sqlite:" + file);
+    }
 
     @Override
     public Void call() throws ParserConfigurationException, IOException, SAXException {
@@ -54,14 +61,6 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
                 generator.close();
         }
         return null;
-    }
-
-    private Connection connection = null;
-
-    private CmdGenerateSQLLiteDB(String file) throws SQLException,
-            ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" + file);
     }
 
     private void close() {
@@ -116,9 +115,9 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
         }
         stm = connection.prepareStatement("insert into relation_stops values(?, ?, ?)");
         for (Relation r : rels) {
-            for (Long k:r.getStops().keySet()){
+            for (Long k : r.getStops().keySet()) {
                 stm.setLong(1, Long.parseLong(r.getId()));
-                 OSMStop castedOsmStop = (OSMStop) r.getStops().get(k); //we force the cast to OSMStop type so we can access the getOSMId() method, this is not the best way as the stop CAN be a GTFSStop, so we need to review the types managed by the Relation class methods
+                OSMStop castedOsmStop = (OSMStop) r.getStops().get(k); //we force the cast to OSMStop type so we can access the getOSMId() method, this is not the best way as the stop CAN be a GTFSStop, so we need to review the types managed by the Relation class methods
 
                 stm.setLong(2, Long.parseLong(castedOsmStop.getOSMId()));
                 stm.setLong(3, k);

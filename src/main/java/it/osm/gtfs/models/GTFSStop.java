@@ -25,12 +25,12 @@ public class GTFSStop extends Stop {
     }
 
 
-    public Element getNewXMLNode(IElementCreator document){
+    public Element getNewXMLNode(IElementCreator document) {
         Element node = document.createElement("node");
         long id;
         try {
             id = Long.parseLong(getGtfsId());
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("The gtfs_id=" + getGtfsId() + " isn't numerical, using an hashcode for the new OSM node instead...");
             id = Math.abs(getGtfsId().hashCode());
         }
@@ -46,13 +46,13 @@ public class GTFSStop extends Stop {
         node.appendChild(OSMXMLUtils.createTagElement(document, "operator", GTFSImportSettings.getInstance().getOperator()));
         node.appendChild(OSMXMLUtils.createTagElement(document, "wheelchair", getWheelchairAccessibility().getOsmValue()));
 
-        if(GTFSImportSettings.getInstance().useRevisedKey()) {
+        if (GTFSImportSettings.getInstance().useRevisedKey()) {
             node.appendChild(OSMXMLUtils.createTagElement(document, GTFSImportSettings.REVISED_KEY, "no"));
         }
 
         //different node values based on the stop type
 
-        if(getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP)) {
+        if (getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP)) {
             node.appendChild(OSMXMLUtils.createTagElement(document, "bus", "yes"));
             node.appendChild(OSMXMLUtils.createTagElement(document, "highway", "bus_stop"));
             node.appendChild(OSMXMLUtils.createTagElement(document, "public_transport", "platform"));

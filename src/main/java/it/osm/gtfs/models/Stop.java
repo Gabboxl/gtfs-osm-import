@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.models;
 
@@ -23,18 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
+    //TODO: maybe we should also create an arraylist for railwayStops matched with also?
+    public List<Stop> stopsMatchedWith = new ArrayList<>(); //TODO: this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently semi-supported but not handled in a GUI in the tool
     private String gtfsId;
     private String code;
     private GeoPosition geoPosition;
     private String name;
     private String operator;
     private OSMStopType stopType;
-    private WheelchairAccess wheelchairAccessibility;
 
     //private Boolean isMetroStop; //TODO: should we add this check only for GTFS stops or also for osm stops, or not at all?
-
-    //TODO: maybe we should also create an arraylist for railwayStops matched with also?
-    public List<Stop> stopsMatchedWith = new ArrayList<>(); //TODO: this is actually pretty much boilerplate as we dont use it for anything, but it could be useful for multiple matches cases that are currently semi-supported but not handled in a GUI in the tool
+    private WheelchairAccess wheelchairAccessibility;
 
 
     protected Stop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
@@ -50,41 +48,49 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public String getGtfsId() {
         return gtfsId;
     }
-    public String getCode() {
-        return code;
-    }
-    public GeoPosition getGeoPosition() {
-        return  geoPosition;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public String getOperator() {
-        return operator;
-    }
-    public WheelchairAccess getWheelchairAccessibility(){
-        return wheelchairAccessibility;
-    }
 
     public void setGtfsId(String gtfsId) {
         this.gtfsId = gtfsId;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public void setCode(String code) {
         this.code = GTFSImportSettings.getInstance().getPlugin().fixBusStopRef(code);
     }
 
+    public GeoPosition getGeoPosition() {
+        return geoPosition;
+    }
+
     public void setGeoPosition(GeoPosition geoPosition) {
-            this.geoPosition = geoPosition;
+        this.geoPosition = geoPosition;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getOperator() {
+        return operator;
+    }
+
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public WheelchairAccess getWheelchairAccessibility() {
+        return wheelchairAccessibility;
+    }
+
+    public void setWheelchairAccessibility(WheelchairAccess wheelchairAccessibility) {
+        this.wheelchairAccessibility = wheelchairAccessibility;
     }
 
     public OSMStopType getStopType() {
@@ -94,12 +100,6 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     public void setStopType(OSMStopType stopType) {
         this.stopType = stopType;
     }
-
-    public void setWheelchairAccessibility(WheelchairAccess wheelchairAccessibility){
-        this.wheelchairAccessibility = wheelchairAccessibility;
-    }
-
-
 
     @Override
     public int hashCode() {

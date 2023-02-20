@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.input;
 
@@ -84,7 +83,7 @@ public class OSMParser {
             for (int t = 0; t < att.getLength(); t++) {
                 Node attNode = att.item(t);
 
-                if (attNode.getAttributes() != null){
+                if (attNode.getAttributes() != null) {
                     String key = attNode.getAttributes().getNamedItem("k").getNodeValue();
                     String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
 
@@ -106,10 +105,10 @@ public class OSMParser {
                     if (key.equalsIgnoreCase("railway"))
                         railway_tag = value;
 
-                    if (key.equalsIgnoreCase("public_transport") )
+                    if (key.equalsIgnoreCase("public_transport"))
                         public_transport_tag = value;
 
-                    if (key.equalsIgnoreCase("train") )
+                    if (key.equalsIgnoreCase("train"))
                         train_tag = value;
 
                     if (key.equalsIgnoreCase("tram"))
@@ -147,7 +146,7 @@ public class OSMParser {
             if (tram_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
-            if(highway_tag.equalsIgnoreCase("bus_stop"))
+            if (highway_tag.equalsIgnoreCase("bus_stop"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
 
             if (bus_tag.equalsIgnoreCase("yes"))
@@ -160,13 +159,13 @@ public class OSMParser {
             if (public_transport_tag.equalsIgnoreCase("stop_position")) {
                 OSMStopType currType = osmStop.getStopType();
 
-                if(currType == null){
+                if (currType == null) {
                     osmStop.setStopType(OSMStopType.GENERAL_STOP_POSITION);
 
                 } else if (currType.equals(OSMStopType.PHYSICAL_BUS_STOP)) {
                     osmStop.setStopType(OSMStopType.BUS_STOP_POSITION);
 
-                } else if(currType.equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
+                } else if (currType.equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
                     osmStop.setStopType(OSMStopType.TRAM_STOP_POSITION);
 
                 }
@@ -180,25 +179,24 @@ public class OSMParser {
 
 
             //skip subway stops if requested
-            if(SharedCliOptions.onlyBusStops && (osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION))) {
+            if (SharedCliOptions.onlyBusStops && (osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION))) {
 
-                System.out.println(ansi().render("@|yellow Skipping OSM subway/station stop (nodeID= " + osmStop.getOSMId() + ", ref= "  + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") as requested. |@"));
+                System.out.println(ansi().render("@|yellow Skipping OSM subway/station stop (nodeID= " + osmStop.getOSMId() + ", ref= " + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") as requested. |@"));
                 continue;
             }
 
 
             //if the current osm stop has a different operator tag value than the one specified in the properties we skip it - but we keep the stops with a null operator as they could be of our operator
-            if(!readStopsOfAnyOperator && osmStop.getOperator() != null && !StringUtils.containsIgnoreCase(osmStop.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
+            if (!readStopsOfAnyOperator && osmStop.getOperator() != null && !StringUtils.containsIgnoreCase(osmStop.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
                 //System.out.println(osmStop.getOperator());
 
-                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM Stop node ID " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " as its operator tag value (" + osmStop.getOperator() +") is different than the one specified in the properties file.").reset());
+                System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM Stop node ID " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " as its operator tag value (" + osmStop.getOperator() + ") is different than the one specified in the properties file.").reset());
                 continue;
             }
 
 
-            if(osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
+            if (osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
                 throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop, railway=station and station=subway");
-
 
 
             if (osmStop.getStopType().equals(OSMStopType.GENERAL_STOP_POSITION)) {
@@ -213,7 +211,7 @@ public class OSMParser {
         return osmStopsListOutput;
     }
 
-    public static ReadOSMRelationsResult readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex, boolean readRelationsOfAnyOperator) throws SAXException, IOException{
+    public static ReadOSMRelationsResult readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex, boolean readRelationsOfAnyOperator) throws SAXException, IOException {
         NodeParser nodeParser;
         {
             XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -242,10 +240,10 @@ public class OSMParser {
         }
 
 
-        if (relationParser.missingNodes.size() > 0 || relationParser.failedRelations.size() > 0){
+        if (relationParser.missingNodes.size() > 0 || relationParser.failedRelations.size() > 0) {
             List<String> failedRelsIds = new ArrayList<>();
 
-            for(Relation failedRel : relationParser.failedRelations){
+            for (Relation failedRel : relationParser.failedRelations) {
                 failedRelsIds.add(failedRel.getId());
             }
 
@@ -262,7 +260,7 @@ public class OSMParser {
         @Override
         public void startElement(String uri, String localName, String qName,
                                  Attributes attributes) {
-            if (localName.equals("node")){
+            if (localName.equals("node")) {
 
                 OSMNode osmNode = new OSMNode(new GeoPosition(Double.parseDouble(attributes.getValue("lat")),
                         Double.parseDouble(attributes.getValue("lon"))), Long.parseLong(attributes.getValue("id")), null);
@@ -288,13 +286,13 @@ public class OSMParser {
         public void startElement(String uri, String localName, String qName,
                                  Attributes attributes) {
 
-            if (localName.equals("way")){
+            if (localName.equals("way")) {
                 currentWay = new OSMWay(Long.parseLong(attributes.getValue("id")));
 
-            }else if(currentWay != null && localName.equals("nd")){ //aggiungiamo all'oggetto way tutti i nodi che la compongono
+            } else if (currentWay != null && localName.equals("nd")) { //aggiungiamo all'oggetto way tutti i nodi che la compongono
                 currentWay.nodes.add(nodes.get(Long.parseLong(attributes.getValue("ref"))));
 
-            }else if(currentWay != null && localName.equals("tag")){
+            } else if (currentWay != null && localName.equals("tag")) {
 
                 String key = attributes.getValue("k");
                 String value = attributes.getValue("v");
@@ -305,7 +303,7 @@ public class OSMParser {
 
         @Override
         public void endElement(String uri, String localName, String qName) {
-            if (localName.equals("way")){
+            if (localName.equals("way")) {
                 result.put(currentWay.getId(), currentWay);
                 currentWay = null;
             }
@@ -354,7 +352,7 @@ public class OSMParser {
 
                 tempMemberRefRoleMap = new HashMap<>();
 
-            }else if(currentRelation != null && localName.equals("member")) {
+            } else if (currentRelation != null && localName.equals("member")) {
                 String memberType = attributes.getValue("type");
                 String memberRole = attributes.getValue("role");
                 String memberRef = attributes.getValue("ref");
@@ -362,15 +360,15 @@ public class OSMParser {
                 if (memberType.equals("node")) {
                     tempMemberRefRoleMap.put(memberRef, memberRole);
 
-                }else if (memberType.equals("way")) {
+                } else if (memberType.equals("way")) {
                     OSMWay member = ways.get(Long.parseLong(attributes.getValue("ref")));
                     currentRelation.getWayMembers().add(member);
 
                 } else { //TODO: supportare i membri "relation", ovvero le master_relation solitamente
-                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member (id: " + memberRef + ") of an unsupported type \"" + memberType +"\"" + "|@"));
+                    System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member (id: " + memberRef + ") of an unsupported type \"" + memberType + "\"" + "|@"));
                 }
 
-            }else if (currentRelation != null && localName.equals("tag")) {
+            } else if (currentRelation != null && localName.equals("tag")) {
                 String key = attributes.getValue("k");
 
                 if (key.equalsIgnoreCase("type"))
@@ -403,17 +401,17 @@ public class OSMParser {
         public void endElement(String uri, String localName, String qName) {
             if (localName.equals("relation")) {
 
-                if(!type_tag.equalsIgnoreCase("route")) {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its type tag (" + currentRelation.getOperator() +") is not a route.").reset());
+                if (!type_tag.equalsIgnoreCase("route")) {
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its type tag (" + currentRelation.getOperator() + ") is not a route.").reset());
 
                     return;
                 }
 
 
                 //if the current osm relation has a different operator tag value than the one specified in the properties we skip it - but we keep the stops with a null operator as they could be of our operator
-                if(!readRelationsOfAnyOperator && currentRelation.getOperator() != null && !StringUtils.containsIgnoreCase(currentRelation.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
+                if (!readRelationsOfAnyOperator && currentRelation.getOperator() != null && !StringUtils.containsIgnoreCase(currentRelation.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
 
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its operator tag value (" + currentRelation.getOperator() +") is different than the one specified in the properties file.").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its operator tag value (" + currentRelation.getOperator() + ") is different than the one specified in the properties file.").reset());
 
                     return;
                 }
@@ -428,14 +426,14 @@ public class OSMParser {
                         OSMStop osmStop = stopsWithOSMIndex.get(tempMemberRef);
 
                         if (osmStop == null) {
-                            System.out.println(ansi().render("@|yellow Warning: Node " + tempMemberRef + " not found in internal stops array/map. Probably this isn't a valid stop anymore but is still attached to the relation " + currentRelation.getId() +". Better checking it out. |@"));
+                            System.out.println(ansi().render("@|yellow Warning: Node " + tempMemberRef + " not found in internal stops array/map. Probably this isn't a valid stop anymore but is still attached to the relation " + currentRelation.getId() + ". Better checking it out. |@"));
                             missingNodes.add(tempMemberRef);
                             failed = true;
                         }
                         currentRelation.pushPoint(seq++, osmStop);
 
                     } else {
-                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + tempMemberRole +"\", node ref/Id = " + tempMemberRef + "|@"));
+                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + tempMemberRole + "\", node ref/Id = " + tempMemberRef + "|@"));
                     }
                 }
 

@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.input;
 
@@ -37,12 +36,12 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
 
-    public static List<GTFSStop> readStops(String fName) throws IOException{
+    public static List<GTFSStop> readStops(String fName) throws IOException {
         List<GTFSStop> resultGtfsStopsList = new ArrayList<>();
 
         String thisLine;
-        String [] elements;
-        int stopIdKey=-1, stopNameKey=-1, stopCodeKey=-1, stopLatKey=-1, stopLonKey=-1, locationTypeKey=-1, parentStationKey=-1, wheelchairBoardingKey = -1;
+        String[] elements;
+        int stopIdKey = -1, stopNameKey = -1, stopCodeKey = -1, stopLatKey = -1, stopLonKey = -1, locationTypeKey = -1, parentStationKey = -1, wheelchairBoardingKey = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
@@ -54,7 +53,7 @@ public class GTFSParser {
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
 
-                for(int i=0; i<keys.length; i++){
+                for (int i = 0; i < keys.length; i++) {
                     switch (keys[i]) {
                         case "stop_id" -> stopIdKey = i;
                         case "stop_name" -> stopNameKey = i;
@@ -85,11 +84,11 @@ public class GTFSParser {
                 String stopCode = elements[stopCodeKey];
                 if (stopCode.length() == 0)
                     stopCode = elements[stopIdKey];
-                if (stopCode.length() > 0){
+                if (stopCode.length() > 0) {
                     if (locationTypeKey >= 0 && parentStationKey >= 0 && "1".equals(elements[locationTypeKey])) {
                         //this is a station (group of multiple stops)
                         System.out.println(ansi().render("@|red GTFSParser: Skipped a station (group of multiple stops) with gtfs id: |@" + elements[stopIdKey]));
-                    }else{
+                    } else {
 
 
                         GTFSStop gtfsStop = new GTFSStop(elements[stopIdKey],
@@ -103,7 +102,7 @@ public class GTFSParser {
 
                         OSMStopType stopType = GTFSImportSettings.getInstance().getPlugin().getStopType(gtfsStop);
 
-                        if(!stopType.equals(OSMStopType.PHYSICAL_BUS_STOP) && SharedCliOptions.onlyBusStops) {
+                        if (!stopType.equals(OSMStopType.PHYSICAL_BUS_STOP) && SharedCliOptions.onlyBusStops) {
                             continue;
                         }
 
@@ -111,12 +110,11 @@ public class GTFSParser {
                         gtfsStop.setStopType(stopType);
 
 
-
-                        if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gtfsStop)){
+                        if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gtfsStop)) {
                             resultGtfsStopsList.add(gtfsStop);
                         }
                     }
-                }else{
+                } else {
                     System.out.println(ansi().render("@|red GTFSParser: Failed to parse stops.txt line: |@" + thisLine));
                 }
             }
@@ -126,16 +124,16 @@ public class GTFSParser {
         return resultGtfsStopsList;
     }
 
-    public static List<Trip> readTrips(String gtfsTripsFilePath, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException{
+    public static List<Trip> readTrips(String gtfsTripsFilePath, Map<String, Route> routes, Map<String, TripStopsList> stopTimes) throws IOException {
         List<Trip> finalTripsList = new ArrayList<>();
 
-        if(stopTimes.isEmpty()) {
+        if (stopTimes.isEmpty()) {
             System.out.println(ansi().render("@|red No stop times provided! The trips list will be generated without a stop list! |@"));
         }
 
         String thisLine;
-        String [] elements;
-        int shape_id=-1, route_id=-1, trip_id=-1, trip_headsign=-1, wheelchair_accessible=-1;
+        String[] elements;
+        int shape_id = -1, route_id = -1, trip_id = -1, trip_headsign = -1, wheelchair_accessible = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(gtfsTripsFilePath));
         boolean isFirstLine = true;
@@ -144,7 +142,7 @@ public class GTFSParser {
                 isFirstLine = false;
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
-                for (int i=0; i<keys.length; i++) {
+                for (int i = 0; i < keys.length; i++) {
                     switch (keys[i]) {
                         case "route_id" -> route_id = i;
                         case "trip_id" -> trip_id = i;
@@ -158,7 +156,7 @@ public class GTFSParser {
             } else {
                 elements = getElementsFromLine(thisLine, false);
 
-                if (elements[shape_id].length() > 0){
+                if (elements[shape_id].length() > 0) {
                     finalTripsList.add(new Trip(elements[trip_id],
                             routes.get(elements[route_id]),
                             elements[shape_id],
@@ -174,12 +172,12 @@ public class GTFSParser {
         return finalTripsList;
     }
 
-    public static Map<String, Shape> readShapes(String fName) throws IOException{
+    public static Map<String, Shape> readShapes(String fName) throws IOException {
         Map<String, Shape> result = new TreeMap<>();
 
         String thisLine;
-        String [] elements;
-        int shape_id=-1, shape_pt_lat=-1, shape_pt_lon=-1, shape_pt_sequence=-1;
+        String[] elements;
+        int shape_id = -1, shape_pt_lat = -1, shape_pt_lon = -1, shape_pt_sequence = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
@@ -188,7 +186,7 @@ public class GTFSParser {
                 isFirstLine = false;
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
-                for(int i=0; i<keys.length; i++){
+                for (int i = 0; i < keys.length; i++) {
                     switch (keys[i]) {
                         case "shape_id" -> shape_id = i;
                         case "shape_pt_lat" -> shape_pt_lat = i;
@@ -200,9 +198,9 @@ public class GTFSParser {
             } else {
                 elements = getElementsFromLine(thisLine, true);
 
-                if (elements[shape_id].length() > 0){
+                if (elements[shape_id].length() > 0) {
                     Shape s = result.get(elements[shape_id]);
-                    if (s == null){
+                    if (s == null) {
                         s = new Shape(elements[shape_id]);
                         result.put(elements[shape_id], s);
                     }
@@ -214,12 +212,12 @@ public class GTFSParser {
         return result;
     }
 
-    public static Map<String, Route> readRoutes(String fName) throws IOException{
+    public static Map<String, Route> readRoutes(String fName) throws IOException {
         Map<String, Route> finalRouteIdRouteMap = new HashMap<>();
 
         String thisLine;
-        String [] elements;
-        int route_id=-1, agency_id = -1, route_short_name=-1, route_long_name=-1, route_type=-1, route_color=-1;
+        String[] elements;
+        int route_id = -1, agency_id = -1, route_short_name = -1, route_long_name = -1, route_type = -1, route_color = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(fName));
         boolean isFirstLine = true;
@@ -228,7 +226,7 @@ public class GTFSParser {
                 isFirstLine = false;
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
-                for(int i=0; i<keys.length; i++){
+                for (int i = 0; i < keys.length; i++) {
                     switch (keys[i]) {
                         case "route_id" -> route_id = i;
                         case "agency_id" -> agency_id = i;
@@ -239,9 +237,9 @@ public class GTFSParser {
                     }
                 }
             } else {
-                 elements = getElementsFromLine(thisLine, true);
+                elements = getElementsFromLine(thisLine, true);
 
-                if (elements[route_id].length() > 0){
+                if (elements[route_id].length() > 0) {
                     finalRouteIdRouteMap.put(elements[route_id],
                             new Route(elements[route_id],
                                     elements[agency_id],
@@ -267,8 +265,8 @@ public class GTFSParser {
         int count = 0;
 
         String thisLine;
-        String [] thisLineElements;
-        int trip_id=-1, stop_id=-1, stop_sequence=-1, arrival_time = -1;
+        String[] thisLineElements;
+        int trip_id = -1, stop_id = -1, stop_sequence = -1, arrival_time = -1;
 
         Path filePath = Paths.get(gtfsStopTimesFilePath);
 
@@ -277,7 +275,7 @@ public class GTFSParser {
         BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
-            count ++;
+            count++;
 
             if (count % 100000 == 0)
                 System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Stop times read so far: ").reset().a(count + "/" + numberOfLines));
@@ -288,7 +286,7 @@ public class GTFSParser {
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
 
-                for (int i=0; i<keys.length; i++) {
+                for (int i = 0; i < keys.length; i++) {
                     switch (keys[i]) {
                         case "trip_id" -> trip_id = i;
                         case "arrival_time" -> arrival_time = i;
@@ -300,10 +298,10 @@ public class GTFSParser {
             } else {
                 thisLineElements = getElementsFromLine(thisLine, true);
 
-                if (thisLineElements[trip_id].length() > 0){
+                if (thisLineElements[trip_id].length() > 0) {
                     TripStopsList tripStopsList = tripIdStopListMap.get(thisLineElements[trip_id]);
 
-                    if (tripStopsList == null){
+                    if (tripStopsList == null) {
                         tripStopsList = new TripStopsList(thisLineElements[trip_id]);
                         tripIdStopListMap.put(thisLineElements[trip_id], tripStopsList);
                     }
@@ -339,14 +337,13 @@ public class GTFSParser {
     }
 
 
-
-    public static GTFSFeedInfo readFeedInfo(String gtfsFeedInfoPath) throws IOException{
+    public static GTFSFeedInfo readFeedInfo(String gtfsFeedInfoPath) throws IOException {
 
         GTFSFeedInfo gtfsFeedInfo;
 
         String thisLine;
-        String [] elements;
-        int feed_publisher_name=-1, feed_publisher_url=-1, feed_start_date=-1, feed_end_date=-1, feed_version=-1;
+        String[] elements;
+        int feed_publisher_name = -1, feed_publisher_url = -1, feed_start_date = -1, feed_end_date = -1, feed_version = -1;
 
         BufferedReader br = new BufferedReader(new FileReader(gtfsFeedInfoPath));
         boolean isFirstLine = true;
@@ -355,7 +352,7 @@ public class GTFSParser {
                 isFirstLine = false;
                 thisLine = thisLine.replace("\"", "");
                 String[] keys = thisLine.split(",");
-                for (int i=0; i<keys.length; i++) {
+                for (int i = 0; i < keys.length; i++) {
                     switch (keys[i]) {
                         case "feed_publisher_name" -> feed_publisher_name = i;
                         case "feed_publisher_url" -> feed_publisher_url = i;
@@ -382,16 +379,16 @@ public class GTFSParser {
         return null;
     }
 
-    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes){
+    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes) {
         Collections.sort(trips);
         Multimap<String, Trip> result = ArrayListMultimap.create();
 
-        for (Trip trip : trips){
+        for (Trip trip : trips) {
             Route route = routes.get(trip.getRoute().getId());
 
             TripStopsList tripStopsList = trip.getStopsList();
 
-            if (tripStopsList.isValid()){
+            if (tripStopsList.isValid()) {
                 result.put(route.getShortName(), trip);
             }
         }
@@ -405,15 +402,15 @@ public class GTFSParser {
 
         thisLine = thisLine.trim();
 
-        if(thisLine.contains("\"") || thisLine.contains(",")) {
+        if (thisLine.contains("\"") || thisLine.contains(",")) {
             String[] temp = new String[0];
 
-            if(thisLine.contains("\""))
+            if (thisLine.contains("\""))
                 temp = thisLine.split("\"");
             else if (thisLine.contains(","))
                 temp = thisLine.split(",");
 
-            for(int x=0; x<temp.length; x++){
+            for (int x = 0; x < temp.length; x++) {
 
                 if (thisLine.contains("\"")) {
                     if (x % 2 == 1) { //aggiungo all'array un elemento si e uno no

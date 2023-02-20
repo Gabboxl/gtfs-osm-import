@@ -36,7 +36,7 @@ public class DownloadUtils {
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
 
-                if(useGzipCompression) {
+                if (useGzipCompression) {
                     conn.setRequestProperty("Accept-Encoding", "gzip");
                 }
 

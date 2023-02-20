@@ -1,16 +1,15 @@
 /**
- Licensed under the GNU General Public License version 3
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.gnu.org/licenses/gpl-3.0.html
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-
+ * Licensed under the GNU General Public License version 3
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  **/
 package it.osm.gtfs.utils;
 
@@ -36,7 +35,7 @@ public class OSMXMLUtils {
     public static void addOrReplaceTagValue(Element node, String key, String value) {
         Element tag = getTagElement(node, key);
 
-        if (tag == null){
+        if (tag == null) {
             addTagAndValue(node, key, value);
         } else {
 
@@ -54,12 +53,12 @@ public class OSMXMLUtils {
         }
     }
 
-    private static Element getTagElement(Element node, String key){
+    private static Element getTagElement(Element node, String key) {
         NodeList childs = node.getChildNodes();
         for (int t = 0; t < childs.getLength(); t++) {
             Node attNode = childs.item(t);
-            if (attNode.getAttributes() != null){
-                if (attNode.getAttributes().getNamedItem("k").getNodeValue().equalsIgnoreCase(key)){ //check if the key equals without case check
+            if (attNode.getAttributes() != null) {
+                if (attNode.getAttributes().getNamedItem("k").getNodeValue().equalsIgnoreCase(key)) { //check if the key equals without case check
                     return (Element) attNode;
                 }
             }
@@ -68,17 +67,17 @@ public class OSMXMLUtils {
     }
 
 
-    public static String getTagValue(Element node, String key){
+    public static String getTagValue(Element node, String key) {
         Element attNode = getTagElement(node, key);
 
-        if (attNode != null){
+        if (attNode != null) {
             return attNode.getNodeValue();
         }
 
         return null;
     }
 
-    public static Element createTagElement(IElementCreator document, String key, String value){
+    public static Element createTagElement(IElementCreator document, String key, String value) {
         Element tag = document.createElement("tag");
         tag.setAttribute("k", key);
         tag.setAttribute("v", value);
@@ -102,7 +101,7 @@ public class OSMXMLUtils {
         if (tagElementHighway != null || tagElementRailway != null || tagElementPublicTransport != null) {
             addOSMModifyActionAttribute(node);
 
-            if(GTFSImportSettings.getInstance().useRevisedKey()) {
+            if (GTFSImportSettings.getInstance().useRevisedKey()) {
                 removeOldRevisedTag(node); //we remove old Turin-specific revised tags
                 addOrReplaceTagValue(node, GTFSImportSettings.REVISED_KEY, "no");
             }
