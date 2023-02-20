@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,17 +44,20 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
     @CommandLine.Option(names = {"-n", "--nowaymatching"}, description = "Generate stops-only relations (skips OSM ways matching)")
     Boolean noOsmWayMatching = false;
 
-    @CommandLine.Option(names = {"-s", "--skipupdate"}, description = "Skip download of updated OSM ways, OSM data and GTFS data")
+    @CommandLine.Option(names = {"-s"}, description = "Skip update of OSM stops and GTFS stops data")
     Boolean skipDataUpdate = false;
+
+    @CommandLine.Option(names = {"-sw"}, description = "Skip download of updated OSM ways")
+    Boolean skipWaysUpdate = false;
 
 
     @Override
-    public Void call() throws IOException, ParserConfigurationException, SAXException, InterruptedException {
+    public Void call() throws IOException, ParserConfigurationException, SAXException, InterruptedException, TransformerException {
 
 
         if(!skipDataUpdate) {
             //update osm and gtfs data
-            //new CmdUpdateGTFSOSMData().call();  //todo: da uncommentare
+            new CmdUpdateGTFSOSMData().call();
         }
 
     GTFSFeedInfo gtfsFeedInfo = GTFSParser.readFeedInfo(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_FEED_INFO_FILE_NAME);
@@ -88,7 +92,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
 
-        if(!skipDataUpdate) {
+        if(!skipWaysUpdate) {
 
             //download of updated OSM ways in the GTFS bounding box
             String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
@@ -97,7 +101,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
             DownloadUtils.download(urlhighways, fileOverpassHighways, true);
         }
 
-        GTFSOSMWaysMatch osmmatchinstance = new GTFSOSMWaysMatch().initMatch(!skipDataUpdate);
+        GTFSOSMWaysMatch osmmatchinstance = new GTFSOSMWaysMatch().initMatch(!skipWaysUpdate);
 
 
         //create file path
