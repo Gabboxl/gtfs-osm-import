@@ -182,7 +182,7 @@ public class OSMParser {
             //skip subway stops if requested
             if(SharedCliOptions.onlyBusStops && (osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION))) {
 
-                System.out.println(ansi().render("@|yellow Skipping OSM subway stop (nodeID= " + osmStop.getOSMId() + ", ref= "  + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") |@"));
+                System.out.println(ansi().render("@|yellow Skipping OSM subway/station stop (nodeID= " + osmStop.getOSMId() + ", ref= "  + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") as requested. |@"));
                 continue;
             }
 
@@ -331,7 +331,7 @@ public class OSMParser {
         public void startElement(String uri, String localName, String qName,
                                  Attributes attributes) {
 
-            if (localName.equals("relation")){
+            if (localName.equals("relation")) {
                 currentRelation = new Relation(attributes.getValue("id"));
                 currentRelation.setVersion(Integer.parseInt(attributes.getValue("version")));
                 seq = 1;
