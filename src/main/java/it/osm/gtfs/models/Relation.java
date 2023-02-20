@@ -1,6 +1,7 @@
 package it.osm.gtfs.models;
 
 import it.osm.gtfs.enums.RouteType;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,21 +166,27 @@ public class Relation {
     }
 
     public static class OSMNode {
-        private final Double lat;
-        private final Double lon;
+        private final GeoPosition geoPosition;
+        private final Long id;
+        private final String role;
 
-        public OSMNode(Double lat, Double lon) {
+        public OSMNode(GeoPosition geoPosition, Long id, String role) {
             super();
-            this.lat = lat;
-            this.lon = lon;
+            this.geoPosition = geoPosition;
+            this.id = id;
+            this.role = role;
         }
 
-        public Double getLat() {
-            return lat;
+        public GeoPosition getGeoPosition() {
+            return geoPosition;
         }
 
-        public Double getLon() {
-            return lon;
+        public Long getId() {
+            return id;
+        }
+
+        public String getRole() {
+            return role;
         }
     }
 }

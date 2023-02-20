@@ -37,7 +37,7 @@ public class CmdCheckOsmRoutes implements Callable<Void> {
         System.out.println("Step 2/4 Indexing OSM Stops");
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
         System.out.println("Step 3/4 Reading OSM Relations");
-        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
         System.out.println("Step 4/4 Checking relations");
         for (Relation validRelation : osmRels.getFinalValidRelations()){

@@ -48,7 +48,7 @@ public class CmdGenerateGeoJSON implements Callable<Void> {
 
         System.out.println("Parsing OSM Relations...");
         ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()),
-                osmstopsOsmID);
+                osmstopsOsmID, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
 
         CmdGenerateGeoJSON generator = null;

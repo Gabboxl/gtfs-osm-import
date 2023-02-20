@@ -51,7 +51,7 @@ public enum RouteType { //data according to the GTFS reference guide
                 return MONORAIL;
         }
 
-        throw new IllegalArgumentException("Unsupported relation type: \"" + osmValue + "\"");
+        throw new IllegalArgumentException("Unsupported relation route type: \"" + osmValue + "\"");
     }
 
     public static RouteType getEnumByGtfsValue(int gtfsValue){

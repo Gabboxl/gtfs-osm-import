@@ -33,7 +33,7 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
         Map<String, OSMStop> osmstopsOsmID = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         System.out.println("Parsing OSM relations...");
-        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID);
+        ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
 
         CmdGenerateSQLLiteDB generator = null;

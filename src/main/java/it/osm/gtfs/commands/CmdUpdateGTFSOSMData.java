@@ -17,10 +17,7 @@ package it.osm.gtfs.commands;
 import it.osm.gtfs.input.GTFSParser;
 import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.*;
-import it.osm.gtfs.utils.DownloadUtils;
-import it.osm.gtfs.utils.GTFSImportSettings;
-import it.osm.gtfs.utils.OsmosisUtils;
-import it.osm.gtfs.utils.StopsUtils;
+import it.osm.gtfs.utils.*;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.fusesource.jansi.Ansi;
 import org.w3c.dom.Document;
@@ -140,7 +137,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         Map<String, OSMStop> osmIdOSMStopMap = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         // Default to all available rel, then override forced updates
-        ReadOSMRelationsResult readRelsResult = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap);
+        ReadOSMRelationsResult readRelsResult = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
         
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

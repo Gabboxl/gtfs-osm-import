@@ -213,7 +213,7 @@ public class OSMParser {
         return osmStopsListOutput;
     }
 
-    public static ReadOSMRelationsResult readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex) throws SAXException, IOException{
+    public static ReadOSMRelationsResult readOSMRelations(File file, Map<String, OSMStop> stopsWithOSMIndex, boolean readRelationsOfAnyOperator) throws SAXException, IOException{
         NodeParser nodeParser;
         {
             XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -235,7 +235,7 @@ public class OSMParser {
         RelationParser relationParser;
         {
             XMLReader xr = XMLReaderFactory.createXMLReader();
-            relationParser = new RelationParser(stopsWithOSMIndex, wayParser.result);
+            relationParser = new RelationParser(stopsWithOSMIndex, wayParser.result, readRelationsOfAnyOperator);
             xr.setContentHandler(relationParser);
             xr.setErrorHandler(relationParser);
             xr.parse(new InputSource(new FileReader(file)));
@@ -253,7 +253,7 @@ public class OSMParser {
             System.out.println(ansi().render("@|red OSMParser: " + relationParser.missingNodes.size() + " member nodes are not valid stops. Invalid nodes: |@" + StringUtils.join(relationParser.missingNodes, ", ")));
         }
 
-        return new ReadOSMRelationsResult(relationParser.finalValidRelations, relationParser.failedRelations, relationParser.missingNodes);
+        return new ReadOSMRelationsResult(relationParser.validRelations, relationParser.failedRelations, relationParser.missingNodes);
     }
 
     private static class NodeParser extends DefaultHandler {
@@ -263,9 +263,12 @@ public class OSMParser {
         public void startElement(String uri, String localName, String qName,
                                  Attributes attributes) {
             if (localName.equals("node")){
-                result.put(Long.parseLong(attributes.getValue("id")),
-                        new OSMNode(Double.parseDouble(attributes.getValue("lat")),
-                                Double.parseDouble(attributes.getValue("lon"))));
+
+                OSMNode osmNode = new OSMNode(new GeoPosition(Double.parseDouble(attributes.getValue("lat")),
+                        Double.parseDouble(attributes.getValue("lon"))), Long.parseLong(attributes.getValue("id")), null);
+
+                result.put(Long.parseLong(attributes.getValue("id")), osmNode);
+
             }
         }
     }
@@ -313,21 +316,27 @@ public class OSMParser {
         private final Map<String, OSMStop> stopsWithOSMIndex;
         private final Map<Long, OSMWay> ways;
 
-        private final List<Relation> finalValidRelations = new ArrayList<>();
+        private final List<Relation> validRelations = new ArrayList<>();
         private final List<Relation> failedRelations = new ArrayList<>();
         private final List<String> missingNodes = new ArrayList<>();
 
+        private final boolean readRelationsOfAnyOperator;
 
-        //temp variables for tags
-        String route_tag = "";
+        //temp tags variables
+        String route_tag, type_tag;
+        Map<String, String> tempMemberRefRoleMap;
+
+
         private Relation currentRelation;
         private long seq = 1;
         private boolean failed = false;
 
-        private RelationParser(Map<String, OSMStop> stopsWithOSMIndex, Map<Long, OSMWay> ways) {
+        private RelationParser(Map<String, OSMStop> stopsWithOSMIndex, Map<Long, OSMWay> ways, boolean readRelationsOfAnyOperator) {
             super();
             this.stopsWithOSMIndex = stopsWithOSMIndex;
             this.ways = ways;
+            this.readRelationsOfAnyOperator = readRelationsOfAnyOperator;
+
         }
 
         @Override
@@ -340,66 +349,112 @@ public class OSMParser {
                 seq = 1;
                 failed = false;
 
+                route_tag = "";
+                type_tag = "";
+
+                tempMemberRefRoleMap = new HashMap<>();
+
             }else if(currentRelation != null && localName.equals("member")) {
                 String memberType = attributes.getValue("type");
                 String memberRole = attributes.getValue("role");
                 String memberRef = attributes.getValue("ref");
 
-                if (memberType.equals("node")){
-                    if (memberRole.equals("stop") || memberRole.equals("platform")) {
-                        OSMStop osmStop = stopsWithOSMIndex.get(memberRef);
+                if (memberType.equals("node")) {
+                    tempMemberRefRoleMap.put(memberRef, memberRole);
 
-                        if (osmStop == null) {
-                            System.out.println(ansi().render("@|yellow Warning: Node " + memberRef + " not found in internal stops array/map. Probably this isn't a valid stop anymore but is still attached to the relation " + currentRelation.getId() +". Better checking it out. |@"));
-                            missingNodes.add(memberRef);
-                            failed = true;
-                        }
-                        currentRelation.pushPoint(seq++, osmStop);
-
-                    }else{
-                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + memberRole +"\", node ref/Id = " + memberRef + "|@"));
-                    }
-
-                }else if (memberType.equals("way")){
+                }else if (memberType.equals("way")) {
                     OSMWay member = ways.get(Long.parseLong(attributes.getValue("ref")));
                     currentRelation.getWayMembers().add(member);
+
                 } else { //TODO: supportare i membri "relation", ovvero le master_relation solitamente
                     System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member (id: " + memberRef + ") of an unsupported type \"" + memberType +"\"" + "|@"));
                 }
 
-            }else if (currentRelation != null && localName.equals("tag")){
+            }else if (currentRelation != null && localName.equals("tag")) {
                 String key = attributes.getValue("k");
+
+                if (key.equalsIgnoreCase("type"))
+                    type_tag = attributes.getValue("v");
+
                 if (key.equalsIgnoreCase("name"))
                     currentRelation.setName(attributes.getValue("v"));
+
                 else if (key.equalsIgnoreCase("ref"))
                     currentRelation.setRef(attributes.getValue("v"));
+
                 else if (key.equalsIgnoreCase("from"))
                     currentRelation.setFrom(attributes.getValue("v"));
+
                 else if (key.equalsIgnoreCase("to"))
                     currentRelation.setTo(attributes.getValue("v"));
+
                 else if (key.equalsIgnoreCase("operator")) {
                     currentRelation.setOperator(attributes.getValue("v"));
+
                 } else if (key.equalsIgnoreCase("route")) {
-                    try {
-                        currentRelation.setType(RouteType.getEnumByOsmValue(attributes.getValue("v")));
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                        failed = true;
-                    }
+                    route_tag = attributes.getValue("v");
+
                 }
             }
         }
 
+        //here we check the relation data we gathered during the parsing
         @Override
         public void endElement(String uri, String localName, String qName) {
             if (localName.equals("relation")) {
+
+                if(!type_tag.equalsIgnoreCase("route")) {
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its type tag (" + currentRelation.getOperator() +") is not a route.").reset());
+
+                    return;
+                }
+
+
+                //if the current osm relation has a different operator tag value than the one specified in the properties we skip it - but we keep the stops with a null operator as they could be of our operator
+                if(!readRelationsOfAnyOperator && currentRelation.getOperator() != null && !StringUtils.containsIgnoreCase(currentRelation.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
+
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its operator tag value (" + currentRelation.getOperator() +") is different than the one specified in the properties file.").reset());
+
+                    return;
+                }
+
+
+                //members check
+                for (var entry : tempMemberRefRoleMap.entrySet()) {
+                    var tempMemberRole = entry.getValue();
+                    var tempMemberRef = entry.getKey();
+
+                    if (tempMemberRole.equals("stop") || tempMemberRole.equals("platform")) {
+                        OSMStop osmStop = stopsWithOSMIndex.get(tempMemberRef);
+
+                        if (osmStop == null) {
+                            System.out.println(ansi().render("@|yellow Warning: Node " + tempMemberRef + " not found in internal stops array/map. Probably this isn't a valid stop anymore but is still attached to the relation " + currentRelation.getId() +". Better checking it out. |@"));
+                            missingNodes.add(tempMemberRef);
+                            failed = true;
+                        }
+                        currentRelation.pushPoint(seq++, osmStop);
+
+                    } else {
+                        System.out.println(ansi().render("@|red Warning: Relation " + currentRelation.getId() + " has a member node with an unsupported role \"" + tempMemberRole +"\", node ref/Id = " + tempMemberRef + "|@"));
+                    }
+                }
+
+                //route tag
+                try {
+                    currentRelation.setType(RouteType.getEnumByOsmValue(route_tag));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                    failed = true;
+                }
+
+
                 if (!failed) {
-                    finalValidRelations.add(currentRelation);
+                    validRelations.add(currentRelation);
                 } else {
                     failedRelations.add(currentRelation);
                     System.out.println(ansi().render("@|red OSMParser: Relation " + currentRelation.getId() + " couldn't be parsed because of invalid member nodes. [" + currentRelation.getName() + "]" + "|@"));
                 }
-                currentRelation = null;
+
             }
         }
 
