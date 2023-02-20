@@ -156,7 +156,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         if(!noOsmWayMatching) {
             System.out.println(ansi().fg(Ansi.Color.YELLOW).a("\nBe aware that the IDs of OSM's ways can change anytime!").reset());
-            System.out.println(ansi().fg(Ansi.Color.YELLOW).a("This means you can encounter problems if you upload these relations to OSM later as matched OSM ways could be changed/removed and a new match would be required.").reset());
+            System.out.println(ansi().fg(Ansi.Color.YELLOW).a("This means you can encounter problems if you upload these relations later, as those matched ways can be changed/removed and a new match would be required.").reset());
         }
 
         return null;
