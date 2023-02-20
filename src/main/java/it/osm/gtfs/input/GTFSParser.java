@@ -328,7 +328,7 @@ public class GTFSParser {
         if (missingStops.size() > 0) {
             System.out.println(ansi().render("@|red \nError: Some stops weren't found, not all trips have been generated. |@"));
             System.out.println(ansi().render("@|red Make sure you uploaded the new GTFS stops data to OpenStreetMap before running this command! |@"));
-            System.out.println(ansi().render("@|red Run the GTFSOSMImport \"stops\" command to create the new stops. Then upload the new stops to OSM, and then run this command again! |@"));
+            System.out.println(ansi().render("@|red Run the GTFSOSMImport \"stops\" command to create the new stops, upload the new stops to OSM, and then run this command again! |@"));
         }
 
         readStopTimesResult = new ReadStopTimesResult(tripIdStopListMap, missingStops);
