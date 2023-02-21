@@ -51,14 +51,14 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class OSMParser {
 
-    public static List<OSMStop> readOSMStops(String fileName, boolean readStopsOfAnyOperator) throws ParserConfigurationException, SAXException, IOException {
+    public static List<OSMStop> readOSMStops(String osmStopsFileName, boolean readStopsOfAnyOperator) throws ParserConfigurationException, SAXException, IOException {
         List<OSMStop> osmStopsListOutput = new ArrayList<>();
 
 
-        File file = new File(fileName);
+        File osmStopsFile = new File(osmStopsFileName);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
+        Document doc = db.parse(osmStopsFile);
         doc.getDocumentElement().normalize();
 
         NodeList nodeList = doc.getElementsByTagName("node");
