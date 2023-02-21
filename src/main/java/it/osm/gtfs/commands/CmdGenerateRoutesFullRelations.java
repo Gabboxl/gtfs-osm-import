@@ -25,9 +25,8 @@ import picocli.CommandLine;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -99,6 +98,9 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         //create file path
         new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
 
+        //list of the files to be merged into one
+        List<File> relationsFileList = new ArrayList<>();
+
 
         int tempid = 10000;
 
@@ -134,9 +136,19 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 String fixedRouteShortNameFileName = route.getShortName().replace("/", "B");
 
 
-                FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".osm");
-                f.write(OSMRelationImportGenerator.createSingleTripRelation(boundingBox, osmWayIds, trip, route, gtfsFeedInfo, tempid).getBytes());
-                f.close();
+                File relationOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".osm");
+
+                FileOutputStream fileOutputStream = new FileOutputStream(relationOutputFile);
+                OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+
+                out.write(OSMRelationImportGenerator.createSingleTripRelation(boundingBox, osmWayIds, trip, route, gtfsFeedInfo, tempid));
+                out.close();
+
+
+
+
+                //we add the file to the list
+                relationsFileList.add(relationOutputFile);
 
                 //printa il file txt delle fermate con i nomi di esse
                 //f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".txt");
@@ -145,8 +157,14 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
                 tempid++;
             }
-
         }
+
+
+        //we merge all the files together
+        File mergedRelationsFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "mergedFullRelations.osm");
+        OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(relationsFileList, mergedRelationsFile));
+
+
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
 
