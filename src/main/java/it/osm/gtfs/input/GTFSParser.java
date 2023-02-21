@@ -27,6 +27,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +44,7 @@ public class GTFSParser {
         String[] elements;
         int stopIdKey = -1, stopNameKey = -1, stopCodeKey = -1, stopLatKey = -1, stopLonKey = -1, locationTypeKey = -1, parentStationKey = -1, wheelchairBoardingKey = -1;
 
-        BufferedReader br = new BufferedReader(new FileReader(fName));
+        BufferedReader br = new BufferedReader(new FileReader(fName, StandardCharsets.UTF_8));
         boolean isFirstLine = true;
         Hashtable<String, Integer> keysIndex = new Hashtable<>();
         while ((thisLine = br.readLine()) != null) {
@@ -135,7 +136,7 @@ public class GTFSParser {
         String[] elements;
         int shape_id = -1, route_id = -1, trip_id = -1, trip_headsign = -1, wheelchair_accessible = -1;
 
-        BufferedReader br = new BufferedReader(new FileReader(gtfsTripsFilePath));
+        BufferedReader br = new BufferedReader(new FileReader(gtfsTripsFilePath, StandardCharsets.UTF_8));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
@@ -179,7 +180,7 @@ public class GTFSParser {
         String[] elements;
         int shape_id = -1, shape_pt_lat = -1, shape_pt_lon = -1, shape_pt_sequence = -1;
 
-        BufferedReader br = new BufferedReader(new FileReader(fName));
+        BufferedReader br = new BufferedReader(new FileReader(fName, StandardCharsets.UTF_8));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
@@ -219,7 +220,7 @@ public class GTFSParser {
         String[] elements;
         int route_id = -1, agency_id = -1, route_short_name = -1, route_long_name = -1, route_type = -1, route_color = -1;
 
-        BufferedReader br = new BufferedReader(new FileReader(fName));
+        BufferedReader br = new BufferedReader(new FileReader(fName, StandardCharsets.UTF_8));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
@@ -272,7 +273,7 @@ public class GTFSParser {
 
         long numberOfLines = Files.lines(filePath).count();
 
-        BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
+        BufferedReader br = new BufferedReader(new FileReader(filePath.toFile(), StandardCharsets.UTF_8));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             count++;
@@ -345,7 +346,7 @@ public class GTFSParser {
         String[] elements;
         int feed_publisher_name = -1, feed_publisher_url = -1, feed_start_date = -1, feed_end_date = -1, feed_version = -1;
 
-        BufferedReader br = new BufferedReader(new FileReader(gtfsFeedInfoPath));
+        BufferedReader br = new BufferedReader(new FileReader(gtfsFeedInfoPath, StandardCharsets.UTF_8));
         boolean isFirstLine = true;
         while ((thisLine = br.readLine()) != null) {
             if (isFirstLine) {
