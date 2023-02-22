@@ -85,12 +85,6 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
             gtfsStop.setCode(fixBusStopRef(gtfsStop.getCode()));
         }
 
-        //TODO: codice da revisionare per ref non numerici
-		/*try{
-			Integer.parseInt(gs.getCode());
-		}catch(Exception e){
-			System.err.println("Warning not numeric ref: " + gs.getCode() + " " + gs.getName() + " " + gs.getGtfsId());
-		}*/
         return true;
     }
 
@@ -129,7 +123,6 @@ public class RFIPiedmontPlugin implements GTFSPlugin {
         return true;
     }
 
-    //todo: is there any way to determine whether a gtfs stop is a tram or bus stop?
     @Override
     public OSMStopType getStopType(GTFSStop gtfsStop) {
         String stopName = gtfsStop.getName().toLowerCase();

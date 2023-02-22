@@ -131,8 +131,6 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         DownloadUtils.download(urlrel, uncheckedRelsFile, false);
 
 
-
-        //TODO: should we really read stops of ANY operator?
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), true);
         Map<String, OSMStop> osmIdOSMStopMap = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
