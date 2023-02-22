@@ -19,6 +19,7 @@ import it.osm.gtfs.input.OSMParser;
 import it.osm.gtfs.models.*;
 import it.osm.gtfs.output.OSMRelationImportGenerator;
 import it.osm.gtfs.utils.*;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.fusesource.jansi.Ansi;
 import org.xml.sax.SAXException;
 import picocli.CommandLine;
@@ -84,11 +85,11 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
         if (!skipWaysUpdate) {
-
             //download of updated OSM ways in the GTFS bounding box
-            String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
+            String queryHighways =  "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
             File fileOverpassHighways = new File(GTFSImportSettings.getInstance().getOsmOverpassWaysFilePath());
-            urlhighways = urlhighways.replace(" ", "%20"); //we substitute spaced with the uri code as httpurlconnection doesn't do that automatically, and it makes the request fail
+
+            String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryHighways);
             DownloadUtils.download(urlhighways, fileOverpassHighways, true);
         }
 
