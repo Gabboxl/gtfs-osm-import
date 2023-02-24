@@ -104,6 +104,9 @@ Di default il comando scarica tutte le ways di OSM in locale per effettuare un m
 
 Il risultato sarà contenuto in un file nominato `gtfs_import_mergedFullRelations.osm` completo contenente tutte le relazioni contenenti le fermate e le vie, da revisionare prima di caricare su OSM.
 
+*NOTA*: Prima di generare le relazioni assicurati di aver caricato e aggiornato tutte le fermate GTFS su OSM, altrimenti non potrai generarle!
+
+
 
 ### Comando *conf*
 
