@@ -158,7 +158,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
             //master relation creation
-            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + route +".osm");
+            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + route.getShortName() +".osm");
 
             FileOutputStream fileOutputStream = new FileOutputStream(routeMasterOutputFile);
             OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
