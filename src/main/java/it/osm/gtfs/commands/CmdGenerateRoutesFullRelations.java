@@ -116,8 +116,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
                 Route route = routes.get(trip.getRoute().getId());
 
-                TripStopsList tripStopsList = trip.getStopsList();
-
                 List<Integer> osmWayIds = null;
 
                 if (!noOsmWayMatching) {
