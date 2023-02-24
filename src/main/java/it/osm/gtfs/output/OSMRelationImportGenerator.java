@@ -86,7 +86,7 @@ public class OSMRelationImportGenerator {
     }
 
     //TODO: to implement
-    public static String createMasterRouteTripsRelation(int routeMasterId, List<Integer> idList, String routeName, BoundingBox bb) {
+    public static String createMasterRouteTripsRelation(Route route, List<Integer> idList, BoundingBox bb, int routeMasterId) {
 
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 

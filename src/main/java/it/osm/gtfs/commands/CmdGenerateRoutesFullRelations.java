@@ -70,8 +70,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
         //sorting set
-        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes);
-        Set<String> routeNamesSet = new TreeSet<>(groupedTrips.keySet());
+        Multimap<Route, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
+        Set<Route> routesSet = new TreeSet<>(groupedTrips.keySet());
 
 
         if (!readStopTimesResult.getMissingStops().isEmpty()) {
@@ -103,8 +103,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         int tempid = 10000;
 
-        for (String routeName : routeNamesSet) { //for every route
-            Collection<Trip> allTrips = groupedTrips.get(routeName);
+        for (Route route : routesSet) { //for every route
+            Collection<Trip> allTrips = groupedTrips.get(route);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
 
@@ -113,8 +113,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
             for (Trip trip : uniqueTrips) { //for every trip
 
                 int count = Collections.frequency(allTrips, trip); //number of trips with the same headsign present in the gtfs trips file
-
-                Route route = routes.get(trip.getRoute().getId());
 
                 List<Integer> osmWayIds = null;
 
@@ -160,12 +158,12 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
             //master relation creation
-            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + routeName +".osm");
+            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + route +".osm");
 
             FileOutputStream fileOutputStream = new FileOutputStream(routeMasterOutputFile);
             OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
 
-            out.write(OSMRelationImportGenerator.createMasterRouteTripsRelation(tempid, newRelationsIds, routeName, boundingBox));
+            out.write(OSMRelationImportGenerator.createMasterRouteTripsRelation(route, newRelationsIds, boundingBox, tempid));
             out.close();
 
 
