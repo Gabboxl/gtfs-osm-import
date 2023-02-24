@@ -50,18 +50,17 @@ public class CmdGenerateRoutesGPXs implements Callable<Void> {
                 routes, new HashMap<>());
 
         //sorting set
-        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
-        Set<String> keys = new TreeSet<>(groupedTrips.keySet());
+        Multimap<Route, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
+        Set<Route> routeSet = new TreeSet<>(groupedTrips.keySet());
 
         new File(GTFSImportSettings.getInstance().getOutputPath() + "gpx").mkdirs();
 
         int id = 10000;
-        for (String k : keys) {
-            Collection<Trip> allTrips = groupedTrips.get(k);
+        for (Route route : routeSet) {
+            Collection<Trip> allTrips = groupedTrips.get(route);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
             for (Trip trip : uniqueTrips) {
-                Route route = routes.get(trip.getRoute().getId());
                 Shape shape = shapes.get(trip.getShapeId());
 
                 FileOutputStream f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "/gpx/r" + id++ + " " + route.getShortName().replace("/", "B") + " " + trip.getTripHeadsign().replace("/", "_") + ".gpx");

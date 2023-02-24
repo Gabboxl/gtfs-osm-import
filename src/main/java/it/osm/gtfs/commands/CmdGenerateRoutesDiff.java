@@ -52,16 +52,15 @@ public class CmdGenerateRoutesDiff implements Callable<Void> {
         Set<Relation> osmRelationFoundInGTFS = new HashSet<>();
         List<Trip> tripsNotFoundInOSM = new LinkedList<>();
 
-        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
-        Set<String> keys = new TreeSet<>(groupedTrips.keySet());
+        Multimap<Route, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
+        Set<Route> routeSet = new TreeSet<>(groupedTrips.keySet());
         Map<Relation, Affinity> affinities = new HashMap<>();
 
-        for (String k : keys) {
-            Collection<Trip> allTrips = groupedTrips.get(k);
+        for (Route route : routeSet) {
+            Collection<Trip> allTrips = groupedTrips.get(route);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
             for (Trip trip : uniqueTrips) {
-                Route route = routes.get(trip.getRoute().getId());
                 TripStopsList s = readStopTimesResult.getTripIdStopListMap().get(trip.getTripId());
                 if (GTFSImportSettings.getInstance().getPlugin().isValidTrip(allTrips, uniqueTrips, trip, s)) {
                     if (GTFSImportSettings.getInstance().getPlugin().isValidRoute(route)) {
