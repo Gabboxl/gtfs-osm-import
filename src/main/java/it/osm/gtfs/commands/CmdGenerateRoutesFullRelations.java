@@ -94,8 +94,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         GTFSOSMWaysMatch osmmatchinstance = new GTFSOSMWaysMatch().initMatch(!skipWaysUpdate);
 
 
-        //create file path
-        new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
+        //create file paths
+        new File(GTFSImportSettings.getInstance().getFullRelsOutputPath()).mkdirs();
 
         //list of the files to be merged into one
         List<File> relationsFileList = new ArrayList<>();
@@ -157,8 +157,11 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
             }
 
 
+
+            String fixedRouteShortNameFileName = route.getShortName().replace("/", "B");
             //master relation creation
-            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + route.getShortName() +".osm");
+            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + fixedRouteShortNameFileName +".osm");
+            routeMasterOutputFile.getParentFile().mkdirs(); //we create the required parent folder and not a folder with the filename
 
             FileOutputStream fileOutputStream = new FileOutputStream(routeMasterOutputFile);
             OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
@@ -178,7 +181,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         //we merge all the files together
         File mergedRelationsFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "mergedFullRelations.osm");
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(relationsFileList, mergedRelationsFile));
-
 
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());
