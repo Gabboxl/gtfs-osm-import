@@ -49,7 +49,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, InterruptedException, TransformerException {
 
-
         if (!skipDataUpdate) {
             //update osm and gtfs data
             new CmdUpdateGTFSOSMData().call();
@@ -59,7 +58,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         BoundingBox boundingBox = new BoundingBox(gtfsIdOsmStopMap.values());
-
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
@@ -72,8 +70,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
         //sorting set
-        Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes);
-        Set<String> keys = new TreeSet<>(groupedTrips.keySet());
+        Multimap<Route, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
+        Set<Route> routesSet = new TreeSet<>(groupedTrips.keySet());
 
 
         if (!readStopTimesResult.getMissingStops().isEmpty()) {
@@ -96,8 +94,8 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         GTFSOSMWaysMatch osmmatchinstance = new GTFSOSMWaysMatch().initMatch(!skipWaysUpdate);
 
 
-        //create file path
-        new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations").mkdirs();
+        //create file paths
+        new File(GTFSImportSettings.getInstance().getFullRelsOutputPath()).mkdirs();
 
         //list of the files to be merged into one
         List<File> relationsFileList = new ArrayList<>();
@@ -105,18 +103,16 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         int tempid = 10000;
 
-        for (String k : keys) {
-            Collection<Trip> allTrips = groupedTrips.get(k);
+        for (Route route : routesSet) { //for every route
+            Collection<Trip> allTrips = groupedTrips.get(route);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
-            for (Trip trip : uniqueTrips) {
+
+            List<Integer> newRelationsIds = new ArrayList<>();
+
+            for (Trip trip : uniqueTrips) { //for every trip
 
                 int count = Collections.frequency(allTrips, trip); //number of trips with the same headsign present in the gtfs trips file
-
-                Route route = routes.get(trip.getRoute().getId());
-
-
-                TripStopsList tripStopsList = trip.getStopsList();
 
                 List<Integer> osmWayIds = null;
 
@@ -129,6 +125,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = osmmatchinstance.matchGPX(xmlGPXShape);
+
                 } else {
                     System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getTripHeadsign() + " tripId=" + trip.getTripId() + " ...").reset());
                 }
@@ -146,9 +143,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 out.close();
 
 
-
-
-                //we add the file to the list
+                //we add the file to the merge list
                 relationsFileList.add(relationOutputFile);
 
                 //printa il file txt delle fermate con i nomi di esse
@@ -156,15 +151,36 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 //f.write(tripStopsList.getStopsListTextFile().getBytes());
                 //f.close();
 
+                newRelationsIds.add(tempid);
+
                 tempid++;
             }
+
+
+
+            String fixedRouteShortNameFileName = route.getShortName().replace("/", "B");
+            //master relation creation
+            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + fixedRouteShortNameFileName +".osm");
+            routeMasterOutputFile.getParentFile().mkdirs(); //we create the required parent folder and not a folder with the filename
+
+            FileOutputStream fileOutputStream = new FileOutputStream(routeMasterOutputFile);
+            OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+
+            out.write(OSMRelationImportGenerator.createMasterRouteTripsRelation(route, newRelationsIds, boundingBox, tempid));
+            out.close();
+
+
+            //we add the file to the merge list
+            relationsFileList.add(routeMasterOutputFile);
+
+            tempid++;
+
         }
 
 
         //we merge all the files together
         File mergedRelationsFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "mergedFullRelations.osm");
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(relationsFileList, mergedRelationsFile));
-
 
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("\nRelations generation completed!").reset());

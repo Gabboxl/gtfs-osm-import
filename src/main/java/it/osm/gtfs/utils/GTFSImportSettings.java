@@ -208,6 +208,10 @@ public class GTFSImportSettings {
         return getOsmDataPath() + OSM_OVERPASS_WAYS_FILE_NAME;
     }
 
+    public String getFullRelsOutputPath() {
+        return getOutputPath() + "fullrelations";
+    }
+
     public String getGTFSZipUrl() {
         return gtfsZipUrl;
     }

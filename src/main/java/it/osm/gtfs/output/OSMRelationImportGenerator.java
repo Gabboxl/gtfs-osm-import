@@ -27,6 +27,8 @@ public class OSMRelationImportGenerator {
     public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo, int id) {
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
+
+        //todo: remove the timestamp as it is redundant, set osmosis' enableDateParsing option to false
         //the timestamp and the version attribute for every relation is needed by the merge with osmosis, unfortunately
         String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date());
 
@@ -84,7 +86,36 @@ public class OSMRelationImportGenerator {
     }
 
     //TODO: to implement
-    public static String createMasterRouteTripsRelation() {
-        return "side";
+    public static String createMasterRouteTripsRelation(Route route, List<Integer> idList, BoundingBox bb, int routeMasterId) {
+
+        String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date());
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='GTFSOSMImport'>\n");
+        buffer.append(bb.getXMLTag());
+        buffer.append("<relation id='-" + routeMasterId + "' version='1' timestamp='" + currentTimeStamp +"' action='modify'>\n");
+
+        for (Integer childRelId : idList) {
+            buffer.append("<member type='relation' ref=\"-" + childRelId + "\" role='' />\n");
+        }
+
+        buffer.append("<tag k='type' v='route_master' />\n");
+        buffer.append("<tag k='route_master' v='" + route.getRouteType().getOsmValue() + "' />\n");
+        buffer.append("<tag k='ref' v=\"" + route.getShortName() + "\" />\n");
+        buffer.append("<tag k='name' v=\"" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + "\" />\n");
+        buffer.append("<tag k='operator' v=\"" + GTFSImportSettings.getInstance().getOperator() + "\" />\n");
+        buffer.append("<tag k='network' v=\"" + GTFSImportSettings.getInstance().getNetwork() + "\" />\n");
+        buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
+
+
+        buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
+
+        buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
+
+
+        buffer.append("</relation>");
+        buffer.append("</osm>");
+
+        return buffer.toString();
     }
 }

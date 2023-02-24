@@ -324,6 +324,9 @@ public class GTFSParser {
             }
         }
 
+        System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stop times read completed.").reset());
+
+
         br.close();
 
         if (missingStops.size() > 0) {
@@ -380,9 +383,9 @@ public class GTFSParser {
         return null;
     }
 
-    public static Multimap<String, Trip> groupTrip(List<Trip> trips, Map<String, Route> routes) {
+    public static Multimap<Route, Trip> groupTrips(Map<String, Route> routes, List<Trip> trips) {
         Collections.sort(trips);
-        Multimap<String, Trip> result = ArrayListMultimap.create();
+        Multimap<Route, Trip> result = ArrayListMultimap.create();
 
         for (Trip trip : trips) {
             Route route = routes.get(trip.getRoute().getId());
@@ -390,7 +393,7 @@ public class GTFSParser {
             TripStopsList tripStopsList = trip.getStopsList();
 
             if (tripStopsList.isValid()) {
-                result.put(route.getShortName(), trip);
+                result.put(route, trip);
             }
         }
 
