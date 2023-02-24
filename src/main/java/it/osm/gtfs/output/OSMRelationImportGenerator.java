@@ -96,7 +96,7 @@ public class OSMRelationImportGenerator {
         buffer.append("<relation id='-" + routeMasterId + "' version='1' timestamp='" + currentTimeStamp +"' action='modify'>\n");
 
         for (Integer childRelId : idList) {
-            buffer.append("<member type='relation' ref=\"" + childRelId + "\" role='' />\n");
+            buffer.append("<member type='relation' ref=\"-" + childRelId + "\" role='' />\n");
         }
 
         buffer.append("<tag k='type' v='route_master' />\n");
