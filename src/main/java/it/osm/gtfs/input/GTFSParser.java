@@ -324,6 +324,9 @@ public class GTFSParser {
             }
         }
 
+        System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stop times read completed.").reset());
+
+
         br.close();
 
         if (missingStops.size() > 0) {
