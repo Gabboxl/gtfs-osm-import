@@ -179,7 +179,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
 
         //we merge all the files together
-        File mergedRelationsFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "mergedFullRelations.osm");
+        File mergedRelationsFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "gtfs_import_mergedFullRelations.osm");
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisMerge(relationsFileList, mergedRelationsFile));
 
 
