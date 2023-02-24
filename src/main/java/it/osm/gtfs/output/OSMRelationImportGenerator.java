@@ -27,6 +27,8 @@ public class OSMRelationImportGenerator {
     public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo, int id) {
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
+
+        //todo: remove the timestamp as it is redundant, set osmosis' enableDateParsing option to false
         //the timestamp and the version attribute for every relation is needed by the merge with osmosis, unfortunately
         String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date());
 
