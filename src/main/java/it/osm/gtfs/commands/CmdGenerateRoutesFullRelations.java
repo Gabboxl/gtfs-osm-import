@@ -73,7 +73,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         //sorting set
         Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes);
-        Set<String> keys = new TreeSet<>(groupedTrips.keySet());
+        Set<String> routeNames = new TreeSet<>(groupedTrips.keySet());
 
 
         if (!readStopTimesResult.getMissingStops().isEmpty()) {
@@ -105,11 +105,11 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         int tempid = 10000;
 
-        for (String k : keys) {
-            Collection<Trip> allTrips = groupedTrips.get(k);
+        for (String routeName : routeNames) { //for every route
+            Collection<Trip> allTrips = groupedTrips.get(routeName);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
-            for (Trip trip : uniqueTrips) {
+            for (Trip trip : uniqueTrips) { //for every trip
 
                 int count = Collections.frequency(allTrips, trip); //number of trips with the same headsign present in the gtfs trips file
 
@@ -129,6 +129,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
                     //TODO: need to check if the way matches are ordered well
                     osmWayIds = osmmatchinstance.matchGPX(xmlGPXShape);
+
                 } else {
                     System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Creating stops-only relation " + trip.getTripHeadsign() + " tripId=" + trip.getTripId() + " ...").reset());
                 }
