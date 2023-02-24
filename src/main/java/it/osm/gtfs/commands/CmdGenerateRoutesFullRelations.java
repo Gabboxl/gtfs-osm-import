@@ -49,7 +49,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
     @Override
     public Void call() throws IOException, ParserConfigurationException, SAXException, InterruptedException, TransformerException {
 
-
         if (!skipDataUpdate) {
             //update osm and gtfs data
             new CmdUpdateGTFSOSMData().call();
@@ -59,7 +58,6 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue));
         BoundingBox boundingBox = new BoundingBox(gtfsIdOsmStopMap.values());
-
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
         Map<String, Shape> shapes = GTFSParser.readShapes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_SHAPES_FILE_NAME);
@@ -73,7 +71,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         //sorting set
         Multimap<String, Trip> groupedTrips = GTFSParser.groupTrip(trips, routes);
-        Set<String> routeNames = new TreeSet<>(groupedTrips.keySet());
+        Set<String> routeNamesSet = new TreeSet<>(groupedTrips.keySet());
 
 
         if (!readStopTimesResult.getMissingStops().isEmpty()) {
@@ -105,16 +103,18 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         int tempid = 10000;
 
-        for (String routeName : routeNames) { //for every route
+        for (String routeName : routeNamesSet) { //for every route
             Collection<Trip> allTrips = groupedTrips.get(routeName);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
+
+
+            List<Integer> newRelationsIds = new ArrayList<>();
 
             for (Trip trip : uniqueTrips) { //for every trip
 
                 int count = Collections.frequency(allTrips, trip); //number of trips with the same headsign present in the gtfs trips file
 
                 Route route = routes.get(trip.getRoute().getId());
-
 
                 TripStopsList tripStopsList = trip.getStopsList();
 
@@ -147,9 +147,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 out.close();
 
 
-
-
-                //we add the file to the list
+                //we add the file to the merge list
                 relationsFileList.add(relationOutputFile);
 
                 //printa il file txt delle fermate con i nomi di esse
@@ -157,8 +155,27 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 //f.write(tripStopsList.getStopsListTextFile().getBytes());
                 //f.close();
 
+                newRelationsIds.add(tempid);
+
                 tempid++;
             }
+
+
+            //master relation creation
+            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + routeName +".osm");
+
+            FileOutputStream fileOutputStream = new FileOutputStream(routeMasterOutputFile);
+            OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+
+            out.write(OSMRelationImportGenerator.createMasterRouteTripsRelation(tempid, newRelationsIds, routeName, boundingBox));
+            out.close();
+
+
+            //we add the file to the merge list
+            relationsFileList.add(routeMasterOutputFile);
+
+            tempid++;
+
         }
 
 

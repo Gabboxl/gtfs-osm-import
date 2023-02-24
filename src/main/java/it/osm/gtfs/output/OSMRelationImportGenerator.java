@@ -86,7 +86,47 @@ public class OSMRelationImportGenerator {
     }
 
     //TODO: to implement
-    public static String createMasterRouteTripsRelation() {
-        return "side";
+    public static String createMasterRouteTripsRelation(int routeMasterId, List<Integer> idList, String routeName, BoundingBox bb) {
+
+        GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
+
+
+        //todo: remove the timestamp as it is redundant, set osmosis' enableDateParsing option to false
+        //the timestamp and the version attribute for every relation is needed by the merge with osmosis, unfortunately
+        String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date());
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<?xml version=\"1.0\"?><osm version='0.6' generator='GTFSOSMImport'>\n");
+        buffer.append(bb.getXMLTag());
+        buffer.append("<relation id='-" + routeMasterId + "' version='1' timestamp='" + currentTimeStamp +"' action='modify'>\n");
+
+        for (Integer id : idList) {
+            buffer.append("<member type='relation' ref=\"" + id + "\" role='' />\n");
+        }
+
+        buffer.append("<tag k='type' v='route_master' />\n");
+        buffer.append("<tag k='route' v='" + route.getRouteType().getOsmValue() + "' />\n");
+
+        buffer.append("<tag k='public_transport:version' v='2' />\n");
+
+
+        buffer.append("<tag k='name' v=\"" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + ": " + plugin.fixTripHeadsignName(trip.getTripHeadsign()) + "\" />\n");
+
+        buffer.append("<tag k='network' v=\"" + GTFSImportSettings.getInstance().getNetwork() + "\" />\n");
+
+        buffer.append("<tag k='route_master' v=\"" + "asd" + "\" />\n");
+
+
+        buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
+
+        buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
+
+        buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
+
+
+        buffer.append("</relation>");
+        buffer.append("</osm>");
+
+        return buffer.toString();
     }
 }
