@@ -88,8 +88,6 @@ public class OSMRelationImportGenerator {
     //TODO: to implement
     public static String createMasterRouteTripsRelation(Route route, List<Integer> idList, BoundingBox bb, int routeMasterId) {
 
-        GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
-
         String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date());
 
         StringBuilder buffer = new StringBuilder();
