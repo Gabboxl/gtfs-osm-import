@@ -106,9 +106,9 @@ Il risultato sarà contenuto in un file nominato `gtfs_import_mergedFullRelation
 
 Il file conterrà inoltre le relazioni di tipo `route_master`, formate da tutte le varianti (i trip) di ogni route definita nei dati GTFS.
 
-**warning**: A differenza del comando *stops*, la generazione delle relazioni con il comando *fullrels* è utile soltanto in caso su OSM non siano presenti alcune relazioni nella zona di interesse. In altre parole, il comando *fullrels* non tiene conto delle relazioni già presenti su OSM, per cui se si tentasse di caricare le nuove relazioni generate accadrebbe un disastro a causa delle relazioni doppie su OSM. 
+> **Warning**: A differenza del comando *stops*, la generazione delle relazioni con il comando *fullrels* è utile soltanto in caso su OSM non siano presenti alcune relazioni nella zona di interesse. In altre parole, il comando *fullrels* non tiene conto delle relazioni già presenti su OSM, per cui se si tentasse di caricare le nuove relazioni generate accadrebbe un disastro a causa delle relazioni doppie su OSM. 
 
-*NOTA*: Prima di generare le relazioni assicurati di aver caricato e aggiornato tutte le fermate GTFS su OSM, altrimenti non potrai generarle!
+> **Note**: Prima di generare le relazioni assicurati di aver caricato e aggiornato tutte le fermate GTFS su OSM, altrimenti non potrai generarle!
 
 ### Disclaimer Way-matching per OSM
 Devi tenere a mente che il matching effettuato da GraphHopper non è preciso, ma può velocizzare notevolmente l'aggiunta delle vie alle relazioni. Per cui controlla attentamente ogni relazione generata prima di caricarle su OSM! 
