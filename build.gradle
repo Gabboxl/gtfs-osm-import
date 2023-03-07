@@ -24,7 +24,7 @@ dependencies {
     implementation 'com.graphhopper:graphhopper-map-matching:7.0-pre2'
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1' //questo è da rimuovere quando la versione modificata di graphhopper-core non sarà più necessaria, credo
-    implementation 'org.slf4j:slf4j-simple:2.0.5' //anche questa come quello sopra
+    implementation 'org.slf4j:slf4j-simple:2.0.6' //anche questa come quello sopra
 
     //custom jxmapviewer2 libs with fixes for the bing imagery zoom levels
     implementation 'com.github.gabboxl:jxmapviewer2:b2b31b1f84'
