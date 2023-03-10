@@ -1,10 +1,9 @@
 #Url to the GTFS zip file
 gtfs_zip_url=https://www.gtt.to.it/open_data/gtt_gtfs.zip
 
-#Path where this tool will generate its files #todo: if empty/not specified use the same directory of the tool .jar file
+#Path where this tool will generate its files
 output_path=C:\\Users/Gabriele/Desktop/osm/gtfsimport/
 
-#TODO: support multiple operator tag values for additional stops checks
 #value of the operator tag for the bus stop nodes used to filter OSM stops
 operator=Gruppo Torinese Trasporti
 
