@@ -74,7 +74,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         List<GTFSStop> gtfsStops = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStops);
 
-        String queryBusStopsUrl = "data=[bbox];node[highway=bus_stop];out meta;&bbox=" + bb.getAPIQuery();
+        String queryBusStopsUrl = "data=[bbox];(node[highway=bus_stop];node[\"disused:highway\"=bus_stop];);out meta;&bbox=" + bb.getAPIQuery();
         File busFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_busstops.osm");
         URIUtil.encodeQuery(queryBusStopsUrl);
 
@@ -84,26 +84,26 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
 
         Thread.sleep(1000L);
 
-        String queryStopPositionsUrl = "data=[bbox];node[public_transport=stop_position];out meta;&bbox=" + bb.getAPIQuery();
+        String queryStopPositionsUrl = "data=[bbox];(node[public_transport=stop_position];node[\"disused:public_transport\"=stop_position];);out meta;&bbox=" + bb.getAPIQuery();
         File stopPositionsFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_stoppositions.osm");
         String stopPositionsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryStopPositionsUrl);
         DownloadUtils.download(stopPositionsUrl, stopPositionsFileTemp, false);
 
         Thread.sleep(1000L);
 
-        String queryTramStopsUrl = "data=[bbox];node[railway=tram_stop];out meta;&bbox=" + bb.getAPIQuery();
+        String queryTramStopsUrl = "data=[bbox];(node[railway=tram_stop];node[\"disused:railway\"=tram_stop];);out meta;&bbox=" + bb.getAPIQuery();
         File tramFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_tramstops.osm");
         String tramStopsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryTramStopsUrl);;
         DownloadUtils.download(tramStopsUrl, tramFileTemp, false);
 
         Thread.sleep(2000L);
 
-        String queryMetroTrainStationsUrl = "data=[bbox];node[railway=station];out meta;&bbox=" + bb.getAPIQuery();
+        String queryMetroTrainStationsUrl = "data=[bbox];(node[railway=station];node[\"disused:railway\"=station];);out meta;&bbox=" + bb.getAPIQuery();
         File metroFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_metrostops.osm");
         String metroTrainStationsUrl = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryMetroTrainStationsUrl);
         DownloadUtils.download(metroTrainStationsUrl, metroFileTemp, false);
 
-        String queryUrlstat = "data=[bbox];node[public_transport=station];out meta;&bbox=" + bb.getAPIQuery();
+        String queryUrlstat = "data=[bbox];(node[public_transport=station];node[\"disused:public_transport\"=station];);out meta;&bbox=" + bb.getAPIQuery();
         File stationsFileTemp = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_stationstops.osm");
         String urlstat = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryUrlstat);
         DownloadUtils.download(urlstat, stationsFileTemp, false);

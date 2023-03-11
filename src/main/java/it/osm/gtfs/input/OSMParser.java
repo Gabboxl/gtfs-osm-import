@@ -87,6 +87,12 @@ public class OSMParser {
                     String key = attNode.getAttributes().getNamedItem("k").getNodeValue();
                     String value = attNode.getAttributes().getNamedItem("v").getNodeValue();
 
+                    if (StringUtils.containsIgnoreCase(key, "disused")) {
+                        osmStop.setDisused(true);
+                        key = key.replace("disused:", ""); //we remove the disused part from the key name so that we can continue setting the stop's data
+                    }
+
+
                     if (key.equalsIgnoreCase("ref"))
                         osmStop.setCode(value);
 

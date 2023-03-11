@@ -11,6 +11,7 @@ public class OSMStop extends Stop {
     public Node originalXMLNode;
     private boolean needsPositionReview = false;
     private boolean isRevised = false;
+    private boolean isDisused = false;
 
 
     public OSMStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
@@ -56,4 +57,11 @@ public class OSMStop extends Stop {
                 ", isRevised=" + isRevised() + "]";
     }
 
+    public boolean isDisused() {
+        return isDisused;
+    }
+
+    public void setDisused(boolean disused) {
+        isDisused = disused;
+    }
 }

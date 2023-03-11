@@ -18,6 +18,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /***
  * This class contains methods to work with XML OSM data
  */
@@ -121,6 +124,37 @@ public class OSMXMLUtils {
             //node.removeChild(tagElementPublicTransport);
             tagElementPublicTransport.setAttribute("k", "disused:public_transport");
         }
+
+
+        LocalDateTime current = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = current.format(formatter);
+
+        String disusedNote = "This stop got marked as disused on " + formattedDate + " as it was removed from the transport agency's GTFS data." +
+                " It can be a temporary removal or the stop could have been physically removed. Please check and update this node.";
+
+        //we add a note to the stop node telling the people when and why this stop was marked as disused
+        addOrReplaceTagValue(node, "note:disused", disusedNote);
+    }
+
+    public static void unmarkDisused(Element node) {
+        NodeList childNodes = node.getChildNodes();
+
+        for (int t = 0; t < childNodes.getLength(); t++) {
+            Node attNode = childNodes.item(t);
+            if (attNode.getAttributes() != null) {
+
+                String attNodeKeyValue = attNode.getAttributes().getNamedItem("k").getNodeValue();
+
+                if (attNodeKeyValue.startsWith("disused:")) {
+
+                    attNode.getAttributes().getNamedItem("k").setNodeValue(attNodeKeyValue.replace("disused:", ""));
+
+                }
+            }
+        }
+
+        addOSMModifyActionAttribute(node);
     }
 
     public static void removeOldRevisedTag(Element node) {

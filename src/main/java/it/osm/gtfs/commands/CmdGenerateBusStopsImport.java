@@ -68,7 +68,7 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
         List<OSMStop> osmStopsList = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
-        //TODO: TO REMOVE THIS IS ONLY FOR A QUICK DEBUG!!!!
+        //TODO: TO REMOVE - THIS IS ONLY FOR A QUICK DEBUG!!!!
         // osmStopsList = osmStopsList.subList(0, 500);
 
 
@@ -158,6 +158,15 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 //we check if the osm stop got matched with a gtfs stop AND only IF the osm stop needs the position review but the user doesn't want to review the stops then we consider the stop as not matched and we handle it in the else case
                 if (osmStop.gtfsStopMatchedWith != null && !(osmStop.needsPositionReview() && noGuiReview)) {
 
+
+                    //if the stop was marked as disused but now was matched again, we remove the disused marking
+                    if(osmStop.isDisused()) {
+                        String stringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " was marked as disused but now it has been matched.";
+
+                        System.out.println(stringOutput);
+                        OSMXMLUtils.unmarkDisused(originalNode);
+                    }
+
                     //we update the XML data according to the relative GTFS stop data
                     StopsUtils.updateOSMNodeMetadata(osmStop);
 
@@ -183,7 +192,9 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                         //for the not matched stops we add the action=delete keyvalue so that JOSM knows that these stops need to be deleted on upload
                         //OSMXMLUtils.addOSMDeleteActionAttribute(originalNode);
-                        OSMXMLUtils.markDisused(originalNode);
+
+                        //instead of adding a JOSM "delete" action, we mark this stop as disused, so that it is preserved in OSM in case this is a false positive
+                        OSMXMLUtils.markDisused(originalNode); //to stops that are already marked as disused we re-mark them as disused in case some tags are not marked as disused
 
                         bufferNotMatchedStops.appendNode(originalNode);
 
