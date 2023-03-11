@@ -19,6 +19,7 @@ import it.osm.gtfs.commands.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.VersionProvider;
 import org.fusesource.jansi.AnsiConsole;
+import org.jline.builtins.ConfigurationPath;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
 import org.jline.console.impl.SystemRegistryImpl;
@@ -109,10 +110,11 @@ public class GTFSOSMImport {
         try {
             Supplier<Path> workDir = () -> Paths.get(System.getProperty("user.dir"));
             // set up JLine built-in commands
-            Builtins builtins = new Builtins(workDir, null, null);
+            Builtins builtins = new Builtins(workDir, new ConfigurationPath(null, null), null);
             builtins.rename(Builtins.Command.TTOP, "top");
             builtins.alias("zle", "widget");
             builtins.alias("bindkey", "keymap");
+
             // set up picocli commands
             CliCommands commands = new CliCommands();
 
@@ -158,7 +160,7 @@ public class GTFSOSMImport {
                 KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
                 keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
 
-                String prompt = "GTFSOSMImport> ";
+                String prompt = "\nGTFSOSMImport> ";
                 String rightPrompt = null;
 
                 // start the shell and process input until the user quits with Ctrl-D
