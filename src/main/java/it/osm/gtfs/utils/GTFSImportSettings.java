@@ -100,7 +100,7 @@ public class GTFSImportSettings {
             System.out.println(ansi().render("@|green Config properties loaded successfully.|@"));
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("An error occurred while loading the settings: " + e.getMessage());
+            throw new IllegalArgumentException("An error occurred while loading config properties: " + e.getMessage());
         }
     }
 
