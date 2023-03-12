@@ -33,9 +33,6 @@ public class GTFSImportSettings {
     public static final String GTFS_TRIPS_FILE_NAME = "trips.txt";
     public static final String GTFS_FEED_INFO_FILE_NAME = "feed_info.txt";
 
-    /* instanze disponibili di Overpass: https://wiki.openstreetmap.org/wiki/Overpass_API
-    meglio usare l'instanza di Overpass russa perchè non ha forme di rate limiting */
-    public static final String OSM_OVERPASS_API_SERVER = "https://maps.mail.ru/osm/tools/overpass/api/interpreter?";
     //public static final String OSM_OVERPASS_XAPI_SERVER = "http://overpass.osm.rambler.ru/cgi/xapi?"; //vecchia xapi
 
     public static final String OSM_API_SERVER = "https://www.openstreetmap.org/api/0.6/";
@@ -54,6 +51,7 @@ public class GTFSImportSettings {
     //properties file data
     private final Properties properties;
 
+    private String overpassApiServer = null;
     private String gtfsZipUrl = null;
     private String outputPath = null;
     private GTFSPlugin plugin = null;
@@ -106,6 +104,10 @@ public class GTFSImportSettings {
 
     public static void init() {
         SettingsHolder.INSTANCE = new GTFSImportSettings();
+    }
+
+    public String getOverpassApiServer() {
+        return overpassApiServer;
     }
 
     private static class SettingsHolder {
@@ -182,6 +184,13 @@ public class GTFSImportSettings {
         if (tempUseRevisedKey == null) {
             throw new IllegalArgumentException("Please set a revised_key value.");
         } else useRevisedKey = !tempUseRevisedKey.equals("false");
+
+        //overpass_api_server value
+        synchronized (this) {
+            overpassApiServer = properties.getProperty("overpass_api_server");
+            if (overpassApiServer == null)
+                throw new IllegalArgumentException("Please set a valid overpass_api_server value.");
+        }
     }
 
     public String getCachePath() {

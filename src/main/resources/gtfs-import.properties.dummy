@@ -16,3 +16,6 @@ revised_key=true
 #Plugin class path to use to preprocess the stops' data (if not specified, no preprocessing will be done)
 #You can use the DefaultPlugin class plugin for a standard preprocess of stops' data even though is NOT recommended. Create a custom plugin instead.
 plugin=it.osm.gtfs.plugins.GTTTurinPlugin
+
+#The URL pointing to the Overpass API interpreter - Available public instances are documented here: https://wiki.openstreetmap.org/wiki/Overpass_API
+overpass_api_server=https://maps.mail.ru/osm/tools/overpass/api/interpreter

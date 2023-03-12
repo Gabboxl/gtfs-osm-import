@@ -84,10 +84,10 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         if (!skipWaysUpdate) {
             //download of updated OSM ways in the GTFS bounding box
-            String queryHighways =  "data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
+            String queryHighways =  "?data=[bbox];(way[\"highway\"~\"motorway|trunk|primary|tertiary|secondary|unclassified|motorway_link|trunk_link|primary_link|track|path|residential|service|secondary_link|tertiary_link|bus_guideway|road|busway\"];>;);out body;&bbox=" + boundingBox.getAPIQuery();
             File fileOverpassHighways = new File(GTFSImportSettings.getInstance().getOsmOverpassWaysFilePath());
 
-            String urlhighways = GTFSImportSettings.OSM_OVERPASS_API_SERVER + URIUtil.encodeQuery(queryHighways);
+            String urlhighways = GTFSImportSettings.getInstance().getOverpassApiServer() + URIUtil.encodeQuery(queryHighways);
             DownloadUtils.download(urlhighways, fileOverpassHighways, true);
         }
 
