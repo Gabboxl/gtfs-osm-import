@@ -100,13 +100,13 @@ Il tool marcherà ogni suddetta fermata come "*disused*", ma se non più present
 ### Comando *fullrels*
 Il comando *fullrels* permette di generare un file contenente tutte le relazioni da importare su OSM dalle varie routes definite nei dati GTFS.
 
-Di default il comando scarica tutte le ways di OSM in locale per effettuare un match con i dati dei percorsi (shape) dei file GTFS grazie alla libreria GraphHopper.
+Di default il comando scarica tutte le ways (nell'area definita dalle fermate GTFS) di OSM in locale per effettuare un match con i dati dei percorsi (shape) dei file GTFS grazie alla libreria GraphHopper.
 
 Il risultato sarà contenuto in un file nominato `gtfs_import_mergedFullRelations.osm` completo contenente tutte le relazioni formate da fermate e vie, da revisionare prima di caricare su OSM.
 
 Il file conterrà inoltre le relazioni di tipo `route_master`, formate da tutte le varianti (i trip) di ogni route definita nei dati GTFS.
 
-> **Warning**: A differenza del comando *stops*, la generazione delle relazioni con il comando *fullrels* è utile soltanto in caso su OSM non siano presenti alcune relazioni nella zona di interesse. In altre parole, il comando *fullrels* non tiene conto delle relazioni già presenti su OSM, per cui se si tentasse di caricare le nuove relazioni generate accadrebbe un disastro a causa delle relazioni doppie su OSM. 
+> **Warning**: A differenza del comando *stops*, la generazione delle relazioni con il comando *fullrels* è utile soltanto in caso su OSM non siano presenti alcune relazioni nella zona di interesse. In altre parole, il comando *fullrels* non tiene conto delle relazioni già presenti su OSM, per cui se si tentasse di caricare le nuove relazioni generate accadrebbe un disastro a causa di relazioni doppie. 
 
 > **Note**: Prima di generare le relazioni assicurati di aver caricato e aggiornato tutte le fermate GTFS su OSM, altrimenti non potrai generarle!
 
