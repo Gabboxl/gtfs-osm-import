@@ -135,7 +135,7 @@ public class GTFSImportSettings {
             if (!outputPath.endsWith(File.separator))
                 outputPath = outputPath + File.separator;
             if (!new File(outputPath).isDirectory())
-                throw new IllegalArgumentException("Please set a valid output_path value.");
+                throw new IllegalArgumentException("The output_path value is not a directory. Please set a valid output_path value.");
         }
 
         //plugin class value
