@@ -21,7 +21,7 @@ dependencies {
     implementation 'org.json:json:20230227'
     implementation 'org.fusesource.jansi:jansi:2.4.0'
 
-    implementation 'com.graphhopper:graphhopper-map-matching:7.0-pre2'
+    implementation 'com.graphhopper:graphhopper-map-matching:7.0'
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1' //questo è da rimuovere quando la versione modificata di graphhopper-core non sarà più necessaria, credo
     implementation 'org.slf4j:slf4j-simple:2.0.6' //anche questa come quello sopra
