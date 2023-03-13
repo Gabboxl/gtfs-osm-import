@@ -84,6 +84,15 @@
   # for the preparation (`my_other_profile`)
   profiles_lm: []
 
+
+  #### Vehicles ####
+
+  # The vehicle defines the base for how the routing of a profile behaves. It can be fine tuned using the options:
+  # name=mycustomvehicle,block_private=true,turn_costs=true,transportation_mode=MOTOR_VEHICLE (only for the roads vehicle)
+  # Still, it is recommended to avoid changing the vehicle settings and change the custom model instead.
+  graph.vehicles: car|block_private=false
+  # Other standard vehicles: foot,bike,mtb,racingbike,motorcycle,wheelchair
+
   ##### Elevation #####
 
   # To populate your graph with elevation data use SRTM, default is noop (no elevation). Read more about it in docs/core/elevation.md
@@ -170,14 +179,16 @@
   # motorized vehicles. This leads to a smaller and less dense graph, because there are fewer ways (obviously),
   # but also because there are fewer crossings between highways (=junctions).
   # Another typical example is excluding 'motorway', 'trunk' and maybe 'primary' highways for bicycle or pedestrian routing.
-  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps # typically useful for motorized-only routing
+  #import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps # typically useful for motorized-only routing
   # import.osm.ignored_highways: motorway,trunk # typically useful for non-motorized routing
+  import.osm.ignored_highways:
 
   # configure the memory access, use RAM_STORE for well equipped servers (default and recommended)
   graph.dataaccess.default_type: RAM_STORE
 
 
-  # will write way names in the preferred language (language code as defined in ISO 639-1 or ISO 639-2):
+
+# will write way names in the preferred language (language code as defined in ISO 639-1 or ISO 639-2):
   # datareader.preferred_language: en
 
 
