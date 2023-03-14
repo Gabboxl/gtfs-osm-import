@@ -113,7 +113,7 @@ Il comando *fullrels* permette di generare un file contenente tutte le relazioni
 
 Di default il comando scarica tutte le ways (nell'area definita dalle fermate GTFS) di OSM in locale per effettuare un match con i dati dei percorsi (shape) dei file GTFS grazie alla libreria GraphHopper.
 
-Il risultato sarà contenuto in un file nominato `gtfs_import_mergedFullRelations.osm` completo contenente tutte le relazioni formate da fermate e vie, da revisionare prima di caricare su OSM.
+Il risultato sarà contenuto in un file nominato `gtfs_import_mergedFullRelations.osm` contenente tutte le relazioni formate da fermate e vie, da revisionare prima di caricare su OSM.
 
 Il file conterrà inoltre le relazioni di tipo `route_master`, formate da tutte le varianti (i trip) di ogni route definita nei dati GTFS.
 
