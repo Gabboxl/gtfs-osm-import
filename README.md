@@ -31,6 +31,17 @@ You can download the [.jar file here](https://github.com/Gabboxl/gtfs-osm-import
 
 You can find a list of upcoming features [here](https://github.com/users/Gabboxl/projects/3)!
 
+## How to compile
+1) First of all, enter the tool's source folder.
+
+2) Before proceeding, make sure you have installed JDK 17!
+
+3) To compile the program and generate the executable .jar file, use the command according to your operating system:
+
+Windows: `.\gradlew.bat shadowJar`
+
+Linux/macOS: `./gradlew shadowJar`
+
 
 
 # [IT] Come si usa
