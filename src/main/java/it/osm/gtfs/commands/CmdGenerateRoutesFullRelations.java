@@ -134,7 +134,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 String fixedRouteShortNameFileName = route.getShortName().replace("/", "B");
 
 
-                File relationOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".osm");
+                File relationOutputFile = new File(GTFSImportSettings.getInstance().getFullRelsOutputPath() + "r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".osm");
 
                 FileOutputStream fileOutputStream = new FileOutputStream(relationOutputFile);
                 OutputStreamWriter out = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
@@ -147,7 +147,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
                 relationsFileList.add(relationOutputFile);
 
                 //printa il file txt delle fermate con i nomi di esse
-                //f = new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".txt");
+                //f = new FileOutputStream(GTFSImportSettings.getInstance().getFullRelsOutputPath() + "r" + tempid + " " + fixedRouteShortNameFileName + " " + fixedTripHeadsignFileName + "_" + count + ".txt");
                 //f.write(tripStopsList.getStopsListTextFile().getBytes());
                 //f.close();
 
@@ -160,7 +160,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
             String fixedRouteShortNameFileName = route.getShortName().replace("/", "B");
             //master relation creation
-            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getOutputPath() + "fullrelations/routemasterfiles/" + fixedRouteShortNameFileName +".osm");
+            File routeMasterOutputFile = new File(GTFSImportSettings.getInstance().getFullRelsOutputPath() + "routemasterfiles/" + fixedRouteShortNameFileName +".osm");
             routeMasterOutputFile.getParentFile().mkdirs(); //we create the required parent folder and not a folder with the filename
 
             FileOutputStream fileOutputStream = new FileOutputStream(routeMasterOutputFile);

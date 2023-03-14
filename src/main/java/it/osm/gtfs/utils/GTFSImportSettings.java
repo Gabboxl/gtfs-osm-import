@@ -218,7 +218,7 @@ public class GTFSImportSettings {
     }
 
     public String getFullRelsOutputPath() {
-        return getOutputPath() + "fullrelations";
+        return getCachePath() + "fullrelations" + File.separator;
     }
 
     public String getGTFSZipUrl() {
