@@ -1,4 +1,4 @@
-# gtfs-osm-import
+# gtfs-osm-import [![GitHub release](https://img.shields.io/github/release/Gabboxl/gtfs-osm-import.svg)](https://github.com/Gabboxl/gtfs-osm-import/releases)
 Java tool to import/sync GTFS data into OSM 
   
 *originally written by [davidef](https://github.com/davidef)*
