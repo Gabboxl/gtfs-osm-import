@@ -42,6 +42,8 @@ Windows: `.\gradlew.bat shadowJar`
 
 Linux/macOS: `./gradlew shadowJar`
 
+4) The .jar file will be created in the folder `build/libs/`
+
 
 
 # [IT] Come si usa
