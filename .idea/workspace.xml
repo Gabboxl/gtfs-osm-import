@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ce63716-aa1c-409a-ae26-8b81e6f54b7d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/gtfs-osm-import.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/gtfs-osm-import.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/osm/gtfs/input/GTFSParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/osm/gtfs/input/GTFSParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/osm/gtfs/models/GTFSStop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/osm/gtfs/models/GTFSStop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/osm/gtfs/output/OSMRelationImportGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/osm/gtfs/output/OSMRelationImportGenerator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +27,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/lang/Double.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/jdk/internal/math/FloatingDecimal.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -40,8 +44,15 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/Gabriele/GitHub/gtfs-osm-import/build.gradle",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "spring.configuration.checksum": "90ae73aba2db00e7a097ced9630fdda5",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -63,11 +74,44 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1686249376976</updated>
-      <workItem from="1686249378075" duration="94000" />
+      <workItem from="1686249378075" duration="674000" />
+      <workItem from="1686254916143" duration="11000" />
+      <workItem from="1686254935553" duration="4253000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-line">
+          <condition expression="elements.length &lt; 6" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/it/osm/gtfs/input/GTFSParser.java</url>
+          <line>89</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.NumberFormatException" package="java.lang" />
+          <option name="timeStamp" value="6" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="9" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
