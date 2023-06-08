@@ -372,9 +372,10 @@ public class GTFSParser {
 
                 gtfsFeedInfo = new GTFSFeedInfo(elements[feed_publisher_name],
                         elements[feed_publisher_url],
-                        elements[feed_start_date],
-                        elements[feed_end_date],
-                        elements[feed_version]);
+                        (feed_start_date > -1) ? elements[feed_start_date] : null,
+                        (feed_end_date > -1) ? elements[feed_end_date] : null,
+                        (feed_version > -1) ? elements[feed_version] : null
+                );
 
                 return gtfsFeedInfo;
             }
