@@ -21,29 +21,49 @@ import java.util.Set;
 
 public interface GTFSPlugin {
     /**
-     * Apply changes to the bus stop name / other GTFS data before generating OSM Import file
+     * Manipulation of the bus stop name / other GTFS data before generating OSM Import file
      */
     String fixBusStopName(GTFSStop gtfsStop);
 
+    /**
+     * Manipulation of the stop's ref code
+     */
     String fixBusStopRef(String stopRef);
 
+    /**
+     * Manipulation of the trip's headsign name
+     */
     String fixTripHeadsignName(String name);
 
+    /**
+     * Manipulation of the GTFS version date
+     */
     String fixGtfsVersionDate(String gtfsVersionDate);
 
     /**
-     * Allow to exclude some stops from importing
+     * Custom logic to consider valid or exclude specific stops from the import
      */
     Boolean isValidStop(GTFSStop gtfsStop);
 
+
+    /**
+     * Custom logic to consider valid or exclude specific routes from the import
+     */
     boolean isValidRoute(Route route);
 
+    /**
+     * Custom logic to define the type of a GTFS stop (bus, tram, subway, etc.)
+     */
     OSMStopType getStopType(GTFSStop gtfsStop) throws IllegalStateException;
 
     /**
-     * allow plugins to define custom rules to decide if a route is the same
+     * Custom logic to decide if a GTFS route is the same of an OSM relation
      */
     boolean isRelationSameAs(Relation relation, TripStopsList s);
+
+    /**
+     * Custom logic to consider valid or exclude specific trips from the import
+     */
 
     boolean isValidTrip(Collection<Trip> allTrips, Set<Trip> uniqueTrips, Trip trip, TripStopsList s);
 }
