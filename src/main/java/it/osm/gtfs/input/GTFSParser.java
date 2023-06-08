@@ -32,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -400,35 +401,33 @@ public class GTFSParser {
         return result;
     }
 
-
+    /**
+     * This code uses a regular expression to split the input string by commas that are not inside quotes.
+     * It then iterates through the resulting array, removing the quotes from the elements that are enclosed in quotes, and adding them to the elements list.
+     * If removeCommasFromValues is true, it also removes any commas from the elements before adding them to the list.
+     *
+     * @param thisLine
+     * @param removeCommasFromValues
+     * @return Split line in a vector
+     */
     private static String[] getElementsFromLine(String thisLine, boolean removeCommasFromValues) {
         List<String> elements = new ArrayList<>();
 
         thisLine = thisLine.trim();
 
-        if (thisLine.contains("\"") || thisLine.contains(",")) {
-            String[] temp = new String[0];
+        Pattern pattern = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        String[] temp = pattern.split(thisLine);
 
-            if (thisLine.contains("\""))
-                temp = thisLine.split("\"");
-            else if (thisLine.contains(","))
-                temp = thisLine.split(",");
-
-            for (int x = 0; x < temp.length; x++) {
-
-                if (thisLine.contains("\"")) {
-                    if (x % 2 == 1) { //aggiungo all'array un elemento si e uno no
-                        if (removeCommasFromValues) {
-                            temp[x] = temp[x].replace(",", "");
-                        }
-
-                        elements.add(temp[x]);
-                    }
-
-                } else {
-                    elements.add(temp[x]);
-                }
+        for (String element : temp) {
+            if (element.startsWith("\"") && element.endsWith("\"")) {
+                element = element.substring(1, element.length() - 1);
             }
+
+            if (removeCommasFromValues) {
+                element = element.replace(",", "");
+            }
+
+            elements.add(element);
         }
 
         return elements.toArray(new String[0]);
