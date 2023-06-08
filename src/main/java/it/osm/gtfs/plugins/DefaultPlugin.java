@@ -53,7 +53,7 @@ public class DefaultPlugin implements GTFSPlugin {
 
     @Override
     public OSMStopType getStopType(GTFSStop gtfsStop) throws IllegalStateException {
-        return null;
+        return OSMStopType.PHYSICAL_BUS_STOP;
     }
 
     @Override
