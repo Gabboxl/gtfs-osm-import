@@ -13,6 +13,7 @@
  **/
 package it.osm.gtfs.output;
 
+import it.osm.gtfs.enums.WheelchairAccess;
 import it.osm.gtfs.models.*;
 import it.osm.gtfs.plugins.GTFSPlugin;
 import it.osm.gtfs.utils.GTFSImportSettings;
@@ -77,7 +78,9 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
         buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
 
-        buffer.append("<tag k='wheelchair' v='" + trip.getWheelchairAccess().getOsmValue() + "' />\n");
+        if (trip.getWheelchairAccess() != null && trip.getWheelchairAccess() != WheelchairAccess.UNKNOWN) {
+            buffer.append("<tag k='wheelchair' v='" + trip.getWheelchairAccess().getOsmValue() + "' />\n");
+        }
 
         buffer.append("</relation>");
         buffer.append("</osm>");

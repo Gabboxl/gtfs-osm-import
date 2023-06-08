@@ -164,7 +164,7 @@ public class GTFSParser {
                             elements[shape_id],
                             (trip_headsign > -1) ? elements[trip_headsign] : "",
                             stopTimes.get(elements[trip_id]),
-                            WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchair_accessible]))
+                            (wheelchair_accessible > -1) ? WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchair_accessible])) : null
                     ));
                 }
             }
