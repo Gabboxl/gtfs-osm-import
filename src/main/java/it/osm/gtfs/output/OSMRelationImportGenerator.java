@@ -76,7 +76,10 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
         buffer.append("<tag k='gtfs:shape_id' v='" + trip.getShapeId() + "' />\n");
         buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
-        buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
+
+        if (gtfsFeedInfo.getVersion() != null && !gtfsFeedInfo.getVersion().isBlank()) {
+            buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
+        }
 
         if (trip.getWheelchairAccess() != null && trip.getWheelchairAccess() != WheelchairAccess.UNKNOWN) {
             buffer.append("<tag k='wheelchair' v='" + trip.getWheelchairAccess().getOsmValue() + "' />\n");
