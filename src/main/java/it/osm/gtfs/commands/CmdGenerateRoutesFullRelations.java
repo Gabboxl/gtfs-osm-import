@@ -57,6 +57,15 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
         GTFSFeedInfo gtfsFeedInfo = GTFSParser.readFeedInfo(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_FEED_INFO_FILE_NAME);
 
         Map<String, OSMStop> gtfsIdOsmStopMap = StopsUtils.getGTFSIdOSMStopMap(OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), SharedCliOptions.checkStopsOfAnyOperatorTagValue));
+
+        if (gtfsIdOsmStopMap.values().isEmpty()) {
+
+            System.out.println(ansi().render("@|red \n The relations generation will not continue as there are no OSM stops with a GTFS id on OpenStreetMap!" +
+                    "\n Please run the \"stops\" command and upload the new stops to OSM first! |@"));
+
+            return null;
+        }
+
         BoundingBox boundingBox = new BoundingBox(gtfsIdOsmStopMap.values());
 
         Map<String, Route> routes = GTFSParser.readRoutes(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_ROUTES_FILE_NAME);
