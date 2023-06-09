@@ -149,15 +149,25 @@ public class OSMParser {
             if (tram_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_TRAM_STOP);
 
+            //bus
+
             if (highway_tag.equalsIgnoreCase("bus_stop"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
 
             if (bus_tag.equalsIgnoreCase("yes"))
                 osmStop.setStopType(OSMStopType.PHYSICAL_BUS_STOP);
 
+            //tram
 
             if (railway_tag.equalsIgnoreCase("tram_stop"))
                 osmStop.setStopType(OSMStopType.TRAM_STOP_POSITION);
+
+            //subway
+            if (station_tag.equalsIgnoreCase("subway"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
+
+            if (subway_tag.equalsIgnoreCase("yes"))
+                osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
 
             if (public_transport_tag.equalsIgnoreCase("stop_position")) {
                 OSMStopType currType = osmStop.getStopType();
@@ -171,14 +181,14 @@ public class OSMParser {
                 } else if (currType.equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
                     osmStop.setStopType(OSMStopType.TRAM_STOP_POSITION);
 
+                } else if (currType.equals(OSMStopType.PHYSICAL_TRAIN_STATION)) {
+                    osmStop.setStopType(OSMStopType.TRAIN_STOP_POSITION);
+
+                } else if (currType.equals(OSMStopType.PHYSICAL_SUBWAY_STOP)) {
+                    osmStop.setStopType(OSMStopType.SUBWAY_STOP_POSITION);
+
                 }
             }
-
-            if (station_tag.equalsIgnoreCase("subway"))
-                osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
-
-            if (subway_tag.equalsIgnoreCase("yes"))
-                osmStop.setStopType(OSMStopType.PHYSICAL_SUBWAY_STOP);
 
 
             //skip subway stops if requested

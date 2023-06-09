@@ -7,6 +7,8 @@ public enum OSMStopType {
     PHYSICAL_TRAIN_STATION("physical_train_station"),
     BUS_STOP_POSITION("bus_stop_position"),
     TRAM_STOP_POSITION("tram_stop_position"),
+    TRAIN_STOP_POSITION("train_stop_position"),
+    SUBWAY_STOP_POSITION("subway_stop_position"),
     GENERAL_STOP_POSITION("general_stop_position");
 
 
