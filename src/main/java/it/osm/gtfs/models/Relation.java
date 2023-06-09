@@ -119,7 +119,7 @@ public class Relation {
         this.to = to;
     }
 
-    public RouteType getType() {
+    public RouteType getRouteType() {
         return type;
     }
 

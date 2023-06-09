@@ -110,7 +110,7 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
             stm.setString(3, r.getName());
             stm.setString(4, r.getFrom());
             stm.setString(5, r.getTo());
-            stm.setInt(6, r.getType().getGtfsValue());
+            stm.setInt(6, r.getRouteType().getGtfsValue());
             stm.executeUpdate();
         }
         stm = connection.prepareStatement("insert into relation_stops values(?, ?, ?)");
