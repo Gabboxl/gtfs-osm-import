@@ -405,7 +405,7 @@ public class OSMParser {
             if (localName.equals("relation")) {
 
                 if (!type_tag.equalsIgnoreCase("route")) {
-                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getRouteType() + " as its type tag (" + currentRelation.getOperator() + ") is not a route.").reset());
+                    System.out.println(ansi().fg(Ansi.Color.YELLOW).a("Skipping OSM relation " + currentRelation.getId() + " as its type tag (" + type_tag + ") is not a route.").reset());
 
                     return;
                 }
