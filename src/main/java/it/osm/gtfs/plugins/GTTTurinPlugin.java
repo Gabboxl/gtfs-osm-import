@@ -111,7 +111,7 @@ public class GTTTurinPlugin implements GTFSPlugin {
     }
 
     @Override
-    public boolean isValidRoute(Route route) {
+    public boolean isValidRoute(Route route) { //TODO: perchè non è valido GTT_E? ora sarebbe la linea "E", ovver extraurbana, magari levare sto check inutile?
         return !"GTT_E".equals(route.getAgencyId());
     }
 
