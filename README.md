@@ -105,7 +105,7 @@ Una volta che il tool avrà eseguito correttamente il comando, verranno generati
 3) `gtfs_import_not_matched_stops.osm`: Questo file conterrà tutte le fermate su OSM non presenti più nei dati GTFS.
 Il tool marcherà ogni suddetta fermata come "*disused*", ma se non più presente fisicamente nella realtà è possibile eliminare il nodo.
 
-*NOTA*: Si possono verificare dei falsi-positivi: alcune fermate possono venire contrassegnate per la rimozione erroneamente, per cui è ncessario rimuovere le fermate coinvolte manualmente dai file generati. Con JOSM per esempio è possibile utilizzare l'opzione "*purge*" (con combinazione `Ctrl+Shift+P`) dopo aver attivato la modalità esperto per rimuovere i nodi selezionati dal file senza rimuoveri durante l'upload dei dati su OSM.
+*NOTA*: Si possono verificare dei falsi-positivi: alcune fermate possono venire contrassegnate per la rimozione erroneamente, per cui è ncessario rimuovere le fermate coinvolte manualmente dai file generati. Con JOSM per esempio è possibile utilizzare l'opzione "*purge*" (con combinazione `Ctrl+Shift+P`) dopo aver attivato la modalità "esperto" per rimuovere i nodi selezionati dal file senza rimuoveri durante l'upload dei dati su OSM.
 
 
 
