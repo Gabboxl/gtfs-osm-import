@@ -6,6 +6,7 @@ import it.osm.gtfs.models.*;
 import it.osm.gtfs.utils.GTFSImportSettings;
 import it.osm.gtfs.utils.SharedCliOptions;
 import it.osm.gtfs.utils.StopsUtils;
+import org.fusesource.jansi.Ansi;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.jdesktop.beansbinding.ELProperty;
 import org.jdesktop.beansbinding.util.logging.Logger;
@@ -123,8 +124,8 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
                 line = br.readLine();
             }
             br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            System.out.println(Ansi.ansi().fg(Ansi.Color.RED).a("tripmarker.txt not found, that's ok").reset());
         }
 
         for (Trip t : uniqueTrips) {
