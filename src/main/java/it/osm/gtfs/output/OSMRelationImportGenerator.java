@@ -67,7 +67,11 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='from' v=\"" + trip.getStopsList().getStopSequenceOSMStopMap().firstEntry().getValue().getName() + "\" />\n");
         buffer.append("<tag k='to' v=\"" + trip.getStopsList().getStopSequenceOSMStopMap().lastEntry().getValue().getName() + "\" />\n");
 
-        buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
+        var routeColor = route.getRouteColor();
+
+        if (routeColor != null && !routeColor.isBlank()) {
+            buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
+        }
 
         buffer.append("<tag k='network' v=\"" + GTFSImportSettings.getInstance().getNetwork() + "\" />\n");
         buffer.append("<tag k='operator' v=\"" + GTFSImportSettings.getInstance().getOperator() + "\" />\n");
@@ -75,7 +79,13 @@ public class OSMRelationImportGenerator {
 
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
         buffer.append("<tag k='gtfs:shape_id' v='" + trip.getShapeId() + "' />\n");
-        buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
+
+
+        var agencyId = route.getAgencyId();
+
+        if(agencyId != null && !agencyId.isBlank()) {
+            buffer.append("<tag k='gtfs:agency_id' v='" + agencyId + "' />\n");
+        }
 
         if (gtfsFeedInfo.getVersion() != null && !gtfsFeedInfo.getVersion().isBlank()) {
             buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
@@ -111,12 +121,21 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='name' v=\"" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + "\" />\n");
         buffer.append("<tag k='operator' v=\"" + GTFSImportSettings.getInstance().getOperator() + "\" />\n");
         buffer.append("<tag k='network' v=\"" + GTFSImportSettings.getInstance().getNetwork() + "\" />\n");
-        buffer.append("<tag k='colour' v='#" + route.getRouteColor() + "' />\n");
 
+
+        var routeColor = route.getRouteColor();
+
+        if (routeColor != null && !routeColor.isBlank()) {
+            buffer.append("<tag k='colour' v='#" + routeColor + "' />\n");
+        }
 
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
 
-        buffer.append("<tag k='gtfs:agency_id' v='" + route.getAgencyId() + "' />\n");
+        var agencyId = route.getAgencyId();
+
+        if(agencyId != null && !agencyId.isBlank()) {
+            buffer.append("<tag k='gtfs:agency_id' v='" + agencyId + "' />\n");
+        }
 
 
         buffer.append("</relation>");

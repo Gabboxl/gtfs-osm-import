@@ -244,11 +244,11 @@ public class GTFSParser {
                 if (elements[route_id].length() > 0) {
                     finalRouteIdRouteMap.put(elements[route_id],
                             new Route(elements[route_id],
-                                    elements[agency_id],
+                                    agency_id > -1 ? elements[agency_id] : null,
                                     elements[route_long_name],
                                     elements[route_short_name],
                                     RouteType.getEnumByGtfsValue(Integer.parseInt(elements[route_type])),
-                                    elements[route_color])
+                                    route_color > -1 ? elements[route_color] : null)
                     );
                 }
             }
