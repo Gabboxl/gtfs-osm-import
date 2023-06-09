@@ -33,7 +33,11 @@ public class StopsUtils {
         if (osmStop.getCode() != null && osmStop.getCode().equals(gtfsStop.getCode())) {
 
             if (distanceBetween < maxDist || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) && osmStop.isRevised())) {
-                //if the stops are less than maxDist far away (with only the ref code in common) OR are already linked with gtfsid AND the OSM stop is already revised (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop. In other cases the stops can be gtfs-is-matched but the position could have been changed)
+                //if the stops are less than maxDist far away (with only the ref code in common)
+                // OR are already linked with gtfsid
+                // AND the OSM stop is already revised
+                // (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop.
+                // In other cases the stops can be gtfs-is-matched but the position could have been changed)
                 return true;
             } else if (distanceBetween < 2000 && osmStop.getOperator() != null) {//if the operator is null and that stop is too distant then it could be of another bus company/operator. so we consider it as not matched (and we will need to remove it from any list later)
                 System.out.println(ansi().render("@|yellow Stop match: found too distant osm and gtfs stops / |@" + debugData));
@@ -62,7 +66,7 @@ public class StopsUtils {
 
             return true;
 
-        } else if (distanceBetween < 50 && StringUtils.equalsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
+        } else if (osmStop.getGtfsId() == null && osmStop.getCode() == null && distanceBetween < 50 && StringUtils.equalsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
             //remove accents from the osm stop name and try matching it with the gtfs stop name (some GTFS stops have accents, some don't)
 
             System.out.println(ansi().render("@|yellow Warning: Stops with same name matched / |@" + debugData));
