@@ -55,10 +55,17 @@ public class StopsUtils {
 
         } else if (((gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP))
                 || (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION)))
-                && distanceBetween < 200 && StringUtils.containsIgnoreCase(osmStop.getName(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
-            //lol that condition is so complicated
+                && distanceBetween < 200 && StringUtils.containsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
+            //for subway and train stations we consider the stops matched if they are less than 200m far away and have the same name
 
             System.out.println(ansi().render("@|yellow Warning: Metro/train stop matched only with name / " + debugData + "|@"));
+
+            return true;
+
+        } else if (distanceBetween < 50 && StringUtils.equalsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
+            //remove accents from the osm stop name and try matching it with the gtfs stop name (some GTFS stops have accents, some don't)
+
+            System.out.println(ansi().render("@|yellow Warning: Stops with same name matched / " + debugData + "|@"));
 
             return true;
         }
