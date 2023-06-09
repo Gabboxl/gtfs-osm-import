@@ -31,7 +31,7 @@ dependencies {
 
     implementation 'info.picocli:picocli:4.7.1'
     implementation 'info.picocli:picocli-shell-jline3:4.7.1'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.1'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
 
     implementation 'org.mapfish.geo:mapfish-geo-lib:1.2.0'
 
