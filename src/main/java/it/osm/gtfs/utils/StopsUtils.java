@@ -50,12 +50,12 @@ public class StopsUtils {
         } else if (distanceBetween < 15 && osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId())) {
             //if the stops have different ref tag code, same gtfs_id and are less than 15m far away
             System.out.println(ansi().render("@|yellow Warning: Stops with different ref-code tag but equal gtfs_id matched / " + debugData + "|@"));
-            return true;
 
+            return true;
 
         } else if (((gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP))
                 || (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION)))
-                && distanceBetween < 100 && StringUtils.containsIgnoreCase(osmStop.getName(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
+                && distanceBetween < 200 && StringUtils.containsIgnoreCase(osmStop.getName(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
             //lol that condition is so complicated
 
             System.out.println(ansi().render("@|yellow Warning: Metro/train stop matched only with name / " + debugData + "|@"));
