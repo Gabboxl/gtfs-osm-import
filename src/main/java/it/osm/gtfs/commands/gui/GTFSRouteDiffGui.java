@@ -126,6 +126,8 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             br.close();
         } catch (FileNotFoundException e) {
             System.out.println(Ansi.ansi().fg(Ansi.Color.RED).a("tripmarker.txt not found, that's ok").reset());
+        }catch (Exception e) {
+            System.err.println(e);
         }
 
         for (Trip t : uniqueTrips) {
