@@ -42,10 +42,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
@@ -428,7 +425,10 @@ public class OSMParser {
                     var tempMemberRole = entry.getValue();
                     var tempMemberRef = entry.getKey();
 
-                    if (tempMemberRole.equals("stop") || tempMemberRole.equals("platform")) {
+                    //array with the supported roles
+                    String[] supportedRoles = new String[]{"stop", "platform", "stop_exit_only", "stop_entry_only", "platform_exit_only", "platform_entry_only"};
+
+                    if (Arrays.asList(supportedRoles).contains(tempMemberRole) ) {
                         OSMStop osmStop = stopsWithOSMIndex.get(tempMemberRef);
 
                         if (osmStop == null) {
