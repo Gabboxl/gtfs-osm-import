@@ -262,7 +262,7 @@ public class GTFSRouteDiffGui extends JFrame implements ListSelectionListener, K
             setName(r.getName());
             setRef(r.getRef());
             setTo(r.getTo());
-            setType(r.getRouteType());
+            setRouteType(r.getRouteType());
             setVersion(r.getVersion());
             setWayMembers(r.getWayMembers());
             setStops(r.getStops());

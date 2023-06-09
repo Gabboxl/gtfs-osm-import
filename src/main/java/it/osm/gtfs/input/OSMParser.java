@@ -445,7 +445,7 @@ public class OSMParser {
 
                 //route tag
                 try {
-                    currentRelation.setType(RouteType.getEnumByOsmValue(route_tag));
+                    currentRelation.setRouteType(RouteType.getEnumByOsmValue(route_tag));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                     failed = true;

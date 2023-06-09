@@ -16,7 +16,7 @@ public class Relation {
     private String from;
     private String to;
     private String operator;
-    private RouteType type;
+    private RouteType routeType;
     private List<OSMWay> wayMembers = new ArrayList<>();
 
     private Map<Long, OSMStop> sequenceOSMstopMap;
@@ -120,11 +120,11 @@ public class Relation {
     }
 
     public RouteType getRouteType() {
-        return type;
+        return routeType;
     }
 
-    public void setType(RouteType type) {
-        this.type = type;
+    public void setRouteType(RouteType routeType) {
+        this.routeType = routeType;
     }
 
     public Integer getVersion() {
