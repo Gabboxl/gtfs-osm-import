@@ -45,7 +45,7 @@ dependencies {
 
     implementation 'commons-httpclient:commons-httpclient:3.1'
 
-    shadow 'junit:junit:3.8.2'
+    shadow 'junit:junit:4.13.2'
 }
 
 //needed for Picocli
