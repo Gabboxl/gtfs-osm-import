@@ -72,75 +72,9 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
         // osmStopsList = osmStopsList.subList(0, 500);
 
 
-        //first matching phase between GTFS and OSM stops - check the StopUtils match() function to understand the criteria used to consider whether the GTFS and OSM stops are the same or not
-        for (GTFSStop gtfsStop : gtfsStopsList) {
+        //first matching phase between GTFS and OSM stops
+        new MatchUtils().doStopsMatching(gtfsStopsList, osmStopsList);
 
-            for (OSMStop osmStop : osmStopsList) {
-                if (StopsUtils.match(gtfsStop, osmStop)) {
-                    if (osmStop.getStopType().equals(OSMStopType.TRAM_STOP_POSITION)) { //todo: maybe add also a check for OSMStopType.PHYSICAL_TRAM_STOP ?
-
-                        //we check for multiple matches for tram stops && bus stops, and we handle them based on how distant the current loop stop and the already matched stop are
-                        if (gtfsStop.railwayStopMatchedWith != null) {
-                            System.out.println(ansi().render("@|red Multiple match found between current GTFS stop and two other OSM stops: |@"));
-                            System.out.println(ansi().render("@|red Current GTFS stop: |@" + gtfsStop));
-                            System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
-                            System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
-
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.railwayStopMatchedWith.getGeoPosition());
-
-                            if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop) {
-
-                                System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + gtfsStop.osmStopMatchedWith + "|@"));
-
-                                continue;
-                            }
-
-                            System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + osmStop + "|@"));
-
-                            gtfsStop.railwayStopMatchedWith.gtfsStopMatchedWith = null;
-
-                        }
-
-                        gtfsStop.railwayStopMatchedWith = osmStop;
-
-                    } else {
-                        if (osmStop.gtfsStopMatchedWith != null || gtfsStop.osmStopMatchedWith != null) {
-                            System.out.println(ansi().render("@|red Multiple match found between current GTFS stop and two other OSM stops: |@"));
-                            System.out.println(ansi().render("@|red Current GTFS stop: |@" + gtfsStop));
-                            System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
-                            System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
-
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.osmStopMatchedWith.getGeoPosition());
-
-                            //in case of multiple matching we check what stop is the closest one to the gtfs coordinates between the current loop stop and the already-matched stop
-                            if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop) {
-
-                                System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + gtfsStop.osmStopMatchedWith + "|@"));
-                                //in case the already-matched stop is the closest one to the gtfs coordinates then we skip setting the stop match variables, and we go ahead with the loop
-                                continue;
-                            }
-
-                            System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + osmStop + "|@"));
-
-                            //in case the current loop stop is the closest one to the gtfs coordinates, we remove the matched gtfs stop from the  already matched osm stop
-                            gtfsStop.osmStopMatchedWith.gtfsStopMatchedWith = null;
-                            //gtfsStop.osmStopMatchedWith = null; nope because we just replace 5 lines later
-                        }
-
-                        gtfsStop.stopsMatchedWith.add(osmStop);
-                        osmStop.stopsMatchedWith.add(gtfsStop);
-
-                        gtfsStop.osmStopMatchedWith = osmStop;
-
-                    }
-
-                    osmStop.gtfsStopMatchedWith = gtfsStop;
-
-                }
-            }
-        }
 
         //second matching phase by checking all osm stops again (also checking stops that didn't get matched && those that we don't consider matched)
         {
