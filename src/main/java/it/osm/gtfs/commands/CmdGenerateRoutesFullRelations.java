@@ -80,7 +80,10 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         //sorting set
         Multimap<Route, Trip> groupedTrips = GTFSParser.groupTrips(routes, trips);
-        Set<Route> routesSet = new TreeSet<>(groupedTrips.keySet());
+
+        //this is usually the same as the routes variable, but making a list of actually used routes from the trips
+        //is more accurate, as some routes may not have any trips
+        Set<Route> finalRoutesSet = new TreeSet<>(groupedTrips.keySet());
 
 
         if (!readStopTimesResult.getMissingStops().isEmpty()) {
@@ -112,7 +115,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         int tempid = 10000;
 
-        for (Route route : routesSet) { //for every route
+        for (Route route : finalRoutesSet) { //for every route
             Collection<Trip> allTrips = groupedTrips.get(route);
             Set<Trip> uniqueTrips = new HashSet<>(allTrips);
 
