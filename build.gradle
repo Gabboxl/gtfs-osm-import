@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-simple:2.0.7' //anche questa come quello sopra
 
     //custom jxmapviewer2 libs with fixes for the bing imagery zoom levels
-    implementation 'com.github.gabboxl:jxmapviewer2:b2b31b1f84'
+    implementation 'com.github.gabboxl:jxmapviewer2:2.6'
 
     implementation 'info.picocli:picocli:4.7.4'
     implementation 'info.picocli:picocli-shell-jline3:4.7.4'
