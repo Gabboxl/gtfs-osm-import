@@ -175,7 +175,7 @@ java -jar gtfs-osm-import.jar stops
 
 ## The Commands
 
-The available commands are as follows: `stops`, `fullrels`, `conf`, `bbox`
+The available commands are the following: `stops`, `fullrels`, `conf`, `bbox`
 
 ______________________________________________________________________
 
