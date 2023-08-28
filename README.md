@@ -139,4 +139,91 @@ Stampa le coordinate del bounding box date dall'analisi delle fermate presenti n
 
 
 ## [EN] How to use
-WIP
+
+## Initial Startup
+
+1. Make sure you have installed the software requirements indicated above
+
+1. Download the .jar file from the **Download** section above
+
+1. From the command line, start the tool with the following command:
+
+```bash
+java -jar gtfs-osm-import.jar
+```
+
+4. The tool will generate an example .properties file, if not already present in the same location as the .jar file.
+
+1. You will need to modify this .properties file: open it and make sure to set a valid path for generating the files for the new import.
+
+(If you are using the tool for a city other than Torino, you will need to modify the link that points to the GTFS data for your city. You will need to create a specific plugin class to process the GTFS data, also.)
+
+6. Once the .properties file has been modified according to your needs, you can restart the tool with the previous command by adding the name of the command to execute at the end.
+   For example, to generate a new import of stops, use the following syntax:
+
+```bash
+java -jar gtfs-osm-import.jar stops
+```
+
+7. To view all the available commands of the tool you can use the `-h` option:
+
+`java -jar gtfs-osm-import.jar -h`
+
+8. You can also view the options available for any command:
+
+`java -jar gtfs-osm-import.jar stops -h`
+
+## The Commands
+
+The available commands are as follows: `stops`, `fullrels`, `conf`, `bbox`
+
+______________________________________________________________________
+
+There is also an interactive mode that can be started with the `interactivedebug` command. It contains additional experimental and debugging commands (not documented as they can change from day to day), and it can be very useful for sending commands one after another from an IDE.
+
+______________________________________________________________________
+
+### *Stops* Command
+
+The *stops* command is the main command for controlling the differences between the stops present in OSM and those in the GTFS data.
+
+Once the tool has matched all the OSM and GTFS stops, some stops may have been physically moved.
+In case one or more GTFS stops are more than 100 meters away from their respective stops on OSM, a graphical interface will be launched that allows you to choose which coordinates (OSM or GTFS) to keep for the generation of import files.
+
+Once the tool has successfully executed the command, the following files will be generated:
+
+1. `gtfs_import_matched_with_updated_metadata.osm`: This file will contain all the stops already present on OSM, with various tags updated according to the PTv2 schema and the coordinates chosen from the graphical interface (if used).
+
+1. `gtfs_import_new_stops_from_gtfs.osm`: This file will contain all the new stops not yet present on OSM.
+
+1. `gtfs_import_not_matched_stops.osm`: This file will contain all the stops on OSM no longer present in the GTFS data.
+   The tool will mark each of these stops as "*disused*", but if it is no longer physically present in reality, the node can be deleted.
+
+*NOTE*: False positives can occur: some stops may be marked for removal erroneously, so it is necessary to manually remove the involved stops from the generated files. With JOSM for example, you can use the "*purge*" option (with the combination `Ctrl+Shift+P`) after activating the "expert" mode to remove the selected nodes from the file without removing them during data upload to OSM.
+
+### *Fullrels* Command
+
+The *fullrels* command allows you to generate a file containing all the relationships to import to OSM from the various routes defined in the GTFS data.
+
+By default, the command downloads all the ways (in the area defined by the GTFS stops) of OSM locally to match with the route data (shape) of the GTFS files using the GraphHopper library.
+
+The result will be contained in a file named `gtfs_import_mergedFullRelations.osm` containing all the relationships formed by stops and ways, to be reviewed before uploading to OSM.
+
+The file will also contain `route_master` type relationships, formed by all the variants (the trips) of each route defined in the GTFS data.
+
+> **Warning**: Unlike the *stops* command, generating relationships with the *fullrels* command is useful only if some relationships are not present on OSM in the area of interest. In other words, the *fullrels* command does not take into account the relationships already present on OSM, so if you tried to upload the newly generated relationships, it would be a disaster due to duplicate relationships.
+
+> **Note**: Before generating relationships, ensure you have uploaded and updated all GTFS stops on OSM, otherwise you will not be able to generate them!
+
+
+### Way-matching Disclaimer for OSM
+
+You should keep in mind that the matching performed by GraphHopper is not precise, but it can significantly speed up the addition of roads to relations. Therefore, carefully check each generated relation before uploading them to OSM!
+
+### *conf* Command
+
+Prints the current tool's configuration.
+
+### *bbox* Command
+
+Prints the coordinates of the bounding box given by the analysis of the stops present in the GTFS data.
