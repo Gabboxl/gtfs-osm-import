@@ -38,6 +38,15 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class GTFSParser {
 
+    private static String sanitizeBOM(String s) {
+        final String UTF8_BOM = "\uFEFF";
+        if (s.startsWith(UTF8_BOM)) {
+            s = s.substring(1);
+            System.out.println(ansi().render("@|red GTFSParser: removed BOM|@" ));
+        }
+        return s;
+    }
+
     public static List<GTFSStop> readStops(String fName) throws IOException {
         List<GTFSStop> resultGtfsStopsList = new ArrayList<>();
 
@@ -52,7 +61,7 @@ public class GTFSParser {
             if (isFirstLine) {
                 isFirstLine = false;
 
-                thisLine = thisLine.replace("\"", "");
+                thisLine = sanitizeBOM(thisLine).replace("\"", "");
                 String[] keys = thisLine.split(",");
 
                 for (int i = 0; i < keys.length; i++) {
