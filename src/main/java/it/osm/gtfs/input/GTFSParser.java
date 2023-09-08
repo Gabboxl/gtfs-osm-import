@@ -108,7 +108,8 @@ public class GTFSParser {
                                 elements[stopNameKey],
                                 null, //TODO: we probably should find a way to get the real operator from GTFS for GTFS-type stops - no because the operator is set by us
                                 null,
-                                (wheelchairBoardingKey > -1) ? WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey])) : null
+                                (wheelchairBoardingKey > -1 && elements[wheelchairBoardingKey] != "") ?
+                                    WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchairBoardingKey])) : null
                         );
 
                         OSMStopType stopType = GTFSImportSettings.getInstance().getPlugin().getStopType(gtfsStop);
@@ -173,7 +174,8 @@ public class GTFSParser {
                             elements[shape_id],
                             (trip_headsign > -1) ? elements[trip_headsign] : "",
                             stopTimes.get(elements[trip_id]),
-                            (wheelchair_accessible > -1) ? WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchair_accessible])) : null
+                            (wheelchair_accessible > -1 && elements[wheelchair_accessible] != "") ?
+                                WheelchairAccess.getEnumByGtfsValue(Integer.parseInt(elements[wheelchair_accessible])) : null
                     ));
                 }
             }
@@ -426,7 +428,8 @@ public class GTFSParser {
         thisLine = thisLine.trim();
 
         Pattern pattern = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-        String[] temp = pattern.split(thisLine);
+        // pass limit=-1 to pattern.split() to avoid discarding trailing empty fields
+        String[] temp = pattern.split(thisLine, -1);
 
         for (String element : temp) {
             if (element.startsWith("\"") && element.endsWith("\"")) {
