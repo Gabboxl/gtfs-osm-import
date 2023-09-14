@@ -87,7 +87,7 @@ public class OSMRelationImportGenerator {
             buffer.append("<tag k='gtfs:agency_id' v='" + agencyId + "' />\n");
         }
 
-        if (gtfsFeedInfo.getVersion() != null && !gtfsFeedInfo.getVersion().isBlank()) {
+        if (gtfsFeedInfo != null && gtfsFeedInfo.getVersion() != null && !gtfsFeedInfo.getVersion().isBlank()) {
             buffer.append("<tag k='gtfs:release_date' v='" + plugin.fixGtfsVersionDate(gtfsFeedInfo.getVersion()) + "' />\n");
         }
 

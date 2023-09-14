@@ -355,6 +355,8 @@ public class GTFSParser {
 
     public static GTFSFeedInfo readFeedInfo(String gtfsFeedInfoPath) throws IOException {
 
+        if (!Files.isRegularFile(Paths.get(gtfsFeedInfoPath))) return null;
+
         GTFSFeedInfo gtfsFeedInfo;
 
         String thisLine;
