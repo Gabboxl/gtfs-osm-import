@@ -72,13 +72,53 @@ public class TripStopsList {
         return stopSequenceArrivalTimeMap;
     }
 
+    //this method checks if the list contains the same stops as the parameter list by comparing the GTFS stop sequence in the stop_times.txt file
     public boolean equalsStops(TripStopsList o) {
+        //we check if the number of contained stops is the same
         if (stopSequenceOSMStopMap.size() != o.stopSequenceOSMStopMap.size())
             return false;
+
         for (Long key : o.stopSequenceOSMStopMap.keySet()) {
             Stop a = stopSequenceOSMStopMap.get(key);
             Stop b = o.stopSequenceOSMStopMap.get(key);
             if (a == null || !a.equals(b))
+                return false;
+        }
+        return true;
+    }
+
+    //this method checks if the list contains the same stops as the parameter list by iterating the tripstoplist and comparing each stop to this class tripstoplist
+    public boolean equalsStopsNoSequenceCode(TripStopsList o) {
+        //we check if the number of contained stops is the same
+        if (stopSequenceOSMStopMap.size() != o.stopSequenceOSMStopMap.size())
+            return false;
+
+        var set1 = stopSequenceOSMStopMap.values().toArray();
+        var set2 = o.stopSequenceOSMStopMap.values().toArray();
+
+        //check if every stop in set1 is present in set2 at the same position of set1
+        for (int i = 0; i < set1.length; i++) {
+            Stop a = (Stop) set1[i];
+            Stop b = (Stop) set2[i];
+            if (a == null || !a.equals(b))
+                return false;
+        }
+
+
+        return true;
+    }
+
+
+
+    //instead of equalsStops, this method checks if the list contains the same stops as the parameter list without checking the GTFS stop sequence in the stop_times.txt file
+    public boolean equalsContainedStops(TripStopsList list) {
+        //we check if the number of contained stops is the same
+        if (stopSequenceOSMStopMap.size() != list.stopSequenceOSMStopMap.size())
+            return false;
+
+        for (Long key : list.stopSequenceOSMStopMap.keySet()) {
+            Stop a = list.stopSequenceOSMStopMap.get(key);
+            if (!stopSequenceOSMStopMap.containsValue(a))
                 return false;
         }
         return true;

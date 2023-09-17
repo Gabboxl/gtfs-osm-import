@@ -117,7 +117,7 @@ public class CmdGenerateRoutesFullRelations implements Callable<Void> {
 
         for (Route route : finalRoutesSet) { //for every route
             Collection<Trip> allTrips = groupedTrips.get(route);
-            Set<Trip> uniqueTrips = new HashSet<>(allTrips);
+            Set<Trip> uniqueTrips = new HashSet<>(allTrips); //uses the equals method of the Trip class to check if the trips are the same
 
 
             List<Integer> newRelationsIds = new ArrayList<>();

@@ -72,9 +72,9 @@ public class Trip implements Comparable<Trip> {
         }
 
         Trip other = (Trip) obj;
-        return (other.route.equals(route) && other.shapeId.equals(shapeId) &&
-                ((other.tripStopsList == null && tripStopsList == null) ||
-                        (other.tripStopsList != null && other.tripStopsList.equalsStops(tripStopsList))));
+        boolean testvar = ((other.tripStopsList == null && tripStopsList == null) || (other.tripStopsList != null && other.tripStopsList.equalsStopsNoSequenceCode(tripStopsList)));
+
+        return (other.route.equals(route) && other.shapeId.equals(shapeId) && testvar);
     }
 
     @Override
