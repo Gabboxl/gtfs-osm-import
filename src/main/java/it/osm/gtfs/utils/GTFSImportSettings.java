@@ -35,7 +35,7 @@ public class GTFSImportSettings {
 
     //public static final String OSM_OVERPASS_XAPI_SERVER = "http://overpass.osm.rambler.ru/cgi/xapi?"; //vecchia xapi
 
-    public static final String OSM_API_SERVER = "https://www.openstreetmap.org/api/0.6/";
+    public static final String OSM_API_SERVER = "https://api.openstreetmap.org/api/0.6/";
     public static final String OSM_RELATIONS_FILE_NAME = "relations.osm";
     public static final String OSM_STOPS_FILE_NAME = "stops.osm";
     public static final String OUTPUT_MATCHED_WITH_UPDATED_METADATA = "gtfs_import_matched_with_updated_metadata.osm";
