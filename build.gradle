@@ -36,7 +36,7 @@ dependencies {
     implementation 'org.mapfish.geo:mapfish-geo-lib:1.2.0'
 
     implementation 'org.openstreetmap.osmosis:osmosis-xml:0.48.3'
-    implementation 'org.openstreetmap.osmosis:osmosis-set:0.48.3'
+    implementation 'org.openstreetmap.osmosis:osmosis-set:0.49.2'
     implementation 'org.openstreetmap.osmosis:osmosis-tagfilter:0.48.3'
 
 
