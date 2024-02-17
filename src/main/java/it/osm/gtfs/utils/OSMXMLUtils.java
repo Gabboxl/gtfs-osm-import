@@ -69,7 +69,6 @@ public class OSMXMLUtils {
         return null;
     }
 
-
     public static String getTagValue(Element node, String key) {
         Element attNode = getTagElement(node, key);
 
@@ -124,7 +123,6 @@ public class OSMXMLUtils {
             //node.removeChild(tagElementPublicTransport);
             tagElementPublicTransport.setAttribute("k", "disused:public_transport");
         }
-
 
         LocalDateTime current = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

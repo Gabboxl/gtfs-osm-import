@@ -14,7 +14,6 @@ public enum RouteType { //data according to the GTFS reference guide
     TROLLEYBUS(11, "trolleybus"),
     MONORAIL(12, "monorail");
 
-
     private final int gtfsValue;
     private final String osmValue;
 
@@ -82,7 +81,6 @@ public enum RouteType { //data according to the GTFS reference guide
 
         throw new IllegalArgumentException("Unsupported GTFS type: \"" + gtfsValue + "\"");
     }
-
 
     public int getGtfsValue() {
         return gtfsValue;

@@ -108,8 +108,6 @@ public class TripStopsList {
         return true;
     }
 
-
-
     //instead of equalsStops, this method checks if the list contains the same stops as the parameter list without checking the GTFS stop sequence in the stop_times.txt file
     public boolean equalsContainedStops(TripStopsList list) {
         //we check if the number of contained stops is the same

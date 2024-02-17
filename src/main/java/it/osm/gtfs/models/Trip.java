@@ -38,7 +38,6 @@ public class Trip implements Comparable<Trip> {
         return tripId;
     }
 
-
     public Route getRoute() {
         return route;
     }

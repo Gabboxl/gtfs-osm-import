@@ -24,7 +24,6 @@ public class GTFSStop extends Stop {
                 + ", lon=" + getGeoPosition().getLongitude() + ", name=" + getName() + ", stopType=" + getStopType() + ", accessibility=" + getWheelchairAccessibility() + "]";
     }
 
-
     public Element getNewXMLNode(IElementCreator document) {
         Element node = document.createElement("node");
         long id;
@@ -71,7 +70,6 @@ public class GTFSStop extends Stop {
             node.appendChild(OSMXMLUtils.createTagElement(document, "railway", "station"));
             node.appendChild(OSMXMLUtils.createTagElement(document, "train", "yes"));
         }
-
 
         return node;
     }

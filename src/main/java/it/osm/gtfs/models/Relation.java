@@ -65,7 +65,6 @@ public class Relation {
         sequenceOSMstopMap = s;
     }
 
-
     public boolean equalsStops(TripStopsList o) {
         if (sequenceOSMstopMap.size() != o.getStopSequenceOSMStopMap().size())
             return false;
@@ -77,7 +76,6 @@ public class Relation {
         }
         return true;
     }
-
 
     public void pushPoint(Long sequence, OSMStop stop) {
         sequenceOSMstopMap.put(sequence, stop);

@@ -71,7 +71,6 @@ public class GTFSOSMImport {
             CmdRelDiffGui.class
     );
 
-
     @CommandLine.Command(description = "Display current configuration")
     void conf(){
         System.out.println("Current Configuration:\n" +
@@ -81,7 +80,6 @@ public class GTFSOSMImport {
                 "Revised key: " + GTFSImportSettings.getInstance().useRevisedKey() + "\n" +
                 "Plugin class: " + GTFSImportSettings.getInstance().getPlugin().getClass().getCanonicalName() + "\n");
     }
-
 
     @CommandLine.Command(description = {
             "Example interactive shell with completion and autosuggestions. " +
@@ -102,9 +100,7 @@ public class GTFSOSMImport {
             out.println(new CommandLine(this).getUsageMessage());
         }
     }
-
-
-
+    
     //@CommandLine.Command(description = "Start GTFS-OSM-import in shell interactive mode")
     static void interactive(){
         try {

@@ -31,7 +31,6 @@ public enum WheelchairAccess { //data according to the GTFS reference guide - th
         return null;
     }
 
-
     public int getGtfsValue() {
         return gtfsValue;
     }

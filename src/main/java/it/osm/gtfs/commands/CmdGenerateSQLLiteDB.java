@@ -42,7 +42,6 @@ public class CmdGenerateSQLLiteDB implements Callable<Void> {
         System.out.println("Parsing OSM relations...");
         ReadOSMRelationsResult osmRels = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getOsmRelationsFilePath()), osmstopsOsmID, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
-
         CmdGenerateSQLLiteDB generator = null;
         try {
             System.out.println("Creating SQLite DB...");

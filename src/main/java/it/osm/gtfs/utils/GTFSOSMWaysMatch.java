@@ -60,7 +60,6 @@ public class GTFSOSMWaysMatch {
         mapMatching.setTransitionProbabilityBeta(2.0);
         mapMatching.setMeasurementErrorSigma(40);
 
-
         String instructions_locale = "";
         tr = new TranslationMap().doImport().getWithFallBack(Helper.getLocale(instructions_locale));
         withRoute = !instructions_locale.isEmpty();
@@ -92,7 +91,6 @@ public class GTFSOSMWaysMatch {
 
             List<Observation> measurements = GpxConversions.getEntries(gpx.trk.get(0));
             importSW.stop();
-
 
             matchSW.start();
             MatchResult matchResult = mapMatching.match(measurements);

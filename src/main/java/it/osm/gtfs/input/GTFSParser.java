@@ -75,7 +75,6 @@ public class GTFSParser {
                         case "parent_station" -> parentStationKey = i;
                         case "wheelchair_boarding" -> wheelchairBoardingKey = i;
 
-
                         // gtfs stop_url is mapped to source_ref tag in OSM
                         case "stop_url" -> keysIndex.put("source_ref", i);
                         default -> {
@@ -101,7 +100,6 @@ public class GTFSParser {
                         System.out.println(ansi().render("@|red GTFSParser: Skipped a station (group of multiple stops) with gtfs id: |@" + elements[stopIdKey]));
                     } else {
 
-
                         GTFSStop gtfsStop = new GTFSStop(elements[stopIdKey],
                                 elements[stopCodeKey],
                                 new GeoPosition(Double.parseDouble(elements[stopLatKey]), Double.parseDouble(elements[stopLonKey])),
@@ -120,7 +118,6 @@ public class GTFSParser {
 
                         //todo: probably we should remove this plugin call and instead find a way to include the stop type directly in the constructor up there
                         gtfsStop.setStopType(stopType);
-
 
                         if (GTFSImportSettings.getInstance().getPlugin().isValidStop(gtfsStop)) {
                             resultGtfsStopsList.add(gtfsStop);
@@ -338,7 +335,6 @@ public class GTFSParser {
 
         System.out.println(ansi().fg(Ansi.Color.GREEN).a("Stop times read completed.").reset());
 
-
         br.close();
 
         if (missingStops.size() > 0) {
@@ -351,7 +347,6 @@ public class GTFSParser {
 
         return readStopTimesResult;
     }
-
 
     public static GTFSFeedInfo readFeedInfo(String gtfsFeedInfoPath) throws IOException {
 

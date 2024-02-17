@@ -28,7 +28,6 @@ public class OSMRelationImportGenerator {
     public static String createSingleTripRelation(BoundingBox bb, List<Integer> osmWaysIds, Trip trip, Route route, GTFSFeedInfo gtfsFeedInfo, int id) {
         GTFSPlugin plugin = GTFSImportSettings.getInstance().getPlugin();
 
-
         //todo: remove the timestamp as it is redundant, set osmosis' enableDateParsing option to false
         //the timestamp and the version attribute for every relation is needed by the merge with osmosis, unfortunately
         String currentTimeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date());
@@ -38,11 +37,9 @@ public class OSMRelationImportGenerator {
         buffer.append(bb.getXMLTag());
         buffer.append("<relation id='-" + id + "' version='1' timestamp='" + currentTimeStamp +"' action='modify'>\n");
 
-
         for (OSMStop osmStop : trip.getStopsList().getStopSequenceOSMStopMap().values()) {
             buffer.append("<member type='node' ref='" + osmStop.originalXMLNode.getAttributes().getNamedItem("id").getNodeValue() + "' role='stop' />\n");
         }
-
 
         if (osmWaysIds != null) {
             for (Integer osmWayId : osmWaysIds) {
@@ -58,7 +55,6 @@ public class OSMRelationImportGenerator {
         if (GTFSImportSettings.getInstance().useRevisedKey()) {
             buffer.append("<tag k='" + GTFSImportSettings.REVISED_KEY + "' v='no' />\n");
         }
-
 
         buffer.append("<tag k='name' v=\"" + StringUtils.capitalize(route.getRouteType().getOsmValue()) + " " + route.getShortName() + ": " + plugin.fixTripHeadsignName(trip.getTripHeadsign()) + "\" />\n");
 
@@ -76,10 +72,8 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='network' v=\"" + GTFSImportSettings.getInstance().getNetwork() + "\" />\n");
         buffer.append("<tag k='operator' v=\"" + GTFSImportSettings.getInstance().getOperator() + "\" />\n");
 
-
         buffer.append("<tag k='gtfs:route_id' v='" + route.getId() + "' />\n");
         buffer.append("<tag k='gtfs:shape_id' v='" + trip.getShapeId() + "' />\n");
-
 
         var agencyId = route.getAgencyId();
 
@@ -122,7 +116,6 @@ public class OSMRelationImportGenerator {
         buffer.append("<tag k='operator' v=\"" + GTFSImportSettings.getInstance().getOperator() + "\" />\n");
         buffer.append("<tag k='network' v=\"" + GTFSImportSettings.getInstance().getNetwork() + "\" />\n");
 
-
         var routeColor = route.getRouteColor();
 
         if (routeColor != null && !routeColor.isBlank()) {
@@ -136,7 +129,6 @@ public class OSMRelationImportGenerator {
         if(agencyId != null && !agencyId.isBlank()) {
             buffer.append("<tag k='gtfs:agency_id' v='" + agencyId + "' />\n");
         }
-
 
         buffer.append("</relation>");
         buffer.append("</osm>");

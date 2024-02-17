@@ -66,7 +66,6 @@ public class GTTTurinPlugin implements GTFSPlugin {
                     .replaceAll("STAZIONE ", "");
         }
 
-
         try {
             if (Character.isUpperCase(fixedStopName.charAt(1))) {
                 return camelCase(fixedStopName).trim();

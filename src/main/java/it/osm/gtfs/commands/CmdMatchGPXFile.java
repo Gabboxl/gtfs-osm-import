@@ -24,17 +24,14 @@ import java.util.concurrent.Callable;
 public class CmdMatchGPXFile implements Callable<Void> {
     //TODO: make this command match both folders or individual files given the path in input
 
-
     //@CommandLine.Option(names = {"-f", "--file"}, description = "export to file")
     //Boolean exportToFile;
 
     public Void call() throws IOException {
 
-
         File directoryPath = new File(GTFSImportSettings.getInstance().getOutputPath() + "/gpx");
         //List of all files and directories
         File[] gpx_files_list = directoryPath.listFiles();
-
 
         assert gpx_files_list != null; //mi assicuro che la cartella dei file gpx sia piena almeno, altrimenti genera un'eccezione
         for (File gpxFile : gpx_files_list) {
@@ -42,7 +39,6 @@ public class CmdMatchGPXFile implements Callable<Void> {
             System.out.println(gpxFile);
 
             String outFile = gpxFile.getAbsolutePath() + ".res.gpx";
-
 
             // new GTFSOSMWaysMatch().initMatch(Files.readString(gpxFile.toPath()), false);
 

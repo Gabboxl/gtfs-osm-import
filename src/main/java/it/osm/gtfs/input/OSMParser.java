@@ -51,7 +51,6 @@ public class OSMParser {
     public static List<OSMStop> readOSMStops(String osmStopsFileName, boolean readStopsOfAnyOperator) throws ParserConfigurationException, SAXException, IOException {
         List<OSMStop> osmStopsListOutput = new ArrayList<>();
 
-
         File osmStopsFile = new File(osmStopsFileName);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -190,14 +189,12 @@ public class OSMParser {
                 }
             }
 
-
             //skip subway stops if requested
             if (SharedCliOptions.onlyBusStops && (osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION))) {
 
                 System.out.println(ansi().render("@|yellow Skipping OSM subway/station stop (nodeID= " + osmStop.getOSMId() + ", ref= " + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ") as requested. |@"));
                 continue;
             }
-
 
             //if the current osm stop has a different operator tag value than the one specified in the properties we skip it - but we keep the stops with a null operator as they could be of our operator
             if (!readStopsOfAnyOperator && osmStop.getOperator() != null && !StringUtils.containsIgnoreCase(osmStop.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
@@ -207,16 +204,13 @@ public class OSMParser {
                 continue;
             }
 
-
             if (osmStop.getStopType() == null) //we don't know the type of this stop based on the tag values we checked
                 throw new IllegalArgumentException("Unknown node type for OSM node ID: " + osmStop.getOSMId() + ". We support only highway=bus_stop, public_transport=stop_position, railway=tram_stop, railway=station and station=subway");
-
 
             if (osmStop.getStopType().equals(OSMStopType.GENERAL_STOP_POSITION)) {
                 System.out.println(ansi().render("@|yellow Ignoring general_stop_position... (node ID: " + osmStop.getOSMId() + ") |@"));
                 continue; //ignore unsupported stop positions (like ferries)
             }
-
 
             osmStopsListOutput.add(osmStop);
         }
@@ -337,7 +331,6 @@ public class OSMParser {
         String route_tag, type_tag;
         Map<String, String> tempMemberRefRoleMap;
 
-
         private Relation currentRelation;
         private long seq = 1;
         private boolean failed = false;
@@ -347,7 +340,6 @@ public class OSMParser {
             this.stopsWithOSMIndex = stopsWithOSMIndex;
             this.ways = ways;
             this.readRelationsOfAnyOperator = readRelationsOfAnyOperator;
-
         }
 
         @Override
@@ -420,7 +412,6 @@ public class OSMParser {
                     return;
                 }
 
-
                 //if the current osm relation has a different operator tag value than the one specified in the properties we skip it - but we keep the stops with a null operator as they could be of our operator
                 if (!readRelationsOfAnyOperator && currentRelation.getOperator() != null && !StringUtils.containsIgnoreCase(currentRelation.getOperator(), GTFSImportSettings.getInstance().getOperator())) {
 
@@ -428,7 +419,6 @@ public class OSMParser {
 
                     return;
                 }
-
 
                 //members check
                 for (var entry : tempMemberRefRoleMap.entrySet()) {
@@ -461,16 +451,13 @@ public class OSMParser {
                     failed = true;
                 }
 
-
                 if (!failed) {
                     validRelations.add(currentRelation);
                 } else {
                     failedRelations.add(currentRelation);
                     System.out.println(ansi().render("@|red OSMParser: Relation " + currentRelation.getId() + " couldn't be parsed because of invalid member nodes. [" + currentRelation.getName() + "]" + "|@"));
                 }
-
             }
         }
-
     }
 }

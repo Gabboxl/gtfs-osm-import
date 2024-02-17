@@ -34,7 +34,6 @@ public abstract class Stop { //https://stackoverflow.com/a/42756744/9008381
     //private Boolean isMetroStop; //TODO: should we add this check only for GTFS stops or also for osm stops, or not at all?
     private WheelchairAccess wheelchairAccessibility;
 
-
     protected Stop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
         super();
         this.gtfsId = gtfsId;

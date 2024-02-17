@@ -101,6 +101,7 @@ public class GpxConversions {
                 + "<time>" + formatter.format(startTimeMillis) + "</time>"
                 + "</metadata>";
         StringBuilder gpxOutput = new StringBuilder(header);
+
         if (!instructions.isEmpty()) {
             if (withWayPoints) {
                 createWayPointBlock(gpxOutput, instructions.get(0), decimalFormat, tr);   // Start
@@ -125,6 +126,7 @@ public class GpxConversions {
                 gpxOutput.append("\n</rte>");
             }
         }
+
         if (withTrack) {
             gpxOutput.append("\n<trk><name>").append(trackName).append("</name>");
 

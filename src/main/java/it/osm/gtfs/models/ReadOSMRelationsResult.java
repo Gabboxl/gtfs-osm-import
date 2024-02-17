@@ -13,7 +13,6 @@ public class ReadOSMRelationsResult {
         this.missingNodes = missingNodes;
     }
 
-
     public List<Relation> getFinalValidRelations() {
         return finalValidRelations;
     }

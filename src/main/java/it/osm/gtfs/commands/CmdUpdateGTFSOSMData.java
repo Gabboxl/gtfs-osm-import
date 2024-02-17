@@ -133,14 +133,12 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         File uncheckedRelsFile = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_unchecked_rels.osm");
         DownloadUtils.download(urlrel, uncheckedRelsFile, false);
 
-
         List<OSMStop> osmStops = OSMParser.readOSMStops(GTFSImportSettings.getInstance().getOsmStopsFilePath(), true);
         Map<String, OSMStop> osmIdOSMStopMap = StopsUtils.getOSMIdOSMStopMap(osmStops);
 
         // Default to all available rel, then override forced updates
         ReadOSMRelationsResult readRelsResult = OSMParser.readOSMRelations(new File(GTFSImportSettings.getInstance().getCachePath() +  "tmp_unchecked_rels.osm"), osmIdOSMStopMap, SharedCliOptions.checkStopsOfAnyOperatorTagValue);
 
-        
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(uncheckedRelsFile);
@@ -157,7 +155,6 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
                     doc.getDocumentElement().removeChild(node);
                 }
             }
-
         }
 
         String tmpCheckedRelsPath = GTFSImportSettings.getInstance().getCachePath() + "tmp_checked_rels.osm";
@@ -171,11 +168,9 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         //we close the file stream
         stream.close();
 
-
         File checkedRelsFile = new File(tmpCheckedRelsPath);
         File filteredRelsFile = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_filteredchecked_rels.osm");
         OsmosisUtils.checkProcessOutput(OsmosisUtils.runOsmosisUnusedWaysNodes(checkedRelsFile, filteredRelsFile));
-
 
         File stopsFile = new File(GTFSImportSettings.getInstance().getOsmStopsFilePath());
 

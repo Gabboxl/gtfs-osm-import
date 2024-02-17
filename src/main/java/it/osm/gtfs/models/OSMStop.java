@@ -13,7 +13,6 @@ public class OSMStop extends Stop {
     private boolean isRevised = false;
     private boolean isDisused = false;
 
-
     public OSMStop(String gtfsId, String code, GeoPosition geoPosition, String name, String operator, OSMStopType stopType, WheelchairAccess wheelchairAccessibility) {
         super(gtfsId, code, geoPosition, name, operator, stopType, wheelchairAccessibility);
     }
@@ -30,7 +29,6 @@ public class OSMStop extends Stop {
         this.isRevised = isRevised;
     }
 
-
     public boolean isRevised() {
         return isRevised;
     }
@@ -38,7 +36,6 @@ public class OSMStop extends Stop {
     public boolean needsPositionReview() {
         return needsPositionReview;
     }
-
 
     @Override
     public String toString() {

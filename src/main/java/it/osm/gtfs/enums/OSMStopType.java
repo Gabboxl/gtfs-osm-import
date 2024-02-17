@@ -11,13 +11,11 @@ public enum OSMStopType {
     SUBWAY_STOP_POSITION("subway_stop_position"),
     GENERAL_STOP_POSITION("general_stop_position");
 
-
     private final String osmStopType;
 
     OSMStopType(String osmStopType) {
         this.osmStopType = osmStopType;
     }
-
 
     public String getOsmStopType() {
         return osmStopType;

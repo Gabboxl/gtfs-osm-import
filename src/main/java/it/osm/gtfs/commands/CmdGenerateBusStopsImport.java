@@ -62,7 +62,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
             new CmdUpdateGTFSOSMData().call();
         }
 
-
         List<GTFSStop> gtfsStopsList = GTFSParser.readStops(GTFSImportSettings.getInstance().getGTFSDataPath() + GTFSImportSettings.GTFS_STOP_FILE_NAME);
         BoundingBox bb = new BoundingBox(gtfsStopsList);
 
@@ -71,14 +70,11 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
         //TODO: TO REMOVE - THIS IS ONLY FOR A QUICK DEBUG!!!!
         // osmStopsList = osmStopsList.subList(0, 500);
 
-
         //first matching phase between GTFS and OSM stops
         new MatchUtils().doStopsMatching(gtfsStopsList, osmStopsList);
 
-
         //second matching phase by checking all osm stops again (also checking stops that didn't get matched && those that we don't consider matched)
         {
-
             int matched_stops = 0;
             int not_matched_osm_stops = 0;
             int stopsToReview = 0;
@@ -137,7 +133,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 }
             }
 
-
             //stops position review with GUI
             //only execute if the noreview flag is set to false
             if (!noGuiReview && !osmStopsToReview.isEmpty()) {
@@ -179,7 +174,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 }
             }
 
-
             if (matched_stops > 0) {
                 bufferMatchedStops.end();
                 bufferMatchedStops.saveTo(new FileOutputStream(GTFSImportSettings.getInstance().getOutputPath() + GTFSImportSettings.OUTPUT_MATCHED_WITH_UPDATED_METADATA));
@@ -204,7 +198,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
         }
 
-
         //new stops from gtfs data
         {
             int new_stops_from_gtfs = 0;
@@ -228,7 +221,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 System.out.println(ansi().fg(Ansi.Color.GREEN).a("New stops from GTFS (unmatched stops from GTFS): ").reset().a(new_stops_from_gtfs));
             }
         }
-
 
         return null;
     }

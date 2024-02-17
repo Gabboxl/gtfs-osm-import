@@ -32,7 +32,6 @@ public class GTFSFeedInfo implements Comparable<GTFSFeedInfo> {
         this.version = version;
     }
 
-
     @Override
     public boolean equals(Object other) {
         if (other instanceof GTFSFeedInfo) {

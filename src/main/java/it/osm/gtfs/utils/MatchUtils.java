@@ -18,7 +18,6 @@ public class MatchUtils {
         this.globalGtfsStopsList = gtfsStopsList;
         this.globalOsmStopsList = osmStopsList;
 
-
         //TODO: consider inverting the for loops, first osmstops and then gtfsstops, so that we can integrate the second step of the cmdgeneratebusstopsimport there directly
         for (GTFSStop gtfsStop : gtfsStopsList) {
 
@@ -48,7 +47,6 @@ public class MatchUtils {
                             System.out.println(ansi().render("@|cyan Keeping the closest one, which is " + osmStop + "|@"));
 
                             gtfsStop.railwayStopMatchedWith.gtfsStopMatchedWith = null;
-
                         }
 
                         gtfsStop.railwayStopMatchedWith = osmStop;
@@ -86,7 +84,6 @@ public class MatchUtils {
                     }
 
                     osmStop.gtfsStopMatchedWith = gtfsStop;
-
                 }
             }
         }
@@ -115,7 +112,6 @@ public class MatchUtils {
                 return true;
             } else if (distanceBetween < 2000 && osmStop.getOperator() != null) {//if the operator is null and that stop is too distant then it could be of another bus company/operator. so we consider it as not matched (and we will need to remove it from any list later)
                 System.out.println(ansi().render("@|yellow Stop match: found too distant osm and gtfs stops / |@" + debugData));
-
 
                 //FIXME: we should remove this check and instead decide what to do with the stop positions that are associated to the physical stops (like move them or what during the stop gui review??)
                 if (osmStop.getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAM_STOP)) {
@@ -172,13 +168,10 @@ public class MatchUtils {
                 return true;
             }
 
-
         }
 
         return false;
     }
-
-
 
     public boolean isAmbiguousNearbyStopPresent(List<OSMStop> nearbyStops, OSMStop mainOsmStop) {
 

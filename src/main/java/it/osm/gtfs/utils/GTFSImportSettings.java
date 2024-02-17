@@ -91,9 +91,7 @@ public class GTFSImportSettings {
                 properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME));
             }
 
-
             readProperties();
-
 
             System.out.println(ansi().render("@|green Config properties loaded successfully.|@"));
 
@@ -163,14 +161,12 @@ public class GTFSImportSettings {
             }
         }
 
-
         //operator value
         synchronized (this) {
             operator = properties.getProperty("operator");
             if (operator == null)
                 throw new IllegalArgumentException("Please set a valid operator value.");
         }
-
 
         //network value
         synchronized (this) {
