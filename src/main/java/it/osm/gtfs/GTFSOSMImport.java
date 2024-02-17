@@ -100,7 +100,7 @@ public class GTFSOSMImport {
             out.println(new CommandLine(this).getUsageMessage());
         }
     }
-    
+
     //@CommandLine.Command(description = "Start GTFS-OSM-import in shell interactive mode")
     static void interactive(){
         try {

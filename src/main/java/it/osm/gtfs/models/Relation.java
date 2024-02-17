@@ -1,6 +1,7 @@
 package it.osm.gtfs.models;
 
 import it.osm.gtfs.enums.RouteType;
+import it.osm.gtfs.utils.VariousUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
@@ -26,23 +27,13 @@ public class Relation {
         sequenceOSMstopMap = new TreeMap<>();
     }
 
-    //TODO: maybe this function can be put in a separate Utils class
-    private static <T, E> T getKeysByValue(Map<T, E> map, E value) {
-        for (Map.Entry<T, E> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
     public int getStopsAffinity(TripStopsList tripStopsList) {
         boolean exactMatch = true;
         int affinity = 0;
 
         for (OSMStop stop : sequenceOSMstopMap.values())
             if (tripStopsList.getStopSequenceOSMStopMap().containsValue(stop)) {
-                affinity += sequenceOSMstopMap.size() - Math.abs((getKeysByValue(sequenceOSMstopMap, stop) - getKeysByValue(tripStopsList.getStopSequenceOSMStopMap(), stop)));
+                affinity += sequenceOSMstopMap.size() - Math.abs((VariousUtils.getKeysByValue(sequenceOSMstopMap, stop) - VariousUtils.getKeysByValue(tripStopsList.getStopSequenceOSMStopMap(), stop)));
             } else {
                 affinity -= sequenceOSMstopMap.size();
                 exactMatch = false;

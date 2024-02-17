@@ -145,9 +145,7 @@ public class OSMXMLUtils {
                 String attNodeKeyValue = attNode.getAttributes().getNamedItem("k").getNodeValue();
 
                 if (attNodeKeyValue.startsWith("disused:")) {
-
                     attNode.getAttributes().getNamedItem("k").setNodeValue(attNodeKeyValue.replace("disused:", ""));
-
                 }
             }
         }
