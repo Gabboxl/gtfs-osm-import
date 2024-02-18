@@ -45,14 +45,13 @@ public interface GTFSPlugin {
      */
     Boolean isValidStop(GTFSStop gtfsStop);
 
-
     /**
      * Custom logic to consider valid or exclude specific routes from the import
      */
     boolean isValidRoute(Route route);
 
     /**
-     * Custom logic to define the type of a GTFS stop (bus, tram, subway, etc.)
+     * Custom logic to define the type of GTFS stop (bus, tram, subway, etc.)
      */
     OSMStopType getStopType(GTFSStop gtfsStop) throws IllegalStateException;
 

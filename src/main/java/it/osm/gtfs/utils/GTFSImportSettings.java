@@ -59,7 +59,6 @@ public class GTFSImportSettings {
     private String network = null;
     private boolean useRevisedKey = true;
 
-
     private GTFSImportSettings() {
 
         System.out.println("\nLoading config properties...");
@@ -128,12 +127,17 @@ public class GTFSImportSettings {
         //output_path value
         synchronized (this) {
             outputPath = properties.getProperty("output_path");
-            if (outputPath == null)
-                throw new IllegalArgumentException("Please set a valid output_path value.");
+            if (outputPath == null || outputPath.isBlank())
+            {
+                //say that the output path is not set and use the directory where the jar is located
+                System.out.println(ansi().render("\n @|yellow The output_path value is not set, using the current directory as output path.|@"));
+                outputPath = System.getProperty("user.dir");
+            }
+
             if (!outputPath.endsWith(File.separator))
                 outputPath = outputPath + File.separator;
             if (!new File(outputPath).isDirectory())
-                throw new IllegalArgumentException("The output_path value is not a directory. Please set a valid output_path value.");
+                throw new IllegalArgumentException("The output_path value is not a valid directory. Please set a valid output_path value.");
         }
 
         //plugin class value
