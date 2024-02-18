@@ -34,8 +34,8 @@ public class MatchUtils {
                             System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
                             System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.railwayStopMatchedWith.getGeoPosition());
+                            double distanceBetweenCurrentStop = DistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
+                            double distanceBetweenAlreadyMatchedStop = DistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.railwayStopMatchedWith.getGeoPosition());
 
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop) {
 
@@ -58,8 +58,8 @@ public class MatchUtils {
                             System.out.println(ansi().render("@|red Current-matching OSM stop: |@" + osmStop));
                             System.out.println(ansi().render("@|red Already-matched OSM stop: |@" + gtfsStop.osmStopMatchedWith));
 
-                            double distanceBetweenCurrentStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
-                            double distanceBetweenAlreadyMatchedStop = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.osmStopMatchedWith.getGeoPosition());
+                            double distanceBetweenCurrentStop = DistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
+                            double distanceBetweenAlreadyMatchedStop = DistanceUtils.distVincenty(gtfsStop.getGeoPosition(), gtfsStop.osmStopMatchedWith.getGeoPosition());
 
                             //in case of multiple matching we check what stop is the closest one to the gtfs coordinates between the current loop stop and the already-matched stop
                             if (distanceBetweenCurrentStop > distanceBetweenAlreadyMatchedStop) {
@@ -98,7 +98,7 @@ public class MatchUtils {
     public boolean match(GTFSStop gtfsStop, OSMStop osmStop) {
         int maxDist = 100;
 
-        double distanceBetween = OSMDistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
+        double distanceBetween = DistanceUtils.distVincenty(gtfsStop.getGeoPosition(), osmStop.getGeoPosition());
         String debugData = "GTFS Stop data: [" + gtfsStop + "] -> OSM Stop data: [" + osmStop + "], exact distance between: " + distanceBetween + " m";
 
         if (osmStop.getCode() != null && osmStop.getCode().equals(gtfsStop.getCode())) {

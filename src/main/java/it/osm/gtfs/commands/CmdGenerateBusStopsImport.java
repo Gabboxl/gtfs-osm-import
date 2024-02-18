@@ -88,7 +88,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
                 //we check if the osm stop got matched with a gtfs stop AND only IF the osm stop needs the position review but the user doesn't want to review the stops then we consider the stop as not matched and we handle it in the else case
                 if (osmStop.gtfsStopMatchedWith != null && !(osmStop.needsPositionReview() && noGuiReview)) {
 
-
                     //if the stop was marked as disused but now was matched again, we remove the disused marking
                     if(osmStop.isDisused()) {
                         String stringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " was marked as disused but now it has been matched.";
@@ -115,7 +114,6 @@ public class CmdGenerateBusStopsImport implements Callable<Void> {
 
                 } else {
                     String notMatchedStringOutput = "OSM Stop node id " + osmStop.getOSMId() + " (ref=" + osmStop.getCode() + ", gtfs_id=" + osmStop.getGtfsId() + ")" + " didn't get matched to a GTFS stop as either they are too distant or the ref code is no more available in gtfs.";
-
 
                     if (osmStop.getOperator() != null) {//if there is a stop that has no operator, and it has NOT been matched, then it couuld be managed by another bus company/operator. so we don't consider it anymore
                         System.out.println(notMatchedStringOutput);

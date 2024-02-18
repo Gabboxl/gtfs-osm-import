@@ -17,7 +17,7 @@ package it.osm.gtfs.utils;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-public class OSMDistanceUtils {
+public class DistanceUtils {
 
     public static double distVincenty(GeoPosition geoPosition1, GeoPosition geoPosition2) {
         return distVincenty(geoPosition1.getLatitude(), geoPosition1.getLongitude(), geoPosition2.getLatitude(), geoPosition2.getLongitude());

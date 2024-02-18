@@ -2,9 +2,7 @@ package it.osm.gtfs.utils;
 
 import it.osm.gtfs.enums.OSMStopType;
 import it.osm.gtfs.enums.WheelchairAccess;
-import it.osm.gtfs.models.GTFSStop;
 import it.osm.gtfs.models.OSMStop;
-import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class StopsUtils {
         List<OSMStop> result = new ArrayList<>();
 
         for (OSMStop currentLoopStop : osmStopsList) {
-            if (currentLoopStop.getStopType().equals(mainOsmStop.getStopType()) && OSMDistanceUtils.distVincenty(mainOsmStop.getGeoPosition(), currentLoopStop.getGeoPosition()) < radius) {
+            if (currentLoopStop.getStopType().equals(mainOsmStop.getStopType()) && DistanceUtils.distVincenty(mainOsmStop.getGeoPosition(), currentLoopStop.getGeoPosition()) < radius) {
                 result.add(currentLoopStop);
             }
         }
