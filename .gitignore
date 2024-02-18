@@ -38,3 +38,4 @@ graph-cache/
 !graphhopper-core-7.0-SNAPSHOT-modded.jar
 !gradle/wrapper/gradle-wrapper.jar
 .idea/workspace.xml
+.idea/uiDesigner.xml
