@@ -105,10 +105,10 @@ public class MatchUtils {
 
             if (distanceBetween < maxDist || (osmStop.getGtfsId() != null && gtfsStop.getGtfsId() != null && osmStop.getGtfsId().equals(gtfsStop.getGtfsId()) && osmStop.isRevised())) {
                 //if the stops are less than maxDist far away (with only the ref code in common)
-                // OR are already linked with gtfsid
-                // AND the OSM stop is already revised
-                // (if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop.
-                // In other cases the stops can be gtfs-is-matched but the position could have been changed)
+                // OR (are already linked with gtfsid
+                // AND the OSM stop is already marked as revised)
+                // [if it has the tag that this tool creates during the import, because if the stop was already checked by a real person we know this is probably the real position of the stop.
+                // In other cases the stops can be gtfs-id-matched but the position could have been changed]
                 return true;
             } else if (distanceBetween < 2000 && osmStop.getOperator() != null) {//if the operator is null and that stop is too distant then it could be of another bus company/operator. so we consider it as not matched (and we will need to remove it from any list later)
                 System.out.println(ansi().render("@|yellow Stop match: found too distant osm and gtfs stops / |@" + debugData));
@@ -129,7 +129,7 @@ public class MatchUtils {
 
         } else if (((gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_SUBWAY_STOP))
                 || (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION) && osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAIN_STATION)))
-                && distanceBetween < 200 && StringUtils.containsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
+                && distanceBetween < 200 && StringUtils.containsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), VariousUtils.removeAccents(GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop)))) {
             //for subway and train stations we consider the stops matched if they are less than 200m far away and have the same name
 
             System.out.println(ansi().render("@|yellow Warning: Metro/train stop matched only with name / |@" + debugData));
@@ -139,7 +139,7 @@ public class MatchUtils {
         } else if (osmStop.getGtfsId() == null && osmStop.getCode() == null
                 && (osmStop.getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP) || osmStop.getStopType().equals(OSMStopType.PHYSICAL_TRAM_STOP))
                 && (gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_BUS_STOP) || gtfsStop.getStopType().equals(OSMStopType.PHYSICAL_TRAM_STOP))
-                && distanceBetween < 50 && StringUtils.equalsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop))) {
+                && distanceBetween < 50 && StringUtils.equalsIgnoreCase(VariousUtils.removeAccents(osmStop.getName()), VariousUtils.removeAccents(GTFSImportSettings.getInstance().getPlugin().fixBusStopName(gtfsStop)))) {
             //remove accents from the osm stop name and try matching it with the gtfs stop name (some GTFS stops have accents, some don't)
 
             //check if in the range of 50m there is another stop with the same name
