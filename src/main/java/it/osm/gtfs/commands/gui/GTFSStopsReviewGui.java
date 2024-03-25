@@ -42,7 +42,6 @@ public class GTFSStopsReviewGui
 
     final JButton btSkipStop;
 
-
     final JButton btCloseWindow;
 
     String infoListReviewText = "<html><b>Stop review list:</b> (you can select any stop from this list to review it again)</html>";
@@ -62,7 +61,6 @@ public class GTFSStopsReviewGui
 
     final Map<OSMStop, GeoPosition> finalReviewedGeopositions;
 
-
     public GTFSStopsReviewGui(ArrayList<OSMStop> osmStopsToReview, Map<OSMStop, GeoPosition> finalReviewedGeopositions, Object lockObject) {
         this.osmStopsToReview = osmStopsToReview;
         this.finalReviewedGeopositions = finalReviewedGeopositions;
@@ -73,7 +71,6 @@ public class GTFSStopsReviewGui
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             System.out.println(ansi().render("@|red Error setting the look and feel: " + e.getLocalizedMessage() + "|@"));
         }
-
 
         osmCoordsStopMap = new JXMapKit();
         gtfsCoordsStopMap = new JXMapKit();
@@ -88,13 +85,11 @@ public class GTFSStopsReviewGui
         gtfsCoordsStopMap.setTileFactory(tileFactory);
         gtfsCoordsStopMap.setDataProviderCreditShown(true);
 
-
         iteratorStopsToReview = osmStopsToReview.listIterator();
 
         //set starting zoom level
         osmCoordsStopMap.setZoom(2);
         gtfsCoordsStopMap.setZoom(2);
-
 
         GridBagConstraints constraints = new GridBagConstraints();
         GridBagLayout layout = new GridBagLayout();
@@ -157,6 +152,7 @@ public class GTFSStopsReviewGui
 
         inputMap.put(KeyStroke.getKeyStroke("A"), "pressA");
         inputMap.put(KeyStroke.getKeyStroke("D"), "pressD");
+        inputMap.put(KeyStroke.getKeyStroke("S"), "pressS");
 
         actionMap.put("pressA", new AbstractAction() {
             @Override
@@ -174,10 +170,15 @@ public class GTFSStopsReviewGui
             }
         });
 
+        actionMap.put("pressS", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //skip stop
+                nextStopToReview();
+            }
+        });
+
         frame.setVisible(true);
-
-
-
 
         //we define the components of the frame here
 
@@ -194,7 +195,6 @@ public class GTFSStopsReviewGui
         constraints.gridy = 0;
         frame.add(lab1, constraints);
 
-
         lab2 = new JLabel("Some OSM stops are too distant from the respective GTFS coordinates, so you need to choose what coordinates, between the OSM and the respective GTFS stop, are the correct ones.");
         lab2.setFont(new Font(null, Font.PLAIN, 13));
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -207,7 +207,6 @@ public class GTFSStopsReviewGui
         constraints.gridwidth = 2;
         constraints.gridy = 1;
         frame.add(lab2, constraints);
-
 
         labInfoReviewList = new JLabel(infoListReviewText);
         labInfoReviewList.setFont(new Font(null, Font.PLAIN, 14));
@@ -222,8 +221,6 @@ public class GTFSStopsReviewGui
         constraints.gridheight = 1;
         constraints.weighty = 0;
         frame.add(labInfoReviewList, constraints);
-
-
 
         DefaultListModel<OSMStop> model = new DefaultListModel<>();
         for(OSMStop s:osmStopsToReview){
@@ -318,7 +315,6 @@ public class GTFSStopsReviewGui
         constraints.weightx = 0;
         frame.add(labOsmCoords, constraints);
 
-
         labGtfsCoords = new JLabel(textLabGtfsCoords);
         labGtfsCoords.setFont(new Font(null, Font.BOLD, 12));
         constraints.fill = GridBagConstraints.BOTH;
@@ -331,7 +327,6 @@ public class GTFSStopsReviewGui
         constraints.gridy = 5;
         constraints.weightx = 0;
         frame.add(labGtfsCoords, constraints);
-
 
         labReviewCompleted = new JLabel("Stop positions review completed! You can now close this window!");
         labReviewCompleted.setFont(new Font(null, Font.BOLD, 24));
@@ -348,7 +343,6 @@ public class GTFSStopsReviewGui
         constraints.weightx = 0;
         frame.add(labReviewCompleted, constraints);
 
-
         btCloseWindow = new JButton("Click here to close and save!");
         btCloseWindow.addActionListener(actionEvent -> {
             frame.dispose();
@@ -363,7 +357,6 @@ public class GTFSStopsReviewGui
         constraints.gridwidth = 2;   //2 columns wide
         constraints.gridy = 6;       //third row
         frame.add(btCloseWindow, constraints);
-
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.anchor = GridBagConstraints.SOUTHEAST;
@@ -390,7 +383,6 @@ public class GTFSStopsReviewGui
         constraints.weighty = 1;
         frame.add(gtfsCoordsStopMap, constraints);
 
-
         btChooseOSM = new JButton("Accept current OSM coordinates (if unsure) [A key]");
         btChooseOSM.addActionListener(actionEvent -> {
 
@@ -408,8 +400,6 @@ public class GTFSStopsReviewGui
         constraints.weightx = 0;
         frame.add(btChooseOSM, constraints);
 
-
-
         btChooseGTFS = new JButton("Accept new GTFS coordinates  [D key]");
         btChooseGTFS.addActionListener(actionEvent -> {
             acceptGtfsPosition();
@@ -426,8 +416,7 @@ public class GTFSStopsReviewGui
         constraints.weightx = 0;
         frame.add(btChooseGTFS, constraints);
 
-
-        btSkipStop = new JButton("Skip stop for now");
+        btSkipStop = new JButton("Skip stop for now [S key]");
         btSkipStop.addActionListener(actionEvent -> {
             nextStopToReview();
         });
@@ -443,8 +432,6 @@ public class GTFSStopsReviewGui
         constraints.weightx = 0;
         frame.add(btSkipStop, constraints);
 
-
-
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 1;
         constraints.weighty = 0.1; //set this to 1 when no other components use the 1 at weighty
@@ -455,10 +442,6 @@ public class GTFSStopsReviewGui
         constraints.anchor = GridBagConstraints.CENTER;
 
         frame.add(new JLabel(" ", SwingConstants.CENTER), constraints);  // blank JLabel
-
-
-
-
 
         //things to update the window title
         osmCoordsStopMap.getMainMap().addPropertyChangeListener("zoom", event -> updateWindowTitle(frame));
@@ -471,14 +454,12 @@ public class GTFSStopsReviewGui
 
         updateWindowTitle(frame);
 
-
         //we start with the first stop of the list
         nextStop();
 
         //we ensure the window is the right size so that every element fits. we need this to avoid weird components sizes at frame startup
         frame.pack();
     }
-
 
     protected void updateWindowTitle(JFrame frame)
     {
@@ -491,7 +472,6 @@ public class GTFSStopsReviewGui
         int zoomSecond = gtfsCoordsStopMap.getMainMap().getZoom();
 
         frame.setTitle(String.format("GTFSOSMImport stops changes review - osmmap coords: (%.2f / %.2f) - Zoom: %d // gtfsmap coords: (%.2f / %.2f) - Zoom: %d // window size: %dx%d", latFirst, lonFirst, zoomFirst, latSecond, lonSecond, zoomSecond, frame.getSize().width, frame.getSize().height));
-
     }
 
     private void acceptOsmPosition() {
@@ -540,7 +520,6 @@ public class GTFSStopsReviewGui
             }
         }*/
 
-
         int splitindex = iteratorStopsToReview.nextIndex();
 
         ArrayList<OSMStop> reorderedArray = new ArrayList<>();
@@ -583,7 +562,6 @@ public class GTFSStopsReviewGui
             //we ensure that the currently selected index is visible without manual scrolling
             jListStops.ensureIndexIsVisible(jListStops.getSelectedIndex());
         }
-
     }
 
     private void showEverythingStopRelated() {
@@ -626,15 +604,12 @@ public class GTFSStopsReviewGui
         //osmCoordsStopMap.setZoom(2);
         //gtfsCoordsStopMap.setZoom(2);
 
-
         //we update the variout interface texts
         labInfoStop1.setText(String.format(infoStopText1, currentStop.getCode(), GTFSImportSettings.getInstance().getPlugin().fixBusStopName(currentStop.gtfsStopMatchedWith)));
         labInfoStop2.setText(String.format(infoStopText2, finalReviewedGeopositions.size(), osmStopsToReview.size()));
         labOsmCoords.setText(String.format(textLabOsmCoords, osmStopCoords.getLatitude(), osmStopCoords.getLongitude()));
         labGtfsCoords.setText(String.format(textLabGtfsCoords, gtfsStopCoords.getLatitude(), gtfsStopCoords.getLongitude()));
-
     }
-
 
     private class CustomStopCellRenderer extends DefaultListCellRenderer {
         @Override
@@ -646,7 +621,6 @@ public class GTFSStopsReviewGui
             setText(index + ") " + GTFSImportSettings.getInstance().getPlugin().fixBusStopName(thisCellStop.gtfsStopMatchedWith)
                     + " (ref: " + thisCellStop.getCode() + " - " + thisCellStop.getStopType() +")"); //make sure to use only name/data from the gtfs match as it could be more up to date than the osm one
 
-
             //check whether the osm or gtfs stop position got accepted
             if (finalReviewedGeopositions.get(thisCellStop) != null && finalReviewedGeopositions.get(thisCellStop).equals(thisCellStop.getGeoPosition())){ //the user accepted the OSM coordinates
                 setBackground(new Color(120, 255, 120));
@@ -657,7 +631,6 @@ public class GTFSStopsReviewGui
 
                 setText(getText() + " / GTFS Accepted");
             }
-
 
             return component;
         }
