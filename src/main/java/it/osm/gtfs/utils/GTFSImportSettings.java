@@ -19,6 +19,8 @@ import it.osm.gtfs.plugins.GTFSPlugin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
 import java.util.Properties;
@@ -84,7 +86,7 @@ public class GTFSImportSettings {
                     System.exit(0);
                 }
 
-                properties.load(new FileInputStream(propfile));
+                properties.load(new InputStreamReader(new FileInputStream(propfile)), StandardCharsets.UTF_8);
 
             } else {
                 properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME));
