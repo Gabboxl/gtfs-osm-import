@@ -127,7 +127,7 @@ public class CmdUpdateGTFSOSMData implements Callable<Void> {
         String overpassApiServer = GTFSImportSettings.getInstance().getOverpassApiServer();
 
         //we download the relations data
-        String queryRel = "?data=(relation[network=" + GTFSImportSettings.getInstance().getNetwork() +  "];>;);out meta;";
+        String queryRel = "?data=(relation[network=\"" + GTFSImportSettings.getInstance().getNetwork() +  "\"];>;);out meta;";
         String urlrel = overpassApiServer + URIUtil.encodeQuery(queryRel);;
 
         File uncheckedRelsFile = new File(GTFSImportSettings.getInstance().getCachePath() + "tmp_unchecked_rels.osm");
