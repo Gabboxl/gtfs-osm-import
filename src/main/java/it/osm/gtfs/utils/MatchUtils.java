@@ -149,7 +149,7 @@ public class MatchUtils {
                 System.out.println(ansi().render("@|yellow Warning: Stops with same name not matched as nearby stops have that name also / |@" + debugData));
 
                 return false;
-            }else if (nearbyStops.size() >= 1) {//this means that there are other stops with data that *could* correspond to gtfs data
+            }else if (!nearbyStops.isEmpty()) {//this means that there are other stops with data that *could* correspond to gtfs data
 
                 for (OSMStop nearbyStop : nearbyStops) {
                     if ((nearbyStop.getGtfsId() != null && nearbyStop.getGtfsId().equals(gtfsStop.getGtfsId()))
