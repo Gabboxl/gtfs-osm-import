@@ -49,7 +49,7 @@ public class GTFSOSMWaysMatch {
         hopper.setOSMFile(GTFSImportSettings.getInstance().getOsmOverpassWaysFilePath());
 
         //programmatically set additional values to be assigned to every graphhopper's edge for a later use (in our case we need the osm way ids ofr every graphhopper's edge)
-        hopper.setEncodedValuesString("osm_way_id"); //ricorda, se vuoi cambiare/aggiungere questi encoded values, devi rigenerare tutti i graph cancellando da cache dei graph in modo che vengano aggiunti i nuovi valori scelti a ogni edge
+        //hopper.setEncodedValuesString("osm_way_id, car_access, car_average_speed"); //ricorda, se vuoi cambiare/aggiungere questi encoded values, devi rigenerare tutti i graph cancellando da cache dei graph in modo che vengano aggiunti i nuovi valori scelti a ogni edge
 
         hopper.importOrLoad();
 
