@@ -36,7 +36,6 @@ public class GTFSImportSettings {
     public static final String GTFS_FEED_INFO_FILE_NAME = "feed_info.txt";
 
     //public static final String OSM_OVERPASS_XAPI_SERVER = "http://overpass.osm.rambler.ru/cgi/xapi?"; //vecchia xapi
-
     public static final String OSM_API_SERVER = "https://api.openstreetmap.org/api/0.6/";
     public static final String OSM_RELATIONS_FILE_NAME = "relations.osm";
     public static final String OSM_STOPS_FILE_NAME = "stops.osm";
@@ -77,17 +76,14 @@ public class GTFSImportSettings {
                     System.out.println(ansi().render("\n @|yellow No properties file found, looks like this is a fresh start! \n Creating new gtfs-import.properties file into current directory...|@"));
 
                     InputStream dummyprops = getClass().getClassLoader().getResourceAsStream(DUMMY_PROPERTIES_FILE_NAME);
-
                     assert dummyprops != null;
                     Files.copy(dummyprops, propfile.toPath());
 
                     System.out.println(ansi().render("\n @|yellow A new properties file has been copied to the current directory! \n Check it before restarting the tool && before making any operation!|@"));
-
                     System.exit(0);
                 }
 
                 properties.load(new InputStreamReader(new FileInputStream(propfile), StandardCharsets.UTF_8));
-
             } else {
                 properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME));
             }
