@@ -35,6 +35,7 @@ replay_pid*
 graph-cache/
 
 #include some custom files
+!gradle/wrapper/gradle-wrapper.jar
 .idea/inspectionProfiles
 .idea/workspace.xml
 .idea/uiDesigner.xml
