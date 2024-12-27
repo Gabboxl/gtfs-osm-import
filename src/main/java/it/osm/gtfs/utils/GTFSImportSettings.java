@@ -85,7 +85,7 @@ public class GTFSImportSettings {
 
                 properties.load(new InputStreamReader(new FileInputStream(propfile), StandardCharsets.UTF_8));
             } else {
-                properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME));
+                properties.load(new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME)), StandardCharsets.UTF_8));
             }
 
             readProperties();
