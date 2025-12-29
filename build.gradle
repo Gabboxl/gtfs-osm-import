@@ -20,7 +20,7 @@ dependencies {
     implementation 'com.google.guava:guava:33.5.0-jre'
     implementation 'org.json:json:20251224'
     implementation 'org.fusesource.jansi:jansi:2.4.2'
-    implementation 'com.graphhopper:graphhopper-map-matching:9.1'
+    implementation 'com.graphhopper:graphhopper-map-matching:11.0'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1'
     implementation 'org.slf4j:slf4j-simple:2.0.17'
 
